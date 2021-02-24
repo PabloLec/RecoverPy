@@ -42,7 +42,9 @@ To update:
 
 ## Demo
 
-![demo](pablolec/recoverpy/raw/master/docs/assets/demo.gif"demo")
+<p align="center">
+    <img src="docs/assets/demo.gif">
+</p>
 
 ## Usage
 

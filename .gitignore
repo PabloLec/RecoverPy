@@ -6,3 +6,4 @@ dist/
 *.log
 venv/
 dist/
+build/
