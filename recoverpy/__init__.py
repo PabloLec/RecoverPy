@@ -23,7 +23,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 def parse_configuration():
-    """Sets logging and saving paramters based on yaml conf file."""
+    """Sets logging and saving parameters based on yaml conf file."""
 
     with open(os.path.join(os.path.dirname(__file__), "config.yaml")) as config_file:
         config = yaml.load(config_file, Loader=yaml.FullLoader)
