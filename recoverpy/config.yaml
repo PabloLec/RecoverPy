@@ -1,0 +1,3 @@
+save_directory: "/tmp/"
+enable_logging: true
+log_directory: "/tmp/"
