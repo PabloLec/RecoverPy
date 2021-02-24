@@ -1,3 +1,0 @@
-import recoverpy
-
-recoverpy.main()
