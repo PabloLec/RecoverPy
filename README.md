@@ -18,7 +18,7 @@ The main prerequisite is having a Linux system. The file system type of your par
 
 `dnf install grep coreutils util-linux`
 
-#### Installation from pip:
+#### - Installation from pip:
 
 **_Recommended_**
 
@@ -26,7 +26,7 @@ Pip should be already installed if you have Python >=3.4. Otherwise, see [pip do
 
 `pip install recoverpy`
 
-#### From source:
+#### - From source:
 
 To install:
 
