@@ -18,7 +18,7 @@ The main prerequisite is having a Linux system. The file system type of your par
 
 `dnf install grep coreutils util-linux`
 
-### - Installation from pip:
+### - From pip:
 
 **_Recommended_**
 
