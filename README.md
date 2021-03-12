@@ -1,10 +1,12 @@
-# Recoverpy [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+# Recoverpy [![GitHub release (latest by date)](https://img.shields.io/github/v/release/pablolec/recoverpy)](https://github.com/PabloLec/recoverpy/releases/) [![GitHub](https://img.shields.io/github/license/pablolec/recoverpy)](https://github.com/PabloLec/recoverpy/blob/main/LICENCE)
 
 Recoverpy is a CUI utility written in Python with the help of [py_cui](https://github.com/jwlodek/py_cui "py_cui"). You can already find plenty of solutions to recover deleted files but it can be a hassle to recover overwritten files. Recoverpy search through every inodes to find your request.
 
 ## Installation
 
-The main prerequisite is having a Linux system. The file system type of your partition should not be a problem, just make sure you have access to `grep`, `dd`, and `lsblk` commands.
+:penguin: The main prerequisite is having a Linux system.
+
+The file system type of your partition should not be a problem, just make sure you have access to `grep`, `dd`, and `lsblk` commands.
 
 - Debian-like :
 
@@ -18,9 +20,7 @@ The main prerequisite is having a Linux system. The file system type of your par
 
 `dnf install grep coreutils util-linux`
 
-### - From pip:
-
-**_Recommended_**
+### - From pip (_recommended_):
 
 Pip should be already installed if you have Python >=3.4. Otherwise, see [pip docs](https://pip.pypa.io/en/stable/installing/ "pip docs") for installation.
 
@@ -30,15 +30,15 @@ Pip should be already installed if you have Python >=3.4. Otherwise, see [pip do
 
 To install:
 
-```
+```bash
 git clone https://github.com/pablolec/recoverpy
 cd recoverpy
-pip install .
+python3 -m pip install .
 ```
 
 To update:
 
-`pip install --upgrade recoverpy`
+`python3 -m pip install --upgrade recoverpy`
 
 ## Demo
 
@@ -48,21 +48,24 @@ To update:
 
 ## Usage
 
-To start recoverpy, simply type `recoverpy`.
-**You must have root access to use recoverpy**. If you are not logged as root use `sudo recoverpy` or log with `su -`beforehand.
+```bash
+python3 -m recoverpy
+```
+
+**You must have root access to use recoverpy**. If you are not logged as root use `sudo recoverpy` or log in with `su -` before execution.
 
 First, select the system partition in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
 
 Then, type a text to search. You can now start the search.
 
-Note that searching a string in a whole partition may take a while.
+Note that searching a string in a whole partition may take _a while_. (see [euphemism](https://en.wikipedia.org/wiki/Euphemism "euphemism"))
 
 Results will appear in the left-hand box. Select a result to display the corresponding partition block content in the right-hand box.
 
 Once you have found your precious, select `Save`.
 You can now either save this block individually or explore neighboring blocks for the remaining parts of the file. You could then save it all in one file.
 
-Save path is set in `conf.yaml`. Default is `/tmp/`.
+**Save path is set in `conf.yaml`. Default is `/tmp/`.**
 
 ## Tips
 
