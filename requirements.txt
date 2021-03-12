@@ -1,2 +1,2 @@
-py_cui==0.1.2
-PyYAML==5.4.1
+py_cui>=0.1.2
+PyYAML>=5.4.1

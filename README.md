@@ -1,6 +1,8 @@
 # Recoverpy [![GitHub release (latest by date)](https://img.shields.io/github/v/release/pablolec/recoverpy)](https://github.com/PabloLec/recoverpy/releases/) [![GitHub](https://img.shields.io/github/license/pablolec/recoverpy)](https://github.com/PabloLec/recoverpy/blob/main/LICENCE)
 
-Recoverpy is a CUI utility written in Python with the help of [py_cui](https://github.com/jwlodek/py_cui "py_cui"). You can already find plenty of solutions to recover deleted files but it can be a hassle to recover overwritten files. Recoverpy search through every inodes to find your request.
+Recoverpy is a CUI utility written in Python with the help of [py_cui](https://github.com/jwlodek/py_cui "py_cui").
+
+You can already find plenty of solutions to recover deleted files but it can be a hassle to recover overwritten files. Recoverpy search through every inodes to find your request.
 
 ## Installation
 
@@ -52,7 +54,9 @@ To update:
 python3 -m recoverpy
 ```
 
-**You must have root access to use recoverpy**. If you are not logged as root use `sudo recoverpy` or log in with `su -` before execution.
+**You must have root access to use recoverpy**.
+
+If you are not logged as root use `sudo recoverpy` or log in with `su -` before execution.
 
 First, select the system partition in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
 
