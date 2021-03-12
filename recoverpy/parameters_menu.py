@@ -36,6 +36,11 @@ class ParametersMenu:
 
         self.is_user_root()
 
+        self.create_ui_content()
+
+    def create_ui_content(self):
+        """Handles the creation of the UI elements."""
+
         self.partition_list_cell = self.master.add_scroll_menu(
             "Select a partition to search:", 0, 0, row_span=9, column_span=5
         )
@@ -85,7 +90,7 @@ class ParametersMenu:
         LOGGER.write("warning", "User is not root")
         return False
 
-    def list_partitions(self):
+    def list_partitions(self) -> dict:
         """Uses lsblk command to find partitions.
 
         Returns:
@@ -93,18 +98,11 @@ class ParametersMenu:
                     {Name: FSTYPE, IS_MOUNTED, MOUNT_POINT}
         """
 
-        # Generate partition list through lsblk
-        lsblk_output = check_output(
-            ["lsblk", "-r", "-n", "-o", "NAME,TYPE,FSTYPE,MOUNTPOINT"], encoding="utf-8"
-        )
-        partition_list_raw = [
-            line for line in lsblk_output.splitlines() if "part" in line
-        ]
-        partition_list_formatted = [line.split(" ") for line in partition_list_raw]
+        partition_list = self.lsblk()
 
         # Create dict with relevant infos
         partition_dict = {}
-        for partition in partition_list_formatted:
+        for partition in partition_list:
             if partition[2] == "":
                 # Ignore if no FSTYPE detected
                 continue
@@ -135,6 +133,24 @@ class ParametersMenu:
         )
 
         return partition_dict
+
+    def lsblk(self) -> list:
+        """Uses 'lsblk' utility to generate a list of detected
+        system partions."
+
+        Returns:
+            list: List of system partitions.
+        """
+
+        lsblk_output = check_output(
+            ["lsblk", "-r", "-n", "-o", "NAME,TYPE,FSTYPE,MOUNTPOINT"], encoding="utf-8"
+        )
+        partition_list_raw = [
+            line for line in lsblk_output.splitlines() if "part" in line
+        ]
+        partition_list_formatted = [line.split(" ") for line in partition_list_raw]
+
+        return partition_list_formatted
 
     def add_partitions_to_list(self):
         """Populates the partition list with partition found previously."""

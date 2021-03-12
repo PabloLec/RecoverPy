@@ -29,6 +29,8 @@ class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             initial_block (int): Initial partition block number that will be displayed.
         """
 
+        super().__init__()
+
         self.master = master
 
         self.partition = partition
@@ -38,6 +40,11 @@ class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.saved_blocks_dict = {}
 
         self.current_block = initial_block
+
+        self.create_ui_content()
+
+    def create_ui_content(self):
+        """Handles the creation of the UI elements."""
 
         self.previous_button = self.master.add_button(
             "<",

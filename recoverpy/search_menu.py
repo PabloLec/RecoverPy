@@ -41,6 +41,8 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             partition (str): System partition to search
         """
 
+        super().__init__()
+
         self.master = master
 
         self.queue_object = Queue()
@@ -52,6 +54,27 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.searched_string = string_to_search
 
         LOGGER.write("info", "Starting 'SearchMenu' CUI window")
+
+        self.create_ui_content()
+
+        self.start_search()
+        LOGGER.write("info", dir(self))
+
+        LOGGER.write(
+            "info",
+            "Raw searched string:\n{searched_string}".format(
+                searched_string=self.searched_string
+            ),
+        )
+        LOGGER.write(
+            "info",
+            "Formated searched string:\n{escaped_string}".format(
+                escaped_string=quote(self.searched_string)
+            ),
+        )
+
+    def create_ui_content(self):
+        """Handles the creation of the UI elements."""
 
         self.search_results_cell = self.master.add_scroll_menu(
             "Search results:", 0, 0, row_span=10, column_span=5, padx=1, pady=0
@@ -113,21 +136,6 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             padx=1,
             pady=0,
             command=self.master.stop,
-        )
-
-        self.start_search()
-
-        LOGGER.write(
-            "info",
-            "Raw searched string:\n{searched_string}".format(
-                searched_string=self.searched_string
-            ),
-        )
-        LOGGER.write(
-            "info",
-            "Formated searched string:\n{escaped_string}".format(
-                escaped_string=quote(self.searched_string)
-            ),
         )
 
     def start_search(self):
