@@ -15,7 +15,7 @@ setup(
     description="A command line interface for recovering overwritten or deleted text data.",
     license="MIT License",
     keywords="data recovery cui",
-    url="https://github.com/pabloleco/recoverpy",
+    url="https://github.com/pablolec/recoverpy",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=["tests", "docs"]),
