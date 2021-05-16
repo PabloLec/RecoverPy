@@ -1,23 +1,11 @@
-from subprocess import PIPE, Popen, check_output
-from threading import Thread
-from queue import Queue, Empty
-from shlex import quote
-from datetime import datetime
-
 import os
-import time
-import re
 import logging
 import yaml
-import py_cui
 
 import recoverpy.errors as ERRORS
 import recoverpy.window_handler as WINDOW_HANDLER
 import recoverpy.logger as LOGGER
 import recoverpy.saver as SAVER
-import recoverpy.menu_with_block_display as BLOCK_DISPLAY_MENU
-import recoverpy.search_menu as SEARCH_MENU
-import recoverpy.block_menu as BLOCK_MENU
 
 _LOGGER = logging.getLogger(__name__)
 

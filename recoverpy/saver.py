@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import recoverpy.logger as LOGGER
+from recoverpy import logger as LOGGER
 
 _SAVE_PATH = None
 

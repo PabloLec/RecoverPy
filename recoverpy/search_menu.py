@@ -8,10 +8,10 @@ import time
 import re
 import py_cui
 
-import recoverpy.window_handler as WINDOW_HANDLER
-import recoverpy.saver as SAVER
-import recoverpy.logger as LOGGER
-import recoverpy.menu_with_block_display as BLOCK_DISPLAY_MENU
+from recoverpy import window_handler as WINDOW_HANDLER
+from recoverpy import saver as SAVER
+from recoverpy import logger as LOGGER
+from recoverpy import menu_with_block_display as BLOCK_DISPLAY_MENU
 
 
 class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
@@ -62,15 +62,11 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         LOGGER.write(
             "info",
-            "Raw searched string:\n{searched_string}".format(
-                searched_string=self.searched_string
-            ),
+            "Raw searched string:\n{searched_string}".format(searched_string=self.searched_string),
         )
         LOGGER.write(
             "info",
-            "Formated searched string:\n{escaped_string}".format(
-                escaped_string=quote(self.searched_string)
-            ),
+            "Formated searched string:\n{escaped_string}".format(escaped_string=quote(self.searched_string)),
         )
 
     def create_ui_content(self):
@@ -79,20 +75,14 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.search_results_cell = self.master.add_scroll_menu(
             "Search results:", 0, 0, row_span=10, column_span=5, padx=1, pady=0
         )
-        self.search_results_cell.add_key_command(
-            py_cui.keys.KEY_ENTER, self.display_selected_block
-        )
+        self.search_results_cell.add_key_command(py_cui.keys.KEY_ENTER, self.display_selected_block)
 
         self.result_content_box = self.master.add_text_block(
             "Block content:", 0, 5, row_span=9, column_span=5, padx=1, pady=0
         )
         self.result_content_box.add_key_command(py_cui.keys.KEY_F5, self.open_save_menu)
-        self.result_content_box.add_key_command(
-            py_cui.keys.KEY_F6, self.display_previous_block
-        )
-        self.result_content_box.add_key_command(
-            py_cui.keys.KEY_F7, self.display_next_block
-        )
+        self.result_content_box.add_key_command(py_cui.keys.KEY_F6, self.display_previous_block)
+        self.result_content_box.add_key_command(py_cui.keys.KEY_F7, self.display_next_block)
 
         self.previous_button = self.master.add_button(
             "<",
@@ -212,14 +202,10 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             for result in new_results:
                 string_result = str(result)[2:-1]
 
-                LOGGER.write(
-                    "debug", "New result found: " + string_result[:30] + " ..."
-                )
+                LOGGER.write("debug", "New result found: " + string_result[:30] + " ...")
 
                 self.search_results_cell.add_item(string_result)
-            self.master.set_title(
-                "{num_of_results} results".format(num_of_results=str(self.result_index))
-            )
+            self.master.set_title("{num_of_results} results".format(num_of_results=str(self.result_index)))
 
             # Sleeps to avoid unnecessary overload
             # This should not affect Popen's GIL
@@ -237,9 +223,7 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         LOGGER.write(
             "debug",
-            "Displayed block set to {current_block}".format(
-                current_block=str(self.current_block)
-            ),
+            "Displayed block set to {current_block}".format(current_block=str(self.current_block)),
         )
 
     def display_selected_block(self):
@@ -258,9 +242,7 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             "Explore neighboring blocks and save it all",
             "Cancel",
         ]
-        self.master.show_menu_popup(
-            "How do you want to save it ?", menu_choices, self.handle_save_menu_choice
-        )
+        self.master.show_menu_popup("How do you want to save it ?", menu_choices, self.handle_save_menu_choice)
 
     def handle_save_menu_choice(self, choice: str):
         """Depending on user choice, function will either directly save the output in
@@ -270,14 +252,10 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             choice (str): User choice given by open_save_menu function.
         """
         if choice == "Save currently displayed block":
-            SAVER.save_result(
-                current_block=self.current_block, result=self.current_result
-            )
+            SAVER.save_result(current_block=self.current_block, result=self.current_result)
 
             self.master.show_message_popup("", "Result saved.")
         elif choice == "Explore neighboring blocks and save it all":
-            WINDOW_HANDLER.open_block_menu(
-                partition=self.partition, block=self.current_block
-            )
+            WINDOW_HANDLER.open_block_menu(partition=self.partition, block=self.current_block)
         elif choice == "Cancel":
             pass

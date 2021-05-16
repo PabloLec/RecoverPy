@@ -1,9 +1,9 @@
 import py_cui
 
-import recoverpy.parameters_menu as PARAMETERS_MENU
-import recoverpy.search_menu as SEARCH_MENU
-import recoverpy.block_menu as BLOCK_MENU
-import recoverpy.logger as LOGGER
+from recoverpy import parameters_menu as PARAMETERS_MENU
+from recoverpy import search_menu as SEARCH_MENU
+from recoverpy import block_menu as BLOCK_MENU
+
 
 _PARAMETERS_MENU = None
 _SEARCH_MENU = None
@@ -35,9 +35,7 @@ def open_search_menu(partition: str, string_to_search: str):
     _SEARCH_MENU = py_cui.PyCUI(10, 10)
     _SEARCH_MENU.toggle_unicode_borders()
     _SEARCH_MENU.set_title("View and explore found files")
-    SEARCH_MENU.SearchMenu(
-        _SEARCH_MENU, partition=partition, string_to_search=string_to_search
-    )
+    SEARCH_MENU.SearchMenu(_SEARCH_MENU, partition=partition, string_to_search=string_to_search)
     _SEARCH_MENU.start()
 
 

@@ -4,8 +4,8 @@ from os import geteuid
 import re
 import py_cui
 
-import recoverpy.window_handler as WINDOW_HANDLER
-import recoverpy.logger as LOGGER
+from recoverpy import window_handler as WINDOW_HANDLER
+from recoverpy import logger as LOGGER
 
 
 class ParametersMenu:
@@ -44,21 +44,15 @@ class ParametersMenu:
         self.partition_list_cell = self.master.add_scroll_menu(
             "Select a partition to search:", 0, 0, row_span=9, column_span=5
         )
-        self.partition_list_cell.add_key_command(
-            py_cui.keys.KEY_ENTER, self.select_partition
-        )
+        self.partition_list_cell.add_key_command(py_cui.keys.KEY_ENTER, self.select_partition)
 
         self.add_partitions_to_list()
 
         # Color rules
-        self.partition_list_cell.add_text_color_rule(
-            "Mounted at", py_cui.YELLOW_ON_BLACK, "contains"
-        )
+        self.partition_list_cell.add_text_color_rule("Mounted at", py_cui.YELLOW_ON_BLACK, "contains")
         self.partition_list_cell.set_selected_color(py_cui.GREEN_ON_BLACK)
 
-        self.string_text_box = self.master.add_text_block(
-            "Enter a text to search:", 0, 5, row_span=9, column_span=5
-        )
+        self.string_text_box = self.master.add_text_block("Enter a text to search:", 0, 5, row_span=9, column_span=5)
 
         self.start_search_button = self.master.add_button(
             "Start search",
@@ -142,12 +136,8 @@ class ParametersMenu:
             list: List of system partitions.
         """
 
-        lsblk_output = check_output(
-            ["lsblk", "-r", "-n", "-o", "NAME,TYPE,FSTYPE,MOUNTPOINT"], encoding="utf-8"
-        )
-        partition_list_raw = [
-            line for line in lsblk_output.splitlines() if "part" in line
-        ]
+        lsblk_output = check_output(["lsblk", "-r", "-n", "-o", "NAME,TYPE,FSTYPE,MOUNTPOINT"], encoding="utf-8")
+        partition_list_raw = [line for line in lsblk_output.splitlines() if "part" in line]
         partition_list_formatted = [line.split(" ") for line in partition_list_raw]
 
         return partition_list_formatted
@@ -184,30 +174,22 @@ class ParametersMenu:
     def select_partition(self):
         """Handles the user selection of a partition in the list."""
 
-        selected_partition = re.findall(
-            r"Name\:\ ([A-Za-z0-9]+)\ ", self.partition_list_cell.get()
-        )[0]
+        selected_partition = re.findall(r"Name\:\ ([A-Za-z0-9]+)\ ", self.partition_list_cell.get())[0]
 
         if self.partition_dict[selected_partition]["IS_MOUNTED"]:
             # Warn the user to unmount his partition first
             self.master.show_warning_popup(
                 "Warning",
-                "It is highly recommended to unmount {name} first.".format(
-                    name=selected_partition
-                ),
+                "It is highly recommended to unmount {name} first.".format(name=selected_partition),
             )
         else:
-            self.master.show_message_popup(
-                "", "Partition {name} selected.".format(name=selected_partition)
-            )
+            self.master.show_message_popup("", "Partition {name} selected.".format(name=selected_partition))
 
         self.partition_to_search = "/dev/" + selected_partition.strip()
 
         LOGGER.write(
             "info",
-            "Partition selected: {partition}".format(
-                partition=self.partition_to_search
-            ),
+            "Partition selected: {partition}".format(partition=self.partition_to_search),
         )
 
     def start_search(self):
@@ -224,18 +206,11 @@ class ParametersMenu:
 
         if self.partition_to_search == "":
             # No partition selected
-            self.master.show_message_popup(
-                "Error", "You have to select a partition to search."
-            )
+            self.master.show_message_popup("Error", "You have to select a partition to search.")
             LOGGER.write("warning", "No partition selected for search")
-        elif (
-            self.string_to_search.replace(" ", "").replace("\n", "").replace("\t", "")
-            == ""
-        ):
+        elif self.string_to_search.replace(" ", "").replace("\n", "").replace("\t", "") == "":
             # Blank string to search
-            self.master.show_message_popup(
-                "Error", "You have to enter a text to search."
-            )
+            self.master.show_message_popup("Error", "You have to enter a text to search.")
             LOGGER.write("warning", "No string given for search")
         else:
             # Prompt to confirm string

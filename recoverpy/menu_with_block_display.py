@@ -1,6 +1,6 @@
 from subprocess import check_output
 
-import recoverpy.logger as LOGGER
+from recoverpy import logger as LOGGER
 
 
 class MenuWithBlockDisplay:
@@ -43,9 +43,7 @@ class MenuWithBlockDisplay:
 
         LOGGER.write(
             "debug",
-            "Getting 'dd' output for block {current_block}".format(
-                current_block=str(self.current_block)
-            ),
+            "Getting 'dd' output for block {current_block}".format(current_block=str(self.current_block)),
         )
 
         try:
@@ -69,15 +67,11 @@ class MenuWithBlockDisplay:
         except:
             self.master.show_error_popup(
                 "ERROR",
-                "Error while opening block {current_block}".format(
-                    current_block=str(self.current_block)
-                ),
+                "Error while opening block {current_block}".format(current_block=str(self.current_block)),
             )
             LOGGER.write(
                 "error",
-                "Error while opening block {current_block}".format(
-                    current_block=str(self.current_block)
-                ),
+                "Error while opening block {current_block}".format(current_block=str(self.current_block)),
             )
 
     def update_textbox(self):
@@ -94,15 +88,11 @@ class MenuWithBlockDisplay:
         formated_result = "\n".join(result_lines)
 
         self.result_content_box.set_text(formated_result)
-        self.result_content_box.set_title(
-            "Block {current_block}".format(current_block=str(self.current_block))
-        )
+        self.result_content_box.set_title("Block {current_block}".format(current_block=str(self.current_block)))
 
         LOGGER.write(
             "debug",
-            "Textbox updated with block {current_block}".format(
-                current_block=str(self.current_block)
-            ),
+            "Textbox updated with block {current_block}".format(current_block=str(self.current_block)),
         )
 
     def display_previous_block(self):
@@ -146,7 +136,5 @@ class MenuWithBlockDisplay:
         self.horizontal_char_limit = text_box_dimensions[1] - text_box_dimensions[0]
         LOGGER.write(
             "debug",
-            "Textbox char limit set to {char_limit}".format(
-                char_limit=self.horizontal_char_limit
-            ),
+            "Textbox char limit set to {char_limit}".format(char_limit=self.horizontal_char_limit),
         )

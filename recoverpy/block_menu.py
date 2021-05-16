@@ -1,9 +1,8 @@
 import py_cui
 
-import recoverpy.menu_with_block_display as BLOCK_DISPLAY_MENU
-
-import recoverpy.logger as LOGGER
-import recoverpy.saver as SAVER
+from recoverpy import menu_with_block_display as BLOCK_DISPLAY_MENU
+from recoverpy import logger as LOGGER
+from recoverpy import saver as SAVER
 
 
 class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
@@ -70,9 +69,7 @@ class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.result_content_box = self.master.add_text_block(
             "Block content:", 0, 1, row_span=9, column_span=8, padx=1, pady=0
         )
-        self.result_content_box.set_title(
-            "Block {current_block}".format(current_block=str(self.current_block))
-        )
+        self.result_content_box.set_title("Block {current_block}".format(current_block=str(self.current_block)))
 
         # Display initial block at opening
         self.display_block(self.current_block)
@@ -136,8 +133,6 @@ class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         elif len_results == 1:
             self.master.show_message_popup("", "Result saved")
         else:
-            self.master.show_message_popup(
-                "", "{len_results} results saved".format(len_results=len_results)
-            )
+            self.master.show_message_popup("", "{len_results} results saved".format(len_results=len_results))
 
         SAVER.save_result_dict(self.saved_blocks_dict)
