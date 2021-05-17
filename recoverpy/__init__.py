@@ -10,6 +10,15 @@ import recoverpy.saver as SAVER
 _LOGGER = logging.getLogger(__name__)
 
 
+def verify_terminal_conf():
+    """Fix for outdated terminals not compatible with curses."""
+
+    term = os.environ["TERM"]
+
+    if term != "xterm-256color":
+        os.environ["TERM"] = "xterm-256color"
+
+
 def parse_configuration():
     """Sets logging and saving parameters based on yaml conf file."""
 
@@ -37,6 +46,7 @@ def parse_configuration():
 
 
 def main():
+    verify_terminal_conf()
     parse_configuration()
 
     WINDOW_HANDLER.open_parameters_menu()
