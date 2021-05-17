@@ -9,11 +9,11 @@ with open("README.md", "r") as readme_fp:
 
 setup(
     name="recoverpy",
-    version="1.0.2",
-    author="PabloLec",
+    version="1.0.5",
+    author="Pablo Lecolinet",
     author_email="pablolec@pm.me",
     description="A command line interface for recovering overwritten or deleted text data.",
-    license="MIT License",
+    license="GNU GPLv3",
     keywords="data recovery cui",
     url="https://github.com/pablolec/recoverpy",
     long_description=long_description,

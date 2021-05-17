@@ -2,6 +2,8 @@ import os
 import logging
 import yaml
 
+from pathlib import Path
+
 import recoverpy.errors as ERRORS
 import recoverpy.window_handler as WINDOW_HANDLER
 import recoverpy.logger as LOGGER
@@ -22,12 +24,14 @@ def verify_terminal_conf():
 def parse_configuration():
     """Sets logging and saving parameters based on yaml conf file."""
 
-    with open(os.path.join(os.path.dirname(__file__), "config.yaml")) as config_file:
+    project_path = Path(__file__).parent.absolute()
+
+    with open(project_path / "config.yaml") as config_file:
         config = yaml.load(config_file, Loader=yaml.FullLoader)
 
     if config["save_directory"] == "":
         raise ERRORS.NoSavePath
-    elif not os.path.isdir(config["save_directory"]):
+    elif not Path(config["save_directory"]).is_dir():
         raise ERRORS.InvalidSavePath
     else:
         SAVER.set_save_path(config["save_directory"])
@@ -39,7 +43,7 @@ def parse_configuration():
 
     if config["log_directory"] == "":
         LOGGER.disable_logging()
-    elif not os.path.isdir(config["log_directory"]):
+    elif not Path(config["log_directory"]).is_dir():
         raise ERRORS.InvalidLogPath
     else:
         LOGGER.set_log_file_path(config["log_directory"])
