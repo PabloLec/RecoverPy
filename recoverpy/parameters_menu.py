@@ -97,17 +97,18 @@ class ParametersMenu:
         # Create dict with relevant infos
         partition_dict = {}
         for partition in partition_list:
-            if partition[2] == "":
+            if len(partition) < 3:
                 # Ignore if no FSTYPE detected
                 continue
 
-            if partition[3] == "":
+            if len(partition) < 4:
                 is_mounted = False
                 mount_point = None
             else:
                 is_mounted = True
                 mount_point = partition[3]
 
+            
             partition_dict[partition[0]] = {
                 "FSTYPE": partition[2],
                 "IS_MOUNTED": is_mounted,
@@ -137,7 +138,7 @@ class ParametersMenu:
         """
 
         lsblk_output = check_output(["lsblk", "-r", "-n", "-o", "NAME,TYPE,FSTYPE,MOUNTPOINT"], encoding="utf-8")
-        partition_list_raw = [line for line in lsblk_output.splitlines() if "part" in line]
+        partition_list_raw = [line.strip() for line in lsblk_output.splitlines() if " loop " not in line]
         partition_list_formatted = [line.split(" ") for line in partition_list_raw]
 
         return partition_list_formatted
