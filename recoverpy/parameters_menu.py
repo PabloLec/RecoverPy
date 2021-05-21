@@ -108,7 +108,6 @@ class ParametersMenu:
                 is_mounted = True
                 mount_point = partition[3]
 
-            
             partition_dict[partition[0]] = {
                 "FSTYPE": partition[2],
                 "IS_MOUNTED": is_mounted,
@@ -175,7 +174,7 @@ class ParametersMenu:
     def select_partition(self):
         """Handles the user selection of a partition in the list."""
 
-        selected_partition = re.findall(r"Name\:\ ([A-Za-z0-9]+)\ ", self.partition_list_cell.get())[0]
+        selected_partition = re.findall(r"Name\:\ ([^\ \n]+)\ ", self.partition_list_cell.get())[0]
 
         if self.partition_dict[selected_partition]["IS_MOUNTED"]:
             # Warn the user to unmount his partition first
