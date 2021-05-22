@@ -14,7 +14,7 @@ You can already find plenty of solutions to recover deleted files but it can be 
 
 :penguin: The main prerequisite is having a Linux system.
 
-**Mandatory:** To list and search through your partitions, recoverpy uses `grep`, `dd`, and `lsblk` commands.
+**Mandatory:** To list and search through your partitions, recoverpy uses `grep`, `dd`, and `lsblk` commands.  
 **Optional:** To display real time grep progress, you can install `progress` tool.
 
 To install all dependencies:
