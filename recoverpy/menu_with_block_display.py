@@ -43,17 +43,17 @@ class MenuWithBlockDisplay:
 
         LOGGER.write(
             "debug",
-            "Getting 'dd' output for block {current_block}".format(current_block=str(self.current_block)),
+            f"Getting 'dd' output for block {str(self.current_block)}",
         )
 
         try:
             dd_result = check_output(
                 [
                     "dd",
-                    "if={partition}".format(partition=self.partition),
+                    f"if={self.partition}",
                     "count=1",
                     "status=none",
-                    "skip={block}".format(block=block),
+                    f"skip={block}",
                 ]
             )
             # Try/Catch to decode raw result in utf-8
@@ -67,11 +67,11 @@ class MenuWithBlockDisplay:
         except:
             self.master.show_error_popup(
                 "ERROR",
-                "Error while opening block {current_block}".format(current_block=str(self.current_block)),
+                f"Error while opening block {str(self.current_block)}",
             )
             LOGGER.write(
                 "error",
-                "Error while opening block {current_block}".format(current_block=str(self.current_block)),
+                f"Error while opening block {str(self.current_block)}",
             )
 
     def update_textbox(self):
@@ -88,11 +88,11 @@ class MenuWithBlockDisplay:
         formated_result = "\n".join(result_lines)
 
         self.result_content_box.set_text(formated_result)
-        self.result_content_box.set_title("Block {current_block}".format(current_block=str(self.current_block)))
+        self.result_content_box.set_title(f"Block {str(self.current_block)}")
 
         LOGGER.write(
             "debug",
-            "Textbox updated with block {current_block}".format(current_block=str(self.current_block)),
+            f"Textbox updated with block {str(self.current_block)}",
         )
 
     def display_previous_block(self):
@@ -103,7 +103,7 @@ class MenuWithBlockDisplay:
         except ValueError:
             LOGGER.write(
                 "error",
-                "Cannot display block {block} - 1".format(block=self.current_block),
+                f"Cannot display block {str(self.current_block)} - 1",
             )
             return
 
@@ -115,7 +115,7 @@ class MenuWithBlockDisplay:
         except ValueError:
             LOGGER.write(
                 "error",
-                "Cannot display block {block} + 1".format(block=self.current_block),
+                f"Cannot display block {str(self.current_block)} + 1",
             )
             return
 
@@ -136,5 +136,5 @@ class MenuWithBlockDisplay:
         self.horizontal_char_limit = text_box_dimensions[1] - text_box_dimensions[0]
         LOGGER.write(
             "debug",
-            "Textbox char limit set to {char_limit}".format(char_limit=self.horizontal_char_limit),
+            f"Textbox char limit set to {self.horizontal_char_limit}",
         )

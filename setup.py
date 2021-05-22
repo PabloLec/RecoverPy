@@ -9,7 +9,7 @@ with open("README.md", "r") as readme_fp:
 
 setup(
     name="recoverpy",
-    version="1.0.7",
+    version="1.1.0",
     author="Pablo Lecolinet",
     author_email="pablolec@pm.me",
     description="A command line interface for recovering overwritten or deleted text data.",
@@ -28,10 +28,10 @@ setup(
     package_data={"recoverpy": ["recoverpy/config.yaml"]},
     include_package_data=True,
     classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Intended Audience :: Developers",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
+        "Development Status :: 5 - Production/Stable",
+        "Operating System :: POSIX :: Linux",
+        "Environment :: Console",
+        "Intended Audience :: End Users/Desktop",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",

@@ -123,7 +123,7 @@ class ParametersMenu:
         LOGGER.write("debug", "Partition list generated using 'lsblk'")
         LOGGER.write(
             "debug",
-            "{dict_len} partitions found".format(dict_len=str(len(partition_dict))),
+            f"{str(len(partition_dict))} partitions found",
         )
 
         return partition_dict
@@ -137,7 +137,9 @@ class ParametersMenu:
         """
 
         lsblk_output = check_output(["lsblk", "-r", "-n", "-o", "NAME,TYPE,FSTYPE,MOUNTPOINT"], encoding="utf-8")
-        partition_list_raw = [line.strip() for line in lsblk_output.splitlines() if " loop " not in line]
+        partition_list_raw = [
+            line.strip() for line in lsblk_output.splitlines() if " loop " not in line and "swap" not in line
+        ]
         partition_list_formatted = [line.split(" ") for line in partition_list_raw]
 
         return partition_list_formatted
@@ -168,7 +170,7 @@ class ParametersMenu:
 
             LOGGER.write(
                 "debug",
-                "Partition added to list: {partition}".format(partition=str(partition)),
+                f"Partition added to list: {str(partition)}",
             )
 
     def select_partition(self):
@@ -180,16 +182,16 @@ class ParametersMenu:
             # Warn the user to unmount his partition first
             self.master.show_warning_popup(
                 "Warning",
-                "It is highly recommended to unmount {name} first.".format(name=selected_partition),
+                f"It is highly recommended to unmount {selected_partition} first.",
             )
         else:
-            self.master.show_message_popup("", "Partition {name} selected.".format(name=selected_partition))
+            self.master.show_message_popup("", f"Partition {selected_partition} selected.")
 
         self.partition_to_search = "/dev/" + selected_partition.strip()
 
         LOGGER.write(
             "info",
-            "Partition selected: {partition}".format(partition=self.partition_to_search),
+            f"Partition selected: {self.partition_to_search}",
         )
 
     def start_search(self):

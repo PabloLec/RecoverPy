@@ -4,49 +4,35 @@ Recoverpy is a CUI utility written in Python with the help of [py_cui](https://g
 
 You can already find plenty of solutions to recover deleted files but it can be a hassle to recover overwritten files. Recoverpy search through every inodes to find your request.
 
-## Installation
-
-:penguin: The main prerequisite is having a Linux system.
-
-The file system type of your partition should not be a problem, just make sure you have access to `grep`, `dd`, and `lsblk` commands.
-
-- Debian-like :
-
-`apt install grep coreutils util-linux`
-
-- Arch :
-
-`pacman -S grep coreutils util-linux`
-
-- Fedora :
-
-`dnf install grep coreutils util-linux`
-
-### - From pip (_recommended_):
-
-Pip should be already installed if you have Python >=3.4. Otherwise, see [pip docs](https://pip.pypa.io/en/stable/installing/ "pip docs") for installation.
-
-`pip install recoverpy`
-
-### - From source:
-
-To install:
-
-```bash
-git clone https://github.com/pablolec/recoverpy
-cd recoverpy
-python3 -m pip install .
-```
-
-To update:
-
-`python3 -m pip install --upgrade recoverpy`
-
 ## Demo
 
 <p align="center">
     <img src="docs/assets/demo.gif">
 </p>
+
+## Installation
+
+:penguin: The main prerequisite is having a Linux system.
+
+**Mandatory:** To list and search through your partitions, recoverpy uses `grep`, `dd`, and `lsblk` commands.
+**Optional:** To display real time grep progress, you can install `progress` tool.
+
+To install all dependencies:
+- Debian-like:
+`apt install grep coreutils util-linux progress`  
+- Arch:
+`pacman -S grep coreutils util-linux progress`  
+- Fedora:
+`dnf install grep coreutils util-linux progress`  
+
+**Installation from pip**:
+Pip should be already installed if you have Python >=3.4. Otherwise, see [pip docs](https://pip.pypa.io/en/stable/installing/ "pip docs") for installation.
+
+`python3 -m pip install recoverpy`
+
+
+To update:
+`python3 -m pip install --upgrade recoverpy`
 
 ## Usage
 
@@ -58,9 +44,9 @@ python3 -m recoverpy
 
 If you are not logged as root use `sudo recoverpy` or log in with `su -` before execution.
 
-First, select the system partition in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
+First, **select the system partition** in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
 
-Then, type a text to search. You can now start the search.
+Then, **type a text to search**. You can now start the search.
 
 Note that searching a string in a whole partition may take _a while_. (see [euphemism](https://en.wikipedia.org/wiki/Euphemism "euphemism"))
 

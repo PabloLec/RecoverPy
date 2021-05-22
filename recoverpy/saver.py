@@ -3,6 +3,7 @@ from datetime import datetime
 from recoverpy import logger as LOGGER
 
 _SAVE_PATH = None
+_LAST_SAVED_FILE = None
 
 
 def set_save_path(path: str):
@@ -17,6 +18,7 @@ def save_result(current_block: str, result: str):
     """Saves a single result in a text file"""
 
     global _SAVE_PATH
+    global _LAST_SAVED_FILE
 
     file_name = "{save_location}{time}-{block}".format(
         save_location=_SAVE_PATH,
@@ -27,13 +29,16 @@ def save_result(current_block: str, result: str):
     with open(file_name, "w") as save_file:
         save_file.write(result)
 
-    LOGGER.write("info", "Output saved in file {file_name}".format(file_name=file_name))
+    _LAST_SAVED_FILE = file_name
+
+    LOGGER.write("info", f"Output saved in file {file_name}")
 
 
 def save_result_dict(results: dict):
     """Orders a results dictionnary by block numbers and the saves it in a text file."""
 
     global _SAVE_PATH
+    global _LAST_SAVED_FILE
 
     ordered_blocks = sorted(results)
 
@@ -43,11 +48,11 @@ def save_result_dict(results: dict):
         final_output += results[key]
         final_output += "\n"
 
-    file_name = "{save_location}{time}".format(
-        save_location=_SAVE_PATH,
-        time=datetime.now().strftime("recoverpy-save-%Y-%m-%d-%H%M%S"),
-    )
+    file_name = f"{_SAVE_PATH}{datetime.now().strftime('recoverpy-save-%Y-%m-%d-%H%M%S')}"
 
     with open(file_name, "w") as save_file:
         save_file.write(final_output)
-    LOGGER.write("info", "Output saved in file {file_name}".format(file_name=file_name))
+
+    _LAST_SAVED_FILE = file_name
+
+    LOGGER.write("info", f"Output saved in file {file_name}")

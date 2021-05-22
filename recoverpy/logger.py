@@ -40,7 +40,7 @@ def start_logging():
 
     time = datetime.now().strftime("%Y-%m-%d-%H%M%S")
 
-    log_file_name = "{path}recoverpy-{time}.log".format(path=_LOG_FILE_PATH, time=time)
+    log_file_name = f"{_LOG_FILE_PATH}recoverpy-{time}.log"
 
     _LOGGER = logging.getLogger("main")
     _LOGGER.setLevel(logging.DEBUG)

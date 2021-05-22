@@ -69,7 +69,7 @@ class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.result_content_box = self.master.add_text_block(
             "Block content:", 0, 1, row_span=9, column_span=8, padx=1, pady=0
         )
-        self.result_content_box.set_title("Block {current_block}".format(current_block=str(self.current_block)))
+        self.result_content_box.set_title(f"Block {str(self.current_block)}")
 
         # Display initial block at opening
         self.display_block(self.current_block)
@@ -117,7 +117,7 @@ class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.saved_blocks_dict[self.current_block] = self.current_result
         LOGGER.write(
             "debug",
-            "Stored block {block} for future save".format(block=self.current_block),
+            f"Stored block {self.current_block} for future save",
         )
 
     def save_file(self):
@@ -128,11 +128,12 @@ class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         len_results = len(self.saved_blocks_dict)
 
         if len_results == 0:
-            self.master.show_message_popup("", "No result to save yeet")
+            self.master.show_message_popup("", "No result to save yet")
             return
-        elif len_results == 1:
-            self.master.show_message_popup("", "Result saved")
-        else:
-            self.master.show_message_popup("", "{len_results} results saved".format(len_results=len_results))
 
         SAVER.save_result_dict(self.saved_blocks_dict)
+
+        if len_results == 1:
+            self.master.show_message_popup("", f"Block saved in {SAVER._LAST_SAVED_FILE}")
+        else:
+            self.master.show_message_popup("", f"{len_results} blocks saved in {SAVER._LAST_SAVED_FILE}")

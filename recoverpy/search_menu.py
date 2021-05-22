@@ -1,4 +1,4 @@
-from subprocess import PIPE, Popen
+from subprocess import PIPE, DEVNULL, Popen, check_output, call
 from threading import Thread
 from queue import Queue
 from shlex import quote
@@ -28,6 +28,7 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         master (py_cui.PyCUI): PyCUI constructor.
         queue_object (Queue): Queue object where grep command stdout will be stored.
         result_index (int): Number of results already processed.
+        grep_progress (str): Formated output of 'progress' command.
         partition (str): System partition selected by user for search.
         block_size (int): Size of partition block for dd parsing.
         searched_string (str): String given by the user that will be searched by dd command.
@@ -44,9 +45,12 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         super().__init__()
 
         self.master = master
+        self.master.set_refresh_timeout(1)
 
         self.queue_object = Queue()
         self.result_index = 0
+
+        self.grep_progress = ""
 
         self.partition = partition
         self.block_size = 512
@@ -58,16 +62,23 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.create_ui_content()
 
         self.start_search()
-        LOGGER.write("info", dir(self))
 
         LOGGER.write(
             "info",
-            "Raw searched string:\n{searched_string}".format(searched_string=self.searched_string),
+            f"Raw searched string:\n{self.searched_string}",
         )
         LOGGER.write(
             "info",
-            "Formated searched string:\n{escaped_string}".format(escaped_string=quote(self.searched_string)),
+            f"Formated searched string:\n{quote(self.searched_string)}",
         )
+
+    def set_title(self):
+        if self.grep_progress != "":
+            title = f"{self.grep_progress} - {str(self.result_index)} results"
+        else:
+            title = f"{str(self.result_index)} results"
+
+        self.master.set_title(title)
 
     def create_ui_content(self):
         """Handles the creation of the UI elements."""
@@ -128,11 +139,45 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             command=self.master.stop,
         )
 
+    def is_progress_installed(self):
+        """Verifies if 'progress' tool is installed on current system.
+
+        Returns:
+            bool: 'progress' is installed.
+        """
+
+        output = call("command -v progress", shell=True)
+        if output == 0:
+            return True
+        else:
+            return False
+
+    def monitor_progress(self, grep_pid: int):
+        """Uses 'progress' tool to monitor grep advancement.
+
+        Args:
+            grep_pid (int): PID of grep process.
+        """
+        while True:
+            output = check_output(["progress", "-p", str(grep_pid)], stderr=DEVNULL).decode("utf8")
+
+            try:
+                progress = re.findall(r"([0-9]+\.[0-9]+\%[^\)]+\))", output)[0]
+            except IndexError:
+                continue
+
+            self.grep_progress = progress
+            LOGGER.write("debug", f"Progress: {progress}")
+            self.set_title()
+            time.sleep(1)
+
     def start_search(self):
         """Function is called within __init__
-        Launches a process executing the grep command.
-        A thread to store the output in a queue object.
-        And a second thread to populate the result box dynamically.
+        Launches:
+        - Process executing the grep command.
+        - If available, thread using 'progress' tool to monitor grep.
+        - Thread to store the grep output in a queue object.
+        - Thread to populate the result box dynamically.
         """
 
         grep_process = Popen(
@@ -142,6 +187,11 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             stderr=None,
         )
 
+        if self.is_progress_installed():
+            monitor_progress_thread = Thread(target=self.monitor_progress, args=(grep_process.pid,))
+            monitor_progress_thread.daemon = True
+            monitor_progress_thread.start()
+
         enqueue_grep_output_thread = Thread(
             target=self.enqueue_grep_output,
             args=(grep_process.stdout, self.queue_object),
@@ -149,13 +199,13 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         enqueue_grep_output_thread.daemon = True
         enqueue_grep_output_thread.start()
 
-        LOGGER.write("info", "Starting searching process")
+        LOGGER.write("debug", "Started searching thread")
 
         yield_results_thread = Thread(target=self.populate_result_list)
         yield_results_thread.daemon = True
         yield_results_thread.start()
 
-        LOGGER.write("info", "Starting output fetching process")
+        LOGGER.write("debug", "Started output fetching thread")
 
     def enqueue_grep_output(self, out: io.BufferedReader, queue: Queue):
         """Function called in a thread to store the grep command output in
@@ -205,11 +255,11 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
                 LOGGER.write("debug", "New result found: " + string_result[:30] + " ...")
 
                 self.search_results_cell.add_item(string_result)
-            self.master.set_title("{num_of_results} results".format(num_of_results=str(self.result_index)))
+            self.set_title()
 
             # Sleeps to avoid unnecessary overload
             # This should not affect Popen's GIL
-            time.sleep(2)
+            time.sleep(1)
 
     def update_block_number(self):
         """Updates currently viewed block number when the user selects one in the list."""
@@ -223,7 +273,7 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         LOGGER.write(
             "debug",
-            "Displayed block set to {current_block}".format(current_block=str(self.current_block)),
+            f"Displayed block set to {str(self.current_block)}",
         )
 
     def display_selected_block(self):
@@ -251,6 +301,7 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         Args:
             choice (str): User choice given by open_save_menu function.
         """
+
         if choice == "Save currently displayed block":
             SAVER.save_result(current_block=self.current_block, result=self.current_result)
 
