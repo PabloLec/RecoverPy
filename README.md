@@ -18,21 +18,16 @@ You can already find plenty of solutions to recover deleted files but it can be 
 **Optional:** To display real time grep progress, you can install `progress` tool.
 
 To install all dependencies:
-- Debian-like:
-`apt install grep coreutils util-linux progress`  
-- Arch:
-`pacman -S grep coreutils util-linux progress`  
-- Fedora:
-`dnf install grep coreutils util-linux progress`  
+- Debian-like: `apt install grep coreutils util-linux progress`  
+- Arch: `pacman -S grep coreutils util-linux progress`  
+- Fedora: `dnf install grep coreutils util-linux progress`  
 
-**Installation from pip**:
-Pip should be already installed if you have Python >=3.4. Otherwise, see [pip docs](https://pip.pypa.io/en/stable/installing/ "pip docs") for installation.
+**Installation from pip**: `python3 -m pip install recoverpy`  
 
-`python3 -m pip install recoverpy`
+*Pip should be already installed if you have Python >=3.4. Otherwise, see [
+pip docs](https://pip.pypa.io/en/stable/installing/ "pip docs") for installation.*
 
-
-To update:
-`python3 -m pip install --upgrade recoverpy`
+To update: `python3 -m pip install --upgrade recoverpy`
 
 ## Usage
 
