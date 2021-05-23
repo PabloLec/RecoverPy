@@ -3,9 +3,7 @@
 
 name: Test release upload
 
-on:
-  release:
-    types: [push, pull_request]
+on: [push, pull_request]
 
 jobs:
   deploy:
