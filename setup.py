@@ -13,6 +13,7 @@ with open("README.md", "r") as readme_fp:
 
 def get_version():
     last_tag = str(check_output("git tag --list | tail -1", shell=True))
+    print(last_tag)
     last_version = findall("([0-9]+\.[0-9]+\.[0-9]+)", last_tag)[0]
     
     return last_version
