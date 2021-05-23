@@ -10,7 +10,7 @@ with open("README.md", "r") as readme_fp:
     
 setup(
     name="recoverpy",
-    version="1.1.1,
+    version="1.1.1",
     author="Pablo Lecolinet",
     author_email="pablolec@pm.me",
     description="A command line interface for recovering overwritten or deleted text data.",
