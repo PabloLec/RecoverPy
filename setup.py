@@ -1,4 +1,8 @@
+from re import findall
+from subprocess import check_output
+
 from setuptools import setup, find_packages
+
 
 with open("requirements.txt", "r") as req_fp:
     required_packages = req_fp.readlines()
@@ -7,9 +11,20 @@ with open("requirements.txt", "r") as req_fp:
 with open("README.md", "r") as readme_fp:
     long_description = readme_fp.read()
 
+def get_version():
+    last_tag = str(check_output("git tag --list | tail -1", shell=True))
+    last_version = re.findall("([0-9]+\.[0-9]+\.[0-9]+", last_tag)
+    
+    return last_version
+
+try:
+    last_version = get_version()
+except:
+    last_version = "1.1.0"
+    
 setup(
     name="recoverpy",
-    version="1.1.0",
+    version=last_version,
     author="Pablo Lecolinet",
     author_email="pablolec@pm.me",
     description="A command line interface for recovering overwritten or deleted text data.",
