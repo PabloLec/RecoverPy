@@ -17,10 +17,7 @@ def get_version():
     
     return last_version
 
-try:
-    last_version = get_version()
-except:
-    last_version = "1.1.0"
+last_version = get_version()
     
 setup(
     name="recoverpy",
