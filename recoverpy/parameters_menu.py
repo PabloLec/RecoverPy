@@ -13,10 +13,11 @@ class ParametersMenu:
     User is prompted to select a partition and a string to search in it.
 
     Attributes:
-        partition_dict (dict): Dictionnary of system partitions found with
-            lsblk command and their attributes.
-        partition_to_search (str): Partition selected by user
-        string_to_search (str): String entered by user
+        partition_to_search (str): Partition selected by user.
+        string_to_search (str): String entered by user.
+        partitions_list (list): Raw list of lsblk output.
+        partitions_dict (dict): Dictionnary of system partitions found with
+                lsblk command and their attributes.
     """
 
     def __init__(self, master: py_cui.PyCUI):
@@ -28,7 +29,6 @@ class ParametersMenu:
 
         self.master = master
 
-        self.partition_dict = None
         self.partition_to_search = None
         self.string_to_search = None
 
@@ -36,21 +36,23 @@ class ParametersMenu:
 
         self.is_user_root()
 
+        self.partitions_list = self.lsblk()
+        self.partitions_dict = self.format_partitions_list()
+
         self.create_ui_content()
+        self.add_partitions_to_list()
 
     def create_ui_content(self):
         """Handles the creation of the UI elements."""
 
-        self.partition_list_cell = self.master.add_scroll_menu(
+        self.partitions_list_cell = self.master.add_scroll_menu(
             "Select a partition to search:", 0, 0, row_span=9, column_span=5
         )
-        self.partition_list_cell.add_key_command(py_cui.keys.KEY_ENTER, self.select_partition)
-
-        self.add_partitions_to_list()
+        self.partitions_list_cell.add_key_command(py_cui.keys.KEY_ENTER, self.select_partition)
 
         # Color rules
-        self.partition_list_cell.add_text_color_rule("Mounted at", py_cui.YELLOW_ON_BLACK, "contains")
-        self.partition_list_cell.set_selected_color(py_cui.GREEN_ON_BLACK)
+        self.partitions_list_cell.add_text_color_rule("Mounted at", py_cui.YELLOW_ON_BLACK, "contains")
+        self.partitions_list_cell.set_selected_color(py_cui.GREEN_ON_BLACK)
 
         self.string_text_box = self.master.add_text_block("Enter a text to search:", 0, 5, row_span=9, column_span=5)
 
@@ -84,7 +86,7 @@ class ParametersMenu:
         LOGGER.write("warning", "User is not root")
         return False
 
-    def list_partitions(self) -> dict:
+    def format_partitions_list(self) -> dict:
         """Uses lsblk command to find partitions.
 
         Returns:
@@ -92,11 +94,9 @@ class ParametersMenu:
                     {Name: FSTYPE, IS_MOUNTED, MOUNT_POINT}
         """
 
-        partition_list = self.lsblk()
-
         # Create dict with relevant infos
-        partition_dict = {}
-        for partition in partition_list:
+        partitions_dict = {}
+        for partition in self.partitions_list:
             if len(partition) < 3:
                 # Ignore if no FSTYPE detected
                 continue
@@ -108,14 +108,14 @@ class ParametersMenu:
                 is_mounted = True
                 mount_point = partition[3]
 
-            partition_dict[partition[0]] = {
+            partitions_dict[partition[0]] = {
                 "FSTYPE": partition[2],
                 "IS_MOUNTED": is_mounted,
                 "MOUNT_POINT": mount_point,
             }
 
         # Warn the user if no partition found with lsblk
-        if len(partition_dict) == 0:
+        if len(partitions_dict) == 0:
             LOGGER.write("Error", "No partition found !")
             self.master.show_error_popup("Error", "No partition found.")
             return None
@@ -123,10 +123,10 @@ class ParametersMenu:
         LOGGER.write("debug", "Partition list generated using 'lsblk'")
         LOGGER.write(
             "debug",
-            f"{str(len(partition_dict))} partitions found",
+            f"{str(len(partitions_dict))} partitions found",
         )
 
-        return partition_dict
+        return partitions_dict
 
     def lsblk(self) -> list:
         """Uses 'lsblk' utility to generate a list of detected
@@ -137,34 +137,37 @@ class ParametersMenu:
         """
 
         lsblk_output = check_output(["lsblk", "-r", "-n", "-o", "NAME,TYPE,FSTYPE,MOUNTPOINT"], encoding="utf-8")
-        partition_list_raw = [
+        partitions_list_raw = [
             line.strip() for line in lsblk_output.splitlines() if " loop " not in line and "swap" not in line
         ]
-        partition_list_formatted = [line.split(" ") for line in partition_list_raw]
+        partitions_list_formatted = [line.split(" ") for line in partitions_list_raw]
 
-        return partition_list_formatted
+        LOGGER.write(
+                    "debug",
+                    str(partitions_list_formatted),
+                )
+
+        return partitions_list_formatted
 
     def add_partitions_to_list(self):
         """Populates the partition list with partition found previously."""
 
-        self.partition_dict = self.list_partitions()
-
-        if self.partition_dict is None:
+        if self.partitions_dict is None:
             return
 
-        for partition in self.partition_dict:
-            if self.partition_dict[partition]["IS_MOUNTED"]:
-                self.partition_list_cell.add_item(
+        for partition in self.partitions_dict:
+            if self.partitions_dict[partition]["IS_MOUNTED"]:
+                self.partitions_list_cell.add_item(
                     "Name: {name}  -  Type: {fstype}  -  Mounted at: {mountpoint}".format(
                         name=partition,
-                        fstype=self.partition_dict[partition]["FSTYPE"],
-                        mountpoint=self.partition_dict[partition]["MOUNT_POINT"],
+                        fstype=self.partitions_dict[partition]["FSTYPE"],
+                        mountpoint=self.partitions_dict[partition]["MOUNT_POINT"],
                     )
                 )
             else:
-                self.partition_list_cell.add_item(
+                self.partitions_list_cell.add_item(
                     "Name: {name}  -  Type: {fstype}".format(
-                        name=partition, fstype=self.partition_dict[partition]["FSTYPE"]
+                        name=partition, fstype=self.partitions_dict[partition]["FSTYPE"]
                     )
                 )
 
@@ -176,9 +179,9 @@ class ParametersMenu:
     def select_partition(self):
         """Handles the user selection of a partition in the list."""
 
-        selected_partition = re.findall(r"Name\:\ ([^\ \n]+)\ ", self.partition_list_cell.get())[0]
+        selected_partition = re.findall(r"Name\:\ ([^\ \n]+)\ ", self.partitions_list_cell.get())[0]
 
-        if self.partition_dict[selected_partition]["IS_MOUNTED"]:
+        if self.partitions_dict[selected_partition]["IS_MOUNTED"]:
             # Warn the user to unmount his partition first
             self.master.show_warning_popup(
                 "Warning",

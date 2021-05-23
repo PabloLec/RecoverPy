@@ -244,30 +244,39 @@ class SearchMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         return new_results
 
     def populate_result_list(self):
-        """Dynamically populates the left hand result list with new results from the
-        grep command"""
+        """Polls grep output and populate result list."""
 
         while True:
             new_results = self.yield_new_results()
-            for result in new_results:
-                string_result = str(result)[2:-1]
-
-                LOGGER.write("debug", "New result found: " + string_result[:30] + " ...")
-
-                self.search_results_cell.add_item(string_result)
+            self.add_results_to_list(new_results=new_results)
             self.set_title()
 
             # Sleeps to avoid unnecessary overload
             # This should not affect Popen's GIL
             time.sleep(1)
 
+    def add_results_to_list(self, new_results: list):
+        """Adds new results from the grep command to the left hand result list.
+
+        Args:
+            new_results (list): New results from the grep command.
+        """
+
+        for result in new_results:
+            string_result = str(result)[2:-1]
+
+            LOGGER.write("debug", "New result found: " + string_result[:30] + " ...")
+
+            self.search_results_cell.add_item(string_result)
+
     def update_block_number(self):
         """Updates currently viewed block number when the user selects one in the list."""
 
-        item_index = self.search_results_cell.get_selected_item_index()
-        item_list = self.search_results_cell.get_item_list()
+        # item_index = self.search_results_cell.get_selected_item_index()
+        # item_list = self.search_results_cell.get_item_list()
 
-        item = item_list[item_index]
+        # item = item_list[item_index]
+        item = self.search_results_cell.get()
         inode = int(re.findall(r"^([0-9]+)\:", item)[0])
         self.current_block = str(int(inode / self.block_size))
 
