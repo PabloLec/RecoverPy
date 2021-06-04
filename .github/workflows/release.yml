@@ -29,3 +29,5 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
         twine upload dist/*
+    - name: AUR sync docker
+      uses: ManiaciaChao/aur-sync-action@v1.2
