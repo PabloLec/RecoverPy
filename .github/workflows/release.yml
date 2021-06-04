@@ -29,5 +29,16 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
         twine upload dist/*
-    - name: AUR sync docker
-      uses: ManiaciaChao/aur-sync-action@v1.2
+  aur-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync AUR package with Github release
+        uses: maniaciachao/aur-sync-action@v1.2
+        with:
+          package_name: python-recoverpy
+          github_repo: 'PabloLec/recoverpy'
+          commit_username: 'Github Action Bot'
+          commit_email: pablolec@pm.me
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          extra_dependencies: 'python python-setuptools'
+
