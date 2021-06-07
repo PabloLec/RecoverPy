@@ -1,24 +1,20 @@
-from subprocess import PIPE, DEVNULL, Popen, check_output
-from threading import Thread
+import py_cui
+
+from time import sleep
 from queue import Queue
 from shlex import quote
-
-
-import time
-import re
-import py_cui
+from re import findall
 
 from recoverpy import views_handler as VIEWS_HANDLER
 from recoverpy import menu_with_block_display as BLOCK_DISPLAY_MENU
 from recoverpy import saver as SAVER
 from recoverpy import search_functions as SEARCH
-from recoverpy import helper as HELPER
 from recoverpy import logger as LOGGER
 
 
 class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
-    """Search menu is displayed after Parameters menu.
-    On the left hand scroll menu, results from the grep command will be listed.
+    """Search view is displayed after Parameters view.
+    On the left hand scroll view, results from the grep command will be listed.
     On the right hand textbox, result of a dd command will be displayed when the user
     selects a block.
 
@@ -37,7 +33,7 @@ class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
     """
 
     def __init__(self, master: py_cui.PyCUI, partition: str, string_to_search: str):
-        """Constructor for Search menu
+        """Constructor for Search view
 
         Args:
             master (py_cui.PyCUI): PyCUI constructor
@@ -93,7 +89,7 @@ class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.result_content_box = self.master.add_text_block(
             "Block content:", 0, 5, row_span=9, column_span=5, padx=1, pady=0
         )
-        self.result_content_box.add_key_command(py_cui.keys.KEY_F5, self.open_save_menu)
+        self.result_content_box.add_key_command(py_cui.keys.KEY_F5, self.open_save_view)
         self.result_content_box.add_key_command(py_cui.keys.KEY_F6, self.display_previous_block)
         self.result_content_box.add_key_command(py_cui.keys.KEY_F7, self.display_next_block)
 
@@ -127,7 +123,7 @@ class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             column_span=2,
             padx=1,
             pady=0,
-            command=self.open_save_menu,
+            command=self.open_save_view,
         )
 
         self.exit_button = self.master.add_button(
@@ -149,14 +145,14 @@ class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
                 new_results, self.result_index = SEARCH.yield_new_results(self.queue_object, self.result_index)
             except TypeError:
                 # If no new results
-                time.sleep(1)
+                sleep(1)
                 continue
 
             self.add_results_to_list(new_results=new_results)
             self.set_title()
 
             # Sleeps to avoid unnecessary overload
-            time.sleep(1)
+            sleep(1)
 
     def add_results_to_list(self, new_results: list):
         """Adds new results from the grep command to the left hand result list.
@@ -175,7 +171,7 @@ class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         """Updates currently viewed block number when the user selects one in the list."""
 
         item = self.search_results_scroll_menu.get()
-        inode = int(re.findall(r"^([0-9]+)\:", item)[0])
+        inode = int(findall(r"^([0-9]+)\:", item)[0])
         self.current_block = str(int(inode / self.block_size))
 
         LOGGER.write(
@@ -191,22 +187,22 @@ class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.update_block_number()
         self.display_block(self.current_block)
 
-    def open_save_menu(self):
-        """Opens a menu displaying save options."""
+    def open_save_view(self):
+        """Opens a view displaying save options."""
 
-        menu_choices = [
+        view_choices = [
             "Save currently displayed block",
             "Explore neighboring blocks and save it all",
             "Cancel",
         ]
-        self.master.show_menu_popup("How do you want to save it ?", menu_choices, self.handle_save_menu_choice)
+        self.master.show_menu_popup("How do you want to save it ?", view_choices, self.handle_save_view_choice)
 
-    def handle_save_menu_choice(self, choice: str):
+    def handle_save_view_choice(self, choice: str):
         """Depending on user choice, function will either directly save the output in
-        a text file, open a more detailed menu called ResultsView or just exit.
+        a text file, open a more detailed view called ResultsView or just exit.
 
         Args:
-            choice (str): User choice given by open_save_menu function.
+            choice (str): User choice given by open_save_view function.
         """
 
         if choice == "Save currently displayed block":

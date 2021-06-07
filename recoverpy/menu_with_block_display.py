@@ -4,7 +4,7 @@ from recoverpy import logger as LOGGER
 
 
 class MenuWithBlockDisplay:
-    """Composition aimed class for menus needing methods to display partition
+    """Composition aimed class for views needing methods to display partition
     blocks content.
 
     Attributes:

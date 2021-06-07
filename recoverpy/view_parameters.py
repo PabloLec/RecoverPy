@@ -1,5 +1,6 @@
-import re
 import py_cui
+
+from re import findall
 
 from recoverpy import views_handler as VIEWS_HANDLER
 from recoverpy import helper as HELPER
@@ -7,7 +8,7 @@ from recoverpy import logger as LOGGER
 
 
 class ParametersView:
-    """Parameters menu is the first window displayed.
+    """Parameters view is the first window displayed.
     User is prompted to select a partition and a string to search in it.
 
     Attributes:
@@ -18,7 +19,7 @@ class ParametersView:
     """
 
     def __init__(self, master: py_cui.PyCUI):
-        """Constructor for Parameters menu
+        """Constructor for Parameters view
 
         Args:
             master (py_cui.PyCUI): PyCUI constructor
@@ -39,14 +40,14 @@ class ParametersView:
     def create_ui_content(self):
         """Handles the creation of the UI elements."""
 
-        self.partitions_list_scroll_menu = self.master.add_scroll_menu(
+        self.partitions_list_cell = self.master.add_scroll_menu(
             "Select a partition to search:", 0, 0, row_span=9, column_span=5
         )
-        self.partitions_list_scroll_menu.add_key_command(py_cui.keys.KEY_ENTER, self.select_partition)
+        self.partitions_list_cell.add_key_command(py_cui.keys.KEY_ENTER, self.select_partition)
 
         # Color rules
-        self.partitions_list_scroll_menu.add_text_color_rule("Mounted at", py_cui.YELLOW_ON_BLACK, "contains")
-        self.partitions_list_scroll_menu.set_selected_color(py_cui.GREEN_ON_BLACK)
+        self.partitions_list_cell.add_text_color_rule("Mounted at", py_cui.YELLOW_ON_BLACK, "contains")
+        self.partitions_list_cell.set_selected_color(py_cui.GREEN_ON_BLACK)
 
         self.string_text_box = self.master.add_text_block("Enter a text to search:", 0, 5, row_span=9, column_span=5)
 
@@ -72,7 +73,7 @@ class ParametersView:
 
         for partition in self.partitions_dict:
             if self.partitions_dict[partition]["IS_MOUNTED"]:
-                self.partitions_list_scroll_menu.add_item(
+                self.partitions_list_cell.add_item(
                     "Name: {name}  -  Type: {fstype}  -  Mounted at: {mountpoint}".format(
                         name=partition,
                         fstype=self.partitions_dict[partition]["FSTYPE"],
@@ -80,7 +81,7 @@ class ParametersView:
                     )
                 )
             else:
-                self.partitions_list_scroll_menu.add_item(
+                self.partitions_list_cell.add_item(
                     "Name: {name}  -  Type: {fstype}".format(
                         name=partition, fstype=self.partitions_dict[partition]["FSTYPE"]
                     )
@@ -94,7 +95,7 @@ class ParametersView:
     def select_partition(self):
         """Handles the user selection of a partition in the list."""
 
-        selected_partition = re.findall(r"Name\:\ ([^\ \n]+)\ ", self.partitions_list_scroll_menu.get())[0]
+        selected_partition = findall(r"Name\:\ ([^\ \n]+)\ ", self.partitions_list_cell.get())[0]
 
         if self.partitions_dict[selected_partition]["IS_MOUNTED"]:
             # Warn the user to unmount his partition first
@@ -142,7 +143,7 @@ class ParametersView:
             )
 
     def start_search(self, is_confirmed: bool):
-        """Closes parameters menu and open search menu if confirmed.
+        """Closes parameters view and open search view if confirmed.
 
         Args:
             is_confirmed (bool): User popup selection

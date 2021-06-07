@@ -9,8 +9,8 @@ from queue import Queue
 
 @pytest.fixture
 def PARAMETERS_MENU():
-    menu = recoverpy.view_parameters.ParametersView.__new__(recoverpy.view_parameters.ParametersView)
-    menu.master = py_cui.PyCUI(10, 10)
+    view = recoverpy.view_parameters.ParametersView.__new__(recoverpy.view_parameters.ParametersView)
+    view.master = py_cui.PyCUI(10, 10)
 
     partitions = [
         ["sda", "disk"],
@@ -24,36 +24,36 @@ def PARAMETERS_MENU():
         ["vdb", "disk", "LVM2_member"],
         ["vda2", "part", "LVM2_member"],
     ]
-    menu.partitions_list = partitions
+    view.partitions_list = partitions
 
-    return menu
+    return view
 
 
 @pytest.fixture
 def SEARCH_MENU():
-    menu = recoverpy.view_search.SearchView.__new__(recoverpy.view_search.SearchView)
-    menu.master = py_cui.PyCUI(10, 10)
-    menu.queue_object = Queue()
+    view = recoverpy.view_search.SearchView.__new__(recoverpy.view_search.SearchView)
+    view.master = py_cui.PyCUI(10, 10)
+    view.queue_object = Queue()
     lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-    menu.queue_object.put(f"- 1000: {lorem}")
-    menu.queue_object.put(f"- 2000: {lorem}")
-    menu.queue_object.put(f"- 3000: {lorem}")
-    menu.result_index = 0
-    menu.grep_progress = ""
-    menu.block_size = 512
+    view.queue_object.put(f"- 1000: {lorem}")
+    view.queue_object.put(f"- 2000: {lorem}")
+    view.queue_object.put(f"- 3000: {lorem}")
+    view.result_index = 0
+    view.grep_progress = ""
+    view.block_size = 512
 
-    return menu
+    return view
 
 
 @pytest.fixture
 def BLOCK_MENU():
-    menu = recoverpy.view_results.ResultsView.__new__(recoverpy.view_results.ResultsView)
-    menu.master = py_cui.PyCUI(10, 10)
-    menu.partition = "/dev/sda1"
-    menu.saved_blocks_dict = {}
-    menu.current_block = 5
+    view = recoverpy.view_results.ResultsView.__new__(recoverpy.view_results.ResultsView)
+    view.master = py_cui.PyCUI(10, 10)
+    view.partition = "/dev/sda1"
+    view.saved_blocks_dict = {}
+    view.current_block = 5
 
-    return menu
+    return view
 
 
 def test_partitions_parsing(PARAMETERS_MENU):
@@ -211,7 +211,7 @@ def test_save_search_result(SEARCH_MENU, tmp_path):
     SEARCH_MENU.current_result = "TEST CONTENT"
     recoverpy.saver._SAVE_PATH = tmp_path
 
-    SEARCH_MENU.handle_save_menu_choice(choice="Save currently displayed block")
+    SEARCH_MENU.handle_save_view_choice(choice="Save currently displayed block")
 
     saved_file = recoverpy.saver._LAST_SAVED_FILE
 

@@ -6,7 +6,7 @@ from recoverpy import saver as SAVER
 
 
 class ResultsView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
-    """Block menu is called in order to navigate more easily through partition blocks
+    """Block view is called in order to navigate more easily through partition blocks
     and eventually save multiple results in the same file.
 
     Args:
@@ -20,7 +20,7 @@ class ResultsView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
     """
 
     def __init__(self, master: py_cui.PyCUI, partition: str, initial_block: int):
-        """Constructor for Block menu
+        """Constructor for Block view
 
         Args:
             master (py_cui.PyCUI): PyCUI constructor
@@ -96,7 +96,7 @@ class ResultsView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         )
 
         self.go_back_button = self.master.add_button(
-            "Go back to previous menu",
+            "Go back to previous view",
             9,
             8,
             row_span=1,

@@ -1,24 +1,23 @@
-import os
-import logging
-import yaml
-
+from os import environ
 from pathlib import Path
+from logging import getLogger
+from yaml import load, FullLoader
 
 import recoverpy.errors as ERRORS
 import recoverpy.views_handler as VIEWS_HANDLER
 import recoverpy.logger as LOGGER
 import recoverpy.saver as SAVER
 
-_LOGGER = logging.getLogger(__name__)
+getLogger(__name__)
 
 
 def verify_terminal_conf():
     """Fix for outdated terminals not compatible with curses."""
 
-    term = os.environ["TERM"]
+    term = environ["TERM"]
 
     if term != "xterm-256color":
-        os.environ["TERM"] = "xterm-256color"
+        environ["TERM"] = "xterm-256color"
 
 
 def parse_configuration():
@@ -27,7 +26,7 @@ def parse_configuration():
     project_path = Path(__file__).parent.absolute()
 
     with open(project_path / "config.yaml") as config_file:
-        config = yaml.load(config_file, Loader=yaml.FullLoader)
+        config = load(config_file, Loader=FullLoader)
 
     if config["save_directory"] == "":
         raise ERRORS.NoSavePath
