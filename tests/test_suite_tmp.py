@@ -9,7 +9,7 @@ from queue import Queue
 
 @pytest.fixture
 def PARAMETERS_MENU():
-    menu = recoverpy.parameters_menu.ParametersMenu.__new__(recoverpy.parameters_menu.ParametersMenu)
+    menu = recoverpy.view_parameters.ParametersView.__new__(recoverpy.view_parameters.ParametersView)
     menu.master = py_cui.PyCUI(10, 10)
 
     partitions = [
@@ -31,7 +31,7 @@ def PARAMETERS_MENU():
 
 @pytest.fixture
 def SEARCH_MENU():
-    menu = recoverpy.search_menu.SearchMenu.__new__(recoverpy.search_menu.SearchMenu)
+    menu = recoverpy.view_search.SearchView.__new__(recoverpy.view_search.SearchView)
     menu.master = py_cui.PyCUI(10, 10)
     menu.queue_object = Queue()
     lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
@@ -47,7 +47,7 @@ def SEARCH_MENU():
 
 @pytest.fixture
 def BLOCK_MENU():
-    menu = recoverpy.block_menu.BlockMenu.__new__(recoverpy.block_menu.BlockMenu)
+    menu = recoverpy.view_results.ResultsView.__new__(recoverpy.view_results.ResultsView)
     menu.master = py_cui.PyCUI(10, 10)
     menu.partition = "/dev/sda1"
     menu.saved_blocks_dict = {}
@@ -74,7 +74,7 @@ def test_parameters_ui(PARAMETERS_MENU):
     PARAMETERS_MENU.create_ui_content()
     instance_dir = dir(PARAMETERS_MENU)
 
-    assert "partitions_list_cell" in instance_dir
+    assert "partitions_list_scroll_menu" in instance_dir
     assert "string_text_box" in instance_dir
     assert "start_search_button" in instance_dir
 
@@ -93,7 +93,7 @@ def test_partitions_list_population(PARAMETERS_MENU):
         "Name: vdb  -  Type: LVM2_member",
         "Name: vda2  -  Type: LVM2_member",
     ]
-    current_item_list = PARAMETERS_MENU.partitions_list_cell.get_item_list()
+    current_item_list = PARAMETERS_MENU.partitions_list_scroll_menu.get_item_list()
     assert current_item_list == expected_item_list
 
 
@@ -103,16 +103,16 @@ def test_partition_selection(PARAMETERS_MENU):
 
     PARAMETERS_MENU.add_partitions_to_list()
 
-    PARAMETERS_MENU.partitions_list_cell.set_selected_item_index(0)
+    PARAMETERS_MENU.partitions_list_scroll_menu.set_selected_item_index(0)
     item_0 = "Name: sda1  -  Type: ext4  -  Mounted at: /media/disk1"
-    assert PARAMETERS_MENU.partitions_list_cell.get() == item_0
+    assert PARAMETERS_MENU.partitions_list_scroll_menu.get() == item_0
 
     PARAMETERS_MENU.select_partition()
     assert PARAMETERS_MENU.partition_to_search == "/dev/sda1"
 
-    PARAMETERS_MENU.partitions_list_cell.set_selected_item_index(4)
+    PARAMETERS_MENU.partitions_list_scroll_menu.set_selected_item_index(4)
     item_4 = "Name: system-root  -  Type: btrfs  -  Mounted at: /test"
-    assert PARAMETERS_MENU.partitions_list_cell.get() == item_4
+    assert PARAMETERS_MENU.partitions_list_scroll_menu.get() == item_4
 
     PARAMETERS_MENU.select_partition()
     assert PARAMETERS_MENU.partition_to_search == "/dev/system-root"
@@ -122,7 +122,7 @@ def test_search_ui(SEARCH_MENU):
     SEARCH_MENU.create_ui_content()
     instance_dir = dir(SEARCH_MENU)
 
-    assert "search_results_cell" in instance_dir
+    assert "search_results_scroll_menu" in instance_dir
     assert "result_content_box" in instance_dir
     assert "previous_button" in instance_dir
     assert "next_button" in instance_dir
@@ -161,7 +161,7 @@ def test_result_list_population(SEARCH_MENU):
     new_results = SEARCH_MENU.yield_new_results()
     SEARCH_MENU.add_results_to_list(new_results=new_results)
 
-    item_list = SEARCH_MENU.search_results_cell.get_item_list()
+    item_list = SEARCH_MENU.search_results_scroll_menu.get_item_list()
     expected = [
         "1000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmo",
         "2000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmo",
@@ -191,19 +191,19 @@ def test_block_number_update(SEARCH_MENU):
     new_results = SEARCH_MENU.yield_new_results()
     SEARCH_MENU.add_results_to_list(new_results=new_results)
 
-    SEARCH_MENU.search_results_cell.set_selected_item_index(0)
+    SEARCH_MENU.search_results_scroll_menu.set_selected_item_index(0)
     SEARCH_MENU.update_block_number()
     item_0 = "1000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmo"
 
     assert SEARCH_MENU.current_block == "1"
-    assert SEARCH_MENU.search_results_cell.get() == item_0
+    assert SEARCH_MENU.search_results_scroll_menu.get() == item_0
 
-    SEARCH_MENU.search_results_cell.set_selected_item_index(2)
+    SEARCH_MENU.search_results_scroll_menu.set_selected_item_index(2)
     SEARCH_MENU.update_block_number()
     item_2 = "3000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmo"
 
     assert SEARCH_MENU.current_block == "5"
-    assert SEARCH_MENU.search_results_cell.get() == item_2
+    assert SEARCH_MENU.search_results_scroll_menu.get() == item_2
 
 
 def test_save_search_result(SEARCH_MENU, tmp_path):

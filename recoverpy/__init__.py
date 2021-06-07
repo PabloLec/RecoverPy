@@ -5,7 +5,7 @@ import yaml
 from pathlib import Path
 
 import recoverpy.errors as ERRORS
-import recoverpy.window_handler as WINDOW_HANDLER
+import recoverpy.views_handler as VIEWS_HANDLER
 import recoverpy.logger as LOGGER
 import recoverpy.saver as SAVER
 
@@ -53,4 +53,4 @@ def main():
     verify_terminal_conf()
     parse_configuration()
 
-    WINDOW_HANDLER.open_parameters_menu()
+    VIEWS_HANDLER.open_view_parameters()

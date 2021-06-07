@@ -5,7 +5,7 @@ from recoverpy import logger as LOGGER
 from recoverpy import saver as SAVER
 
 
-class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
+class ResultsView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
     """Block menu is called in order to navigate more easily through partition blocks
     and eventually save multiple results in the same file.
 
@@ -34,7 +34,7 @@ class BlockMenu(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         self.partition = partition
 
-        LOGGER.write("info", "Starting 'BlockMenu' CUI window")
+        LOGGER.write("info", "Starting 'ResultsView' CUI window")
 
         self.saved_blocks_dict = {}
 
