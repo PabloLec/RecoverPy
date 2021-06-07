@@ -89,7 +89,7 @@ class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.result_content_box = self.master.add_text_block(
             "Block content:", 0, 5, row_span=9, column_span=5, padx=1, pady=0
         )
-        self.result_content_box.add_key_command(py_cui.keys.KEY_F5, self.open_save_view)
+        self.result_content_box.add_key_command(py_cui.keys.KEY_F5, self.open_save_popup)
         self.result_content_box.add_key_command(py_cui.keys.KEY_F6, self.display_previous_block)
         self.result_content_box.add_key_command(py_cui.keys.KEY_F7, self.display_next_block)
 
@@ -123,7 +123,7 @@ class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             column_span=2,
             padx=1,
             pady=0,
-            command=self.open_save_view,
+            command=self.open_save_popup,
         )
 
         self.exit_button = self.master.add_button(
@@ -187,22 +187,22 @@ class SearchView(BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.update_block_number()
         self.display_block(self.current_block)
 
-    def open_save_view(self):
-        """Opens a view displaying save options."""
+    def open_save_popup(self):
+        """Opens a popup displaying save options."""
 
         view_choices = [
             "Save currently displayed block",
             "Explore neighboring blocks and save it all",
             "Cancel",
         ]
-        self.master.show_menu_popup("How do you want to save it ?", view_choices, self.handle_save_view_choice)
+        self.master.show_menu_popup("How do you want to save it ?", view_choices, self.handle_save_popup_choice)
 
-    def handle_save_view_choice(self, choice: str):
+    def handle_save_popup_choice(self, choice: str):
         """Depending on user choice, function will either directly save the output in
         a text file, open a more detailed view called ResultsView or just exit.
 
         Args:
-            choice (str): User choice given by open_save_view function.
+            choice (str): User choice given by open_save_popup function.
         """
 
         if choice == "Save currently displayed block":
