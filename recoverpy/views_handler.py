@@ -1,56 +1,56 @@
 import py_cui
 
-from recoverpy import view_parameters as PARAMETERS_MENU
-from recoverpy import view_search as SEARCH_MENU
-from recoverpy import view_results as BLOCK_MENU
+from recoverpy import view_parameters as PARAMETERS_VIEW
+from recoverpy import view_search as SEARCH_VIEW
+from recoverpy import view_results as RESULTS_VIEW
 
 
-_PARAMETERS_MENU = None
-_SEARCH_MENU = None
-_BLOCK_MENU = None
+_PARAMETERS_VIEW = None
+_SEARCH_VIEW = None
+_RESULTS_VIEW = None
 
 
 def open_view_parameters():
     """Starts a ParametersView instance."""
-    global _PARAMETERS_MENU
+    global _PARAMETERS_VIEW
 
-    _PARAMETERS_MENU = py_cui.PyCUI(10, 10)
-    _PARAMETERS_MENU.toggle_unicode_borders()
-    _PARAMETERS_MENU.set_title("Retrieve deleted or overwritten text files")
-    PARAMETERS_MENU.ParametersView(_PARAMETERS_MENU)
-    _PARAMETERS_MENU.start()
+    _PARAMETERS_VIEW = py_cui.PyCUI(10, 10)
+    _PARAMETERS_VIEW.toggle_unicode_borders()
+    _PARAMETERS_VIEW.set_title("Retrieve deleted or overwritten text files")
+    PARAMETERS_VIEW.ParametersView(_PARAMETERS_VIEW)
+    _PARAMETERS_VIEW.start()
 
 
 def close_view_parameters():
     """Stops the global ParametersView instance."""
-    global _PARAMETERS_MENU
+    global _PARAMETERS_VIEW
 
-    _PARAMETERS_MENU.stop()
+    _PARAMETERS_VIEW.stop()
 
 
 def open_view_search(partition: str, string_to_search: str):
     """Starts a SearchView instance."""
-    global _SEARCH_MENU
+    global _SEARCH_VIEW
 
-    _SEARCH_MENU = py_cui.PyCUI(10, 10)
-    _SEARCH_MENU.toggle_unicode_borders()
-    _SEARCH_MENU.set_title("View and explore found files")
-    SEARCH_MENU.SearchView(_SEARCH_MENU, partition=partition, string_to_search=string_to_search)
-    _SEARCH_MENU.start()
+    _SEARCH_VIEW = py_cui.PyCUI(10, 10)
+    _SEARCH_VIEW.toggle_unicode_borders()
+    _SEARCH_VIEW.set_title("View and explore found files")
+    SEARCH_VIEW.SearchView(_SEARCH_VIEW, partition=partition, string_to_search=string_to_search)
+    _SEARCH_VIEW.start()
 
 
 def close_view_search():
     """Stops the global SearchView instance."""
-    global _SEARCH_MENU
+    global _SEARCH_VIEW
 
-    _SEARCH_MENU.stop()
+    _SEARCH_VIEW.stop()
 
 
 def open_view_results(partition: str, block: str):
-    global _BLOCK_MENU
+    global _RESULTS_VIEW
 
-    _BLOCK_MENU = py_cui.PyCUI(10, 10)
-    _BLOCK_MENU.toggle_unicode_borders()
-    _BLOCK_MENU.set_title("")
-    BLOCK_MENU.ResultsView(_BLOCK_MENU, partition=partition, initial_block=block)
-    _BLOCK_MENU.start()
+    _RESULTS_VIEW = py_cui.PyCUI(10, 10)
+    _RESULTS_VIEW.toggle_unicode_borders()
+    _RESULTS_VIEW.set_title("")
+    RESULTS_VIEW.ResultsView(_RESULTS_VIEW, partition=partition, initial_block=block)
+    _RESULTS_VIEW.start()
