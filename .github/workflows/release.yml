@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: pypi-github-sync
-      uses: PabloLec/pypi-github-sync@v1.0.1
+      uses: PabloLec/pypi-github-sync@v1.0.2
       with:
           github_repo: PabloLec/recoverpy
           twine_username: ${{ secrets.TWINE_USERNAME }}
