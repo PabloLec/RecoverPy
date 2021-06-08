@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "recoverpy"
+version = "1.2.0"
+description = "A CUI to recover overwritten or deleted data."
+authors = ["PabloLec <pablo.lecolinet@gmail.com>"]
+license = "GPL-3.0 License"
+readme = "README.md"
+homepage = "https://github.com/PabloLec/recoverpy"
+repository = "https://github.com/PabloLec/recoverpy"
+documentation = "https://github.com/PabloLec/recoverpy#readme"
+keywords=["data", "recovery", "cui", "tui"]
+classifiers = [
+        "Development Status :: 5 - Production/Stable",
+        "Operating System :: POSIX :: Linux",
+        "Environment :: Console",
+        "Intended Audience :: End Users/Desktop",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+    ]
+include = ["recoverpy/config.yaml"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+PyYAML = "^5.4.1"
+py-cui = "^0.1.3"
+
+[tool.poetry.dev-dependencies]
+coverage = "^5.5"
+pytest = "^6.2.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

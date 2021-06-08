@@ -8,3 +8,7 @@ env/
 dist/
 build/
 dev.py
+.coverage
+htmlcov/
+poetry.lock
+.pytest_cache
