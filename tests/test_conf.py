@@ -10,6 +10,7 @@ def test_conf_parsing():
 
 
 def test_terminal_fix():
+    environ["TERM"] = "Dummy value"
     recoverpy.verify_terminal_conf()
 
     assert environ["TERM"] == "xterm-256color"
