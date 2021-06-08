@@ -27,6 +27,9 @@ jobs:
         pip install .
         pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Set dummy TERM envvar
+      run: |
+        export TERM="dummy value"
     - name: Run unit tests
       run: |
         pytest
