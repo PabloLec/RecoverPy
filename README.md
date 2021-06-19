@@ -1,8 +1,35 @@
-# Recoverpy [![GitHub release (latest by date)](https://img.shields.io/github/v/release/pablolec/recoverpy)](https://github.com/PabloLec/recoverpy/releases/) [![GitHub](https://img.shields.io/github/license/pablolec/recoverpy)](https://github.com/PabloLec/recoverpy/blob/main/LICENCE) [![Downloads](https://static.pepy.tech/personalized-badge/recoverpy?period=total&units=abbreviation&left_color=grey&right_color=red&left_text=Downloads)](https://pepy.tech/project/recoverpy) [![Tests](https://github.com/PabloLec/recoverpy/actions/workflows/recoverpy-tests.yml/badge.svg?branch=main)](#)
+<div align="center">
+    <img src="docs/assets/logo.png" alt="RecoverPy">
+</div>
 
-Recoverpy is a CUI utility written in Python with the help of [py_cui](https://github.com/jwlodek/py_cui "py_cui").
+<p align="center">
+    <em>Recover overwritten or deleted data.</em>
+</p>
 
-You can already find plenty of solutions to recover deleted files but it can be a hassle to recover overwritten files. Recoverpy search through every inodes to find your request.
+<p align="center">
+<a href="https://img.shields.io/github/v/release/pablolec/recoverpy" target="_blank">
+    <img src="https://img.shields.io/github/v/release/pablolec/recoverpy" alt="Release">
+</a>
+<a href="https://github.com/PabloLec/recoverpy/blob/main/LICENSE" target="_blank">
+    <img src="https://img.shields.io/github/license/pablolec/recoverpy" alt="License">
+</a>
+<a href="https://pepy.tech/project/recoverpy" target="_blank">
+    <img src="https://static.pepy.tech/personalized-badge/recoverpy?period=total&units=abbreviation&left_color=grey&right_color=red&left_text=Download" alt="Downloads">
+</a>
+<a href="#" target="_blank">
+    <img src="https://github.com/PabloLec/recoverpy/actions/workflows/recoverpy-tests.yml/badge.svg?branch=main" alt="Tests">
+</a>
+</p>
+
+---
+
+# RecoverPy
+
+RecoverPy is a TUI utility written in Python with the help of [py_cui](https://github.com/jwlodek/py_cui "py_cui").
+
+You can already find plenty of solutions to recover deleted files but it can be a hassle to recover overwritten files. RecoverPy searches through every inodes to find your request.
+
+
 
 ## Demo
 
