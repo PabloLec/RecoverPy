@@ -1,9 +1,20 @@
 import py_cui
 
 from subprocess import check_output, call
+from platform import system
 from os import geteuid
 
 from recoverpy import logger as LOGGER
+
+
+def which_os() -> str:
+    user_os = system().lower()
+
+    if user_os not in ["linux", "darwin"]:
+        print(f"Your OS ({user_os}) is not supported.")
+        exit()
+
+    return user_os
 
 
 def is_user_root(window: py_cui.PyCUI) -> bool:
@@ -29,7 +40,7 @@ def is_user_root(window: py_cui.PyCUI) -> bool:
     return False
 
 
-def lsblk() -> list:
+def linux_lsblk() -> list:
     """Uses 'lsblk' utility to generate a list of detected
     system partions."
 
@@ -41,14 +52,29 @@ def lsblk() -> list:
     partitions_list_raw = [
         line.strip() for line in lsblk_output.splitlines() if " loop " not in line and "swap" not in line
     ]
-    partitions_list_formatted = [line.split(" ") for line in partitions_list_raw]
+    partitions_list_filtered = [line.split(" ") for line in partitions_list_raw]
 
     LOGGER.write(
         "debug",
-        str(partitions_list_formatted),
+        str(partitions_list_filtered),
     )
 
-    return partitions_list_formatted
+    return partitions_list_filtered
+
+
+def macos_diskutil() -> list:
+
+    import plistlib
+
+    from pathlib import Path
+
+    # diskutil list -plist
+    diskutil_output = (Path(__file__).parent.parent.absolute() / "macos_dev/plist").read_text().encode("utf8")
+
+    partitions = plistlib.loads(diskutil_output)["AllDisksAndPartitions"]
+
+    for x in partitions:
+        print(x)
 
 
 def format_partitions_list(window: py_cui.PyCUI, raw_lsblk: list) -> dict:

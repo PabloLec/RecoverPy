@@ -66,7 +66,7 @@ class ParametersView:
     def get_system_partitions(self):
         """Calls lsblk and lsblk output formatting."""
 
-        partitions_list = HELPER.lsblk()
+        partitions_list = HELPER.linux_lsblk()
         self.partitions_dict = HELPER.format_partitions_list(window=self.master, raw_lsblk=partitions_list)
 
     def add_partitions_to_list(self):

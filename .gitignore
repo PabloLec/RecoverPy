@@ -12,3 +12,4 @@ dev.py
 htmlcov/
 poetry.lock
 .pytest_cache
+macos_dev/
