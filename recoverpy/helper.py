@@ -71,10 +71,43 @@ def macos_diskutil() -> list:
     # diskutil list -plist
     diskutil_output = (Path(__file__).parent.parent.absolute() / "macos_dev/plist").read_text().encode("utf8")
 
-    partitions = plistlib.loads(diskutil_output)["AllDisksAndPartitions"]
+    plist = plistlib.loads(diskutil_output)["AllDisksAndPartitions"]
 
-    for x in partitions:
-        print(x)
+    return plist_to_list(plist)
+
+
+def plist_to_list(plist: list):
+    possible_partitions = []
+
+    for disk_info in plist:
+        for segment in disk_info:
+            if segment.lower() in ("partitions",):
+                possible_partitions += disk_info[segment]
+            elif segment.lower() in ("apfsvolumes",):
+                possible_partitions += plist_add_type(partition_list=disk_info[segment], partition_type="Apple_APFS")
+
+    final_list = []
+
+    for partition in possible_partitions:
+        device = partition.get("DeviceIdentifier")
+        content = partition.get("Content")
+        mount_point = partition.get("MountPoint")
+
+        if device is None or content is None:
+            continue
+        elif mount_point is None:
+            final_list.append([device, "part", content])
+        else:
+            final_list.append([device, "part", content, mount_point])
+
+    return final_list
+
+
+def plist_add_type(partition_list: list, partition_type: str):
+    for i in range(0, len(partition_list)):
+        partition_list[i]["Content"] = partition_type
+
+    return partition_list
 
 
 def format_partitions_list(window: py_cui.PyCUI, raw_lsblk: list) -> dict:
@@ -111,7 +144,7 @@ def format_partitions_list(window: py_cui.PyCUI, raw_lsblk: list) -> dict:
 
     # Warn the user if no partition found with lsblk
     if len(partitions_dict) == 0:
-        LOGGER.write("Error", "No partition found !")
+        LOGGER.write("Error", "No partition found.")
         window.show_error_popup("Error", "No partition found.")
         return None
 
