@@ -7,7 +7,7 @@ from queue import Queue
 
 @pytest.fixture
 def PARAMETERS_VIEW():
-    view = recoverpy.view_parameters.ParametersView.__new__(recoverpy.view_parameters.ParametersView)
+    view = recoverpy.views.view_parameters.ParametersView.__new__(recoverpy.views.view_parameters.ParametersView)
     view.master = py_cui.PyCUI(10, 10)
 
     partitions = [
@@ -28,8 +28,8 @@ def PARAMETERS_VIEW():
 
 
 @pytest.fixture
-def SEARCH_VIEW():
-    view = recoverpy.view_search.SearchView.__new__(recoverpy.view_search.SearchView)
+def _SEARCH_VIEW():
+    view = recoverpy.views.view_search.SearchView.__new__(recoverpy.views.view_search.SearchView)
     view.master = py_cui.PyCUI(10, 10)
     view.queue_object = Queue()
     lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
@@ -45,7 +45,7 @@ def SEARCH_VIEW():
 
 @pytest.fixture
 def RESULTS_VIEW():
-    view = recoverpy.view_results.ResultsView.__new__(recoverpy.view_results.ResultsView)
+    view = recoverpy.views.view_results.ResultsView.__new__(recoverpy.views.view_results.ResultsView)
     view.master = py_cui.PyCUI(10, 10)
     view.partition = "/dev/sda1"
     view.saved_blocks_dict = {}

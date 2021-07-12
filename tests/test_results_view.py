@@ -27,7 +27,7 @@ def test_add_block_to_file(RESULTS_VIEW):
 
 
 def test_save_multiple_blocks(RESULTS_VIEW, tmp_path):
-    recoverpy.saver._SAVE_PATH = tmp_path
+    recoverpy.saver._save_path = tmp_path
 
     for i in range(0, 3):
         RESULTS_VIEW.current_block = str(i)
@@ -36,7 +36,7 @@ def test_save_multiple_blocks(RESULTS_VIEW, tmp_path):
 
     RESULTS_VIEW.save_file()
 
-    saved_file = recoverpy.saver._LAST_SAVED_FILE
+    saved_file = recoverpy.saver.SAVER.last_saved_file
 
     with open(saved_file) as f:
         content = f.read()

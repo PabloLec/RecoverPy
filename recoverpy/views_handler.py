@@ -1,56 +1,70 @@
 import py_cui
 
-from recoverpy import view_parameters as PARAMETERS_VIEW
-from recoverpy import view_search as SEARCH_VIEW
-from recoverpy import view_results as RESULTS_VIEW
+from recoverpy.views import view_parameters as _PARAMETERS_VIEW
+from recoverpy.views import view_search as _SEARCH_VIEW
+from recoverpy.views import view_results as _RESULTS_VIEW
 
 
-_PARAMETERS_VIEW = None
-_SEARCH_VIEW = None
-_RESULTS_VIEW = None
+class ViewsHandler:
+    """Store UI windows instances and provide navigation logic.
+
+    Attributes:
+        _parameters_view_window (py_cui.PyCUI): Parameters window.
+        _search_view_window (py_cui.PyCUI): Search window.
+        _results_view_window (py_cui.PyCUI): Results window.
+    """
+
+    def __init__(self):
+        """Constructor for ViewsHandler."""
+
+        _parameters_view_window = None
+        _search_view_window = None
+        _results_view_window = None
+
+    def open_view_parameters(self):
+        """Start a ParametersView instance."""
+
+        self._parameters_view_window = py_cui.PyCUI(10, 10)
+        self._parameters_view_window.toggle_unicode_borders()
+        self._parameters_view_window.set_title("RecoverPy 1.3.0")
+        _PARAMETERS_VIEW.ParametersView(self._parameters_view_window)
+        self._parameters_view_window.start()
+
+    def close_view_parameters(self):
+        """Stop the ParametersView instance."""
+
+        self._parameters_view_window.stop()
+
+    def open_view_search(self, partition: str, string_to_search: str):
+        """Start a SearchView instance."""
+
+        self._search_view_window = py_cui.PyCUI(10, 10)
+        self._search_view_window.toggle_unicode_borders()
+        self._search_view_window.set_title("View and explore found files")
+        _SEARCH_VIEW.SearchView(
+            self._search_view_window,
+            partition=partition,
+            string_to_search=string_to_search,
+        )
+        self._search_view_window.start()
+
+    def close_view_search(self):
+        """Stop the SearchView instance."""
+
+        self._search_view_window.stop()
+
+    def open_view_results(self, partition: str, block: str):
+        """Start a ResultsView instance."""
+
+        self._results_view_window = py_cui.PyCUI(10, 10)
+        self._results_view_window.toggle_unicode_borders()
+        self._results_view_window.set_title("")
+        _RESULTS_VIEW.ResultsView(
+            self._results_view_window,
+            partition=partition,
+            initial_block=block,
+        )
+        self._results_view_window.start()
 
 
-def open_view_parameters():
-    """Starts a ParametersView instance."""
-    global _PARAMETERS_VIEW
-
-    _PARAMETERS_VIEW = py_cui.PyCUI(10, 10)
-    _PARAMETERS_VIEW.toggle_unicode_borders()
-    _PARAMETERS_VIEW.set_title("Retrieve deleted or overwritten text files")
-    PARAMETERS_VIEW.ParametersView(_PARAMETERS_VIEW)
-    _PARAMETERS_VIEW.start()
-
-
-def close_view_parameters():
-    """Stops the global ParametersView instance."""
-    global _PARAMETERS_VIEW
-
-    _PARAMETERS_VIEW.stop()
-
-
-def open_view_search(partition: str, string_to_search: str):
-    """Starts a SearchView instance."""
-    global _SEARCH_VIEW
-
-    _SEARCH_VIEW = py_cui.PyCUI(10, 10)
-    _SEARCH_VIEW.toggle_unicode_borders()
-    _SEARCH_VIEW.set_title("View and explore found files")
-    SEARCH_VIEW.SearchView(_SEARCH_VIEW, partition=partition, string_to_search=string_to_search)
-    _SEARCH_VIEW.start()
-
-
-def close_view_search():
-    """Stops the global SearchView instance."""
-    global _SEARCH_VIEW
-
-    _SEARCH_VIEW.stop()
-
-
-def open_view_results(partition: str, block: str):
-    global _RESULTS_VIEW
-
-    _RESULTS_VIEW = py_cui.PyCUI(10, 10)
-    _RESULTS_VIEW.toggle_unicode_borders()
-    _RESULTS_VIEW.set_title("")
-    RESULTS_VIEW.ResultsView(_RESULTS_VIEW, partition=partition, initial_block=block)
-    _RESULTS_VIEW.start()
+VIEWS_HANDLER = ViewsHandler()
