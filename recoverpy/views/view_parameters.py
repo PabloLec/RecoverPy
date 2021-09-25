@@ -94,7 +94,7 @@ class ParametersView:
             if self.partitions_dict[partition]["IS_MOUNTED"]:
                 self.partitions_list_scroll_menu.add_item(
                     f"Name: {partition}  -  Type: {self.partitions_dict[partition]['FSTYPE']}"
-                    f"-  Mounted at: {self.partitions_dict[partition]['MOUNT_POINT']}"
+                    f"  -  Mounted at: {self.partitions_dict[partition]['MOUNT_POINT']}"
                 )
             else:
                 self.partitions_list_scroll_menu.add_item(
