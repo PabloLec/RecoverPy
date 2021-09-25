@@ -49,29 +49,32 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         self.previous_button = self.master.add_button(
             "<",
+            3,
             0,
-            0,
-            row_span=9,
+            row_span=3,
             column_span=1,
             padx=1,
             pady=0,
             command=self.display_previous_block,
         )
+        self.previous_button.set_color(1)
+
         self.next_button = self.master.add_button(
             ">",
-            0,
+            3,
             9,
-            row_span=9,
+            row_span=3,
             column_span=1,
             padx=1,
             pady=0,
             command=self.display_next_block,
         )
+        self.next_button.set_color(1)
 
         self.result_content_box = self.master.add_text_block(
             "Block content:", 0, 1, row_span=9, column_span=8, padx=1, pady=0
         )
-        self.result_content_box.set_title(f"Block {str(self.current_block)}")
+        self.result_content_box.set_title(f"Block {self.current_block}")
 
         self.add_result_button = self.master.add_button(
             "Add current block to file",
@@ -83,6 +86,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.add_block_to_file,
         )
+        self.add_result_button.set_color(6)
 
         self.save_file_button = self.master.add_button(
             "Save file",
@@ -94,6 +98,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.save_file,
         )
+        self.save_file_button.set_color(4)
 
         self.go_back_button = self.master.add_button(
             "Go back to previous view",
@@ -105,6 +110,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.master.stop,
         )
+        self.go_back_button.set_color(2)
 
     def add_block_to_file(self):
         """Store currently displayed result in a dict to save it later."""

@@ -48,7 +48,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.result_index = 0
 
         self.grep_progress = ""
-
+        self.inodes = []
         self.partition = partition
         self.block_size = 512
 
@@ -73,9 +73,9 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         """Set window title based on number of results and search progress."""
 
         if self.grep_progress != "":
-            title = f"{self.grep_progress} - {str(self.result_index)} results"
+            title = f"{self.grep_progress} - {self.result_index} results"
         else:
-            title = f"{str(self.result_index)} results"
+            title = f"{self.result_index} results"
 
         self.master.set_title(title)
 
@@ -84,6 +84,12 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         self.search_results_scroll_menu = self.master.add_scroll_menu(
             "Search results:", 0, 0, row_span=10, column_span=5, padx=1, pady=0
+        )
+        self.search_results_scroll_menu.add_text_color_rule(
+            self.searched_string,
+            py_cui.BLACK_ON_GREEN,
+            "contains",
+            match_type="regex",
         )
         self.search_results_scroll_menu.add_key_command(
             py_cui.keys.KEY_ENTER,
@@ -116,6 +122,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.display_previous_block,
         )
+        self.previous_button.set_color(1)
 
         self.next_button = self.master.add_button(
             ">",
@@ -127,6 +134,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.display_next_block,
         )
+        self.next_button.set_color(1)
 
         self.save_file_button = self.master.add_button(
             "Save Block",
@@ -138,6 +146,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.open_save_popup,
         )
+        self.save_file_button.set_color(4)
 
         self.exit_button = self.master.add_button(
             "Exit",
@@ -149,6 +158,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.master.stop,
         )
+        self.exit_button.set_color(3)
 
     def populate_result_list(self):
         """Poll grep output and populate result list."""
@@ -179,21 +189,17 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         for result in new_results:
             string_result = str(result)[2:-1]
-            self.search_results_scroll_menu.add_item(string_result)
-
-            _LOGGER.write("debug", "New result found: " + string_result[:30] + " ...")
+            inode = findall(r"^([0-9]+)\:", string_result)[0]
+            content = string_result[len(inode) + 1 :]
+            self.inodes.append(int(inode))
+            self.search_results_scroll_menu.add_item(content)
 
     def update_block_number(self):
         """Update currently viewed block number when the user selects one in the list."""
 
-        item = self.search_results_scroll_menu.get()
-        inode = int(findall(r"^([0-9]+)\:", item)[0])
+        inode = self.inodes[int(self.search_results_scroll_menu.get_selected_item_index())]
         self.current_block = str(int(inode / self.block_size))
-
-        _LOGGER.write(
-            "debug",
-            f"Displayed block set to {str(self.current_block)}",
-        )
+        _LOGGER.write("debug", f"Displayed block set to {self.current_block}")
 
     def display_selected_block(self):
         """FCalled when the user select a result in the left hand list.
@@ -205,6 +211,13 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
     def open_save_popup(self):
         """Open a popup displaying save options."""
+
+        if self.current_block is None:
+            self.master.show_message_popup(
+                "",
+                "Please select a block first.",
+            )
+            return
 
         view_choices = [
             "Save currently displayed block",

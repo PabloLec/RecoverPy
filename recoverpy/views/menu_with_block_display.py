@@ -25,7 +25,7 @@ class MenuWithBlockDisplay:
 
         self.horizontal_char_limit = 0
 
-        self.current_block = 0
+        self.current_block = None
         self.current_result = None
 
         self.result_content_box = None
@@ -66,7 +66,7 @@ class MenuWithBlockDisplay:
             _LOGGER.write("debug", "dd command successful")
         except:
             self.master.show_error_popup(
-                "ERROR",
+                "Mmmmhhh...",
                 f"Error while opening block {str(self.current_block)}",
             )
             _LOGGER.write(
@@ -89,12 +89,9 @@ class MenuWithBlockDisplay:
         formated_result = "\n".join(result_lines)
 
         self.result_content_box.set_text(formated_result)
-        self.result_content_box.set_title(f"Block {str(self.current_block)}")
+        self.result_content_box.set_title(f"Block {self.current_block}")
 
-        _LOGGER.write(
-            "debug",
-            f"Textbox updated with block {str(self.current_block)}",
-        )
+        _LOGGER.write("debug", f"Textbox updated with block {self.current_block}")
 
     def display_previous_block(self):
         """Display block n-1 in textbox."""
@@ -102,10 +99,7 @@ class MenuWithBlockDisplay:
         try:
             self.display_block(str(int(self.current_block) - 1))
         except ValueError:
-            _LOGGER.write(
-                "error",
-                f"Cannot display block {str(self.current_block)} - 1",
-            )
+            _LOGGER.write("error", f"Cannot display block {self.current_block} - 1")
             return
 
     def display_next_block(self):
@@ -114,10 +108,7 @@ class MenuWithBlockDisplay:
         try:
             self.display_block(str(int(self.current_block) + 1))
         except ValueError:
-            _LOGGER.write(
-                "error",
-                f"Cannot display block {str(self.current_block)} + 1",
-            )
+            _LOGGER.write("error", f"Cannot display block {self.current_block} + 1")
             return
 
     def display_block(self, block: str):

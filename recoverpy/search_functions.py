@@ -27,6 +27,14 @@ def monitor_progress(search_view, grep_pid: int):
         try:
             progress = re.findall(r"([0-9]+\.[0-9]+\%[^\)]+\))", output)[0]
         except IndexError:
+            if len(output) == 0:
+                search_view.grep_progress = "100% - Search completed"
+                search_view.set_title()
+                if search_view.result_index == 0:
+                    search_view.master.title_bar.set_color(22)
+                else:
+                    search_view.master.title_bar.set_color(30)
+                return
             continue
 
         search_view.grep_progress = progress

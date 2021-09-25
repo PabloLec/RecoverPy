@@ -43,7 +43,9 @@ class ParametersView:
         self.partitions_list_scroll_menu = self.master.add_scroll_menu(
             "Select a partition to search:", 0, 0, row_span=9, column_span=5
         )
-        self.partitions_list_scroll_menu.add_key_command(py_cui.keys.KEY_ENTER, self.select_partition)
+        self.partitions_list_scroll_menu.add_key_command(
+            py_cui.keys.KEY_ENTER, self.select_partition
+        )
 
         # Color rules
         self.partitions_list_scroll_menu.add_text_color_rule(
@@ -71,6 +73,7 @@ class ParametersView:
             pady=0,
             command=self.confirm_search,
         )
+        self.confirm_search_button.set_color(4)
 
     def get_system_partitions(self):
         """Call lsblk and lsblk output formatting."""
@@ -90,23 +93,15 @@ class ParametersView:
         for partition in self.partitions_dict:
             if self.partitions_dict[partition]["IS_MOUNTED"]:
                 self.partitions_list_scroll_menu.add_item(
-                    "Name: {name}  -  Type: {fstype}  -  Mounted at: {mountpoint}".format(
-                        name=partition,
-                        fstype=self.partitions_dict[partition]["FSTYPE"],
-                        mountpoint=self.partitions_dict[partition]["MOUNT_POINT"],
-                    )
+                    f"Name: {partition}  -  Type: {self.partitions_dict[partition]['FSTYPE']}"
+                    f"  -  Mounted at: {self.partitions_dict[partition]['MOUNT_POINT']}"
                 )
             else:
                 self.partitions_list_scroll_menu.add_item(
-                    "Name: {name}  -  Type: {fstype}".format(
-                        name=partition, fstype=self.partitions_dict[partition]["FSTYPE"]
-                    )
+                    f"Name: {partition}  -  Type: {self.partitions_dict[partition]['FSTYPE']}"
                 )
 
-            _LOGGER.write(
-                "debug",
-                f"Partition added to list: {str(partition)}",
-            )
+            _LOGGER.write("debug", f"Partition added to list: {partition}")
 
     def select_partition(self):
         """Handle the user selection of a partition in the list."""
@@ -119,8 +114,9 @@ class ParametersView:
         if self.partitions_dict[selected_partition]["IS_MOUNTED"]:
             # Warn the user to unmount his partition first
             self.master.show_warning_popup(
-                "Warning",
-                f"It is highly recommended to unmount {selected_partition} first.",
+                "You probably should unmount first !",
+                f"It is highly recommended to unmount {selected_partition}"
+                " ASAP to avoid any data loss.",
             )
         else:
             self.master.show_message_popup(
@@ -150,23 +146,21 @@ class ParametersView:
         if self.partition_to_search == "":
             # No partition selected
             self.master.show_message_popup(
-                "Error",
+                "Whoops !",
                 "You have to select a partition to search.",
             )
             _LOGGER.write("warning", "No partition selected for search")
         elif not self.string_to_search.strip():
             # Blank string to search
             self.master.show_message_popup(
-                "Error",
+                "Oops !",
                 "You have to enter a text to search.",
             )
             _LOGGER.write("warning", "No string given for search")
         else:
             # Prompt to confirm string
             self.master.show_yes_no_popup(
-                "Do you want to start searching this text on partition {partition} ?".format(
-                    partition=self.partition_to_search
-                ),
+                f"Do you want to search this text on partition {self.partition_to_search} ?",
                 self.start_search,
             )
 
