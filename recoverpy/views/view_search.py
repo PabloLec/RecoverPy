@@ -48,7 +48,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.result_index = 0
 
         self.grep_progress = ""
-
+        self.inodes = []
         self.partition = partition
         self.block_size = 512
 
@@ -73,9 +73,9 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         """Set window title based on number of results and search progress."""
 
         if self.grep_progress != "":
-            title = f"{self.grep_progress} - {str(self.result_index)} results"
+            title = f"{self.grep_progress} - {self.result_index} results"
         else:
-            title = f"{str(self.result_index)} results"
+            title = f"{self.result_index} results"
 
         self.master.set_title(title)
 
@@ -179,21 +179,17 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         for result in new_results:
             string_result = str(result)[2:-1]
-            self.search_results_scroll_menu.add_item(string_result)
-
-            _LOGGER.write("debug", "New result found: " + string_result[:30] + " ...")
+            inode = findall(r"^([0-9]+)\:", string_result)[0]
+            content = string_result[len(inode) + 1 :]
+            self.inodes.append(int(inode))
+            self.search_results_scroll_menu.add_item(content)
 
     def update_block_number(self):
         """Update currently viewed block number when the user selects one in the list."""
 
-        item = self.search_results_scroll_menu.get()
-        inode = int(findall(r"^([0-9]+)\:", item)[0])
+        inode = self.inodes[int(self.search_results_scroll_menu.get_selected_item_index())]
         self.current_block = str(int(inode / self.block_size))
-
-        _LOGGER.write(
-            "debug",
-            f"Displayed block set to {str(self.current_block)}",
-        )
+        _LOGGER.write("debug", f"Displayed block set to {self.current_block}")
 
     def display_selected_block(self):
         """FCalled when the user select a result in the left hand list.
