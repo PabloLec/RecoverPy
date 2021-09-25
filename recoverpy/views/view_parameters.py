@@ -73,6 +73,7 @@ class ParametersView:
             pady=0,
             command=self.confirm_search,
         )
+        self.confirm_search_button.set_color(4)
 
     def get_system_partitions(self):
         """Call lsblk and lsblk output formatting."""
@@ -149,14 +150,14 @@ class ParametersView:
         if self.partition_to_search == "":
             # No partition selected
             self.master.show_message_popup(
-                "Error",
+                "Whoops !",
                 "You have to select a partition to search.",
             )
             _LOGGER.write("warning", "No partition selected for search")
         elif not self.string_to_search.strip():
             # Blank string to search
             self.master.show_message_popup(
-                "Error",
+                "Oops !",
                 "You have to enter a text to search.",
             )
             _LOGGER.write("warning", "No string given for search")

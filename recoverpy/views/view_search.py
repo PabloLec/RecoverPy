@@ -116,6 +116,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.display_previous_block,
         )
+        self.previous_button.set_color(1)
 
         self.next_button = self.master.add_button(
             ">",
@@ -127,6 +128,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.display_next_block,
         )
+        self.next_button.set_color(1)
 
         self.save_file_button = self.master.add_button(
             "Save Block",
@@ -138,6 +140,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.open_save_popup,
         )
+        self.save_file_button.set_color(4)
 
         self.exit_button = self.master.add_button(
             "Exit",
@@ -149,6 +152,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             pady=0,
             command=self.master.stop,
         )
+        self.exit_button.set_color(3)
 
     def populate_result_list(self):
         """Poll grep output and populate result list."""
