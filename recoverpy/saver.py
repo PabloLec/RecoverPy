@@ -34,12 +34,8 @@ class Saver:
             result (str): Block content to be saved.
         """
 
-        file_name = "{save_location}{time}-{block}".format(
-            save_location=self._save_path,
-            time=datetime.now().strftime("recoverpy-save-%Y-%m-%d-%H%M%S"),
-            block=current_block,
-        )
-
+        time_format = datetime.now().strftime("recoverpy-save-%Y-%m-%d-%H%M%S")
+        file_name = f"{self._save_path}{time_format}-{current_block}"
         with open(file_name, "w") as save_file:
             save_file.write(result)
 

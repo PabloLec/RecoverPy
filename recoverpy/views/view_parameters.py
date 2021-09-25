@@ -93,17 +93,12 @@ class ParametersView:
         for partition in self.partitions_dict:
             if self.partitions_dict[partition]["IS_MOUNTED"]:
                 self.partitions_list_scroll_menu.add_item(
-                    "Name: {name}  -  Type: {fstype}  -  Mounted at: {mountpoint}".format(
-                        name=partition,
-                        fstype=self.partitions_dict[partition]["FSTYPE"],
-                        mountpoint=self.partitions_dict[partition]["MOUNT_POINT"],
-                    )
+                    f"Name: {partition}  -  Type: {self.partitions_dict[partition]['FSTYPE']}"
+                    f"-  Mounted at: {self.partitions_dict[partition]['MOUNT_POINT']}"
                 )
             else:
                 self.partitions_list_scroll_menu.add_item(
-                    "Name: {name}  -  Type: {fstype}".format(
-                        name=partition, fstype=self.partitions_dict[partition]["FSTYPE"]
-                    )
+                    f"Name: {partition}  -  Type: {self.partitions_dict[partition]['FSTYPE']}"
                 )
 
             _LOGGER.write("debug", f"Partition added to list: {partition}")
@@ -120,7 +115,8 @@ class ParametersView:
             # Warn the user to unmount his partition first
             self.master.show_warning_popup(
                 "You probably should unmount first !",
-                f"It is highly recommended to unmount {selected_partition} ASAP to avoid any data loss.",
+                f"It is highly recommended to unmount {selected_partition}"
+                " ASAP to avoid any data loss.",
             )
         else:
             self.master.show_message_popup(
@@ -164,7 +160,8 @@ class ParametersView:
         else:
             # Prompt to confirm string
             self.master.show_yes_no_popup(
-                f"Do you want to search this text on partition {self.partition_to_search} ?".self.start_search,
+                f"Do you want to search this text on partition {self.partition_to_search} ?",
+                self.start_search,
             )
 
     def start_search(self, is_confirmed: bool):
