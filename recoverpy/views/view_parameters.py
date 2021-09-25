@@ -119,8 +119,8 @@ class ParametersView:
         if self.partitions_dict[selected_partition]["IS_MOUNTED"]:
             # Warn the user to unmount his partition first
             self.master.show_warning_popup(
-                "Warning",
-                f"It is highly recommended to unmount {selected_partition} first.",
+                "You probably should unmount first !",
+                f"It is highly recommended to unmount {selected_partition} ASAP to avoid any data loss.",
             )
         else:
             self.master.show_message_popup(
@@ -164,10 +164,7 @@ class ParametersView:
         else:
             # Prompt to confirm string
             self.master.show_yes_no_popup(
-                "Do you want to start searching this text on partition {partition} ?".format(
-                    partition=self.partition_to_search
-                ),
-                self.start_search,
+                f"Do you want to search this text on partition {self.partition_to_search} ?".self.start_search,
             )
 
     def start_search(self, is_confirmed: bool):

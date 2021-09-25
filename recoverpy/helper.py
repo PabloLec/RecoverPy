@@ -23,7 +23,7 @@ def is_user_root(window: py_cui.PyCUI) -> bool:
         _LOGGER.write("info", "User is root")
         return True
 
-    window.show_error_popup("Not root", "You have to be root or use sudo.")
+    window.show_error_popup("Not root :(", "You have to be root or use sudo.")
     _LOGGER.write("warning", "User is not root")
     return False
 
@@ -90,7 +90,7 @@ def format_partitions_list(window: py_cui.PyCUI, raw_lsblk: list) -> dict:
     # Warn the user if no partition found with lsblk
     if not partitions_dict:
         _LOGGER.write("Error", "No partition found !")
-        window.show_error_popup("Error", "No partition found.")
+        window.show_error_popup("Hum...", "No partition found.")
         return None
 
     _LOGGER.write("debug", "Partition list generated using 'lsblk'")

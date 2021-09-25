@@ -66,7 +66,7 @@ class MenuWithBlockDisplay:
             _LOGGER.write("debug", "dd command successful")
         except:
             self.master.show_error_popup(
-                "ERROR",
+                "Mmmmhhh...",
                 f"Error while opening block {str(self.current_block)}",
             )
             _LOGGER.write(
