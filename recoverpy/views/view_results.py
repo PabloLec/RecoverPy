@@ -71,7 +71,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.result_content_box = self.master.add_text_block(
             "Block content:", 0, 1, row_span=9, column_span=8, padx=1, pady=0
         )
-        self.result_content_box.set_title(f"Block {str(self.current_block)}")
+        self.result_content_box.set_title(f"Block {self.current_block}")
 
         self.add_result_button = self.master.add_button(
             "Add current block to file",

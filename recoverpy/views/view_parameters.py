@@ -43,7 +43,9 @@ class ParametersView:
         self.partitions_list_scroll_menu = self.master.add_scroll_menu(
             "Select a partition to search:", 0, 0, row_span=9, column_span=5
         )
-        self.partitions_list_scroll_menu.add_key_command(py_cui.keys.KEY_ENTER, self.select_partition)
+        self.partitions_list_scroll_menu.add_key_command(
+            py_cui.keys.KEY_ENTER, self.select_partition
+        )
 
         # Color rules
         self.partitions_list_scroll_menu.add_text_color_rule(
@@ -103,10 +105,7 @@ class ParametersView:
                     )
                 )
 
-            _LOGGER.write(
-                "debug",
-                f"Partition added to list: {str(partition)}",
-            )
+            _LOGGER.write("debug", f"Partition added to list: {partition}")
 
     def select_partition(self):
         """Handle the user selection of a partition in the list."""
