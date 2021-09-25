@@ -26,7 +26,7 @@ class ViewsHandler:
 
         self._parameters_view_window = py_cui.PyCUI(10, 10)
         self._parameters_view_window.toggle_unicode_borders()
-        self._parameters_view_window.set_title("RecoverPy 1.3.0")
+        self._parameters_view_window.set_title("RecoverPy 1.3.1")
         _PARAMETERS_VIEW.ParametersView(self._parameters_view_window)
         self._parameters_view_window.start()
 
