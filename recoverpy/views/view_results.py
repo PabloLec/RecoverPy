@@ -58,6 +58,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             command=self.display_previous_block,
         )
         self.previous_button.set_color(1)
+
         self.next_button = self.master.add_button(
             ">",
             3,

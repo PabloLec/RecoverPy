@@ -212,6 +212,13 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
     def open_save_popup(self):
         """Open a popup displaying save options."""
 
+        if self.current_block is None:
+            self.master.show_message_popup(
+                "",
+                "Please select a block first.",
+            )
+            return
+
         view_choices = [
             "Save currently displayed block",
             "Explore neighboring blocks and save it all",

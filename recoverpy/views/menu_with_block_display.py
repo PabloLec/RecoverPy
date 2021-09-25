@@ -25,7 +25,7 @@ class MenuWithBlockDisplay:
 
         self.horizontal_char_limit = 0
 
-        self.current_block = 0
+        self.current_block = None
         self.current_result = None
 
         self.result_content_box = None
