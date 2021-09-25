@@ -85,6 +85,12 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.search_results_scroll_menu = self.master.add_scroll_menu(
             "Search results:", 0, 0, row_span=10, column_span=5, padx=1, pady=0
         )
+        self.search_results_scroll_menu.add_text_color_rule(
+            self.searched_string,
+            py_cui.BLACK_ON_GREEN,
+            "contains",
+            match_type="regex",
+        )
         self.search_results_scroll_menu.add_key_command(
             py_cui.keys.KEY_ENTER,
             self.display_selected_block,
