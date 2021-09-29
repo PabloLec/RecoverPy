@@ -1,5 +1,6 @@
 import py_cui
 
+from recoverpy import views_handler as _VIEWS_HANDLER
 from recoverpy.views import menu_with_block_display as _BLOCK_DISPLAY_MENU
 from recoverpy.logger import LOGGER as _LOGGER
 from recoverpy.saver import SAVER as _SAVER
@@ -31,7 +32,6 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         super().__init__()
 
         self.master = master
-
         self.partition = partition
 
         _LOGGER.write("info", "Starting 'ResultsView' CUI window")
@@ -108,7 +108,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             column_span=2,
             padx=1,
             pady=0,
-            command=self.master.stop,
+            command=_VIEWS_HANDLER.VIEWS_HANDLER.results_go_back,
         )
         self.go_back_button.set_color(2)
 
