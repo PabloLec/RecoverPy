@@ -88,6 +88,9 @@ class MenuWithBlockDisplay:
         ]
         formated_result = "\n".join(result_lines)
 
+        # TEMPORARY FIX for embedded null character
+        formated_result = formated_result.replace(chr(0), "")
+
         self.result_content_box.set_text(formated_result)
         self.result_content_box.set_title(f"Block {self.current_block}")
 
@@ -117,6 +120,9 @@ class MenuWithBlockDisplay:
         Args:
             block (str): Partition block number.
         """
+
+        if int(block) < 0:
+            return
 
         self.get_dd_result(block=block)
         self.update_textbox()
