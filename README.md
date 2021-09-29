@@ -93,6 +93,6 @@ Regarding the searched string:
 - Stay simple, your string is escaped but exotic characters may affect your results.
 - Try to remember the last edit you have made to your file.
 
-When you have a match:
+When you found your file:
 
 - Use the option to explore neighboring blocks to make sure you do not miss some part of your file.
