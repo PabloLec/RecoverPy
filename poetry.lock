@@ -1,4 +1,12 @@
 [[package]]
+name = "astor"
+version = "0.8.1"
+description = "Read/rewrite/write Python ASTs"
+category = "dev"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+
+[[package]]
 name = "astroid"
 version = "2.8.0"
 description = "An abstract syntax tree for Python with inference support."
@@ -11,6 +19,20 @@ lazy-object-proxy = ">=1.4.0"
 typed-ast = {version = ">=1.4.0,<1.5", markers = "implementation_name == \"cpython\" and python_version < \"3.8\""}
 typing-extensions = {version = ">=3.10", markers = "python_version < \"3.10\""}
 wrapt = ">=1.11,<1.13"
+
+[[package]]
+name = "asttokens"
+version = "2.0.5"
+description = "Annotate AST trees with source code positions"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+
+[package.extras]
+test = ["astroid", "pytest"]
 
 [[package]]
 name = "atomicwrites"
@@ -191,6 +213,17 @@ pycodestyle = ">=2.7.0,<2.8.0"
 pyflakes = ">=2.3.0,<2.4.0"
 
 [[package]]
+name = "flake8-aaa"
+version = "0.12.0"
+description = "A Flake8 plugin that checks Python tests follow the Arrange-Act-Assert pattern"
+category = "dev"
+optional = false
+python-versions = ">=3.6, <4"
+
+[package.dependencies]
+asttokens = ">=2"
+
+[[package]]
 name = "flake8-bandit"
 version = "2.1.2"
 description = "Automated security testing with bandit and flake8."
@@ -355,6 +388,19 @@ python-versions = ">=3.6,<4.0"
 
 [package.dependencies]
 flake8-plugin-utils = ">=1.3.2,<2.0.0"
+
+[[package]]
+name = "flake8-simplify"
+version = "0.14.2"
+description = "flake8 plugin which checks for code that can be simplified"
+category = "dev"
+optional = false
+python-versions = ">=3.6.1"
+
+[package.dependencies]
+astor = ">=0.1"
+flake8 = ">=3.7"
+importlib-metadata = {version = ">=0.9", markers = "python_version < \"3.8\""}
 
 [[package]]
 name = "flake8-spellcheck"
@@ -835,12 +881,20 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "378134e9cc11e8420e2ce1ff7698762403bf4cceeca318f93b6e1074c0ca862c"
+content-hash = "752363be1f7fb80b4288967144080c1139538d468d847db5e2db913389e29099"
 
 [metadata.files]
+astor = [
+    {file = "astor-0.8.1-py2.py3-none-any.whl", hash = "sha256:070a54e890cefb5b3739d19f30f5a5ec840ffc9c50ffa7d23cc9fc1a38ebbfc5"},
+    {file = "astor-0.8.1.tar.gz", hash = "sha256:6a6effda93f4e1ce9f618779b2dd1d9d84f1e32812c23a29b3fff6fd7f63fa5e"},
+]
 astroid = [
     {file = "astroid-2.8.0-py3-none-any.whl", hash = "sha256:dcc06f6165f415220013801642bd6c9808a02967070919c4b746c6864c205471"},
     {file = "astroid-2.8.0.tar.gz", hash = "sha256:fe81f80c0b35264acb5653302ffbd935d394f1775c5e4487df745bf9c2442708"},
+]
+asttokens = [
+    {file = "asttokens-2.0.5-py2.py3-none-any.whl", hash = "sha256:0844691e88552595a6f4a4281a9f7f79b8dd45ca4ccea82e5e05b4bbdb76705c"},
+    {file = "asttokens-2.0.5.tar.gz", hash = "sha256:9a54c114f02c7a9480d56550932546a3f1fe71d8a02f1bc7ccd0ee3ee35cf4d5"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
@@ -951,6 +1005,10 @@ flake8 = [
     {file = "flake8-3.9.2-py2.py3-none-any.whl", hash = "sha256:bf8fd333346d844f616e8d47905ef3a3384edae6b4e9beb0c5101e25e3110907"},
     {file = "flake8-3.9.2.tar.gz", hash = "sha256:07528381786f2a6237b061f6e96610a4167b226cb926e2aa2b6b1d78057c576b"},
 ]
+flake8-aaa = [
+    {file = "flake8-aaa-0.12.0.tar.gz", hash = "sha256:ce6acf9c278dc6a34d1b8c3823f88b9ee9048fda80a1a3c04cd29d3876e776dc"},
+    {file = "flake8_aaa-0.12.0-py3-none-any.whl", hash = "sha256:07d8b714b1af53f645107157aa65346e95bb94c8f88c0800fa4e199d22719d52"},
+]
 flake8-bandit = [
     {file = "flake8_bandit-2.1.2.tar.gz", hash = "sha256:687fc8da2e4a239b206af2e54a90093572a60d0954f3054e23690739b0b0de3b"},
 ]
@@ -1001,6 +1059,10 @@ flake8-pylint = [
 flake8-pytest-style = [
     {file = "flake8-pytest-style-1.5.0.tar.gz", hash = "sha256:668ce8f55edf7db4ac386d2735c3b354b5cb47aa341a4655d91a5788dd03124b"},
     {file = "flake8_pytest_style-1.5.0-py3-none-any.whl", hash = "sha256:ec287a7dc4fe95082af5e408c8b2f8f4b6bcb366d5a17ff6c34112eb03446580"},
+]
+flake8-simplify = [
+    {file = "flake8_simplify-0.14.2-py3-none-any.whl", hash = "sha256:6584f3d49350659caaf2a42129f820dc64e60d4bdcb316f621b4e1cfae27e33a"},
+    {file = "flake8_simplify-0.14.2.tar.gz", hash = "sha256:4a8f103607195c3d0743a2fd8beeebe24926e19fb3e24521042cfc35771a8d4d"},
 ]
 flake8-spellcheck = [
     {file = "flake8-spellcheck-0.24.0.tar.gz", hash = "sha256:833c92222158b5dea74f858ccfb9f980b7c865fbd89cabc18447dadb07ec62e6"},
