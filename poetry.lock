@@ -331,6 +331,21 @@ python-versions = "*"
 flake8 = "*"
 
 [[package]]
+name = "flake8-pylint"
+version = "0.1.3"
+description = "Flake8 plugin that runs PyLint."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+flake8 = "*"
+pylint = "*"
+
+[package.extras]
+dev = ["isort", "mypy", "pytest"]
+
+[[package]]
 name = "flake8-pytest-style"
 version = "1.5.0"
 description = "A flake8 plugin checking common style issues or inconsistencies with pytest-based tests."
@@ -820,7 +835,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "191381b67b1f4bbc39c034dd6e9ea995e31dafe1bd7f72bc560104eae5838151"
+content-hash = "378134e9cc11e8420e2ce1ff7698762403bf4cceeca318f93b6e1074c0ca862c"
 
 [metadata.files]
 astroid = [
@@ -978,6 +993,10 @@ flake8-plugin-utils = [
 flake8-polyfill = [
     {file = "flake8-polyfill-1.0.2.tar.gz", hash = "sha256:e44b087597f6da52ec6393a709e7108b2905317d0c0b744cdca6208e670d8eda"},
     {file = "flake8_polyfill-1.0.2-py2.py3-none-any.whl", hash = "sha256:12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9"},
+]
+flake8-pylint = [
+    {file = "flake8-pylint-0.1.3.tar.gz", hash = "sha256:430e365d65ec088dd5aad85bf54690d802deec805c4c812a43cc30b75ed51beb"},
+    {file = "flake8_pylint-0.1.3-py3-none-any.whl", hash = "sha256:af4f6633cfb7d4bb51311d62856c81df26ddc0d45a5c7f084cd7845d1af3c3b6"},
 ]
 flake8-pytest-style = [
     {file = "flake8-pytest-style-1.5.0.tar.gz", hash = "sha256:668ce8f55edf7db4ac386d2735c3b354b5cb47aa341a4655d91a5788dd03124b"},

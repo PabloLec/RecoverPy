@@ -1,7 +1,8 @@
 *.pyc
 *.egg-info
 *.log
-__pycache__/
+__pycache__
+.mypy_cache
 env/
 venv/
 dist/

@@ -1,5 +1,6 @@
-from subprocess import check_output, call
 from os import geteuid
+from subprocess import call, check_output
+
 import py_cui
 
 from recoverpy.logger import LOGGER as _LOGGER
@@ -7,6 +8,7 @@ from recoverpy.logger import LOGGER as _LOGGER
 
 def is_user_root(window: py_cui.PyCUI) -> bool:
     """Check if user has root privileges.
+
     The method is simply verifying if EUID == 0.
     It may be problematic in some edge cases. (Some particular OS)
     But, as grep search will not exit quickly, exception handling
@@ -18,7 +20,6 @@ def is_user_root(window: py_cui.PyCUI) -> bool:
     Returns:
         bool: User is root
     """
-
     if geteuid() == 0:
         _LOGGER.write("info", "User is root")
         return True
@@ -29,13 +30,11 @@ def is_user_root(window: py_cui.PyCUI) -> bool:
 
 
 def lsblk() -> list:
-    """Use 'lsblk' utility to generate a list of detected
-    system partions."
+    """Use 'lsblk' utility to generate a list of detected system partions."
 
     Returns:
         list: List of system partitions.
     """
-
     lsblk_output = check_output(
         ["lsblk", "-r", "-n", "-o", "NAME,TYPE,FSTYPE,MOUNTPOINT"],
         encoding="utf-8",
@@ -66,7 +65,6 @@ def format_partitions_list(window: py_cui.PyCUI, raw_lsblk: list) -> dict:
         dict: Found partitions with format :
             {Name: FSTYPE, IS_MOUNTED, MOUNT_POINT}
     """
-
     # Create dict with relevant infos
     partitions_dict = {}
     for partition in raw_lsblk:
@@ -105,7 +103,6 @@ def is_progress_installed() -> bool:
     Returns:
         bool: 'progress' is installed.
     """
-
     output = call("command -v progress", shell=True)
 
     return output == 0

@@ -60,22 +60,7 @@ flake8-pytest-style = "^1.5.0"
 flake8-mutable = "^1.2.0"
 flake8-spellcheck = "^0.24.0"
 flake8-html = "^0.4.1"
-
-[tool.pylint.messages_control]
-max-line-length = 88
-disable = [
-  "missing-docstring",
-  "unused-argument",
-  "no-value-for-parameter",
-  "no-member",
-  "no-else-return",
-  "bad-whitespace",
-  "bad-continuation",
-  "line-too-long",
-  "fixme",
-  "protected-access",
-  "too-few-public-methods",
-]
+flake8-pylint = "^0.1.3"
 
 [tool.isort]
 profile = "black"

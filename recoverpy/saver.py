@@ -12,28 +12,25 @@ class Saver:
     """
 
     def __init__(self):
-        """Constructor for Saver."""
-
-        _save_path = None
-        last_saved_file = None
+        """Initialize Saver."""
+        self._save_path = None
+        self.last_saved_file = None
 
     def set_save_path(self, path: str):
-        """Set result save path based on config file
+        """Set result save path based on config file.
 
         Args:
-            path (str): Local path for search results saving.
+            path (str): Local path for search results saving
         """
-
         self._save_path = path
 
     def save_result(self, current_block: str, result: str):
-        """Save a single result in a text file
+        """Save a single result in a text file.
 
         Args:
-            current_block (str): Current partition block for file naming.
-            result (str): Block content to be saved.
+            current_block (str): Current partition block for file naming
+            result (str): Block content to be saved
         """
-
         time_format = datetime.now().strftime("recoverpy-save-%Y-%m-%d-%H%M%S")
         file_name = f"{self._save_path}{time_format}-{current_block}"
         with open(file_name, "w") as save_file:
@@ -47,9 +44,8 @@ class Saver:
         """Order a results dictionnary by block numbers and then save it in a text file.
 
         Args:
-            results (dict): Blocks number and content to be ordered.
+            results (dict): Blocks number and content to be ordered
         """
-
         ordered_blocks = sorted(results)
 
         final_output = ""

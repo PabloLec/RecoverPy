@@ -14,20 +14,29 @@ def test_search_ui(SEARCH_VIEW):
 
 
 def test_result_queue(SEARCH_VIEW):
-    new_results, SEARCH_VIEW.result_index = recoverpy.search_functions.yield_new_results(
+    (
+        new_results,
+        SEARCH_VIEW.result_index,
+    ) = recoverpy.search_functions.yield_new_results(
         queue_object=SEARCH_VIEW.queue_object, result_index=SEARCH_VIEW.result_index
     )
 
     lorem_results = [
-        "- 1000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
-        "- 2000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
-        "- 3000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+        "- 1000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+        "sed do eiusmod",
+        "- 2000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+        "sed do eiusmod",
+        "- 3000: Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+        "sed do eiusmod",
     ]
     assert new_results == lorem_results
     assert SEARCH_VIEW.result_index == 3
 
     SEARCH_VIEW.queue_object.put("TEST 1")
-    new_results, SEARCH_VIEW.result_index = recoverpy.search_functions.yield_new_results(
+    (
+        new_results,
+        SEARCH_VIEW.result_index,
+    ) = recoverpy.search_functions.yield_new_results(
         queue_object=SEARCH_VIEW.queue_object, result_index=SEARCH_VIEW.result_index
     )
 
@@ -36,7 +45,10 @@ def test_result_queue(SEARCH_VIEW):
 
     SEARCH_VIEW.queue_object.put("TEST 2")
     SEARCH_VIEW.queue_object.put("TEST 3")
-    new_results, SEARCH_VIEW.result_index = recoverpy.search_functions.yield_new_results(
+    (
+        new_results,
+        SEARCH_VIEW.result_index,
+    ) = recoverpy.search_functions.yield_new_results(
         queue_object=SEARCH_VIEW.queue_object, result_index=SEARCH_VIEW.result_index
     )
 
@@ -47,7 +59,10 @@ def test_result_queue(SEARCH_VIEW):
 def test_result_list_population(SEARCH_VIEW):
     SEARCH_VIEW.create_ui_content()
 
-    new_results, SEARCH_VIEW.result_index = recoverpy.search_functions.yield_new_results(
+    (
+        new_results,
+        SEARCH_VIEW.result_index,
+    ) = recoverpy.search_functions.yield_new_results(
         queue_object=SEARCH_VIEW.queue_object, result_index=SEARCH_VIEW.result_index
     )
     SEARCH_VIEW.add_results_to_list(new_results=new_results)
@@ -64,7 +79,10 @@ def test_result_list_population(SEARCH_VIEW):
 def test_search_title(SEARCH_VIEW):
     SEARCH_VIEW.create_ui_content()
 
-    new_results, SEARCH_VIEW.result_index = recoverpy.search_functions.yield_new_results(
+    (
+        new_results,
+        SEARCH_VIEW.result_index,
+    ) = recoverpy.search_functions.yield_new_results(
         queue_object=SEARCH_VIEW.queue_object, result_index=SEARCH_VIEW.result_index
     )
     SEARCH_VIEW.set_title()
@@ -72,7 +90,10 @@ def test_search_title(SEARCH_VIEW):
     assert SEARCH_VIEW.master._title == "3 results"
 
     SEARCH_VIEW.queue_object.put("TEST 1")
-    new_results, SEARCH_VIEW.result_index = recoverpy.search_functions.yield_new_results(
+    (
+        new_results,
+        SEARCH_VIEW.result_index,
+    ) = recoverpy.search_functions.yield_new_results(
         queue_object=SEARCH_VIEW.queue_object, result_index=SEARCH_VIEW.result_index
     )
     SEARCH_VIEW.grep_progress = "0.10% ( TEST )"
@@ -83,7 +104,10 @@ def test_search_title(SEARCH_VIEW):
 
 def test_block_number_update(SEARCH_VIEW):
     SEARCH_VIEW.create_ui_content()
-    new_results, SEARCH_VIEW.result_index = recoverpy.search_functions.yield_new_results(
+    (
+        new_results,
+        SEARCH_VIEW.result_index,
+    ) = recoverpy.search_functions.yield_new_results(
         queue_object=SEARCH_VIEW.queue_object, result_index=SEARCH_VIEW.result_index
     )
     SEARCH_VIEW.add_results_to_list(new_results=new_results)

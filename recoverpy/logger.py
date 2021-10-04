@@ -1,6 +1,5 @@
-from datetime import datetime
-
 import logging
+from datetime import datetime
 
 
 class Logger:
@@ -13,31 +12,30 @@ class Logger:
     """
 
     def __init__(self):
-        """Constructor for Logger."""
-
-        _log_file_path = None
-        _log_enabled = False
-        _logger = None
+        """Initialize Logger."""
+        self._log_file_path = None
+        self._log_enabled = False
+        self._logger = None
 
     def enable_logging(self):
         """Enable logging based on config file."""
-
         self._log_enabled = True
 
     def disable_logging(self):
         """Disable logging based on config file."""
-
         self._log_enabled = False
 
     def set_log_file_path(self, path):
-        """Set result save path based on config file"""
+        """Set result save path based on config file.
 
+        Args:
+            path (str): Log file path
+        """
         self._log_file_path = path
         self.start_logging()
 
     def start_logging(self):
-        """Main logging function, initiates and configures the logger object."""
-
+        """Initiate and configure the logger object."""
         time = datetime.now().strftime("%Y-%m-%d-%H%M%S")
 
         log_file_name = f"{self._log_file_path}recoverpy-{time}.log"
@@ -54,10 +52,9 @@ class Logger:
         """Use logger object to write to file.
 
         Args:
-            log_type (str): Log level.
-            text (str): Message.
+            log_type (str): Log level
+            text (str): Message
         """
-
         if not self._log_enabled:
             return
 

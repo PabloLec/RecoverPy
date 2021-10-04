@@ -1,8 +1,10 @@
-import yaml
-import pytest
-import recoverpy
 from os import environ
 from pathlib import Path
+
+import pytest
+import yaml
+
+import recoverpy
 
 _CONFIG_FILE_PATH = Path(recoverpy.__file__).parent.absolute() / "config.yaml"
 

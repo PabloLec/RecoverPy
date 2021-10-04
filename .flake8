@@ -1,7 +1,23 @@
 [flake8]
-exclude = .git,.venv,__pycache__,build,dist,dev.py
-ignore = S101,
-		 W503
+exclude = .git,
+		  .env,
+		  .venv,
+		  __pycache__,
+		  .mypy_cache,
+		  build,
+		  dist,
+		  flake-report,
+		  dev.py
+
+ignore = D100, # Missing docstring in public module
+		 D104, # Missing docstring in public package
+		 SC200, # Probably mispelled word
+		 SC100, # Possibly mispelled word
+		 E203, # whitespace before ':'
+
+per-file-ignores = tests/*.py:D103,S101,PL
+				   tests/test_conf.py:D103,S101,S108,PL
+
 max-line-length = 88
 show-source = true
 format = html

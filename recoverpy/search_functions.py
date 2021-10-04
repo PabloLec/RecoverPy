@@ -1,11 +1,10 @@
-from queue import Queue
-from threading import Thread
-
 import io
 import re
 import time
+from queue import Queue
+from subprocess import DEVNULL, PIPE, Popen, check_output
+from threading import Thread
 
-from subprocess import PIPE, DEVNULL, Popen, check_output
 from recoverpy import helper as _HELPER
 from recoverpy.logger import LOGGER as _LOGGER
 
@@ -17,7 +16,6 @@ def monitor_progress(search_view, grep_pid: int):
         search_view (SearchView): Current PyCUI search view
         grep_pid (int): PID of grep process
     """
-
     while True:
         output = check_output(
             ["progress", "-p", str(grep_pid)],
@@ -44,17 +42,16 @@ def monitor_progress(search_view, grep_pid: int):
 
 
 def start_search(search_view):
-    """Function is called within view_results.__init__
-    Launches:
+    """Launch:
     - Process executing the grep command.
     - If available, thread using 'progress' tool to monitor grep.
     - Thread to store the grep output in a queue object.
     - Thread to populate the result box dynamically.
+    Function is called within view_results.__init__
 
     Args:
         search_view (SearchView): Current PyCUI search view
     """
-
     grep_process = create_grep_process(
         searched_string=search_view.searched_string,
         partition=search_view.partition,
@@ -99,7 +96,6 @@ def create_grep_process(searched_string: str, partition: str) -> Popen:
     Returns:
         Popen: Created process
     """
-
     return Popen(
         ["grep", "-a", "-b", searched_string, partition],
         stdin=None,
@@ -109,14 +105,12 @@ def create_grep_process(searched_string: str, partition: str) -> Popen:
 
 
 def enqueue_grep_output(out: io.BufferedReader, queue: Queue):
-    """Function called in a thread to store the grep command output in
-    a queue object.
+    """Store grep command output in a queue object.
 
     Args:
         out (io.BufferedReader): Output of grep process
         queue (Queue): Queue object to store stdout
     """
-
     for line in iter(out.readline, b""):
         queue.put(line)
     out.close()
@@ -131,16 +125,15 @@ def yield_new_results(queue_object: Queue, result_index: int) -> tuple:
         result_index (int): [Current result list index
 
     Returns:
-        tuple: Tuple with 1. List of new results 2. New result index
+        tuple: Tuple with (List of new results, New result index)
     """
-
     # Returns if no new result
     if len(list(queue_object.queue)) == result_index:
         return None
 
     queue_list = list(queue_object.queue)
 
-    new_results = [queue_element for queue_element in queue_list[result_index:]]
+    new_results = queue_list[result_index:]
 
     result_index = len(queue_list)
 

@@ -1,11 +1,12 @@
-import recoverpy
+from queue import Queue
+
 import py_cui
 import pytest
 
-from queue import Queue
+import recoverpy
 
 
-@pytest.fixture
+@pytest.fixture()
 def PARAMETERS_VIEW():
     view = recoverpy.views.view_parameters.ParametersView.__new__(
         recoverpy.views.view_parameters.ParametersView
@@ -29,9 +30,11 @@ def PARAMETERS_VIEW():
     return view
 
 
-@pytest.fixture
+@pytest.fixture()
 def SEARCH_VIEW():
-    view = recoverpy.views.view_search.SearchView.__new__(recoverpy.views.view_search.SearchView)
+    view = recoverpy.views.view_search.SearchView.__new__(
+        recoverpy.views.view_search.SearchView
+    )
     view.master = py_cui.PyCUI(10, 10)
     view.queue_object = Queue()
     lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
@@ -47,7 +50,7 @@ def SEARCH_VIEW():
     return view
 
 
-@pytest.fixture
+@pytest.fixture()
 def RESULTS_VIEW():
     view = recoverpy.views.view_results.ResultsView.__new__(
         recoverpy.views.view_results.ResultsView

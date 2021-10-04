@@ -1,19 +1,19 @@
+from logging import getLogger
 from os import environ
 from pathlib import Path
-from logging import getLogger
-from yaml import load, FullLoader
+
+from yaml import FullLoader, load
 
 import recoverpy.errors as ERRORS
-from recoverpy.views_handler import VIEWS_HANDLER as _VIEWS_HANDLER
 from recoverpy.logger import LOGGER as _LOGGER
 from recoverpy.saver import SAVER as _SAVER
+from recoverpy.views_handler import VIEWS_HANDLER as _VIEWS_HANDLER
 
 getLogger(__name__)
 
 
 def verify_terminal_conf():
-    """Fix for outdated terminals not compatible with curses."""
-
+    """Fix for older terminals."""
     term = environ["TERM"]
 
     if term != "xterm-256color":
@@ -21,8 +21,7 @@ def verify_terminal_conf():
 
 
 def parse_configuration():
-    """Sets logging and saving parameters based on yaml conf file."""
-
+    """Set logging and saving parameters based on yaml conf file."""
     project_path = Path(__file__).parent.absolute()
 
     with open(project_path / "config.yaml") as config_file:
@@ -50,7 +49,6 @@ def parse_configuration():
 
 def main():
     """Setup configuration and start UI."""
-
     verify_terminal_conf()
     parse_configuration()
 

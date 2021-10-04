@@ -8,7 +8,11 @@ def test_partitions_parsing(PARAMETERS_VIEW):
     expected_format = {
         "sda1": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/media/disk1"},
         "sdb1": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/media/disk2"},
-        "mmcblk0p1": {"FSTYPE": "vfat", "IS_MOUNTED": True, "MOUNT_POINT": "/boot/firmware"},
+        "mmcblk0p1": {
+            "FSTYPE": "vfat",
+            "IS_MOUNTED": True,
+            "MOUNT_POINT": "/boot/firmware",
+        },
         "mmcblk0p2": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/"},
         "system-root": {"FSTYPE": "btrfs", "IS_MOUNTED": True, "MOUNT_POINT": "/test"},
         "vdb": {"FSTYPE": "LVM2_member", "IS_MOUNTED": False, "MOUNT_POINT": None},
