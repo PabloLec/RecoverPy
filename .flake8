@@ -1,0 +1,8 @@
+[flake8]
+exclude = .git,.venv,__pycache__,build,dist,dev.py
+ignore = S101,
+		 W503
+max-line-length = 88
+show-source = true
+format = html
+htmldir = flake-report
