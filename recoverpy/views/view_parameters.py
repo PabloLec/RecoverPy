@@ -8,7 +8,7 @@ from recoverpy.logger import LOGGER as _LOGGER
 
 
 class ParametersView:
-    """ParametersView is the first window displayed.
+    """ParametersView prompts to select a partion and a string to search.
 
     User is prompted to select a partition and a string to search in it.
 

@@ -42,12 +42,12 @@ def monitor_progress(search_view, grep_pid: int):
 
 
 def start_search(search_view):
-    """Launch:
+    """Launch (called within view_results.__init__):
+
     - Process executing the grep command.
     - If available, thread using 'progress' tool to monitor grep.
     - Thread to store the grep output in a queue object.
     - Thread to populate the result box dynamically.
-    Function is called within view_results.__init__
 
     Args:
         search_view (SearchView): Current PyCUI search view
@@ -118,6 +118,7 @@ def enqueue_grep_output(out: io.BufferedReader, queue: Queue):
 
 def yield_new_results(queue_object: Queue, result_index: int) -> tuple:
     """Probe the queue object for new results.
+
     If any, returns it to populate the result box.
 
     Args:

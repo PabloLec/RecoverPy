@@ -13,10 +13,7 @@ from recoverpy.views import menu_with_block_display as _BLOCK_DISPLAY_MENU
 
 
 class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
-    """SearchView is displayed after Parameters view.
-    On the left hand scroll view, results from the grep command will be listed.
-    On the right hand textbox, result of a dd command will be displayed when the user
-    selects a block.
+    """SearchView displays search results and corresponding block contents.
 
     Args:
         _BLOCK_DISPLAY_MENU (MenuWithBlockDisplay: Composition to inherit block display

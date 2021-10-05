@@ -21,7 +21,13 @@ def verify_terminal_conf():
 
 
 def parse_configuration():
-    """Set logging and saving parameters based on yaml conf file."""
+    """Set logging and saving parameters based on yaml conf file.
+
+    Raises:
+        ERRORS.NoSavePath: If config file save path is empty
+        ERRORS.InvalidSavePath: If config file save path is invalid
+        ERRORS.InvalidLogPath: If config file log path is invalid
+    """
     project_path = Path(__file__).parent.absolute()
 
     with open(project_path / "config.yaml") as config_file:
@@ -48,7 +54,7 @@ def parse_configuration():
 
 
 def main():
-    """Setup configuration and start UI."""
+    """Set configuration and start UI."""
     verify_terminal_conf()
     parse_configuration()
 

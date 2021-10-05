@@ -7,8 +7,7 @@ from recoverpy.views import menu_with_block_display as _BLOCK_DISPLAY_MENU
 
 
 class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
-    """ResultsView is called in order to navigate more easily through partition blocks
-    and eventually save chosen result.
+    """ResultsView let the user navigate through partition blocks and save results.
 
     Args:
         _BLOCK_DISPLAY_MENU (MenuWithBlockDisplay): Composition to inherit block display
@@ -21,7 +20,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
     """
 
     def __init__(self, master: py_cui.PyCUI, partition: str, initial_block: int):
-        """Initialize ResultsView
+        """Initialize ResultsView.
 
         Args:
             master (py_cui.PyCUI): PyCUI main object for UI.

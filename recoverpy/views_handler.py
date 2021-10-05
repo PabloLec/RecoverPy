@@ -35,7 +35,12 @@ class ViewsHandler:
         self._parameters_view_window.stop()
 
     def open_view_search(self, partition: str, string_to_search: str):
-        """Start a SearchView instance."""
+        """Start a SearchView instance.
+
+        Args:
+            partition (str): Selected system partition
+            string_to_search (str): String to be searched
+        """
         self.close_view_results()
         self._search_view_window = py_cui.PyCUI(10, 10)
         self._search_view_window.toggle_unicode_borders()
@@ -54,7 +59,12 @@ class ViewsHandler:
         self._search_view_window.stop()
 
     def open_view_results(self, partition: str, block: str):
-        """Start a ResultsView instance."""
+        """Start a ResultsView instance.
+
+        Args:
+            partition (str): Selected system partition
+            block (str): Block to be displayed
+        """
         self.close_view_search()
         self._results_view_window = py_cui.PyCUI(10, 10)
         self._results_view_window.toggle_unicode_borders()

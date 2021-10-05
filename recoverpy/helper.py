@@ -30,7 +30,7 @@ def is_user_root(window: py_cui.PyCUI) -> bool:
 
 
 def lsblk() -> list:
-    """Use 'lsblk' utility to generate a list of detected system partions."
+    """Use lsblk to generate a list of detected system partitions."
 
     Returns:
         list: List of system partitions.
@@ -103,6 +103,6 @@ def is_progress_installed() -> bool:
     Returns:
         bool: 'progress' is installed.
     """
-    output = call("command -v progress", shell=True)
+    output = call(["command ", "-v", "progress"])
 
     return output == 0

@@ -34,7 +34,7 @@ class MenuWithBlockDisplay:
         """Store a 'dd' command result in current_result var.
 
         Args:
-            block (str, optional): Partition block number. Defaults to None.
+            block (str): Partition block number. Defaults to None.
         """
         if block is None:
             block = self.current_block
