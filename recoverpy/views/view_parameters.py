@@ -1,9 +1,9 @@
 from re import findall
 
-import py_cui
+from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, PyCUI, keys
 
-from recoverpy.utils import helper as _HELPER
 from recoverpy import views_handler as _VIEWS_HANDLER
+from recoverpy.utils import helper as _HELPER
 from recoverpy.utils.logger import LOGGER as _LOGGER
 
 
@@ -19,11 +19,11 @@ class ParametersView:
             lsblk command and their attributes.
     """
 
-    def __init__(self, master: py_cui.PyCUI):
+    def __init__(self, master: PyCUI):
         """Initialize ParametersView.
 
         Args:
-            master (py_cui.PyCUI): PyCUI main object for UI
+            master (PyCUI): PyCUI main object for UI
         """
         self.master = master
 
@@ -44,16 +44,16 @@ class ParametersView:
             "Select a partition to search:", 0, 0, row_span=9, column_span=5
         )
         self.partitions_list_scroll_menu.add_key_command(
-            py_cui.keys.KEY_ENTER, self.select_partition
+            keys.KEY_ENTER, self.select_partition
         )
 
         # Color rules
         self.partitions_list_scroll_menu.add_text_color_rule(
             "Mounted at",
-            py_cui.YELLOW_ON_BLACK,
+            YELLOW_ON_BLACK,
             "contains",
         )
-        self.partitions_list_scroll_menu.set_selected_color(py_cui.GREEN_ON_BLACK)
+        self.partitions_list_scroll_menu.set_selected_color(GREEN_ON_BLACK)
 
         self.string_text_box = self.master.add_text_block(
             "Enter a text to search:",

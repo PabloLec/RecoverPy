@@ -1,4 +1,4 @@
-import py_cui
+from py_cui import PyCUI
 
 from recoverpy.views import view_parameters as _PARAMETERS_VIEW
 from recoverpy.views import view_results as _RESULTS_VIEW
@@ -9,9 +9,9 @@ class ViewsHandler:
     """Store UI windows instances and provide navigation logic.
 
     Attributes:
-        _parameters_view_window (py_cui.PyCUI): Parameters window.
-        _search_view_window (py_cui.PyCUI): Search window.
-        _results_view_window (py_cui.PyCUI): Results window.
+        _parameters_view_window (PyCUI): Parameters window.
+        _search_view_window (PyCUI): Search window.
+        _results_view_window (PyCUI): Results window.
     """
 
     def __init__(self):
@@ -24,9 +24,9 @@ class ViewsHandler:
         """Create a PyCUI instance with standard attributes.
 
         Returns:
-            py_cui.PyCUI: Created view
+            PyCUI: Created view
         """
-        result = py_cui.PyCUI(10, 10)
+        result = PyCUI(10, 10)
         result.toggle_unicode_borders()
         result.set_title("RecoverPy 1.3.2")
         return result

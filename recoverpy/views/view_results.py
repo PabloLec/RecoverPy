@@ -1,4 +1,4 @@
-import py_cui
+from py_cui import PyCUI
 
 from recoverpy import views_handler as _VIEWS_HANDLER
 from recoverpy.utils.logger import LOGGER as _LOGGER
@@ -19,11 +19,11 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         current_block (int): Partition block number currently displayed.
     """
 
-    def __init__(self, master: py_cui.PyCUI, partition: str, initial_block: int):
+    def __init__(self, master: PyCUI, partition: str, initial_block: int):
         """Initialize ResultsView.
 
         Args:
-            master (py_cui.PyCUI): PyCUI main object for UI.
+            master (PyCUI): PyCUI main object for UI.
             partition (str): System partition to search.
             initial_block (int): Initial partition block number that will be displayed.
         """

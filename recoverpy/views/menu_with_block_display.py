@@ -8,7 +8,7 @@ class MenuWithBlockDisplay:
     blocks content.
 
     Attributes:
-        master (py_cui.PyCUI): PyCUI main object for UI.
+        master (PyCUI): PyCUI main object for UI.
         horizontal_char_limit (int): Number of chars that can fit horizontally in
             the left hand result box.
         current_block (int): Partition block number currently displayed.

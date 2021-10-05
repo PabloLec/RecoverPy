@@ -3,7 +3,7 @@ from re import findall
 from shlex import quote
 from time import sleep
 
-import py_cui
+from py_cui import BLACK_ON_GREEN, PyCUI, keys
 
 from recoverpy import search as _SEARCH
 from recoverpy import views_handler as _VIEWS_HANDLER
@@ -20,7 +20,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         methods
 
     Attributes:
-        master (py_cui.PyCUI): PyCUI main object for UI
+        master (PyCUI): PyCUI main object for UI
         queue_object (Queue): Queue object where grep command stdout will be stored
         result_index (int): Number of results already processed
         grep_progress (str): Formated output of 'progress' command
@@ -29,11 +29,11 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         searched_string (str): String given by the user that will be searched by dd
     """
 
-    def __init__(self, master: py_cui.PyCUI, partition: str, string_to_search: str):
+    def __init__(self, master: PyCUI, partition: str, string_to_search: str):
         """Initialize SearchView.
 
         Args:
-            master (py_cui.PyCUI): PyCUI main object for UI
+            master (PyCUI): PyCUI main object for UI
             partition (str): System partition to search
             string_to_search (str): String to search in partition blocks
         """
@@ -83,12 +83,12 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         )
         self.search_results_scroll_menu.add_text_color_rule(
             self.searched_string,
-            py_cui.BLACK_ON_GREEN,
+            BLACK_ON_GREEN,
             "contains",
             match_type="regex",
         )
         self.search_results_scroll_menu.add_key_command(
-            py_cui.keys.KEY_ENTER,
+            keys.KEY_ENTER,
             self.display_selected_block,
         )
 
@@ -96,15 +96,15 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             "Block content:", 0, 5, row_span=9, column_span=5, padx=1, pady=0
         )
         self.result_content_box.add_key_command(
-            py_cui.keys.KEY_F5,
+            keys.KEY_F5,
             self.open_save_popup,
         )
         self.result_content_box.add_key_command(
-            py_cui.keys.KEY_F6,
+            keys.KEY_F6,
             self.display_previous_block,
         )
         self.result_content_box.add_key_command(
-            py_cui.keys.KEY_F7,
+            keys.KEY_F7,
             self.display_next_block,
         )
 

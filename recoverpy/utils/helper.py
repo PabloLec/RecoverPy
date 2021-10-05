@@ -1,12 +1,12 @@
 from os import geteuid
 from subprocess import call, check_output
 
-import py_cui
+from py_cui import PyCUI
 
 from recoverpy.utils.logger import LOGGER as _LOGGER
 
 
-def is_user_root(window: py_cui.PyCUI) -> bool:
+def is_user_root(window: PyCUI) -> bool:
     """Check if user has root privileges.
 
     The method is simply verifying if EUID == 0.
@@ -15,7 +15,7 @@ def is_user_root(window: py_cui.PyCUI) -> bool:
     can't be used.
 
     Args:
-        window (py_cui.PyCUI): PyCUI window to display popup.
+        window (PyCUI): PyCUI window to display popup.
 
     Returns:
         bool: User is root
@@ -54,11 +54,11 @@ def lsblk() -> list:
     return partitions_list_formatted
 
 
-def format_partitions_list(window: py_cui.PyCUI, raw_lsblk: list) -> dict:
+def format_partitions_list(window: PyCUI, raw_lsblk: list) -> dict:
     """Format found partition list to a dict.
 
     Args:
-        window (py_cui.PyCUI): PyCUI window to display popup.
+        window (PyCUI): PyCUI window to display popup.
         raw_lsblk (list): Raw lsblk output.
 
     Returns:

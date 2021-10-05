@@ -1,7 +1,7 @@
 from queue import Queue
 
-import py_cui
 import pytest
+from py_cui import PyCUI
 
 import recoverpy
 
@@ -11,7 +11,7 @@ def PARAMETERS_VIEW():
     view = recoverpy.views.view_parameters.ParametersView.__new__(
         recoverpy.views.view_parameters.ParametersView
     )
-    view.master = py_cui.PyCUI(10, 10)
+    view.master = PyCUI(10, 10)
 
     partitions = [
         ["sda", "disk"],
@@ -35,7 +35,7 @@ def SEARCH_VIEW():
     view = recoverpy.views.view_search.SearchView.__new__(
         recoverpy.views.view_search.SearchView
     )
-    view.master = py_cui.PyCUI(10, 10)
+    view.master = PyCUI(10, 10)
     view.queue_object = Queue()
     lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
     view.queue_object.put(f"- 1000: {lorem}")
@@ -55,7 +55,7 @@ def RESULTS_VIEW():
     view = recoverpy.views.view_results.ResultsView.__new__(
         recoverpy.views.view_results.ResultsView
     )
-    view.master = py_cui.PyCUI(10, 10)
+    view.master = PyCUI(10, 10)
     view.partition = "/dev/sda1"
     view.saved_blocks_dict = {}
     view.current_block = 5
