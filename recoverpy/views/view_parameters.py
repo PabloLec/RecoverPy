@@ -2,9 +2,9 @@ from re import findall
 
 import py_cui
 
-from recoverpy import helper as _HELPER
+from recoverpy.utils import helper as _HELPER
 from recoverpy import views_handler as _VIEWS_HANDLER
-from recoverpy.logger import LOGGER as _LOGGER
+from recoverpy.utils.logger import LOGGER as _LOGGER
 
 
 class ParametersView:

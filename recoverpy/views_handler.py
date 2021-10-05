@@ -20,11 +20,21 @@ class ViewsHandler:
         self._search_view_window = None
         self._results_view_window = None
 
+    def create_view(self):
+        """Create a PyCUI instance with standard attributes.
+
+        Returns:
+            py_cui.PyCUI: Created view
+        """
+        result = py_cui.PyCUI(10, 10)
+        result.toggle_unicode_borders()
+        result.set_title("RecoverPy 1.3.2")
+        return result
+
     def open_view_parameters(self):
         """Start a ParametersView instance."""
-        self._parameters_view_window = py_cui.PyCUI(10, 10)
-        self._parameters_view_window.toggle_unicode_borders()
-        self._parameters_view_window.set_title("RecoverPy 1.3.2")
+        self._parameters_view_window = self.create_view()
+
         _PARAMETERS_VIEW.ParametersView(self._parameters_view_window)
         self._parameters_view_window.start()
 
@@ -42,9 +52,8 @@ class ViewsHandler:
             string_to_search (str): String to be searched
         """
         self.close_view_results()
-        self._search_view_window = py_cui.PyCUI(10, 10)
-        self._search_view_window.toggle_unicode_borders()
-        self._search_view_window.set_title("View and explore found files")
+        self._search_view_window = self.create_view()
+
         _SEARCH_VIEW.SearchView(
             self._search_view_window,
             partition=partition,
@@ -66,9 +75,7 @@ class ViewsHandler:
             block (str): Block to be displayed
         """
         self.close_view_search()
-        self._results_view_window = py_cui.PyCUI(10, 10)
-        self._results_view_window.toggle_unicode_borders()
-        self._results_view_window.set_title("")
+        self._results_view_window = self.create_view()
         _RESULTS_VIEW.ResultsView(
             self._results_view_window,
             partition=partition,

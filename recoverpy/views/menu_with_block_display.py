@@ -1,6 +1,6 @@
 from subprocess import CalledProcessError, check_output
 
-from recoverpy.logger import LOGGER as _LOGGER
+from recoverpy.utils.logger import LOGGER as _LOGGER
 
 
 class MenuWithBlockDisplay:

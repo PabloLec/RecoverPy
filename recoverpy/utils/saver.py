@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from recoverpy.logger import LOGGER as _LOGGER
+from recoverpy.utils.logger import LOGGER as _LOGGER
 
 
 class Saver:

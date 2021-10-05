@@ -3,7 +3,7 @@ from subprocess import call, check_output
 
 import py_cui
 
-from recoverpy.logger import LOGGER as _LOGGER
+from recoverpy.utils.logger import LOGGER as _LOGGER
 
 
 def is_user_root(window: py_cui.PyCUI) -> bool:
@@ -103,6 +103,6 @@ def is_progress_installed() -> bool:
     Returns:
         bool: 'progress' is installed.
     """
-    output = call(["command ", "-v", "progress"])
+    output = call(["bash", "-c", "command", "-v", "progress"])
 
     return output == 0

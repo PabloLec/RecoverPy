@@ -1,8 +1,8 @@
 import py_cui
 
 from recoverpy import views_handler as _VIEWS_HANDLER
-from recoverpy.logger import LOGGER as _LOGGER
-from recoverpy.saver import SAVER as _SAVER
+from recoverpy.utils.logger import LOGGER as _LOGGER
+from recoverpy.utils.saver import SAVER as _SAVER
 from recoverpy.views import menu_with_block_display as _BLOCK_DISPLAY_MENU
 
 

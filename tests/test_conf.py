@@ -23,14 +23,14 @@ def set_config(save_directory: str = "/tmp/", log_directory: str = "/tmp/"):
 def test_no_save_path():
     set_config(save_directory="")
 
-    with pytest.raises(recoverpy.errors.NoSavePath):
+    with pytest.raises(recoverpy.utils.errors.NoSavePath):
         recoverpy.parse_configuration()
 
 
 def test_invalid_save_path():
     set_config(save_directory="/foo/bar")
 
-    with pytest.raises(recoverpy.errors.InvalidSavePath):
+    with pytest.raises(recoverpy.utils.errors.InvalidSavePath):
         recoverpy.parse_configuration()
 
 
@@ -44,7 +44,7 @@ def test_no_log_path():
 def test_invalid_log_path():
     set_config(log_directory="/foo/bar")
 
-    with pytest.raises(recoverpy.errors.InvalidLogPath):
+    with pytest.raises(recoverpy.utils.errors.InvalidLogPath):
         recoverpy.parse_configuration()
 
 

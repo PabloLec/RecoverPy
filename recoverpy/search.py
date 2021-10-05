@@ -5,8 +5,8 @@ from queue import Queue
 from subprocess import DEVNULL, PIPE, Popen, check_output
 from threading import Thread
 
-from recoverpy import helper as _HELPER
-from recoverpy.logger import LOGGER as _LOGGER
+from recoverpy.utils import helper as _HELPER
+from recoverpy.utils.logger import LOGGER as _LOGGER
 
 
 def monitor_progress(search_view, grep_pid: int):
