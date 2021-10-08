@@ -1,4 +1,8 @@
 repos:
+-   repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.10
+    hooks:
+    -   id: remove-tabs
 -   repo: https://github.com/PyCQA/flake8
     rev: 3.9.2
     hooks:
