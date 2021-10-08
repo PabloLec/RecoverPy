@@ -2,9 +2,9 @@ from re import findall
 
 from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, PyCUI, keys
 
-from recoverpy import views_handler as _VIEWS_HANDLER
-from recoverpy.utils import helper as _HELPER
-from recoverpy.utils.logger import LOGGER as _LOGGER
+from recoverpy import views_handler
+from recoverpy.utils import helper
+from recoverpy.utils.logger import LOGGER
 
 
 class ParametersView:
@@ -31,8 +31,8 @@ class ParametersView:
         self.string_to_search = None
         self.partitions_dict = None
 
-        _LOGGER.write("info", "Starting 'ParametersView' CUI window")
-        _HELPER.is_user_root(window=self.master)
+        LOGGER.write("info", "Starting 'ParametersView' CUI window")
+        helper.is_user_root(window=self.master)
 
         self.create_ui_content()
         self.get_system_partitions()
@@ -77,8 +77,8 @@ class ParametersView:
 
     def get_system_partitions(self):
         """Call lsblk and lsblk output formatting."""
-        partitions_list = _HELPER.lsblk()
-        self.partitions_dict = _HELPER.format_partitions_list(
+        partitions_list = helper.lsblk()
+        self.partitions_dict = helper.format_partitions_list(
             window=self.master,
             raw_lsblk=partitions_list,
         )
@@ -101,7 +101,7 @@ class ParametersView:
                     f"Type: {self.partitions_dict[partition]['FSTYPE']}"
                 )
 
-            _LOGGER.write("debug", f"Partition added to list: {partition}")
+            LOGGER.write("debug", f"Partition added to list: {partition}")
 
     def select_partition(self):
         """Handle the user selection of a partition in the list."""
@@ -125,7 +125,7 @@ class ParametersView:
 
         self.partition_to_search = "/dev/" + selected_partition.strip()
 
-        _LOGGER.write(
+        LOGGER.write(
             "info",
             f"Partition selected: {self.partition_to_search}",
         )
@@ -134,12 +134,12 @@ class ParametersView:
         """Check if partition is selected and string is given.
         If all required elements are present, launch start_search method.
         """
-        if not _HELPER.is_user_root(window=self.master):
+        if not helper.is_user_root(window=self.master):
             return
 
         self.string_to_search = self.string_text_box.get()
 
-        _LOGGER.write("info", "Starting search")
+        LOGGER.write("info", "Starting search")
 
         if self.partition_to_search == "":
             # No partition selected
@@ -147,14 +147,14 @@ class ParametersView:
                 "Whoops !",
                 "You have to select a partition to search.",
             )
-            _LOGGER.write("warning", "No partition selected for search")
+            LOGGER.write("warning", "No partition selected for search")
         elif not self.string_to_search.strip():
             # Blank string to search
             self.master.show_message_popup(
                 "Oops !",
                 "You have to enter a text to search.",
             )
-            _LOGGER.write("warning", "No string given for search")
+            LOGGER.write("warning", "No string given for search")
         else:
             # Prompt to confirm string
             self.master.show_yes_no_popup(
@@ -170,8 +170,8 @@ class ParametersView:
             is_confirmed (bool): User popup selection
         """
         if is_confirmed:
-            _VIEWS_HANDLER.VIEWS_HANDLER.close_view_parameters()
-            _VIEWS_HANDLER.VIEWS_HANDLER.open_view_search(
+            views_handler.VIEWS_HANDLER.close_view_parameters()
+            views_handler.VIEWS_HANDLER.open_view_search(
                 partition=self.partition_to_search,
                 string_to_search=self.string_to_search.strip(),
             )

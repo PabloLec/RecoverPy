@@ -1,12 +1,12 @@
 from py_cui import PyCUI
 
-from recoverpy import views_handler as _VIEWS_HANDLER
-from recoverpy.utils.logger import LOGGER as _LOGGER
-from recoverpy.utils.saver import SAVER as _SAVER
-from recoverpy.views import menu_with_block_display as _BLOCK_DISPLAY_MENU
+from recoverpy import views_handler as views_handler
+from recoverpy.utils.logger import LOGGER as LOGGER
+from recoverpy.utils.saver import SAVER as SAVER
+from recoverpy.views.menu_with_block_display import MenuWithBlockDisplay
 
 
-class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
+class ResultsView(MenuWithBlockDisplay):
     """ResultsView let the user navigate through partition blocks and save results.
 
     Args:
@@ -32,7 +32,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         self.master = master
         self.partition = partition
 
-        _LOGGER.write("info", "Starting 'ResultsView' CUI window")
+        LOGGER.write("info", "Starting 'ResultsView' CUI window")
 
         self.saved_blocks_dict = {}
 
@@ -105,7 +105,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             column_span=2,
             padx=1,
             pady=0,
-            command=_VIEWS_HANDLER.VIEWS_HANDLER.results_go_back,
+            command=views_handler.VIEWS_HANDLER.results_go_back,
         )
         self.go_back_button.set_color(2)
 
@@ -116,7 +116,7 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         self.master.show_message_popup("", "Result added to file")
         self.saved_blocks_dict[self.current_block] = self.current_result
-        _LOGGER.write(
+        LOGGER.write(
             "debug",
             f"Stored block {self.current_block} for future save",
         )
@@ -129,15 +129,15 @@ class ResultsView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             self.master.show_message_popup("", "No result to save yet")
             return
 
-        _SAVER.save_result_dict(self.saved_blocks_dict)
+        SAVER.save_result_dict(self.saved_blocks_dict)
 
         if len_results == 1:
             self.master.show_message_popup(
                 "",
-                f"Block saved in {_SAVER.last_saved_file}",
+                f"Block saved in {SAVER.last_saved_file}",
             )
         else:
             self.master.show_message_popup(
                 "",
-                f"{len_results} blocks saved in {_SAVER.last_saved_file}",
+                f"{len_results} blocks saved in {SAVER.last_saved_file}",
             )

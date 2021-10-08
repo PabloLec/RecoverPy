@@ -1,6 +1,6 @@
 from subprocess import CalledProcessError, check_output
 
-from recoverpy.utils.logger import LOGGER as _LOGGER
+from recoverpy.utils.logger import LOGGER
 
 
 class MenuWithBlockDisplay:
@@ -39,7 +39,7 @@ class MenuWithBlockDisplay:
         if block is None:
             block = self.current_block
 
-        _LOGGER.write(
+        LOGGER.write(
             "debug",
             f"Getting 'dd' output for block {str(self.current_block)}",
         )
@@ -61,13 +61,13 @@ class MenuWithBlockDisplay:
                 self.current_result = str(dd_result)
             self.current_block = block
 
-            _LOGGER.write("debug", "dd command successful")
+            LOGGER.write("debug", "dd command successful")
         except CalledProcessError:
             self.master.show_error_popup(
                 "Mmmmhhh...",
                 f"Error while opening block {str(self.current_block)}",
             )
-            _LOGGER.write(
+            LOGGER.write(
                 "error",
                 f"Error while opening block {str(self.current_block)}",
             )
@@ -89,14 +89,14 @@ class MenuWithBlockDisplay:
         self.result_content_box.set_text(formated_result)
         self.result_content_box.set_title(f"Block {self.current_block}")
 
-        _LOGGER.write("debug", f"Textbox updated with block {self.current_block}")
+        LOGGER.write("debug", f"Textbox updated with block {self.current_block}")
 
     def display_previous_block(self):
         """Display block n-1 in textbox."""
         try:
             self.display_block(str(int(self.current_block) - 1))
         except ValueError:
-            _LOGGER.write("error", f"Cannot display block {self.current_block} - 1")
+            LOGGER.write("error", f"Cannot display block {self.current_block} - 1")
             return
 
     def display_next_block(self):
@@ -104,7 +104,7 @@ class MenuWithBlockDisplay:
         try:
             self.display_block(str(int(self.current_block) + 1))
         except ValueError:
-            _LOGGER.write("error", f"Cannot display block {self.current_block} + 1")
+            LOGGER.write("error", f"Cannot display block {self.current_block} + 1")
             return
 
     def display_block(self, block: str):
@@ -123,7 +123,7 @@ class MenuWithBlockDisplay:
         """Update horizontal character limit for textbox depending on terminal size."""
         text_box_dimensions = self.result_content_box.get_cursor_limits_horizontal()
         self.horizontal_char_limit = text_box_dimensions[1] - text_box_dimensions[0]
-        _LOGGER.write(
+        LOGGER.write(
             "debug",
             f"Textbox char limit set to {self.horizontal_char_limit}",
         )

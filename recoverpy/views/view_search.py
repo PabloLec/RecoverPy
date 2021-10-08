@@ -5,18 +5,17 @@ from time import sleep
 
 from py_cui import BLACK_ON_GREEN, PyCUI, keys
 
-from recoverpy import search as _SEARCH
-from recoverpy import views_handler as _VIEWS_HANDLER
-from recoverpy.utils.logger import LOGGER as _LOGGER
-from recoverpy.utils.saver import SAVER as _SAVER
-from recoverpy.views import menu_with_block_display as _BLOCK_DISPLAY_MENU
+from recoverpy import search, views_handler
+from recoverpy.utils.logger import LOGGER
+from recoverpy.utils.saver import SAVER
+from recoverpy.views.menu_with_block_display import MenuWithBlockDisplay
 
 
-class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
+class SearchView(MenuWithBlockDisplay):
     """SearchView displays search results and corresponding block contents.
 
     Args:
-        _BLOCK_DISPLAY_MENU (MenuWithBlockDisplay: Composition to inherit block display
+        _BLOCK_DISPLAY_MENU (MenuWithBlockDisplay): Composition to inherit block display
         methods
 
     Attributes:
@@ -52,17 +51,17 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         self.searched_string = string_to_search
 
-        _LOGGER.write("info", "Starting 'SearchView' CUI window")
+        LOGGER.write("info", "Starting 'SearchView' CUI window")
 
         self.create_ui_content()
 
-        _SEARCH.start_search(self)
+        search.start_search(self)
 
-        _LOGGER.write(
+        LOGGER.write(
             "info",
             f"Raw searched string:\n{self.searched_string}",
         )
-        _LOGGER.write(
+        LOGGER.write(
             "info",
             f"Formated searched string:\n{quote(self.searched_string)}",
         )
@@ -160,7 +159,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         """Poll grep output and populate result list."""
         while True:
             try:
-                new_results, self.result_index = _SEARCH.yield_new_results(
+                new_results, self.result_index = search.yield_new_results(
                     self.queue_object,
                     self.result_index,
                 )
@@ -194,7 +193,7 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             int(self.search_results_scroll_menu.get_selected_item_index())
         ]
         self.current_block = str(int(inode / self.block_size))
-        _LOGGER.write("debug", f"Displayed block set to {self.current_block}")
+        LOGGER.write("debug", f"Displayed block set to {self.current_block}")
 
     def display_selected_block(self):
         """Bundle updating + displaying block.
@@ -231,13 +230,13 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             choice (str): User choice given by open_save_popup function.
         """
         if choice == "Save currently displayed block":
-            _SAVER.save_result(
+            SAVER.save_result(
                 current_block=self.current_block,
                 result=self.current_result,
             )
             self.master.show_message_popup("", "Result saved.")
         elif choice == "Explore neighboring blocks and save it all":
-            _VIEWS_HANDLER.VIEWS_HANDLER.open_view_results(
+            views_handler.VIEWS_HANDLER.open_view_results(
                 partition=self.partition,
                 block=self.current_block,
             )
