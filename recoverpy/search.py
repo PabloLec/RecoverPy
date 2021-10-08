@@ -5,8 +5,8 @@ from queue import Queue
 from subprocess import DEVNULL, PIPE, Popen, check_output
 from threading import Thread
 
-from recoverpy.utils import helper as _HELPER
-from recoverpy.utils.logger import LOGGER as _LOGGER
+from recoverpy.utils import helper
+from recoverpy.utils.logger import LOGGER
 
 
 def monitor_progress(search_view, grep_pid: int):
@@ -36,7 +36,7 @@ def monitor_progress(search_view, grep_pid: int):
             continue
 
         search_view.grep_progress = progress
-        _LOGGER.write("debug", f"Progress: {progress}")
+        LOGGER.write("debug", f"Progress: {progress}")
         search_view.set_title()
         time.sleep(1)
 
@@ -57,7 +57,7 @@ def start_search(search_view):
         partition=search_view.partition,
     )
 
-    if _HELPER.is_progress_installed():
+    if helper.is_progress_installed():
         monitor_progress_thread = Thread(
             target=monitor_progress,
             args=(
@@ -75,7 +75,7 @@ def start_search(search_view):
     )
     enqueue_grep_output_thread.start()
 
-    _LOGGER.write("debug", "Started searching thread")
+    LOGGER.write("debug", "Started searching thread")
 
     yield_results_thread = Thread(
         target=search_view.populate_result_list,
@@ -83,7 +83,7 @@ def start_search(search_view):
     )
     yield_results_thread.start()
 
-    _LOGGER.write("debug", "Started output fetching thread")
+    LOGGER.write("debug", "Started output fetching thread")
 
 
 def create_grep_process(searched_string: str, partition: str) -> Popen:

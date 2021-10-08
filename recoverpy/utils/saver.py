@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from recoverpy.utils.logger import LOGGER as _LOGGER
+from recoverpy.utils.logger import LOGGER
 
 
 class Saver:
@@ -38,7 +38,7 @@ class Saver:
 
         self.last_saved_file = file_name
 
-        _LOGGER.write("info", f"Output saved in file {file_name}")
+        LOGGER.write("info", f"Output saved in file {file_name}")
 
     def save_result_dict(self, results: dict):
         """Order a results dictionnary by block numbers and then save it in a text file.
@@ -62,7 +62,7 @@ class Saver:
 
         self.last_saved_file = file_name
 
-        _LOGGER.write("info", f"Output saved in file {file_name}")
+        LOGGER.write("info", f"Output saved in file {file_name}")
 
 
 SAVER = Saver()

@@ -2,7 +2,7 @@ from logging import getLogger
 from os import environ
 
 from recoverpy.config.config import parse_configuration
-from recoverpy.views_handler import VIEWS_HANDLER as _VIEWS_HANDLER
+from recoverpy.views_handler import VIEWS_HANDLER
 
 getLogger(__name__)
 
@@ -20,4 +20,4 @@ def main():
     verify_terminal_conf()
     parse_configuration()
 
-    _VIEWS_HANDLER.open_view_parameters()
+    VIEWS_HANDLER.open_view_parameters()

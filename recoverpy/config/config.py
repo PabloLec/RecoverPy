@@ -2,18 +2,18 @@ from pathlib import Path
 
 from yaml import FullLoader, load
 
-import recoverpy.utils.errors as _ERRORS
-from recoverpy.utils.logger import LOGGER as _LOGGER
-from recoverpy.utils.saver import SAVER as _SAVER
+from recoverpy.utils import errors
+from recoverpy.utils.logger import LOGGER
+from recoverpy.utils.saver import SAVER
 
 
 def parse_configuration():
     """Set logging and saving parameters based on yaml conf file.
 
     Raises:
-        _ERRORS.NoSavePath: If config file save path is empty
-        _ERRORS.InvalidSavePath: If config file save path is invalid
-        _ERRORS.InvalidLogPath: If config file log path is invalid
+        errors.NoSavePath: If config file save path is empty
+        errors.InvalidSavePath: If config file save path is invalid
+        errors.InvalidLogPath: If config file log path is invalid
     """
     project_path = Path(__file__).parent.absolute()
 
@@ -21,20 +21,20 @@ def parse_configuration():
         config = load(config_file, Loader=FullLoader)
 
     if config["save_directory"] == "":
-        raise _ERRORS.NoSavePath
+        raise errors.NoSavePath
     if not Path(config["save_directory"]).is_dir():
-        raise _ERRORS.InvalidSavePath
+        raise errors.InvalidSavePath
 
-    _SAVER.set_save_path(config["save_directory"])
+    SAVER.set_save_path(config["save_directory"])
 
     if config["enable_logging"]:
-        _LOGGER.enable_logging()
+        LOGGER.enable_logging()
     else:
         return
 
     if config["log_directory"] == "":
-        _LOGGER.disable_logging()
+        LOGGER.disable_logging()
     elif not Path(config["log_directory"]).is_dir():
-        raise _ERRORS.InvalidLogPath
+        raise errors.InvalidLogPath
     else:
-        _LOGGER.set_log_file_path(config["log_directory"])
+        LOGGER.set_log_file_path(config["log_directory"])

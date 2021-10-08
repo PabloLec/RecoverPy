@@ -1,8 +1,6 @@
 from py_cui import PyCUI
 
-from recoverpy.views import view_parameters as _PARAMETERS_VIEW
-from recoverpy.views import view_results as _RESULTS_VIEW
-from recoverpy.views import view_search as _SEARCH_VIEW
+from recoverpy.views import view_parameters, view_results, view_search
 
 
 class ViewsHandler:
@@ -35,7 +33,7 @@ class ViewsHandler:
         """Start a ParametersView instance."""
         self._parameters_view_window = self.create_view()
 
-        _PARAMETERS_VIEW.ParametersView(self._parameters_view_window)
+        view_parameters.ParametersView(self._parameters_view_window)
         self._parameters_view_window.start()
 
     def close_view_parameters(self):
@@ -54,7 +52,7 @@ class ViewsHandler:
         self.close_view_results()
         self._search_view_window = self.create_view()
 
-        _SEARCH_VIEW.SearchView(
+        view_search.SearchView(
             self._search_view_window,
             partition=partition,
             string_to_search=string_to_search,
@@ -76,7 +74,7 @@ class ViewsHandler:
         """
         self.close_view_search()
         self._results_view_window = self.create_view()
-        _RESULTS_VIEW.ResultsView(
+        view_results.ResultsView(
             self._results_view_window,
             partition=partition,
             initial_block=block,

@@ -3,7 +3,7 @@ from subprocess import call, check_output
 
 from py_cui import PyCUI
 
-from recoverpy.utils.logger import LOGGER as _LOGGER
+from recoverpy.utils.logger import LOGGER
 
 
 def is_user_root(window: PyCUI) -> bool:
@@ -21,11 +21,11 @@ def is_user_root(window: PyCUI) -> bool:
         bool: User is root
     """
     if geteuid() == 0:
-        _LOGGER.write("info", "User is root")
+        LOGGER.write("info", "User is root")
         return True
 
     window.show_error_popup("Not root :(", "You have to be root or use sudo.")
-    _LOGGER.write("warning", "User is not root")
+    LOGGER.write("warning", "User is not root")
     return False
 
 
@@ -46,7 +46,7 @@ def lsblk() -> list:
     ]
     partitions_list_formatted = [line.split(" ") for line in partitions_list_raw]
 
-    _LOGGER.write(
+    LOGGER.write(
         "debug",
         str(partitions_list_formatted),
     )
@@ -87,12 +87,12 @@ def format_partitions_list(window: PyCUI, raw_lsblk: list) -> dict:
 
     # Warn the user if no partition found with lsblk
     if not partitions_dict:
-        _LOGGER.write("Error", "No partition found !")
+        LOGGER.write("Error", "No partition found !")
         window.show_error_popup("Hum...", "No partition found.")
         return None
 
-    _LOGGER.write("debug", "Partition list generated using 'lsblk'")
-    _LOGGER.write("debug", f"{len(partitions_dict)} partitions found")
+    LOGGER.write("debug", "Partition list generated using 'lsblk'")
+    LOGGER.write("debug", f"{len(partitions_dict)} partitions found")
 
     return partitions_dict
 
