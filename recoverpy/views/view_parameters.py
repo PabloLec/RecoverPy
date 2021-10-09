@@ -64,7 +64,7 @@ class ParametersView:
         )
 
         self.confirm_search_button = self.master.add_button(
-            "Start search",
+            "Start",
             9,
             4,
             row_span=1,
@@ -74,6 +74,18 @@ class ParametersView:
             command=self.confirm_search,
         )
         self.confirm_search_button.set_color(4)
+
+        self.open_config_button = self.master.add_button(
+            "Settings",
+            9,
+            8,
+            row_span=1,
+            column_span=2,
+            padx=1,
+            pady=0,
+            command=views_handler.VIEWS_HANDLER.open_view_config,
+        )
+        self.open_config_button.set_color(1)
 
     def get_system_partitions(self):
         """Call lsblk and lsblk output formatting."""

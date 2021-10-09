@@ -1,6 +1,6 @@
 from py_cui import PyCUI
 
-from recoverpy.views import view_parameters, view_results, view_search
+from recoverpy.views import view_config, view_parameters, view_results, view_search
 
 
 class ViewsHandler:
@@ -8,6 +8,7 @@ class ViewsHandler:
 
     Attributes:
         _parameters_view_window (PyCUI): Parameters window.
+        _config_view_window  (PyCUI): Config window.
         _search_view_window (PyCUI): Search window.
         _results_view_window (PyCUI): Results window.
     """
@@ -15,6 +16,7 @@ class ViewsHandler:
     def __init__(self):
         """Initialize ViewsHandler."""
         self._parameters_view_window = None
+        self._config_view_window = None
         self._search_view_window = None
         self._results_view_window = None
 
@@ -41,6 +43,19 @@ class ViewsHandler:
         if self._parameters_view_window is None:
             return
         self._parameters_view_window.stop()
+
+    def open_view_config(self):
+        """Start a ConfigView instance."""
+        self._config_view_window = self.create_view()
+
+        view_config.ConfigView(self._config_view_window)
+        self._config_view_window.start()
+
+    def close_view_config(self):
+        """Stop the ParametersView instance."""
+        if self._config_view_window is None:
+            return
+        self._config_view_window.stop()
 
     def open_view_search(self, partition: str, string_to_search: str):
         """Start a SearchView instance.
