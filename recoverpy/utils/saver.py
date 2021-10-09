@@ -16,7 +16,12 @@ class Saver:
         self._save_path = None
         self.last_saved_file = None
 
-    def set_save_path(self, path: str):
+    @property
+    def save_path(self):
+        return self._save_path
+
+    @save_path.setter
+    def save_path(self, path: str):
         """Set result save path based on config file.
 
         Args:

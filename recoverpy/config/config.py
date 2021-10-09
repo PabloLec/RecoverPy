@@ -25,7 +25,7 @@ def parse_configuration():
     if not Path(config["save_directory"]).is_dir():
         raise errors.InvalidSavePath
 
-    SAVER.set_save_path(config["save_directory"])
+    SAVER.save_path = config["save_directory"]
 
     if config["enable_logging"]:
         LOGGER.enable_logging()
