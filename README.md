@@ -64,7 +64,7 @@ python3 -m recoverpy
 
 :red_circle: **You must have root access to use recoverpy**.
 
-If you are not logged as root use `sudo recoverpy` or log in with `su -` before execution.
+If you are not logged as root use `sudo recoverpy` or log in with `su -` before execution.<br/>
 *And if you are pentesting, well, keep grinding.*
 
 ---

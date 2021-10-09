@@ -33,12 +33,8 @@ class Saver:
         """
         time_format = datetime.now().strftime("recoverpy-save-%Y-%m-%d-%H%M%S")
         file_name = f"{self._save_path}{time_format}-{current_block}"
-        with open(file_name, "w") as save_file:
-            save_file.write(result)
 
-        self.last_saved_file = file_name
-
-        LOGGER.write("info", f"Output saved in file {file_name}")
+        self.write_to_file(file_name=file_name, content=result)
 
     def save_result_dict(self, results: dict):
         """Order a results dictionnary by block numbers and then save it in a text file.
@@ -57,8 +53,17 @@ class Saver:
         date_time_name = datetime.now().strftime("recoverpy-save-%Y-%m-%d-%H%M%S")
         file_name = f"{self._save_path}{date_time_name}"
 
+        self.write_to_file(file_name=file_name, content=final_output)
+
+    def write_to_file(self, file_name: str, content: str):
+        """Write content provided save file.
+
+        Args:
+            file_name (str): Save file name
+            content (str): File content to be written
+        """
         with open(file_name, "w") as save_file:
-            save_file.write(final_output)
+            save_file.write(content)
 
         self.last_saved_file = file_name
 
