@@ -22,8 +22,8 @@ class ConfigView:
         )
         self.master.add_button(
             "Save",
-            1,
-            8,
+            row=1,
+            column=8,
             row_span=1,
             column_span=1,
             padx=0,
@@ -42,8 +42,8 @@ class ConfigView:
         )
         self.master.add_button(
             "Save",
-            3,
-            8,
+            row=3,
+            column=8,
             row_span=1,
             column_span=1,
             padx=0,
@@ -59,44 +59,3 @@ class ConfigView:
             padx=0,
             pady=0,
         )
-        self.master.add_button(
-            "Yes",
-            5,
-            3,
-            row_span=1,
-            column_span=1,
-            padx=0,
-            pady=0,
-            command=None,
-        ).set_color(1)
-        self.master.add_button(
-            "No",
-            5,
-            6,
-            row_span=1,
-            column_span=1,
-            padx=0,
-            pady=0,
-            command=None,
-        ).set_color(1)
-
-        self.master.add_button(
-            "Save & Exit",
-            9,
-            1,
-            row_span=1,
-            column_span=3,
-            padx=0,
-            pady=0,
-            command=None,
-        ).set_color(1)
-        self.master.add_button(
-            "Cancel",
-            9,
-            6,
-            row_span=1,
-            column_span=3,
-            padx=0,
-            pady=0,
-            command=None,
-        ).set_color(1)
