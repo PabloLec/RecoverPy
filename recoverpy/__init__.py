@@ -1,7 +1,7 @@
 from logging import getLogger
 from os import environ
 
-from recoverpy.config.config import parse_configuration
+from recoverpy.config.config import load_config
 from recoverpy.views_handler import VIEWS_HANDLER
 
 getLogger(__name__)
@@ -18,6 +18,6 @@ def verify_terminal_conf():
 def main():
     """Set configuration and start UI."""
     verify_terminal_conf()
-    parse_configuration()
+    load_config()
 
     VIEWS_HANDLER.open_view_parameters()
