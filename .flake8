@@ -22,5 +22,3 @@ per-file-ignores = tests/*.py:D103,S101,PL
 
 max-line-length = 88
 show-source = true
-format = html
-htmldir = flake-report
