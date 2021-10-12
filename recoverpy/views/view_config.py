@@ -9,7 +9,7 @@ class ConfigView:
     def __init__(self, master: PyCUI):
         self.master = master
         self.create_ui_content()
-        self._log.enabled = LOGGER._log_enabled
+        self._log.enabled = LOGGER.log_enabled
 
     def create_ui_content(self):
         """Handle the creation of the UI elements."""
@@ -111,6 +111,6 @@ class ConfigView:
 
         CONFIG.write_config(
             save_path=user_input,
-            log_path=LOGGER._log_file_path,
-            log_enabled=self._log_enabled,
+            log_path=LOGGER.log_file_path,
+            log_enabled=LOGGER.log_enabled,
         )

@@ -13,32 +13,15 @@ class Logger:
 
     def __init__(self):
         """Initialize Logger."""
-        self._log_file_path = None
-        self._log_enabled = False
+        self.log_file_path = None
+        self.log_enabled = False
         self._logger = None
-
-    def enable_logging(self):
-        """Enable logging based on config file."""
-        self._log_enabled = True
-
-    def disable_logging(self):
-        """Disable logging based on config file."""
-        self._log_enabled = False
-
-    def set_log_file_path(self, path):
-        """Set result save path based on config file.
-
-        Args:
-            path (str): Log file path
-        """
-        self._log_file_path = path
-        self.start_logging()
 
     def start_logging(self):
         """Initiate and configure the logger object."""
         time = datetime.now().strftime("%Y-%m-%d-%H%M%S")
 
-        log_file_name = f"{self._log_file_path}recoverpy-{time}.log"
+        log_file_name = f"{self.log_file_path}recoverpy-{time}.log"
 
         self._logger = logging.getLogger("main")
         self._logger.setLevel(logging.DEBUG)
@@ -55,7 +38,7 @@ class Logger:
             log_type (str): Log level
             text (str): Message
         """
-        if not self._log_enabled:
+        if not self.log_enabled:
             return
 
         if log_type == "debug":

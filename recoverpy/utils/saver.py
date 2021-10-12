@@ -13,21 +13,8 @@ class Saver:
 
     def __init__(self):
         """Initialize Saver."""
-        self._save_path = None
+        self.save_path = None
         self.last_saved_file = None
-
-    @property
-    def save_path(self):
-        return self._save_path
-
-    @save_path.setter
-    def save_path(self, path: str):
-        """Set result save path based on config file.
-
-        Args:
-            path (str): Local path for search results saving
-        """
-        self._save_path = path
 
     def save_result(self, current_block: str, result: str):
         """Save a single result in a text file.
@@ -37,7 +24,7 @@ class Saver:
             result (str): Block content to be saved
         """
         time_format = datetime.now().strftime("recoverpy-save-%Y-%m-%d-%H%M%S")
-        file_name = f"{self._save_path}{time_format}-{current_block}"
+        file_name = f"{self.save_path}{time_format}-{current_block}"
 
         self.write_to_file(file_name=file_name, content=result)
 
@@ -56,7 +43,7 @@ class Saver:
             final_output += "\n"
 
         date_time_name = datetime.now().strftime("recoverpy-save-%Y-%m-%d-%H%M%S")
-        file_name = f"{self._save_path}{date_time_name}"
+        file_name = f"{self.save_path}{date_time_name}"
 
         self.write_to_file(file_name=file_name, content=final_output)
 

@@ -1,3 +1,3 @@
-enable_logging: true
+enable_logging: False
 log_directory: /tmp/
 save_directory: /tmp/
