@@ -9,7 +9,15 @@ from recoverpy.utils.saver import SAVER
 _CONFIG_DIR = Path(__file__).parent.absolute()
 
 
-def path_is_valid(path: str):
+def path_is_valid(path: str) -> bool:
+    """Verify validity of a given path.
+
+    Args:
+        path (str): Path to verify
+
+    Returns:
+        bool: Is path valid
+    """
     path = Path(path)
     try:
         if not path.is_dir():
@@ -21,6 +29,13 @@ def path_is_valid(path: str):
 
 
 def write_config(save_path: str, log_path: str, enable_logging: bool):
+    """Write provided configuration to config file.
+
+    Args:
+        save_path (str): Provided save path
+        log_path (str): Provided log path
+        enable_logging (bool): Logging is enabled or disabled
+    """
     with open(_CONFIG_DIR / "config.yaml", "w") as config_file:
         config = {
             "save_directory": save_path,
@@ -29,6 +44,7 @@ def write_config(save_path: str, log_path: str, enable_logging: bool):
         }
 
         dump(config, config_file)
+        load_config()
 
 
 def load_config():

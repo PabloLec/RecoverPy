@@ -47,6 +47,7 @@ class ViewsHandler:
 
     def open_view_config(self):
         """Start a ConfigView instance."""
+        self.close_view_parameters()
         self._config_view_window = self.create_view()
 
         view_config.ConfigView(self._config_view_window)
@@ -102,6 +103,12 @@ class ViewsHandler:
         if self._results_view_window is None:
             return
         self._results_view_window.stop()
+
+    def config_go_back(self):
+        """Go back from config view to parameters view."""
+        self.close_view_config()
+        self._parameters_view_window._stopped = False
+        self._parameters_view_window.start()
 
     def results_go_back(self):
         """Go back from results view to search view."""
