@@ -1,3 +1,4 @@
+from os import X_OK, access
 from pathlib import Path
 
 from yaml import FullLoader, dump, load
@@ -25,7 +26,7 @@ def path_is_valid(path: str) -> bool:
     except PermissionError:
         return False
 
-    return True
+    return access(path, X_OK)
 
 
 def write_config(save_path: str, log_path: str, enable_logging: bool):
