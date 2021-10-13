@@ -109,11 +109,11 @@ def test_block_number_update(SEARCH_VIEW):
 def test_save_search_result(SEARCH_VIEW, tmp_path):
     SEARCH_VIEW.current_block = "NUM"
     SEARCH_VIEW.current_result = "TEST CONTENT"
-    recoverpy._SAVER._save_path = tmp_path
+    recoverpy.utils.saver.SAVER.save_path = tmp_path
 
     SEARCH_VIEW.handle_save_popup_choice(choice="Save currently displayed block")
 
-    saved_file = recoverpy._SAVER.last_saved_file
+    saved_file = recoverpy.utils.saver.SAVER.last_saved_file
 
     assert saved_file[-3:] == "NUM"
 

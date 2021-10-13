@@ -72,7 +72,7 @@ def load_config():
         LOGGER.start_logging()
 
     if config["log_directory"] == "":
-        LOGGER.disable_logging()
+        LOGGER.log_enabled = False
     elif not path_is_valid(config["log_directory"]):
         raise errors.InvalidLogPath
     else:

@@ -2,7 +2,7 @@ import recoverpy
 
 
 def test_partitions_parsing(PARAMETERS_VIEW):
-    partitions_dict = recoverpy.helper.format_partitions_list(
+    partitions_dict = recoverpy.utils.helper.format_partitions_list(
         window=PARAMETERS_VIEW.master, raw_lsblk=PARAMETERS_VIEW.partitions_list
     )
     expected_format = {
@@ -31,7 +31,7 @@ def test_parameters_ui(PARAMETERS_VIEW):
 
 
 def test_partitions_list_population(PARAMETERS_VIEW):
-    PARAMETERS_VIEW.partitions_dict = recoverpy.helper.format_partitions_list(
+    PARAMETERS_VIEW.partitions_dict = recoverpy.utils.helper.format_partitions_list(
         window=PARAMETERS_VIEW.master, raw_lsblk=PARAMETERS_VIEW.partitions_list
     )
     PARAMETERS_VIEW.create_ui_content()
@@ -51,7 +51,7 @@ def test_partitions_list_population(PARAMETERS_VIEW):
 
 
 def test_partition_selection(PARAMETERS_VIEW):
-    PARAMETERS_VIEW.partitions_dict = recoverpy.helper.format_partitions_list(
+    PARAMETERS_VIEW.partitions_dict = recoverpy.utils.helper.format_partitions_list(
         window=PARAMETERS_VIEW.master, raw_lsblk=PARAMETERS_VIEW.partitions_list
     )
     PARAMETERS_VIEW.create_ui_content()
