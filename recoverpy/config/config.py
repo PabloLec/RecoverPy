@@ -50,14 +50,13 @@ def load_config():
 
     SAVER.save_path = config["save_directory"]
 
-    if config["enable_logging"]:
-        LOGGER.log_enabled = True
-    else:
-        return
+    LOGGER.log_enabled = bool(config["enable_logging"])
+    if LOGGER.log_enabled:
+        LOGGER.start_logging()
 
     if config["log_directory"] == "":
         LOGGER.disable_logging()
     elif not path_is_valid(config["log_directory"]):
         raise errors.InvalidLogPath
     else:
-        LOGGER.log_file_path = config["log_directory"]
+        LOGGER.log_path = config["log_directory"]

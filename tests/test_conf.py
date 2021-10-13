@@ -53,7 +53,7 @@ def test_conf_parsing():
     recoverpy.parse_configuration()
 
     assert recoverpy._SAVER._save_path == "/tmp/"
-    assert recoverpy._LOGGER._log_file_path == "/tmp/"
+    assert recoverpy._LOGGER._log_path == "/tmp/"
 
 
 def test_terminal_fix():

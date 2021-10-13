@@ -6,14 +6,14 @@ class Logger:
     """Encapsulates all logging related methods.
 
     Attributes:
-        _log_file_path (str): Local path for search results saving.
+        _log_path (str): Local path for search results saving.
         _log_enabled (bool): Last saved file to inform user.
         _logger (logging.Logger): Wrapped Logger object.
     """
 
     def __init__(self):
         """Initialize Logger."""
-        self.log_file_path = None
+        self.log_path = None
         self.log_enabled = False
         self._logger = None
 
@@ -21,7 +21,7 @@ class Logger:
         """Initiate and configure the logger object."""
         time = datetime.now().strftime("%Y-%m-%d-%H%M%S")
 
-        log_file_name = f"{self.log_file_path}recoverpy-{time}.log"
+        log_file_name = f"{self.log_path}recoverpy-{time}.log"
 
         self._logger = logging.getLogger("main")
         self._logger.setLevel(logging.DEBUG)

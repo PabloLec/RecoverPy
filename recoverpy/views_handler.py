@@ -26,10 +26,11 @@ class ViewsHandler:
         Returns:
             PyCUI: Created view
         """
-        result = PyCUI(10, 10)
-        result.toggle_unicode_borders()
-        result.set_title("RecoverPy 1.3.2")
-        return result
+        view = PyCUI(10, 10)
+        view.toggle_unicode_borders()
+        view.set_title("RecoverPy 1.3.2")
+
+        return view
 
     def open_view_parameters(self):
         """Start a ParametersView instance."""
