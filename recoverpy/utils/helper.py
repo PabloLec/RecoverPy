@@ -103,6 +103,6 @@ def is_progress_installed() -> bool:
     Returns:
         bool: 'progress' is installed.
     """
-    output = call(["bash", "-c", "command", "-v", "progress"])
+    output = call(["which", "progress"])
 
     return output == 0

@@ -67,6 +67,7 @@ def start_search(search_view):
         )
         monitor_progress_thread.daemon = True
         monitor_progress_thread.start()
+        LOGGER.write("debug", "Started progress thread")
 
     enqueue_grep_output_thread = Thread(
         target=enqueue_grep_output,

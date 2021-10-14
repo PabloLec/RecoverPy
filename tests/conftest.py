@@ -72,3 +72,13 @@ def CONFIG_VIEW():
     view._log_enabled = True
 
     return view
+
+
+@pytest.fixture(scope="session")
+def TEST_FILE(tmp_path_factory):
+    lorem = "Integer vitae ultrices magna. Nam non cursus odio. In dapibus augue.\n"
+    file = tmp_path_factory.mktemp("data") / "file"
+    with file.open("w", encoding="utf-8") as f:
+        f.write(lorem * 20000 + "TEST STRING" + lorem * 20000)
+
+    return file
