@@ -82,3 +82,12 @@ def TEST_FILE(tmp_path_factory):
         f.write(lorem * 20000 + "TEST STRING" + lorem * 20000)
 
     return file
+
+
+@pytest.fixture(scope="session")
+def TEST_SEARCH_VIEW(TEST_FILE):
+    return recoverpy.views.view_search.SearchView(
+        master=PyCUI(10, 10),
+        partition=TEST_FILE,
+        string_to_search="TEST STRING",
+    )

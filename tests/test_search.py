@@ -1,17 +1,34 @@
 from time import sleep
 
-from py_cui import PyCUI
 
-import recoverpy
+def test_grep(TEST_SEARCH_VIEW):
+    sleep(1)
+    results = TEST_SEARCH_VIEW.search_results_scroll_menu.get_item_list()
+
+    assert len(results) == 1
 
 
-def test_block_ui(TEST_FILE):
-    search_view = recoverpy.views.view_search.SearchView(
-        master=PyCUI(10, 10),
-        partition=TEST_FILE,
-        string_to_search="TEST STRING",
-    )
-    sleep(2)
-    print(search_view.search_results_scroll_menu.get_item_list())
+def test_dd(TEST_SEARCH_VIEW):
+    TEST_SEARCH_VIEW.search_results_scroll_menu.set_selected_item_index(0)
+    TEST_SEARCH_VIEW.display_selected_block()
 
-    assert False
+    text = TEST_SEARCH_VIEW.result_content_box.get()
+
+    assert "TEST STRING" in text
+
+
+def test_previous_block(TEST_SEARCH_VIEW):
+    TEST_SEARCH_VIEW.display_previous_block()
+
+    text = TEST_SEARCH_VIEW.result_content_box.get()
+
+    assert "TEST STRING" not in text
+    assert "Integer vitae" in text
+
+
+def test_next_block(TEST_SEARCH_VIEW):
+    TEST_SEARCH_VIEW.display_next_block()
+
+    text = TEST_SEARCH_VIEW.result_content_box.get()
+
+    assert "TEST STRING" in text
