@@ -61,3 +61,14 @@ def RESULTS_VIEW():
     view.current_block = 5
 
     return view
+
+
+@pytest.fixture()
+def CONFIG_VIEW():
+    view = recoverpy.views.view_config.ConfigView.__new__(
+        recoverpy.views.view_config.ConfigView
+    )
+    view.master = PyCUI(10, 10)
+    view._log_enabled = True
+
+    return view
