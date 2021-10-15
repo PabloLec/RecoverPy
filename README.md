@@ -23,13 +23,20 @@
 
 ---
 
+<!--ts-->
+   * [Demo](#Demo)
+   * [Installation](#Installation)
+      * [Dependancies](#Dependancies)
+      * [Installation from pip](#Installation-from-pip)
+   * [Usage](#Usage)
+   * [Tips](#Tips)
+<!--te-->
+
+---
+
 # RecoverPy
 
-RecoverPy is a utility with Terminal UI written in Python.
-
-You can already find plenty of solutions to recover deleted files but it can be a hassle to recover overwritten files. RecoverPy searches through every blocks of your partition to find your request.
-
-
+You can already find plenty of solutions to recover deleted files, but it can be a hassle to recover overwritten files. RecoverPy searches through every block of your partition to find your request.
 
 ## Demo
 
@@ -39,7 +46,7 @@ You can already find plenty of solutions to recover deleted files but it can be 
 
 ## Installation
 
-:penguin: The main prerequisite is having a Linux system.
+:penguin: RecoverPY is currently only available on Linux systems.
 
 #### :arrow_right: Dependancies
 
