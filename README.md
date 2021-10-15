@@ -26,8 +26,8 @@
 <!--ts-->
    * [Demo](#Demo)
    * [Installation](#Installation)
-      * [Dependancies](#Dependancies)
-      * [Installation from pip](#Installation-from-pip)
+      * [Dependancies](#arrow_right-dependancies)
+      * [Installation from pip](#arrow_right-installation-from-pip)
    * [Usage](#Usage)
    * [Tips](#Tips)
 <!--te-->
