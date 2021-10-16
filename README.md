@@ -46,7 +46,7 @@ You can already find plenty of solutions to recover deleted files, but it can be
 
 ## Installation
 
-:penguin: RecoverPY is currently only available on Linux systems.
+:penguin: RecoverPy is currently only available on Linux systems.
 
 #### :arrow_right: Dependancies
 
