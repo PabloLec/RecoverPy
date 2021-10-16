@@ -30,6 +30,7 @@
       * [Installation from pip](#arrow_right-installation-from-pip)
    * [Usage](#Usage)
    * [Tips](#Tips)
+   * [Contributing](#Contributing)
 <!--te-->
 
 ---
@@ -104,3 +105,8 @@ Regarding the searched string:
 When you found your file:
 
 - Use the option to explore neighboring blocks to make sure you do not miss some part of your file.
+
+## Contributing
+
+Thank you for considering contributing to RecoverPy.
+Any request, bug report or PR are welcome. Please read the [contributing guide](CONTRIBUTING.md).
