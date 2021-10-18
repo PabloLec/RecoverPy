@@ -73,7 +73,7 @@ class ConfigView:
             column_span=2,
             padx=0,
             pady=0,
-        )
+        ).selectable = False
         self.yes_button = self.master.add_button(
             "Yes",
             row=5,
