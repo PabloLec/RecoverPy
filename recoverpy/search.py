@@ -57,7 +57,7 @@ def start_search(search_view):
         partition=search_view.partition,
     )
 
-    if helper.is_progress_installed():
+    if helper.is_installed(command="progress"):
         monitor_progress_thread = Thread(
             target=monitor_progress,
             args=(

@@ -97,12 +97,15 @@ def format_partitions_list(window: PyCUI, raw_lsblk: list) -> dict:
     return partitions_dict
 
 
-def is_progress_installed() -> bool:
+def is_installed(command: str) -> bool:
     """Verify if 'progress' tool is installed on current system.
+
+    Args:
+        command (str): Command to be queried.
 
     Returns:
         bool: 'progress' is installed.
     """
-    output = call(["which", "progress"])
+    output = call(["which", command])
 
     return output == 0
