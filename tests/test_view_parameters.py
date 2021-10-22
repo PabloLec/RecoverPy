@@ -2,13 +2,17 @@ import recoverpy
 
 
 def test_partitions_parsing(PARAMETERS_VIEW):
-    partitions_dict = recoverpy.helper.format_partitions_list(
+    partitions_dict = recoverpy.utils.helper.format_partitions_list(
         window=PARAMETERS_VIEW.master, raw_lsblk=PARAMETERS_VIEW.partitions_list
     )
     expected_format = {
         "sda1": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/media/disk1"},
         "sdb1": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/media/disk2"},
-        "mmcblk0p1": {"FSTYPE": "vfat", "IS_MOUNTED": True, "MOUNT_POINT": "/boot/firmware"},
+        "mmcblk0p1": {
+            "FSTYPE": "vfat",
+            "IS_MOUNTED": True,
+            "MOUNT_POINT": "/boot/firmware",
+        },
         "mmcblk0p2": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/"},
         "system-root": {"FSTYPE": "btrfs", "IS_MOUNTED": True, "MOUNT_POINT": "/test"},
         "vdb": {"FSTYPE": "LVM2_member", "IS_MOUNTED": False, "MOUNT_POINT": None},
@@ -27,7 +31,7 @@ def test_parameters_ui(PARAMETERS_VIEW):
 
 
 def test_partitions_list_population(PARAMETERS_VIEW):
-    PARAMETERS_VIEW.partitions_dict = recoverpy.helper.format_partitions_list(
+    PARAMETERS_VIEW.partitions_dict = recoverpy.utils.helper.format_partitions_list(
         window=PARAMETERS_VIEW.master, raw_lsblk=PARAMETERS_VIEW.partitions_list
     )
     PARAMETERS_VIEW.create_ui_content()
@@ -47,7 +51,7 @@ def test_partitions_list_population(PARAMETERS_VIEW):
 
 
 def test_partition_selection(PARAMETERS_VIEW):
-    PARAMETERS_VIEW.partitions_dict = recoverpy.helper.format_partitions_list(
+    PARAMETERS_VIEW.partitions_dict = recoverpy.utils.helper.format_partitions_list(
         window=PARAMETERS_VIEW.master, raw_lsblk=PARAMETERS_VIEW.partitions_list
     )
     PARAMETERS_VIEW.create_ui_content()

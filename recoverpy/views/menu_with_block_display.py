@@ -1,6 +1,6 @@
-from subprocess import check_output
+from subprocess import CalledProcessError, check_output
 
-from recoverpy.logger import LOGGER as _LOGGER
+from recoverpy.utils.logger import LOGGER
 
 
 class MenuWithBlockDisplay:
@@ -8,7 +8,7 @@ class MenuWithBlockDisplay:
     blocks content.
 
     Attributes:
-        master (py_cui.PyCUI): PyCUI main object for UI.
+        master (PyCUI): PyCUI main object for UI.
         horizontal_char_limit (int): Number of chars that can fit horizontally in
             the left hand result box.
         current_block (int): Partition block number currently displayed.
@@ -19,8 +19,7 @@ class MenuWithBlockDisplay:
     """
 
     def __init__(self):
-        """Constructor for MenuWithBlockDisplay."""
-
+        """Initialize MenuWithBlockDisplay."""
         self.master = None
 
         self.horizontal_char_limit = 0
@@ -35,13 +34,12 @@ class MenuWithBlockDisplay:
         """Store a 'dd' command result in current_result var.
 
         Args:
-            block (str, optional): Partition block number. Defaults to None.
+            block (str): Partition block number. Defaults to None.
         """
-
         if block is None:
             block = self.current_block
 
-        _LOGGER.write(
+        LOGGER.write(
             "debug",
             f"Getting 'dd' output for block {str(self.current_block)}",
         )
@@ -59,26 +57,23 @@ class MenuWithBlockDisplay:
             # Try/Catch to decode raw result in utf-8
             try:
                 self.current_result = dd_result.decode("utf-8")
-            except:
+            except UnicodeDecodeError:
                 self.current_result = str(dd_result)
             self.current_block = block
 
-            _LOGGER.write("debug", "dd command successful")
-        except:
+            LOGGER.write("debug", "dd command successful")
+        except CalledProcessError:
             self.master.show_error_popup(
                 "Mmmmhhh...",
                 f"Error while opening block {str(self.current_block)}",
             )
-            _LOGGER.write(
+            LOGGER.write(
                 "error",
                 f"Error while opening block {str(self.current_block)}",
             )
 
     def update_textbox(self):
-        """Format 'dd' result by breaking lines with char_limit var.
-        Then displays it in lefthand texbox.
-        """
-
+        """Format 'dd' result by breaking lines by char_limit and display it."""
         self.update_char_limit()
 
         # Format raw result to display it in the text box
@@ -94,24 +89,22 @@ class MenuWithBlockDisplay:
         self.result_content_box.set_text(formated_result)
         self.result_content_box.set_title(f"Block {self.current_block}")
 
-        _LOGGER.write("debug", f"Textbox updated with block {self.current_block}")
+        LOGGER.write("debug", f"Textbox updated with block {self.current_block}")
 
     def display_previous_block(self):
         """Display block n-1 in textbox."""
-
         try:
             self.display_block(str(int(self.current_block) - 1))
         except ValueError:
-            _LOGGER.write("error", f"Cannot display block {self.current_block} - 1")
+            LOGGER.write("error", f"Cannot display block {self.current_block} - 1")
             return
 
     def display_next_block(self):
         """Display block n+1 in textbox."""
-
         try:
             self.display_block(str(int(self.current_block) + 1))
         except ValueError:
-            _LOGGER.write("error", f"Cannot display block {self.current_block} + 1")
+            LOGGER.write("error", f"Cannot display block {self.current_block} + 1")
             return
 
     def display_block(self, block: str):
@@ -120,7 +113,6 @@ class MenuWithBlockDisplay:
         Args:
             block (str): Partition block number.
         """
-
         if int(block) < 0:
             return
 
@@ -129,10 +121,9 @@ class MenuWithBlockDisplay:
 
     def update_char_limit(self):
         """Update horizontal character limit for textbox depending on terminal size."""
-
         text_box_dimensions = self.result_content_box.get_cursor_limits_horizontal()
         self.horizontal_char_limit = text_box_dimensions[1] - text_box_dimensions[0]
-        _LOGGER.write(
+        LOGGER.write(
             "debug",
             f"Textbox char limit set to {self.horizontal_char_limit}",
         )

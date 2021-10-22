@@ -1,44 +1,41 @@
-from time import sleep
 from queue import Queue
-from shlex import quote
 from re import findall
-import py_cui
+from shlex import quote
+from time import sleep
 
-from recoverpy import views_handler as _VIEWS_HANDLER
-from recoverpy.views import menu_with_block_display as _BLOCK_DISPLAY_MENU
-from recoverpy.saver import SAVER as _SAVER
-from recoverpy import search_functions as _SEARCH
-from recoverpy.logger import LOGGER as _LOGGER
+from py_cui import BLACK_ON_GREEN, PyCUI, keys
+
+from recoverpy import search, views_handler
+from recoverpy.utils.logger import LOGGER
+from recoverpy.utils.saver import SAVER
+from recoverpy.views.menu_with_block_display import MenuWithBlockDisplay
 
 
-class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
-    """SearchView is displayed after Parameters view.
-    On the left hand scroll view, results from the grep command will be listed.
-    On the right hand textbox, result of a dd command will be displayed when the user
-    selects a block.
+class SearchView(MenuWithBlockDisplay):
+    """SearchView displays search results and corresponding block contents.
 
     Args:
-        _BLOCK_DISPLAY_MENU (MenuWithBlockDisplay: Composition to inherit block display
-        methods.
+        _BLOCK_DISPLAY_MENU (MenuWithBlockDisplay): Composition to inherit block display
+        methods
 
     Attributes:
-        master (py_cui.PyCUI): PyCUI main object for UI.
-        queue_object (Queue): Queue object where grep command stdout will be stored.
-        result_index (int): Number of results already processed.
-        grep_progress (str): Formated output of 'progress' command.
-        partition (str): System partition selected by user for search.
-        block_size (int): Size of partition block for dd parsing.
-        searched_string (str): String given by the user that will be searched by dd command.
+        master (PyCUI): PyCUI main object for UI
+        queue_object (Queue): Queue object where grep command stdout will be stored
+        result_index (int): Number of results already processed
+        grep_progress (str): Formated output of 'progress' command
+        partition (str): System partition selected by user for search
+        block_size (int): Size of partition block for dd parsing
+        searched_string (str): String given by the user that will be searched by dd
     """
 
-    def __init__(self, master: py_cui.PyCUI, partition: str, string_to_search: str):
-        """Constructor SearchView
+    def __init__(self, master: PyCUI, partition: str, string_to_search: str):
+        """Initialize SearchView.
 
         Args:
-            master (py_cui.PyCUI): PyCUI main object for UI.
+            master (PyCUI): PyCUI main object for UI
             partition (str): System partition to search
+            string_to_search (str): String to search in partition blocks
         """
-
         super().__init__()
 
         self.master = master
@@ -54,24 +51,23 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
         self.searched_string = string_to_search
 
-        _LOGGER.write("info", "Starting 'SearchView' CUI window")
+        LOGGER.write("info", "Starting 'SearchView' CUI window")
 
         self.create_ui_content()
 
-        _SEARCH.start_search(self)
+        search.start_search(self)
 
-        _LOGGER.write(
+        LOGGER.write(
             "info",
             f"Raw searched string:\n{self.searched_string}",
         )
-        _LOGGER.write(
+        LOGGER.write(
             "info",
             f"Formated searched string:\n{quote(self.searched_string)}",
         )
 
     def set_title(self):
         """Set window title based on number of results and search progress."""
-
         if self.grep_progress != "":
             title = f"{self.grep_progress} - {self.result_index} results"
         else:
@@ -81,18 +77,17 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
     def create_ui_content(self):
         """Handle the creation of the UI elements."""
-
         self.search_results_scroll_menu = self.master.add_scroll_menu(
             "Search results:", 0, 0, row_span=10, column_span=5, padx=1, pady=0
         )
         self.search_results_scroll_menu.add_text_color_rule(
             self.searched_string,
-            py_cui.BLACK_ON_GREEN,
+            BLACK_ON_GREEN,
             "contains",
             match_type="regex",
         )
         self.search_results_scroll_menu.add_key_command(
-            py_cui.keys.KEY_ENTER,
+            keys.KEY_ENTER,
             self.display_selected_block,
         )
 
@@ -100,15 +95,15 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             "Block content:", 0, 5, row_span=9, column_span=5, padx=1, pady=0
         )
         self.result_content_box.add_key_command(
-            py_cui.keys.KEY_F5,
+            keys.KEY_F5,
             self.open_save_popup,
         )
         self.result_content_box.add_key_command(
-            py_cui.keys.KEY_F6,
+            keys.KEY_F6,
             self.display_previous_block,
         )
         self.result_content_box.add_key_command(
-            py_cui.keys.KEY_F7,
+            keys.KEY_F7,
             self.display_next_block,
         )
 
@@ -162,10 +157,9 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
 
     def populate_result_list(self):
         """Poll grep output and populate result list."""
-
         while True:
             try:
-                new_results, self.result_index = _SEARCH.yield_new_results(
+                new_results, self.result_index = search.yield_new_results(
                     self.queue_object,
                     self.result_index,
                 )
@@ -186,7 +180,6 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         Args:
             new_results (list): New results from the grep command.
         """
-
         for result in new_results:
             string_result = str(result)[2:-1]
             inode = findall(r"^([0-9]+)\:", string_result)[0]
@@ -195,23 +188,23 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
             self.search_results_scroll_menu.add_item(content)
 
     def update_block_number(self):
-        """Update currently viewed block number when the user selects one in the list."""
-
-        inode = self.inodes[int(self.search_results_scroll_menu.get_selected_item_index())]
+        """Update currently viewed block number upon user selection."""
+        inode = self.inodes[
+            int(self.search_results_scroll_menu.get_selected_item_index())
+        ]
         self.current_block = str(int(inode / self.block_size))
-        _LOGGER.write("debug", f"Displayed block set to {self.current_block}")
+        LOGGER.write("debug", f"Displayed block set to {self.current_block}")
 
     def display_selected_block(self):
-        """FCalled when the user select a result in the left hand list.
-        Bundles updating + displaying block.
-        """
+        """Bundle updating + displaying block.
 
+        Called when the user select a result in the left hand list.
+        """
         self.update_block_number()
         self.display_block(self.current_block)
 
     def open_save_popup(self):
         """Open a popup displaying save options."""
-
         if self.current_block is None:
             self.master.show_message_popup(
                 "",
@@ -231,21 +224,19 @@ class SearchView(_BLOCK_DISPLAY_MENU.MenuWithBlockDisplay):
         )
 
     def handle_save_popup_choice(self, choice: str):
-        """Depending on user choice, method will either directly save the output in
-        a text file, open a more detailed view called ResultsView or just exit.
+        """Launch the action selected by the user (save, explore, exit).
 
         Args:
             choice (str): User choice given by open_save_popup function.
         """
-
         if choice == "Save currently displayed block":
-            _SAVER.save_result(
+            SAVER.save_result(
                 current_block=self.current_block,
                 result=self.current_result,
             )
             self.master.show_message_popup("", "Result saved.")
         elif choice == "Explore neighboring blocks and save it all":
-            _VIEWS_HANDLER.VIEWS_HANDLER.open_view_results(
+            views_handler.VIEWS_HANDLER.open_view_results(
                 partition=self.partition,
                 block=self.current_block,
             )

@@ -23,13 +23,21 @@
 
 ---
 
+<!--ts-->
+   * [Demo](#Demo)
+   * [Installation](#Installation)
+      * [Dependancies](#arrow_right-dependancies)
+      * [Installation from pip](#arrow_right-installation-from-pip)
+   * [Usage](#Usage)
+   * [Tips](#Tips)
+   * [Contributing](#Contributing)
+<!--te-->
+
+---
+
 # RecoverPy
 
-RecoverPy is a utility with Terminal UI written in Python.
-
-You can already find plenty of solutions to recover deleted files but it can be a hassle to recover overwritten files. RecoverPy searches through every blocks of your partition to find your request.
-
-
+You can already find plenty of solutions to recover deleted files, but it can be a hassle to recover overwritten files. RecoverPy searches through every block of your partition to find your request.
 
 ## Demo
 
@@ -39,7 +47,7 @@ You can already find plenty of solutions to recover deleted files but it can be 
 
 ## Installation
 
-:penguin: The main prerequisite is having a Linux system.
+:penguin: RecoverPy is currently only available on Linux systems.
 
 #### :arrow_right: Dependancies
 
@@ -64,23 +72,25 @@ python3 -m recoverpy
 
 :red_circle: **You must have root access to use recoverpy**.
 
-If you are not logged as root use `sudo recoverpy` or log in with `su -` before execution.
+*If you are not logged as root use `sudo recoverpy` or log in with `su -` before execution.*<br/>
 
 ---
 
-First, **select the system partition** in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
+:one: **Select the system partition** in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
 
-Then, **type some text to search**. See tips below for better results.
+:two: **Type a text string to search**. See tips below for better results.
 
 Note that searching a string in a whole partition may take _a while_. (see [euphemism](https://en.wikipedia.org/wiki/Euphemism "euphemism"))
 
-Results will appear in the left-hand box. Select a result to display the corresponding partition block content in the right-hand box.
+Default save path is `/tmp/`, click on Settings to edit configuration.
 
-Once you have found your precious, select `Save`.
+:three: **Start search**, Results will appear in the left-hand box. 
 
-You can now either save this block individually or explore neighboring blocks for the remaining parts of the file. You could then save it all in one file.
+:four: **Select a result** to display the corresponding partition block content in the right-hand box.
 
-**Save path is set in `conf.yaml`. Default is `/tmp/`.**
+:five: Once you have found your precious, **select `Save`**.
+
+:six: You can now either save this block individually or explore neighboring blocks for the remaining parts of the file. You could then save it all in one file.
 
 ## Tips
 
@@ -96,3 +106,8 @@ Regarding the searched string:
 When you found your file:
 
 - Use the option to explore neighboring blocks to make sure you do not miss some part of your file.
+
+## Contributing
+
+Thank you for considering contributing to RecoverPy.
+Any request, bug report or PR are welcome. Please read the [contributing guide](CONTRIBUTING.md).

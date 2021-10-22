@@ -16,7 +16,7 @@ def test_block_ui(RESULTS_VIEW):
 def test_add_block_to_file(RESULTS_VIEW):
     RESULTS_VIEW.create_ui_content()
 
-    for i in range(0, 3):
+    for i in range(3):
         RESULTS_VIEW.current_block = str(i)
         RESULTS_VIEW.current_result = f"TEST {i}"
         RESULTS_VIEW.add_block_to_file()
@@ -27,16 +27,16 @@ def test_add_block_to_file(RESULTS_VIEW):
 
 
 def test_save_multiple_blocks(RESULTS_VIEW, tmp_path):
-    recoverpy.saver._save_path = tmp_path
+    recoverpy.utils.saver._save_path = tmp_path
 
-    for i in range(0, 3):
+    for i in range(3):
         RESULTS_VIEW.current_block = str(i)
         RESULTS_VIEW.current_result = f"TEST {i}"
         RESULTS_VIEW.add_block_to_file()
 
     RESULTS_VIEW.save_file()
 
-    saved_file = recoverpy.saver.SAVER.last_saved_file
+    saved_file = recoverpy.utils.saver.SAVER.last_saved_file
 
     with open(saved_file) as f:
         content = f.read()

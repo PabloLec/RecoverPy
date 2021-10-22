@@ -1,16 +1,17 @@
-import recoverpy
-import py_cui
-import pytest
-
 from queue import Queue
 
+import pytest
+from py_cui import PyCUI
 
-@pytest.fixture
+import recoverpy
+
+
+@pytest.fixture()
 def PARAMETERS_VIEW():
     view = recoverpy.views.view_parameters.ParametersView.__new__(
         recoverpy.views.view_parameters.ParametersView
     )
-    view.master = py_cui.PyCUI(10, 10)
+    view.master = PyCUI(10, 10)
 
     partitions = [
         ["sda", "disk"],
@@ -29,10 +30,12 @@ def PARAMETERS_VIEW():
     return view
 
 
-@pytest.fixture
+@pytest.fixture()
 def SEARCH_VIEW():
-    view = recoverpy.views.view_search.SearchView.__new__(recoverpy.views.view_search.SearchView)
-    view.master = py_cui.PyCUI(10, 10)
+    view = recoverpy.views.view_search.SearchView.__new__(
+        recoverpy.views.view_search.SearchView
+    )
+    view.master = PyCUI(10, 10)
     view.queue_object = Queue()
     lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
     view.queue_object.put(f"- 1000: {lorem}")
@@ -47,14 +50,44 @@ def SEARCH_VIEW():
     return view
 
 
-@pytest.fixture
+@pytest.fixture()
 def RESULTS_VIEW():
     view = recoverpy.views.view_results.ResultsView.__new__(
         recoverpy.views.view_results.ResultsView
     )
-    view.master = py_cui.PyCUI(10, 10)
+    view.master = PyCUI(10, 10)
     view.partition = "/dev/sda1"
     view.saved_blocks_dict = {}
     view.current_block = 5
 
     return view
+
+
+@pytest.fixture()
+def CONFIG_VIEW():
+    view = recoverpy.views.view_config.ConfigView.__new__(
+        recoverpy.views.view_config.ConfigView
+    )
+    view.master = PyCUI(10, 10)
+    view._log_enabled = True
+
+    return view
+
+
+@pytest.fixture(scope="session")
+def TEST_FILE(tmp_path_factory):
+    lorem = "Integer vitae ultrices magna. Nam non cursus odio. In dapibus augue.\n"
+    file = tmp_path_factory.mktemp("data") / "file"
+    with file.open("w", encoding="utf-8") as f:
+        f.write(lorem * 20000 + "TEST STRING" + lorem * 20000)
+
+    return file
+
+
+@pytest.fixture(scope="session")
+def TEST_SEARCH_VIEW(TEST_FILE):
+    return recoverpy.views.view_search.SearchView(
+        master=PyCUI(10, 10),
+        partition=TEST_FILE,
+        string_to_search="TEST STRING",
+    )

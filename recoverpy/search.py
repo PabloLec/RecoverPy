@@ -1,13 +1,12 @@
-from queue import Queue
-from threading import Thread
-
 import io
 import re
 import time
+from queue import Queue
+from subprocess import DEVNULL, PIPE, Popen, check_output
+from threading import Thread
 
-from subprocess import PIPE, DEVNULL, Popen, check_output
-from recoverpy import helper as _HELPER
-from recoverpy.logger import LOGGER as _LOGGER
+from recoverpy.utils import helper
+from recoverpy.utils.logger import LOGGER
 
 
 def monitor_progress(search_view, grep_pid: int):
@@ -17,7 +16,6 @@ def monitor_progress(search_view, grep_pid: int):
         search_view (SearchView): Current PyCUI search view
         grep_pid (int): PID of grep process
     """
-
     while True:
         output = check_output(
             ["progress", "-p", str(grep_pid)],
@@ -38,14 +36,14 @@ def monitor_progress(search_view, grep_pid: int):
             continue
 
         search_view.grep_progress = progress
-        _LOGGER.write("debug", f"Progress: {progress}")
+        LOGGER.write("debug", f"Progress: {progress}")
         search_view.set_title()
         time.sleep(1)
 
 
 def start_search(search_view):
-    """Function is called within view_results.__init__
-    Launches:
+    """Launch (called within view_results.__init__):
+
     - Process executing the grep command.
     - If available, thread using 'progress' tool to monitor grep.
     - Thread to store the grep output in a queue object.
@@ -54,13 +52,12 @@ def start_search(search_view):
     Args:
         search_view (SearchView): Current PyCUI search view
     """
-
     grep_process = create_grep_process(
         searched_string=search_view.searched_string,
         partition=search_view.partition,
     )
 
-    if _HELPER.is_progress_installed():
+    if helper.is_installed(command="progress"):
         monitor_progress_thread = Thread(
             target=monitor_progress,
             args=(
@@ -70,6 +67,7 @@ def start_search(search_view):
         )
         monitor_progress_thread.daemon = True
         monitor_progress_thread.start()
+        LOGGER.write("debug", "Started progress thread")
 
     enqueue_grep_output_thread = Thread(
         target=enqueue_grep_output,
@@ -78,7 +76,7 @@ def start_search(search_view):
     )
     enqueue_grep_output_thread.start()
 
-    _LOGGER.write("debug", "Started searching thread")
+    LOGGER.write("debug", "Started searching thread")
 
     yield_results_thread = Thread(
         target=search_view.populate_result_list,
@@ -86,7 +84,7 @@ def start_search(search_view):
     )
     yield_results_thread.start()
 
-    _LOGGER.write("debug", "Started output fetching thread")
+    LOGGER.write("debug", "Started output fetching thread")
 
 
 def create_grep_process(searched_string: str, partition: str) -> Popen:
@@ -99,7 +97,6 @@ def create_grep_process(searched_string: str, partition: str) -> Popen:
     Returns:
         Popen: Created process
     """
-
     return Popen(
         ["grep", "-a", "-b", searched_string, partition],
         stdin=None,
@@ -109,14 +106,12 @@ def create_grep_process(searched_string: str, partition: str) -> Popen:
 
 
 def enqueue_grep_output(out: io.BufferedReader, queue: Queue):
-    """Function called in a thread to store the grep command output in
-    a queue object.
+    """Store grep command output in a queue object.
 
     Args:
         out (io.BufferedReader): Output of grep process
         queue (Queue): Queue object to store stdout
     """
-
     for line in iter(out.readline, b""):
         queue.put(line)
     out.close()
@@ -124,6 +119,7 @@ def enqueue_grep_output(out: io.BufferedReader, queue: Queue):
 
 def yield_new_results(queue_object: Queue, result_index: int) -> tuple:
     """Probe the queue object for new results.
+
     If any, returns it to populate the result box.
 
     Args:
@@ -131,16 +127,15 @@ def yield_new_results(queue_object: Queue, result_index: int) -> tuple:
         result_index (int): [Current result list index
 
     Returns:
-        tuple: Tuple with 1. List of new results 2. New result index
+        tuple: Tuple with (List of new results, New result index)
     """
-
     # Returns if no new result
     if len(list(queue_object.queue)) == result_index:
         return None
 
     queue_list = list(queue_object.queue)
 
-    new_results = [queue_element for queue_element in queue_list[result_index:]]
+    new_results = queue_list[result_index:]
 
     result_index = len(queue_list)
 
