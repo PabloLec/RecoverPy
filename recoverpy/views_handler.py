@@ -28,7 +28,7 @@ class ViewsHandler:
         """
         view = PyCUI(10, 10)
         view.toggle_unicode_borders()
-        view.set_title("RecoverPy 1.3.2")
+        view.set_title("RecoverPy 1.4.0")
 
         return view
 

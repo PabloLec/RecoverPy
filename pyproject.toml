@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "recoverpy"
-version = "1.3.2"
+version = "1.4.0"
 description = "A TUI to recover overwritten or deleted data."
 authors = ["PabloLec <pablo.lecolinet@gmail.com>"]
 license = "GPL-3.0 License"
