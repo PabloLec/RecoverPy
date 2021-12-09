@@ -685,7 +685,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "pylint"
-version = "2.12.1"
+version = "2.12.2"
 description = "python code static checker"
 category = "dev"
 optional = false
@@ -871,7 +871,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "2925d1f669b8fcdad731778fb96cb46be1407a47acdb3630ea892a87aabd988d"
+content-hash = "2c8dfa09e3ba3e67f6e6ff22804c86b934523a5c939a21b3fd3314c3daa7d56b"
 
 [metadata.files]
 astor = [
@@ -1241,8 +1241,8 @@ pygments = [
     {file = "Pygments-2.10.0.tar.gz", hash = "sha256:f398865f7eb6874156579fdf36bc840a03cab64d1cde9e93d68f46a425ec52c6"},
 ]
 pylint = [
-    {file = "pylint-2.12.1-py3-none-any.whl", hash = "sha256:b4b5a7b6d04e914a11c198c816042af1fb2d3cda29bb0c98a9c637010da2a5c5"},
-    {file = "pylint-2.12.1.tar.gz", hash = "sha256:4f4a52b132c05b49094b28e109febcec6bfb7bc6961c7485a5ad0a0f961df289"},
+    {file = "pylint-2.12.2-py3-none-any.whl", hash = "sha256:daabda3f7ed9d1c60f52d563b1b854632fd90035bcf01443e234d3dc794e3b74"},
+    {file = "pylint-2.12.2.tar.gz", hash = "sha256:9d945a73640e1fec07ee34b42f5669b770c759acd536ec7b16d7e4b87a9c9ff9"},
 ]
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
