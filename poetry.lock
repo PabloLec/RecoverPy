@@ -213,7 +213,7 @@ pyflakes = ">=2.4.0,<2.5.0"
 
 [[package]]
 name = "flake8-aaa"
-version = "0.12.0"
+version = "0.12.1"
 description = "A Flake8 plugin that checks Python tests follow the Arrange-Act-Assert pattern"
 category = "dev"
 optional = false
@@ -871,7 +871,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "09bac22023bba1217880e098fe925224a01a2785f1cf3ea2f0db8258881d682f"
+content-hash = "4aa2395866a726b415469e8d7d2e57c3b9d2f0e38cd149a3214419e9b4dde744"
 
 [metadata.files]
 astor = [
@@ -991,8 +991,8 @@ flake8 = [
     {file = "flake8-4.0.1.tar.gz", hash = "sha256:806e034dda44114815e23c16ef92f95c91e4c71100ff52813adf7132a6ad870d"},
 ]
 flake8-aaa = [
-    {file = "flake8-aaa-0.12.0.tar.gz", hash = "sha256:ce6acf9c278dc6a34d1b8c3823f88b9ee9048fda80a1a3c04cd29d3876e776dc"},
-    {file = "flake8_aaa-0.12.0-py3-none-any.whl", hash = "sha256:07d8b714b1af53f645107157aa65346e95bb94c8f88c0800fa4e199d22719d52"},
+    {file = "flake8-aaa-0.12.1.tar.gz", hash = "sha256:8d81997f3903c9307eace7a42811e96e57d0e0578f8bc8a75cd6de4e2e1e2042"},
+    {file = "flake8_aaa-0.12.1-py3-none-any.whl", hash = "sha256:36ed4e479af49928a538be729630b26d73e190d6fc7b2e5015da7b61233504a5"},
 ]
 flake8-bandit = [
     {file = "flake8_bandit-2.1.2.tar.gz", hash = "sha256:687fc8da2e4a239b206af2e54a90093572a60d0954f3054e23690739b0b0de3b"},
