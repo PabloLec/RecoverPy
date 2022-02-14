@@ -42,7 +42,7 @@ py-cui = "^0.1.4"
 
 [tool.poetry.dev-dependencies]
 coverage = "^6.2"
-pytest = "^7.0.0"
+pytest = "^7.0.1"
 pylint = "^2.12.2"
 isort = "^5.10.1"
 black = "^22.1"
