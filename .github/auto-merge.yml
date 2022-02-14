@@ -1,7 +1,0 @@
-- match:
-    dependency_name: py-cui
-    update_type: semver:patch
-
-- match:
-    dependency_type: development
-    update_type: all
