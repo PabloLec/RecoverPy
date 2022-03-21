@@ -10,4 +10,4 @@ def main():
     """Set configuration and start UI."""
     setup()
     load_config()
-    SCREENS_HANDLER.open_screen_parameters()
+    SCREENS_HANDLER.open_screen("parameters")

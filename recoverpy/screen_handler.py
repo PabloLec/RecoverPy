@@ -10,14 +10,7 @@ from recoverpy.screens import (
 
 
 class ScreensHandler:
-    """Store UI windows instances and provide navigation logic.
-
-    Attributes:
-        _parameters_screen_window (PyCUI): Parameters window.
-        _config_screen_window  (PyCUI): Config window.
-        _search_screen_window (PyCUI): Search window.
-        _results_screen_window (PyCUI): Results window.
-    """
+    """Provide navigation logic."""
 
     SCREENS_CLASSES: Final[Dict[str, Type]] = {
         "parameters": screen_parameters.ParametersScreen,
@@ -50,9 +43,9 @@ class ScreensHandler:
         return screen
 
     def open_screen(self, screen_name: str):
-        self.screen[screen_name] = self.create_screen()
-        self.SCREENS_CLASSES[screen_name](self.screen[screen_name])
-        self.screen[screen_name].start()
+        self.screens[screen_name] = self.create_screen()
+        self.SCREENS_CLASSES[screen_name](self.screens[screen_name])
+        self.screens[screen_name].start()
 
         self.current_screen, self.previous_screen = screen_name, self.current_screen
 
