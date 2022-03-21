@@ -1,6 +1,6 @@
 from py_cui import PyCUI
 
-from recoverpy import screen_handler as screen_handler
+from recoverpy.screens import handler as handler
 from recoverpy.utils.logger import LOGGER as LOGGER
 from recoverpy.utils.saver import SAVER as SAVER
 from recoverpy.screens.screen_with_block_display import MenuWithBlockDisplay
@@ -105,7 +105,7 @@ class ResultsScreen(MenuWithBlockDisplay):
             column_span=2,
             padx=1,
             pady=0,
-            command=screen_handler.SCREENS_HANDLER.go_back,
+            command=handler.SCREENS_HANDLER.go_back,
         )
         self.go_back_button.set_color(2)
 

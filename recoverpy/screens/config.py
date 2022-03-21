@@ -1,6 +1,6 @@
 from py_cui import PyCUI
 
-from recoverpy import screen_handler as screen_handler
+from recoverpy.screens import handler as handler
 from recoverpy.config import config as CONFIG
 from recoverpy.screens.screen import Screen
 from recoverpy.utils.logger import LOGGER
@@ -113,7 +113,7 @@ class ConfigScreen(Screen):
             column_span=2,
             padx=0,
             pady=0,
-            command=screen_handler.SCREENS_HANDLER.go_back,
+            command=handler.SCREENS_HANDLER.go_back,
         ).set_color(2)
 
         self.set_yes_no_colors()
@@ -203,4 +203,4 @@ class ConfigScreen(Screen):
             log_path=log_path,
             enable_logging=self._log_enabled,
         )
-        screen_handler.SCREENS_HANDLER.go_back()
+        handler.SCREENS_HANDLER.go_back()

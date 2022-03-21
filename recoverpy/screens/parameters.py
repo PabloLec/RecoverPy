@@ -2,7 +2,7 @@ from re import findall
 
 from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, PyCUI, keys
 
-from recoverpy import screen_handler
+from recoverpy.screens import handler
 from recoverpy.screens.screen import Screen
 from recoverpy.utils import helper
 from recoverpy.utils.logger import LOGGER
@@ -84,7 +84,7 @@ class ParametersScreen(Screen):
             column_span=2,
             padx=1,
             pady=0,
-            command=lambda: screen_handler.SCREENS_HANDLER.open_screen("config"),
+            command=lambda: handler.SCREENS_HANDLER.open_screen("config"),
         )
         self.open_config_button.set_color(1)
 
@@ -183,7 +183,7 @@ class ParametersScreen(Screen):
             is_confirmed (bool): User popup selection
         """
         if is_confirmed:
-            screen_handler.SCREENS_HANDLER.open_screen(
+            handler.SCREENS_HANDLER.open_screen(
                 "search",
                 partition=self.partition_to_search,
                 string_to_search=self.string_to_search.strip(),

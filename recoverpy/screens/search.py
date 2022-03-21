@@ -5,7 +5,8 @@ from time import sleep
 
 from py_cui import BLACK_ON_GREEN, PyCUI, keys
 
-from recoverpy import screen_handler, search
+from recoverpy import search
+from recoverpy.screens import handler
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
 from recoverpy.screens.screen_with_block_display import MenuWithBlockDisplay
@@ -226,15 +227,15 @@ class SearchScreen(MenuWithBlockDisplay):
         Args:
             choice (str): User choice given by open_save_popup function.
         """
-        if choice == "Save currently displayed block":
+        if choice == "Explore neighboring blocks and save it all":
+            handler.SCREENS_HANDLER.open_screen(
+                "screen",
+                partition=self.partition,
+                block=self.current_block,
+            )
+        elif choice == "Save currently displayed block":
             SAVER.save_result(
                 current_block=self.current_block,
                 result=self.current_result,
             )
             self.master.show_message_popup("", "Result saved.")
-        elif choice == "Explore neighboring blocks and save it all":
-            screen_handler.SCREENS_HANDLER.open_screen(
-                "screen",
-                partition=self.partition,
-                block=self.current_block,
-            )

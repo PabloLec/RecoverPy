@@ -2,10 +2,10 @@ from typing import Any, Dict, Final, Type
 from py_cui import PyCUI
 
 from recoverpy.screens import (
-    screen_config,
-    screen_parameters,
-    screen_results,
-    screen_search,
+    config,
+    parameters,
+    results,
+    search,
 )
 
 
@@ -13,10 +13,10 @@ class ScreensHandler:
     """Provide navigation logic."""
 
     SCREENS_CLASSES: Final[Dict[str, Type]] = {
-        "parameters": screen_parameters.ParametersScreen,
-        "config": screen_config.ConfigScreen,
-        "search": screen_search.SearchScreen,
-        "results": screen_results.ResultsScreen,
+        "parameters": parameters.ParametersScreen,
+        "config": config.ConfigScreen,
+        "search": search.SearchScreen,
+        "results": results.ResultsScreen,
     }
 
     def __init__(self):
