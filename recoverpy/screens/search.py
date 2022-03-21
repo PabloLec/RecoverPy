@@ -5,7 +5,7 @@ from time import sleep
 
 from py_cui import BLACK_ON_GREEN, PyCUI, keys
 
-from recoverpy import search
+from recoverpy.utils import search
 from recoverpy.screens import handler
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
