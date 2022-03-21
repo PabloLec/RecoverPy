@@ -42,9 +42,9 @@ class ScreensHandler:
 
         return screen
 
-    def open_screen(self, screen_name: str):
+    def open_screen(self, screen_name: str, **kwargs):
         self.screens[screen_name] = self.create_screen()
-        self.SCREENS_CLASSES[screen_name](self.screens[screen_name])
+        self.SCREENS_CLASSES[screen_name](self.screens[screen_name], **kwargs)
         self.screens[screen_name].start()
 
         self.current_screen, self.previous_screen = screen_name, self.current_screen

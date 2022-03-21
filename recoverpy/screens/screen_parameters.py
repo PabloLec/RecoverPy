@@ -184,7 +184,8 @@ class ParametersScreen(Screen):
         """
         if is_confirmed:
             screen_handler.SCREENS_HANDLER.close_screen_parameters()
-            screen_handler.SCREENS_HANDLER.open_screen_search(
+            screen_handler.SCREENS_HANDLER.open_screen(
+                "search",
                 partition=self.partition_to_search,
                 string_to_search=self.string_to_search.strip(),
             )

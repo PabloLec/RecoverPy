@@ -233,7 +233,8 @@ class SearchScreen(MenuWithBlockDisplay):
             )
             self.master.show_message_popup("", "Result saved.")
         elif choice == "Explore neighboring blocks and save it all":
-            screen_handler.SCREENS_HANDLER.open_screen_results(
+            screen_handler.SCREENS_HANDLER.open_screen(
+                "screen",
                 partition=self.partition,
                 block=self.current_block,
             )
