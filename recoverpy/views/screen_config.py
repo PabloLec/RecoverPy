@@ -6,15 +6,15 @@ from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
 
 
-class ConfigView:
-    """ConfigView is used to display and edit configuration.
+class ConfigScreen:
+    """ConfigScreen is used to display and edit configuration.
 
     Attributes:
         _log_enabled (bool): Mirror LOGGER state for button colorization
     """
 
     def __init__(self, master: PyCUI):
-        """Initialize ConfigView.
+        """Initialize ConfigScreen.
 
         Args:
             master (PyCUI): PyCUI main object for UI.

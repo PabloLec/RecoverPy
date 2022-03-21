@@ -8,8 +8,8 @@ import recoverpy
 
 @pytest.fixture()
 def PARAMETERS_SCREEN():
-    screen = recoverpy.screens.screen_parameters.ParametersView.__new__(
-        recoverpy.screens.screen_parameters.ParametersView
+    screen = recoverpy.screens.screen_parameters.ParametersScreen.__new__(
+        recoverpy.screens.screen_parameters.ParametersScreen
     )
     screen.master = PyCUI(10, 10)
 
@@ -32,8 +32,8 @@ def PARAMETERS_SCREEN():
 
 @pytest.fixture()
 def SEARCH_SCREEN():
-    screen = recoverpy.screens.screen_search.SearchView.__new__(
-        recoverpy.screens.screen_search.SearchView
+    screen = recoverpy.screens.screen_search.SearchScreen.__new__(
+        recoverpy.screens.screen_search.SearchScreen
     )
     screen.master = PyCUI(10, 10)
     screen.queue_object = Queue()
@@ -52,8 +52,8 @@ def SEARCH_SCREEN():
 
 @pytest.fixture()
 def RESULTS_SCREEN():
-    screen = recoverpy.screens.screen_results.ResultsView.__new__(
-        recoverpy.screens.screen_results.ResultsView
+    screen = recoverpy.screens.screen_results.ResultsScreen.__new__(
+        recoverpy.screens.screen_results.ResultsScreen
     )
     screen.master = PyCUI(10, 10)
     screen.partition = "/dev/sda1"
@@ -65,8 +65,8 @@ def RESULTS_SCREEN():
 
 @pytest.fixture()
 def CONFIG_SCREEN():
-    screen = recoverpy.screens.screen_config.ConfigView.__new__(
-        recoverpy.screens.screen_config.ConfigView
+    screen = recoverpy.screens.screen_config.ConfigScreen.__new__(
+        recoverpy.screens.screen_config.ConfigScreen
     )
     screen.master = PyCUI(10, 10)
     screen._log_enabled = True
@@ -86,7 +86,7 @@ def TEST_FILE(tmp_path_factory):
 
 @pytest.fixture(scope="session")
 def TEST_SEARCH_SCREEN(TEST_FILE):
-    return recoverpy.screens.screen_search.SearchView(
+    return recoverpy.screens.screen_search.SearchScreen(
         master=PyCUI(10, 10),
         partition=TEST_FILE,
         string_to_search="TEST STRING",

@@ -11,8 +11,8 @@ from recoverpy.utils.saver import SAVER
 from recoverpy.screens.menu_with_block_display import MenuWithBlockDisplay
 
 
-class SearchView(MenuWithBlockDisplay):
-    """SearchView displays search results and corresponding block contents.
+class SearchScreen(MenuWithBlockDisplay):
+    """SearchScreen displays search results and corresponding block contents.
 
     Args:
         _BLOCK_DISPLAY_MENU (MenuWithBlockDisplay): Composition to inherit block display
@@ -29,7 +29,7 @@ class SearchView(MenuWithBlockDisplay):
     """
 
     def __init__(self, master: PyCUI, partition: str, string_to_search: str):
-        """Initialize SearchView.
+        """Initialize SearchScreen.
 
         Args:
             master (PyCUI): PyCUI main object for UI
@@ -51,7 +51,7 @@ class SearchView(MenuWithBlockDisplay):
 
         self.searched_string = string_to_search
 
-        LOGGER.write("info", "Starting 'SearchView' CUI window")
+        LOGGER.write("info", "Starting 'SearchScreen' CUI window")
 
         self.create_ui_content()
 

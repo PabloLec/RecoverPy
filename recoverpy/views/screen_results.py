@@ -6,8 +6,8 @@ from recoverpy.utils.saver import SAVER as SAVER
 from recoverpy.screens.menu_with_block_display import MenuWithBlockDisplay
 
 
-class ResultsView(MenuWithBlockDisplay):
-    """ResultsView let the user navigate through partition blocks and save results.
+class ResultsScreen(MenuWithBlockDisplay):
+    """ResultsScreen let the user navigate through partition blocks and save results.
 
     Args:
         _BLOCK_DISPLAY_MENU (MenuWithBlockDisplay): Composition to inherit block display
@@ -20,7 +20,7 @@ class ResultsView(MenuWithBlockDisplay):
     """
 
     def __init__(self, master: PyCUI, partition: str, initial_block: int):
-        """Initialize ResultsView.
+        """Initialize ResultsScreen.
 
         Args:
             master (PyCUI): PyCUI main object for UI.
@@ -32,7 +32,7 @@ class ResultsView(MenuWithBlockDisplay):
         self.master = master
         self.partition = partition
 
-        LOGGER.write("info", "Starting 'ResultsView' CUI window")
+        LOGGER.write("info", "Starting 'ResultsScreen' CUI window")
 
         self.saved_blocks_dict = {}
 

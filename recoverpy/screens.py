@@ -9,7 +9,7 @@ from recoverpy.screens import (
 )
 
 
-class ViewsHandler:
+class ScreensHandler:
     """Store UI windows instances and provide navigation logic.
 
     Attributes:
@@ -20,15 +20,14 @@ class ViewsHandler:
     """
 
     SCREENS_CLASSES: Final[Dict[str, Type]] = {
-        "parameters": screen_parameters.ParametersView,
-        "config": screen_config.ConfigView,
-        "search": screen_search.SearchView,
-        "results": screen_results.ResultsView,
+        "parameters": screen_parameters.ParametersScreen,
+        "config": screen_config.ConfigScreen,
+        "search": screen_search.SearchScreen,
+        "results": screen_results.ResultsScreen,
     }
 
     def __init__(self):
-        """Initialize ViewsHandler."""
-        # TO DO: Faire un dict de screens plutôt que x variables
+        """Initialize ScreensHandler."""
         self.screens: Dict[str, Any] = {
             "parameters": None,
             "config": None,
@@ -75,4 +74,4 @@ class ViewsHandler:
         self._search_screen_window.start()
 
 
-SCREENS_HANDLER = ViewsHandler()
+SCREENS_HANDLER = ScreensHandler()

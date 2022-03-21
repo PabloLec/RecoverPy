@@ -13,7 +13,7 @@ def monitor_progress(search_screen, grep_pid: int):
     """Use 'progress' tool to monitor grep advancement.
 
     Args:
-        search_screen (SearchView): Current PyCUI search screen
+        search_screen (SearchScreen): Current PyCUI search screen
         grep_pid (int): PID of grep process
     """
     while True:
@@ -50,7 +50,7 @@ def start_search(search_screen):
     - Thread to populate the result box dynamically.
 
     Args:
-        search_screen (SearchView): Current PyCUI search screen
+        search_screen (SearchScreen): Current PyCUI search screen
     """
     grep_process = create_grep_process(
         searched_string=search_screen.searched_string,

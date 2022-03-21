@@ -7,8 +7,8 @@ from recoverpy.utils import helper
 from recoverpy.utils.logger import LOGGER
 
 
-class ParametersView:
-    """ParametersView prompts to select a partion and a string to search.
+class ParametersScreen:
+    """ParametersScreen prompts to select a partion and a string to search.
 
     User is prompted to select a partition and a string to search in it.
 
@@ -20,7 +20,7 @@ class ParametersView:
     """
 
     def __init__(self, master: PyCUI):
-        """Initialize ParametersView.
+        """Initialize ParametersScreen.
 
         Args:
             master (PyCUI): PyCUI main object for UI
@@ -31,7 +31,7 @@ class ParametersView:
         self.string_to_search = None
         self.partitions_dict = None
 
-        LOGGER.write("info", "Starting 'ParametersView' CUI window")
+        LOGGER.write("info", "Starting 'ParametersScreen' CUI window")
         helper.is_user_root(window=self.master)
 
         self.create_ui_content()
