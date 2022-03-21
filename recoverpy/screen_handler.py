@@ -21,14 +21,14 @@ class ScreensHandler:
 
     def __init__(self):
         """Initialize ScreensHandler."""
-        self.screens: Dict[str, Any] = {
-            "parameters": None,
-            "config": None,
-            "search": None,
-            "results": None,
-        }
+        self.screens: Dict[str, Any] = {}
+        self.init_screens()
         self.current_screen = None
         self.previous_screen = None
+
+    def init_screens(self):
+        for screen in self.SCREENS_CLASSES:
+            self.screens[screen] = None
 
     def create_screen(self):
         """Create a PyCUI instance with standard attributes.
