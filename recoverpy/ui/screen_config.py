@@ -127,11 +127,11 @@ class ConfigScreen(Screen):
 
     def set_save_path(self):
         user_input: str = self.save_path_box.get()
-        if not CONFIG.path_is_valid(path=user_input):
+        if not CONFIG.is_path_valid(path=user_input):
             self.master.show_error_popup("Path invalid", "Given save path is invalid.")
             return
 
-        CONFIG.write_config(
+        CONFIG.write_config_to_file(
             save_path=user_input,
             log_path=LOGGER.log_path,
             enable_logging=LOGGER.log_enabled,
@@ -141,11 +141,11 @@ class ConfigScreen(Screen):
 
     def set_log_path(self):
         user_input: str = self.log_path_box.get()
-        if not CONFIG.path_is_valid(path=user_input):
+        if not CONFIG.is_path_valid(path=user_input):
             self.master.show_error_popup("Path invalid", "Given log path is invalid.")
             return
 
-        CONFIG.write_config(
+        CONFIG.write_config_to_file(
             save_path=SAVER.save_path,
             log_path=user_input,
             enable_logging=LOGGER.log_enabled,
@@ -169,7 +169,7 @@ class ConfigScreen(Screen):
 
     def set_log_state(self, enabled: bool):
         self._log_enabled = enabled
-        CONFIG.write_config(
+        CONFIG.write_config_to_file(
             save_path=SAVER.save_path,
             log_path=LOGGER.log_path,
             enable_logging=self._log_enabled,
@@ -179,14 +179,14 @@ class ConfigScreen(Screen):
     def save_all(self):
         save_path: str = self.save_path_box.get()
         log_path: str = self.log_path_box.get()
-        if not CONFIG.path_is_valid(path=save_path):
+        if not CONFIG.is_path_valid(path=save_path):
             self.master.show_error_popup("Path invalid", "Given save path is invalid.")
             return
-        if not CONFIG.path_is_valid(path=log_path):
+        if not CONFIG.is_path_valid(path=log_path):
             self.master.show_error_popup("Path invalid", "Given Log path is invalid.")
             return
 
-        CONFIG.write_config(
+        CONFIG.write_config_to_file(
             save_path=save_path,
             log_path=log_path,
             enable_logging=self._log_enabled,
