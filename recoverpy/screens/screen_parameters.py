@@ -84,7 +84,7 @@ class ParametersScreen(Screen):
             column_span=2,
             padx=1,
             pady=0,
-            command=screen_handler.SCREENS_HANDLER.open_screen_config,
+            command=lambda: screen_handler.SCREENS_HANDLER.open_screen("config"),
         )
         self.open_config_button.set_color(1)
 
