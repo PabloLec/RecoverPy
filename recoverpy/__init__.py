@@ -1,7 +1,7 @@
 from logging import getLogger
 from recoverpy.config.setup import setup
 from recoverpy.config.config import load_config
-from recoverpy.screens import SCREENS_HANDLER
+from recoverpy.screen_handler import SCREENS_HANDLER
 
 getLogger(__name__)
 
