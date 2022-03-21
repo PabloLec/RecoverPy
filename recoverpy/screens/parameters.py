@@ -1,6 +1,7 @@
 from re import findall
 
 from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, PyCUI, keys
+from py_cui.widgets import ScrollMenu, ScrollTextBlock, Button
 
 from recoverpy.screens import handler
 from recoverpy.screens.screen import Screen
@@ -28,27 +29,23 @@ class ParametersScreen(Screen):
         """
         super().__init__(master)
 
-        self.partition_to_search = None
-        self.string_to_search = None
-        self.partitions_dict = None
+        self.partition_to_search: str
+        self.string_to_search: str
+        self.partitions_dict: dict
 
-        LOGGER.write("info", "Starting 'ParametersScreen' CUI window")
         helper.is_user_root(window=self.master)
 
         self.create_ui_content()
         self.get_system_partitions()
-        self.add_partitions_to_list()
 
     def create_ui_content(self):
         """Handle the creation of the UI elements."""
-        self.partitions_list_scroll_menu = self.master.add_scroll_menu(
+        self.partitions_list_scroll_menu: ScrollMenu = self.master.add_scroll_menu(
             "Select a partition to search:", 0, 0, row_span=9, column_span=5
         )
         self.partitions_list_scroll_menu.add_key_command(
             keys.KEY_ENTER, self.select_partition
         )
-
-        # Color rules
         self.partitions_list_scroll_menu.add_text_color_rule(
             "Mounted at",
             YELLOW_ON_BLACK,
@@ -56,7 +53,7 @@ class ParametersScreen(Screen):
         )
         self.partitions_list_scroll_menu.set_selected_color(GREEN_ON_BLACK)
 
-        self.string_text_box = self.master.add_text_block(
+        self.string_text_box: ScrollTextBlock = self.master.add_text_block(
             "Enter a text to search:",
             0,
             5,
@@ -64,7 +61,7 @@ class ParametersScreen(Screen):
             column_span=5,
         )
 
-        self.confirm_search_button = self.master.add_button(
+        self.confirm_search_button: Button = self.master.add_button(
             "Start",
             9,
             4,
@@ -76,7 +73,7 @@ class ParametersScreen(Screen):
         )
         self.confirm_search_button.set_color(4)
 
-        self.open_config_button = self.master.add_button(
+        self.open_config_button: Button = self.master.add_button(
             "Settings",
             9,
             8,
@@ -90,11 +87,12 @@ class ParametersScreen(Screen):
 
     def get_system_partitions(self):
         """Call lsblk and lsblk output formatting."""
-        partitions_list = helper.lsblk()
+        partitions_list: list = helper.lsblk()
         self.partitions_dict = helper.format_partitions_list(
             window=self.master,
             raw_lsblk=partitions_list,
         )
+        self.add_partitions_to_list()
 
     def add_partitions_to_list(self):
         """Populate the partition list with lsblk output."""
@@ -136,7 +134,7 @@ class ParametersScreen(Screen):
                 f"Partition {selected_partition} selected.",
             )
 
-        self.partition_to_search = "/dev/" + selected_partition.strip()
+        self.partition_to_search = f"/dev/{selected_partition.strip()}"
 
         LOGGER.write(
             "info",
@@ -151,8 +149,6 @@ class ParametersScreen(Screen):
             return
 
         self.string_to_search = self.string_text_box.get()
-
-        LOGGER.write("info", "Starting search")
 
         if self.partition_to_search == "":
             # No partition selected
@@ -183,6 +179,7 @@ class ParametersScreen(Screen):
             is_confirmed (bool): User popup selection
         """
         if is_confirmed:
+            LOGGER.write("info", "Starting search")
             handler.SCREENS_HANDLER.open_screen(
                 "search",
                 partition=self.partition_to_search,
