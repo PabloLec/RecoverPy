@@ -1,4 +1,5 @@
 from py_cui import PyCUI
+from py_cui.widgets import ScrollTextBlock, Button
 
 from recoverpy.screens import handler as handler
 from recoverpy.utils.logger import LOGGER as LOGGER
@@ -29,22 +30,16 @@ class ResultsScreen(MenuWithBlockDisplay):
         """
         super().__init__(master)
 
-        self.master = master
-        self.partition = partition
-
-        LOGGER.write("info", "Starting 'ResultsScreen' CUI window")
-
-        self.saved_blocks_dict = {}
-
-        self.current_block = initial_block
+        self.partition: str = partition
+        self.saved_blocks_dict: dict = {}
+        self.current_block: int = initial_block
 
         self.create_ui_content()
-        # Display initial block at opening
         self.display_block(self.current_block)
 
     def create_ui_content(self):
         """Handle the creation of the UI elements."""
-        self.previous_button = self.master.add_button(
+        self.previous_button: Button = self.master.add_button(
             "<",
             3,
             0,
@@ -56,7 +51,7 @@ class ResultsScreen(MenuWithBlockDisplay):
         )
         self.previous_button.set_color(1)
 
-        self.next_button = self.master.add_button(
+        self.next_button: Button = self.master.add_button(
             ">",
             3,
             9,
@@ -68,12 +63,12 @@ class ResultsScreen(MenuWithBlockDisplay):
         )
         self.next_button.set_color(1)
 
-        self.result_content_box = self.master.add_text_block(
+        self.result_content_box: ScrollTextBlock = self.master.add_text_block(
             "Block content:", 0, 1, row_span=9, column_span=8, padx=1, pady=0
         )
         self.result_content_box.set_title(f"Block {self.current_block}")
 
-        self.add_result_button = self.master.add_button(
+        self.add_result_button: Button = self.master.add_button(
             "Add current block to file",
             9,
             0,
@@ -85,7 +80,7 @@ class ResultsScreen(MenuWithBlockDisplay):
         )
         self.add_result_button.set_color(6)
 
-        self.save_file_button = self.master.add_button(
+        self.save_file_button: Button = self.master.add_button(
             "Save file",
             9,
             5,
@@ -97,7 +92,7 @@ class ResultsScreen(MenuWithBlockDisplay):
         )
         self.save_file_button.set_color(4)
 
-        self.go_back_button = self.master.add_button(
+        self.go_back_button: Button = self.master.add_button(
             "Go back to previous screen",
             9,
             8,
@@ -123,7 +118,7 @@ class ResultsScreen(MenuWithBlockDisplay):
 
     def save_file(self):
         """Bundle results saving and popup message."""
-        len_results = len(self.saved_blocks_dict)
+        len_results: int = len(self.saved_blocks_dict)
 
         if len_results == 0:
             self.master.show_message_popup("", "No result to save yet")

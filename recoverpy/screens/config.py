@@ -1,5 +1,5 @@
 from py_cui import PyCUI
-from py_cui.widgets import ScrollMenu, ScrollTextBlock, Button
+from py_cui.widgets import ScrollTextBlock, Button
 
 from recoverpy.screens import handler as handler
 from recoverpy.config import config as CONFIG
