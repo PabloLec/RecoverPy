@@ -8,20 +8,9 @@ from recoverpy.utils.logger import LOGGER
 class MenuWithBlockDisplay(Screen):
     """Composition aimed class for menus needing methods to display partition
     blocks content.
-
-    Attributes:
-        master (PyCUI): PyCUI main object for UI.
-        horizontal_char_limit (int): Number of chars that can fit horizontally in
-            the left hand result box.
-        current_block (int): Partition block number currently displayed.
-        current_result (int): Block text content found with dd command.
-        result_content_box (PyCUI.TextBox): TextBox in which dd command result
-            will be displayed.
-        partition (str): System partition selected by user for search.
     """
 
     def __init__(self, master: PyCUI):
-        """Initialize MenuWithBlockDisplay."""
         super().__init__(master)
 
         self.horizontal_char_limit = 0
@@ -29,15 +18,10 @@ class MenuWithBlockDisplay(Screen):
         self.current_block = None
         self.current_result = None
 
-        self.result_content_box = None
+        self.blockcontent_box = None
         self.partition = None
 
     def get_dd_result(self, block: str = None):
-        """Store a 'dd' command result in current_result var.
-
-        Args:
-            block (str): Partition block number. Defaults to None.
-        """
         if block is None:
             block = self.current_block
 
@@ -75,26 +59,24 @@ class MenuWithBlockDisplay(Screen):
             )
 
     def update_textbox(self):
-        """Format 'dd' result by breaking lines by char_limit and display it."""
-        self.update_char_limit()
+        self.update_horizontal_char_limit()
 
         # Format raw result to display it in the text box
-        result_lines = [
+        blocklines = [
             str(self.current_result)[i : i + self.horizontal_char_limit]
             for i in range(0, len(str(self.current_result)), self.horizontal_char_limit)
         ]
-        formated_result = "\n".join(result_lines)
+        formated_result = "\n".join(blocklines)
 
-        # TEMPORARY FIX for embedded null character
+        # Fix for embedded null character
         formated_result = formated_result.replace(chr(0), "")
 
-        self.result_content_box.set_text(formated_result)
-        self.result_content_box.set_title(f"Block {self.current_block}")
+        self.blockcontent_box.set_text(formated_result)
+        self.blockcontent_box.set_title(f"Block {self.current_block}")
 
         LOGGER.write("debug", f"Textbox updated with block {self.current_block}")
 
     def display_previous_block(self):
-        """Display block n-1 in textbox."""
         try:
             self.display_block(str(int(self.current_block) - 1))
         except ValueError:
@@ -102,7 +84,6 @@ class MenuWithBlockDisplay(Screen):
             return
 
     def display_next_block(self):
-        """Display block n+1 in textbox."""
         try:
             self.display_block(str(int(self.current_block) + 1))
         except ValueError:
@@ -110,20 +91,14 @@ class MenuWithBlockDisplay(Screen):
             return
 
     def display_block(self, block: str):
-        """Display given block number in textbox.
-
-        Args:
-            block (str): Partition block number.
-        """
         if int(block) < 0:
             return
 
         self.get_dd_result(block=block)
         self.update_textbox()
 
-    def update_char_limit(self):
-        """Update horizontal character limit for textbox depending on terminal size."""
-        text_box_dimensions = self.result_content_box.get_cursor_limits_horizontal()
+    def update_horizontal_char_limit(self):
+        text_box_dimensions = self.blockcontent_box.get_cursor_limits_horizontal()
         self.horizontal_char_limit = text_box_dimensions[1] - text_box_dimensions[0]
         LOGGER.write(
             "debug",

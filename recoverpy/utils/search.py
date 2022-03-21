@@ -28,7 +28,7 @@ def monitor_progress(search_screen, grep_pid: int):
             if len(output) == 0:
                 search_screen.grep_progress = "100% - Search completed"
                 search_screen.set_title()
-                if search_screen.result_index == 0:
+                if search_screen.blockindex == 0:
                     search_screen.master.title_bar.set_color(22)
                 else:
                     search_screen.master.title_bar.set_color(30)
@@ -117,26 +117,26 @@ def enqueue_grep_output(out: io.BufferedReader, queue: Queue):
     out.close()
 
 
-def yield_new_results(queue_object: Queue, result_index: int) -> tuple:
+def yield_new_results(queue_object: Queue, blockindex: int) -> tuple:
     """Probe the queue object for new results.
 
     If any, returns it to populate the result box.
 
     Args:
         queue_object (Queue): Queue object storing grep stdout
-        result_index (int): [Current result list index
+        blockindex (int): [Current result list index
 
     Returns:
         tuple: Tuple with (List of new results, New result index)
     """
     # Returns if no new result
-    if len(list(queue_object.queue)) == result_index:
+    if len(list(queue_object.queue)) == blockindex:
         return None
 
     queue_list = list(queue_object.queue)
 
-    new_results = queue_list[result_index:]
+    new_results = queue_list[blockindex:]
 
-    result_index = len(queue_list)
+    blockindex = len(queue_list)
 
-    return new_results, result_index
+    return new_results, blockindex

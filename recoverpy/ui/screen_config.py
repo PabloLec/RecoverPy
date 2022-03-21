@@ -9,24 +9,14 @@ from recoverpy.utils.saver import SAVER
 
 
 class ConfigScreen(Screen):
-    """ConfigScreen is used to display and edit configuration.
-
-    Attributes:
-        _log_enabled (bool): Mirror LOGGER state for button colorization
-    """
+    """Display and edit RecoverPy configuration."""
 
     def __init__(self, master: PyCUI):
-        """Initialize ConfigScreen.
-
-        Args:
-            master (PyCUI): PyCUI main object for UI.
-        """
         super().__init__(master)
         self._log_enabled: bool = LOGGER.log_enabled
         self.create_ui_content()
 
     def create_ui_content(self):
-        """Handle the creation of the UI elements."""
         self.save_path_box: ScrollTextBlock = self.master.add_text_box(
             title="Save Path",
             row=0,
@@ -127,8 +117,15 @@ class ConfigScreen(Screen):
 
         self.set_yes_no_colors()
 
+    def set_yes_no_colors(self):
+        if self._log_enabled:
+            self.yes_button.set_color(4)
+            self.no_button.set_color(1)
+        else:
+            self.yes_button.set_color(1)
+            self.no_button.set_color(4)
+
     def set_save_path(self):
-        """Verify and set provided save path."""
         user_input: str = self.save_path_box.get()
         if not CONFIG.path_is_valid(path=user_input):
             self.master.show_error_popup("Path invalid", "Given save path is invalid.")
@@ -143,7 +140,6 @@ class ConfigScreen(Screen):
         self.master.show_message_popup("", "Save path changed successfully")
 
     def set_log_path(self):
-        """Verify and set provided log path."""
         user_input: str = self.log_path_box.get()
         if not CONFIG.path_is_valid(path=user_input):
             self.master.show_error_popup("Path invalid", "Given log path is invalid.")
@@ -158,7 +154,6 @@ class ConfigScreen(Screen):
         self.master.show_message_popup("", "Log path changed successfully")
 
     def enable_logging(self):
-        """Enable logging on button press."""
         if self._log_enabled:
             return
 
@@ -166,7 +161,6 @@ class ConfigScreen(Screen):
         self.master.show_message_popup("", "Logging enabled")
 
     def disable_logging(self):
-        """Disable logging on button press."""
         if not self._log_enabled:
             return
 
@@ -174,11 +168,6 @@ class ConfigScreen(Screen):
         self.master.show_message_popup("", "Logging disabled")
 
     def set_log_state(self, enabled: bool):
-        """Set disared log state.
-
-        Args:
-            enabled (bool): Logging enabled or disabled
-        """
         self._log_enabled = enabled
         CONFIG.write_config(
             save_path=SAVER.save_path,
@@ -187,17 +176,7 @@ class ConfigScreen(Screen):
         )
         self.set_yes_no_colors()
 
-    def set_yes_no_colors(self):
-        """Colorize log state buttons."""
-        if self._log_enabled:
-            self.yes_button.set_color(4)
-            self.no_button.set_color(1)
-        else:
-            self.yes_button.set_color(1)
-            self.no_button.set_color(4)
-
     def save_all(self):
-        """Save full config and go back to first menu."""
         save_path: str = self.save_path_box.get()
         log_path: str = self.log_path_box.get()
         if not CONFIG.path_is_valid(path=save_path):

@@ -28,7 +28,7 @@ class Saver:
 
         self.write_to_file(file_name=file_name, content=result)
 
-    def save_result_dict(self, results: dict):
+    def save_blockdict(self, results: dict):
         """Order a results dictionnary by block numbers and then save it in a text file.
 
         Args:

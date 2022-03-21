@@ -2,25 +2,24 @@ from typing import Any, Dict, Final, Type
 from py_cui import PyCUI
 
 from recoverpy.ui import (
+    screen_block,
     screen_config,
     screen_parameters,
-    screen_results,
     screen_search,
 )
 
 
 class ScreensHandler:
-    """Provide navigation logic."""
+    """Provide ui navigation logic."""
 
     SCREENS_CLASSES: Final[Dict[str, Type]] = {
         "parameters": screen_parameters.ParametersScreen,
         "config": screen_config.ConfigScreen,
         "search": screen_search.SearchScreen,
-        "results": screen_results.ResultsScreen,
+        "results": screen_block.BlockScreen,
     }
 
     def __init__(self):
-        """Initialize ScreensHandler."""
         self.screens: Dict[str, PyCUI] = {}
         self.init_screens()
         self.current_screen: str = None
@@ -31,11 +30,6 @@ class ScreensHandler:
             self.screens[screen] = None
 
     def create_screen(self) -> PyCUI:
-        """Create a PyCUI instance with standard attributes.
-
-        Returns:
-            PyCUI: Created screen
-        """
         screen: PyCUI = PyCUI(10, 10)
         screen.toggle_unicode_borders()
         screen.set_title("RecoverPy 1.5.0")

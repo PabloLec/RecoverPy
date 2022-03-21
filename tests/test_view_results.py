@@ -7,8 +7,8 @@ def test_block_ui(RESULTS_SCREEN):
 
     assert "previous_button" in instance_dir
     assert "next_button" in instance_dir
-    assert "result_content_box" in instance_dir
-    assert "add_result_button" in instance_dir
+    assert "blockcontent_box" in instance_dir
+    assert "add_blockbutton" in instance_dir
     assert "save_file_button" in instance_dir
     assert "go_back_button" in instance_dir
 

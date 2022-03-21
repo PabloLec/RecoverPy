@@ -41,7 +41,7 @@ def SEARCH_SCREEN():
     screen.queue_object.put(f"- 1000: {lorem}")
     screen.queue_object.put(f"- 2000: {lorem}")
     screen.queue_object.put(f"- 3000: {lorem}")
-    screen.result_index = 0
+    screen.blockindex = 0
     screen.grep_progress = ""
     screen.block_size = 512
     screen.searched_string = "test"
@@ -52,8 +52,8 @@ def SEARCH_SCREEN():
 
 @pytest.fixture()
 def RESULTS_SCREEN():
-    screen = recoverpy.screens.screen_results.ResultsScreen.__new__(
-        recoverpy.screens.screen_results.ResultsScreen
+    screen = recoverpy.screens.screen_results.BlockScreen.__new__(
+        recoverpy.screens.screen_results.BlockScreen
     )
     screen.master = PyCUI(10, 10)
     screen.partition = "/dev/sda1"

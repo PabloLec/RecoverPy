@@ -14,21 +14,7 @@ from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 
 
 class SearchScreen(MenuWithBlockDisplay):
-    """SearchScreen displays search results and corresponding block contents.
-
-    Args:
-        _BLOCK_DISPLAY_MENU (MenuWithBlockDisplay): Composition to inherit block display
-        methods
-
-    Attributes:
-        master (PyCUI): PyCUI main object for UI
-        queue_object (Queue): Queue object where grep command stdout will be stored
-        result_index (int): Number of results already processed
-        grep_progress (str): Formated output of 'progress' command
-        partition (str): System partition selected by user for search
-        block_size (int): Size of partition block for dd parsing
-        searched_string (str): String given by the user that will be searched by dd
-    """
+    """Display search results and corresponding blocks content."""
 
     block_size: int = 512
 
@@ -43,7 +29,7 @@ class SearchScreen(MenuWithBlockDisplay):
         super().__init__(master)
 
         self.queue_object: Queue = Queue()
-        self.result_index: int = 0
+        self.blockindex: int = 0
 
         self.grep_progress: str = ""
         self.inodes: list = []
@@ -60,17 +46,15 @@ class SearchScreen(MenuWithBlockDisplay):
         )
 
     def set_title(self):
-        """Set window title based on number of results and search progress."""
         title: str = ""
         if self.grep_progress != "":
-            title = f"{self.grep_progress} - {self.result_index} results"
+            title = f"{self.grep_progress} - {self.blockindex} results"
         else:
-            title = f"{self.result_index} results"
+            title = f"{self.blockindex} results"
 
         self.master.set_title(title)
 
     def create_ui_content(self):
-        """Handle the creation of the UI elements."""
         self.search_results_scroll_menu: ScrollMenu = self.master.add_scroll_menu(
             "Search results:", 0, 0, row_span=10, column_span=5, padx=1, pady=0
         )
@@ -85,18 +69,18 @@ class SearchScreen(MenuWithBlockDisplay):
             self.display_selected_block,
         )
 
-        self.result_content_box: ScrollTextBlock = self.master.add_text_block(
+        self.blockcontent_box: ScrollTextBlock = self.master.add_text_block(
             "Block content:", 0, 5, row_span=9, column_span=5, padx=1, pady=0
         )
-        self.result_content_box.add_key_command(
+        self.blockcontent_box.add_key_command(
             keys.KEY_F5,
             self.open_save_popup,
         )
-        self.result_content_box.add_key_command(
+        self.blockcontent_box.add_key_command(
             keys.KEY_F6,
             self.display_previous_block,
         )
-        self.result_content_box.add_key_command(
+        self.blockcontent_box.add_key_command(
             keys.KEY_F7,
             self.display_next_block,
         )
@@ -150,13 +134,12 @@ class SearchScreen(MenuWithBlockDisplay):
         self.exit_button.set_color(3)
 
     def dequeue_results(self):
-        """Poll grep output and populate result list."""
         while True:
             try:
                 new_results: list
-                new_results, self.result_index = search.yield_new_results(
+                new_results, self.blockindex = search.yield_new_results(
                     self.queue_object,
-                    self.result_index,
+                    self.blockindex,
                 )
             except TypeError:
                 # If no new results
@@ -170,11 +153,6 @@ class SearchScreen(MenuWithBlockDisplay):
             sleep(1)
 
     def add_results_to_list(self, new_results: list):
-        """Add new results from the grep command to the left hand result list.
-
-        Args:
-            new_results (list): New results from the grep command.
-        """
         for result in new_results:
             string_result: str = str(result)[2:-1]
             inode: str = findall(r"^([0-9]+)\:", string_result)[0]
@@ -184,7 +162,6 @@ class SearchScreen(MenuWithBlockDisplay):
             self.search_results_scroll_menu.add_item(content)
 
     def update_block_number(self):
-        """Update currently displayed block number upon user selection."""
         inode: str = self.inodes[
             int(self.search_results_scroll_menu.get_selected_item_index())
         ]
@@ -193,15 +170,10 @@ class SearchScreen(MenuWithBlockDisplay):
         LOGGER.write("debug", f"Displayed block set to {self.current_block}")
 
     def display_selected_block(self):
-        """Bundle updating + displaying block.
-
-        Called when the user select a result in the left hand list.
-        """
         self.update_block_number()
         self.display_block(self.current_block)
 
     def open_save_popup(self):
-        """Open a popup displaying save options."""
         if self.current_block is None:
             self.master.show_message_popup(
                 "",
@@ -221,11 +193,6 @@ class SearchScreen(MenuWithBlockDisplay):
         )
 
     def handle_save_popup_choice(self, choice: str):
-        """Launch the action selected by the user (save, explore, exit).
-
-        Args:
-            choice (str): User choice given by open_save_popup function.
-        """
         if choice == "Explore neighboring blocks and save it all":
             handler.SCREENS_HANDLER.open_screen(
                 "screen",
