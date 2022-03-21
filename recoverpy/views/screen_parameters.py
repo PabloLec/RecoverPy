@@ -2,7 +2,7 @@ from re import findall
 
 from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, PyCUI, keys
 
-from recoverpy import views_handler
+from recoverpy import screens
 from recoverpy.utils import helper
 from recoverpy.utils.logger import LOGGER
 
@@ -83,7 +83,7 @@ class ParametersView:
             column_span=2,
             padx=1,
             pady=0,
-            command=views_handler.VIEWS_HANDLER.open_view_config,
+            command=screens.SCREENS_HANDLER.open_screen_config,
         )
         self.open_config_button.set_color(1)
 
@@ -176,14 +176,14 @@ class ParametersView:
             )
 
     def start_search(self, is_confirmed: bool):
-        """Close parameters view and open search view if confirmed.
+        """Close parameters screen and open search screen if confirmed.
 
         Args:
             is_confirmed (bool): User popup selection
         """
         if is_confirmed:
-            views_handler.VIEWS_HANDLER.close_view_parameters()
-            views_handler.VIEWS_HANDLER.open_view_search(
+            screens.SCREENS_HANDLER.close_screen_parameters()
+            screens.SCREENS_HANDLER.open_screen_search(
                 partition=self.partition_to_search,
                 string_to_search=self.string_to_search.strip(),
             )

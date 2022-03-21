@@ -1,9 +1,9 @@
 import recoverpy
 
 
-def test_partitions_parsing(PARAMETERS_VIEW):
+def test_partitions_parsing(PARAMETERS_SCREEN):
     partitions_dict = recoverpy.utils.helper.format_partitions_list(
-        window=PARAMETERS_VIEW.master, raw_lsblk=PARAMETERS_VIEW.partitions_list
+        window=PARAMETERS_SCREEN.master, raw_lsblk=PARAMETERS_SCREEN.partitions_list
     )
     expected_format = {
         "sda1": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/media/disk1"},
@@ -21,22 +21,22 @@ def test_partitions_parsing(PARAMETERS_VIEW):
     assert partitions_dict == expected_format
 
 
-def test_parameters_ui(PARAMETERS_VIEW):
-    PARAMETERS_VIEW.create_ui_content()
-    instance_dir = dir(PARAMETERS_VIEW)
+def test_parameters_ui(PARAMETERS_SCREEN):
+    PARAMETERS_SCREEN.create_ui_content()
+    instance_dir = dir(PARAMETERS_SCREEN)
 
     assert "partitions_list_scroll_menu" in instance_dir
     assert "string_text_box" in instance_dir
     assert "confirm_search_button" in instance_dir
 
 
-def test_partitions_list_population(PARAMETERS_VIEW):
-    PARAMETERS_VIEW.partitions_dict = recoverpy.utils.helper.format_partitions_list(
-        window=PARAMETERS_VIEW.master, raw_lsblk=PARAMETERS_VIEW.partitions_list
+def test_partitions_list_population(PARAMETERS_SCREEN):
+    PARAMETERS_SCREEN.partitions_dict = recoverpy.utils.helper.format_partitions_list(
+        window=PARAMETERS_SCREEN.master, raw_lsblk=PARAMETERS_SCREEN.partitions_list
     )
-    PARAMETERS_VIEW.create_ui_content()
+    PARAMETERS_SCREEN.create_ui_content()
 
-    PARAMETERS_VIEW.add_partitions_to_list()
+    PARAMETERS_SCREEN.add_partitions_to_list()
     expected_item_list = [
         "Name: sda1  -  Type: ext4  -  Mounted at: /media/disk1",
         "Name: sdb1  -  Type: ext4  -  Mounted at: /media/disk2",
@@ -46,28 +46,28 @@ def test_partitions_list_population(PARAMETERS_VIEW):
         "Name: vdb  -  Type: LVM2_member",
         "Name: vda2  -  Type: LVM2_member",
     ]
-    current_item_list = PARAMETERS_VIEW.partitions_list_scroll_menu.get_item_list()
+    current_item_list = PARAMETERS_SCREEN.partitions_list_scroll_menu.get_item_list()
     assert current_item_list == expected_item_list
 
 
-def test_partition_selection(PARAMETERS_VIEW):
-    PARAMETERS_VIEW.partitions_dict = recoverpy.utils.helper.format_partitions_list(
-        window=PARAMETERS_VIEW.master, raw_lsblk=PARAMETERS_VIEW.partitions_list
+def test_partition_selection(PARAMETERS_SCREEN):
+    PARAMETERS_SCREEN.partitions_dict = recoverpy.utils.helper.format_partitions_list(
+        window=PARAMETERS_SCREEN.master, raw_lsblk=PARAMETERS_SCREEN.partitions_list
     )
-    PARAMETERS_VIEW.create_ui_content()
+    PARAMETERS_SCREEN.create_ui_content()
 
-    PARAMETERS_VIEW.add_partitions_to_list()
+    PARAMETERS_SCREEN.add_partitions_to_list()
 
-    PARAMETERS_VIEW.partitions_list_scroll_menu.set_selected_item_index(0)
+    PARAMETERS_SCREEN.partitions_list_scroll_menu.set_selected_item_index(0)
     item_0 = "Name: sda1  -  Type: ext4  -  Mounted at: /media/disk1"
-    assert PARAMETERS_VIEW.partitions_list_scroll_menu.get() == item_0
+    assert PARAMETERS_SCREEN.partitions_list_scroll_menu.get() == item_0
 
-    PARAMETERS_VIEW.select_partition()
-    assert PARAMETERS_VIEW.partition_to_search == "/dev/sda1"
+    PARAMETERS_SCREEN.select_partition()
+    assert PARAMETERS_SCREEN.partition_to_search == "/dev/sda1"
 
-    PARAMETERS_VIEW.partitions_list_scroll_menu.set_selected_item_index(4)
+    PARAMETERS_SCREEN.partitions_list_scroll_menu.set_selected_item_index(4)
     item_4 = "Name: system-root  -  Type: btrfs  -  Mounted at: /test"
-    assert PARAMETERS_VIEW.partitions_list_scroll_menu.get() == item_4
+    assert PARAMETERS_SCREEN.partitions_list_scroll_menu.get() == item_4
 
-    PARAMETERS_VIEW.select_partition()
-    assert PARAMETERS_VIEW.partition_to_search == "/dev/system-root"
+    PARAMETERS_SCREEN.select_partition()
+    assert PARAMETERS_SCREEN.partition_to_search == "/dev/system-root"

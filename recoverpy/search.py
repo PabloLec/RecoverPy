@@ -9,11 +9,11 @@ from recoverpy.utils import helper
 from recoverpy.utils.logger import LOGGER
 
 
-def monitor_progress(search_view, grep_pid: int):
+def monitor_progress(search_screen, grep_pid: int):
     """Use 'progress' tool to monitor grep advancement.
 
     Args:
-        search_view (SearchView): Current PyCUI search view
+        search_screen (SearchView): Current PyCUI search screen
         grep_pid (int): PID of grep process
     """
     while True:
@@ -26,23 +26,23 @@ def monitor_progress(search_view, grep_pid: int):
             progress = re.findall(r"([0-9]+\.[0-9]+\%[^\)]+\))", output)[0]
         except IndexError:
             if len(output) == 0:
-                search_view.grep_progress = "100% - Search completed"
-                search_view.set_title()
-                if search_view.result_index == 0:
-                    search_view.master.title_bar.set_color(22)
+                search_screen.grep_progress = "100% - Search completed"
+                search_screen.set_title()
+                if search_screen.result_index == 0:
+                    search_screen.master.title_bar.set_color(22)
                 else:
-                    search_view.master.title_bar.set_color(30)
+                    search_screen.master.title_bar.set_color(30)
                 return
             continue
 
-        search_view.grep_progress = progress
+        search_screen.grep_progress = progress
         LOGGER.write("debug", f"Progress: {progress}")
-        search_view.set_title()
+        search_screen.set_title()
         time.sleep(1)
 
 
-def start_search(search_view):
-    """Launch (called within view_results.__init__):
+def start_search(search_screen):
+    """Launch (called within screen_results.__init__):
 
     - Process executing the grep command.
     - If available, thread using 'progress' tool to monitor grep.
@@ -50,18 +50,18 @@ def start_search(search_view):
     - Thread to populate the result box dynamically.
 
     Args:
-        search_view (SearchView): Current PyCUI search view
+        search_screen (SearchView): Current PyCUI search screen
     """
     grep_process = create_grep_process(
-        searched_string=search_view.searched_string,
-        partition=search_view.partition,
+        searched_string=search_screen.searched_string,
+        partition=search_screen.partition,
     )
 
     if helper.is_installed(command="progress"):
         monitor_progress_thread = Thread(
             target=monitor_progress,
             args=(
-                search_view,
+                search_screen,
                 grep_process.pid,
             ),
         )
@@ -71,7 +71,7 @@ def start_search(search_view):
 
     enqueue_grep_output_thread = Thread(
         target=enqueue_grep_output,
-        args=(grep_process.stdout, search_view.queue_object),
+        args=(grep_process.stdout, search_screen.queue_object),
         daemon=True,
     )
     enqueue_grep_output_thread.start()
@@ -79,7 +79,7 @@ def start_search(search_view):
     LOGGER.write("debug", "Started searching thread")
 
     yield_results_thread = Thread(
-        target=search_view.populate_result_list,
+        target=search_screen.populate_result_list,
         daemon=True,
     )
     yield_results_thread.start()

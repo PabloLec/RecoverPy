@@ -5,10 +5,10 @@ from time import sleep
 
 from py_cui import BLACK_ON_GREEN, PyCUI, keys
 
-from recoverpy import search, views_handler
+from recoverpy import screens, search
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
-from recoverpy.views.menu_with_block_display import MenuWithBlockDisplay
+from recoverpy.screens.menu_with_block_display import MenuWithBlockDisplay
 
 
 class SearchView(MenuWithBlockDisplay):
@@ -188,7 +188,7 @@ class SearchView(MenuWithBlockDisplay):
             self.search_results_scroll_menu.add_item(content)
 
     def update_block_number(self):
-        """Update currently viewed block number upon user selection."""
+        """Update currently screened block number upon user selection."""
         inode = self.inodes[
             int(self.search_results_scroll_menu.get_selected_item_index())
         ]
@@ -212,14 +212,14 @@ class SearchView(MenuWithBlockDisplay):
             )
             return
 
-        view_choices = [
+        screen_choices = [
             "Save currently displayed block",
             "Explore neighboring blocks and save it all",
             "Cancel",
         ]
         self.master.show_menu_popup(
             "How do you want to save it ?",
-            view_choices,
+            screen_choices,
             self.handle_save_popup_choice,
         )
 
@@ -236,7 +236,7 @@ class SearchView(MenuWithBlockDisplay):
             )
             self.master.show_message_popup("", "Result saved.")
         elif choice == "Explore neighboring blocks and save it all":
-            views_handler.VIEWS_HANDLER.open_view_results(
+            screens.SCREENS_HANDLER.open_screen_results(
                 partition=self.partition,
                 block=self.current_block,
             )

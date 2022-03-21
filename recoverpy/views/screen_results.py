@@ -1,9 +1,9 @@
 from py_cui import PyCUI
 
-from recoverpy import views_handler as views_handler
+from recoverpy import screens as screens
 from recoverpy.utils.logger import LOGGER as LOGGER
 from recoverpy.utils.saver import SAVER as SAVER
-from recoverpy.views.menu_with_block_display import MenuWithBlockDisplay
+from recoverpy.screens.menu_with_block_display import MenuWithBlockDisplay
 
 
 class ResultsView(MenuWithBlockDisplay):
@@ -98,14 +98,14 @@ class ResultsView(MenuWithBlockDisplay):
         self.save_file_button.set_color(4)
 
         self.go_back_button = self.master.add_button(
-            "Go back to previous view",
+            "Go back to previous screen",
             9,
             8,
             row_span=1,
             column_span=2,
             padx=1,
             pady=0,
-            command=views_handler.VIEWS_HANDLER.results_go_back,
+            command=screens.SCREENS_HANDLER.results_go_back,
         )
         self.go_back_button.set_color(2)
 

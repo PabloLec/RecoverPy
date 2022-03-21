@@ -1,6 +1,6 @@
 from py_cui import PyCUI
 
-from recoverpy import views_handler as views_handler
+from recoverpy import screens as screens
 from recoverpy.config import config as CONFIG
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
@@ -112,7 +112,7 @@ class ConfigView:
             column_span=2,
             padx=0,
             pady=0,
-            command=views_handler.VIEWS_HANDLER.config_go_back,
+            command=screens.SCREENS_HANDLER.config_go_back,
         ).set_color(2)
 
         self.set_yes_no_colors()
@@ -202,4 +202,4 @@ class ConfigView:
             log_path=log_path,
             enable_logging=self._log_enabled,
         )
-        views_handler.VIEWS_HANDLER.config_go_back()
+        screens.SCREENS_HANDLER.config_go_back()

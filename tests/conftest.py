@@ -7,11 +7,11 @@ import recoverpy
 
 
 @pytest.fixture()
-def PARAMETERS_VIEW():
-    view = recoverpy.views.view_parameters.ParametersView.__new__(
-        recoverpy.views.view_parameters.ParametersView
+def PARAMETERS_SCREEN():
+    screen = recoverpy.screens.screen_parameters.ParametersView.__new__(
+        recoverpy.screens.screen_parameters.ParametersView
     )
-    view.master = PyCUI(10, 10)
+    screen.master = PyCUI(10, 10)
 
     partitions = [
         ["sda", "disk"],
@@ -25,53 +25,53 @@ def PARAMETERS_VIEW():
         ["vdb", "disk", "LVM2_member"],
         ["vda2", "part", "LVM2_member"],
     ]
-    view.partitions_list = partitions
+    screen.partitions_list = partitions
 
-    return view
+    return screen
 
 
 @pytest.fixture()
-def SEARCH_VIEW():
-    view = recoverpy.views.view_search.SearchView.__new__(
-        recoverpy.views.view_search.SearchView
+def SEARCH_SCREEN():
+    screen = recoverpy.screens.screen_search.SearchView.__new__(
+        recoverpy.screens.screen_search.SearchView
     )
-    view.master = PyCUI(10, 10)
-    view.queue_object = Queue()
+    screen.master = PyCUI(10, 10)
+    screen.queue_object = Queue()
     lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-    view.queue_object.put(f"- 1000: {lorem}")
-    view.queue_object.put(f"- 2000: {lorem}")
-    view.queue_object.put(f"- 3000: {lorem}")
-    view.result_index = 0
-    view.grep_progress = ""
-    view.block_size = 512
-    view.searched_string = "test"
-    view.inodes = [512, 1024, 2056]
+    screen.queue_object.put(f"- 1000: {lorem}")
+    screen.queue_object.put(f"- 2000: {lorem}")
+    screen.queue_object.put(f"- 3000: {lorem}")
+    screen.result_index = 0
+    screen.grep_progress = ""
+    screen.block_size = 512
+    screen.searched_string = "test"
+    screen.inodes = [512, 1024, 2056]
 
-    return view
-
-
-@pytest.fixture()
-def RESULTS_VIEW():
-    view = recoverpy.views.view_results.ResultsView.__new__(
-        recoverpy.views.view_results.ResultsView
-    )
-    view.master = PyCUI(10, 10)
-    view.partition = "/dev/sda1"
-    view.saved_blocks_dict = {}
-    view.current_block = 5
-
-    return view
+    return screen
 
 
 @pytest.fixture()
-def CONFIG_VIEW():
-    view = recoverpy.views.view_config.ConfigView.__new__(
-        recoverpy.views.view_config.ConfigView
+def RESULTS_SCREEN():
+    screen = recoverpy.screens.screen_results.ResultsView.__new__(
+        recoverpy.screens.screen_results.ResultsView
     )
-    view.master = PyCUI(10, 10)
-    view._log_enabled = True
+    screen.master = PyCUI(10, 10)
+    screen.partition = "/dev/sda1"
+    screen.saved_blocks_dict = {}
+    screen.current_block = 5
 
-    return view
+    return screen
+
+
+@pytest.fixture()
+def CONFIG_SCREEN():
+    screen = recoverpy.screens.screen_config.ConfigView.__new__(
+        recoverpy.screens.screen_config.ConfigView
+    )
+    screen.master = PyCUI(10, 10)
+    screen._log_enabled = True
+
+    return screen
 
 
 @pytest.fixture(scope="session")
@@ -85,8 +85,8 @@ def TEST_FILE(tmp_path_factory):
 
 
 @pytest.fixture(scope="session")
-def TEST_SEARCH_VIEW(TEST_FILE):
-    return recoverpy.views.view_search.SearchView(
+def TEST_SEARCH_SCREEN(TEST_FILE):
+    return recoverpy.screens.screen_search.SearchView(
         master=PyCUI(10, 10),
         partition=TEST_FILE,
         string_to_search="TEST STRING",
