@@ -183,7 +183,6 @@ class ParametersScreen(Screen):
             is_confirmed (bool): User popup selection
         """
         if is_confirmed:
-            screen_handler.SCREENS_HANDLER.close_screen_parameters()
             screen_handler.SCREENS_HANDLER.open_screen(
                 "search",
                 partition=self.partition_to_search,

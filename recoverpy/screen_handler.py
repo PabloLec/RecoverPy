@@ -48,11 +48,12 @@ class ScreensHandler:
         self.screens[screen_name].start()
 
         self.current_screen, self.previous_screen = screen_name, self.current_screen
+        self.close_screen(self.previous_screen)
 
     def close_screen(self, screen_name):
-        if self.screen[screen_name] is None:
+        if self.screens[screen_name] is None:
             return
-        self.screen[screen_name].stop()
+        self.screens[screen_name].stop()
 
     def config_go_back(self):
         """Go back from config screen to parameters screen."""
