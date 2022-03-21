@@ -21,22 +21,22 @@ class ScreensHandler:
 
     def __init__(self):
         """Initialize ScreensHandler."""
-        self.screens: Dict[str, Any] = {}
+        self.screens: Dict[str, PyCUI] = {}
         self.init_screens()
-        self.current_screen: PyCUI = None
-        self.previous_screen: PyCUI = None
+        self.current_screen: str = None
+        self.previous_screen: str = None
 
     def init_screens(self):
         for screen in self.SCREENS_CLASSES:
             self.screens[screen] = None
 
-    def create_screen(self):
+    def create_screen(self) -> PyCUI:
         """Create a PyCUI instance with standard attributes.
 
         Returns:
             PyCUI: Created screen
         """
-        screen = PyCUI(10, 10)
+        screen: PyCUI = PyCUI(10, 10)
         screen.toggle_unicode_borders()
         screen.set_title("RecoverPy 1.5.0")
 
