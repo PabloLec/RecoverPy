@@ -43,17 +43,25 @@ class ScreensHandler:
         return screen
 
     def open_screen(self, screen_name: str, **kwargs):
+        self.current_screen, self.previous_screen = screen_name, self.current_screen
+        self.close_screen(self.previous_screen)
         self.screens[screen_name] = self.create_screen()
         self.SCREENS_CLASSES[screen_name](self.screens[screen_name], **kwargs)
         self.screens[screen_name].start()
 
-        self.current_screen, self.previous_screen = screen_name, self.current_screen
-        self.close_screen(self.previous_screen)
-
     def close_screen(self, screen_name):
-        if self.screens[screen_name] is None:
+        if screen_name is None:
             return
         self.screens[screen_name].stop()
+
+    def go_back(self):
+        self.close_screen(self.current_screen)
+        self.current_screen, self.previous_screen = (
+            self.previous_screen,
+            self.current_screen,
+        )
+        self.screens[self.current_screen]._stopped = False
+        self.screens[self.current_screen].start()
 
     def config_go_back(self):
         """Go back from config screen to parameters screen."""

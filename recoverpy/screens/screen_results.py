@@ -105,7 +105,7 @@ class ResultsScreen(MenuWithBlockDisplay):
             column_span=2,
             padx=1,
             pady=0,
-            command=screen_handler.SCREENS_HANDLER.results_go_back,
+            command=screen_handler.SCREENS_HANDLER.go_back,
         )
         self.go_back_button.set_color(2)
 

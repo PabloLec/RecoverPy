@@ -113,7 +113,7 @@ class ConfigScreen(Screen):
             column_span=2,
             padx=0,
             pady=0,
-            command=screen_handler.SCREENS_HANDLER.config_go_back,
+            command=screen_handler.SCREENS_HANDLER.go_back,
         ).set_color(2)
 
         self.set_yes_no_colors()
@@ -203,4 +203,4 @@ class ConfigScreen(Screen):
             log_path=log_path,
             enable_logging=self._log_enabled,
         )
-        screen_handler.SCREENS_HANDLER.config_go_back()
+        screen_handler.SCREENS_HANDLER.go_back()
