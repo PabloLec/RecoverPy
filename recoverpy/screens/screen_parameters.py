@@ -2,12 +2,13 @@ from re import findall
 
 from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, PyCUI, keys
 
-from recoverpy import screens
+from recoverpy import screen_handler
+from recoverpy.screens.screen import Screen
 from recoverpy.utils import helper
 from recoverpy.utils.logger import LOGGER
 
 
-class ParametersScreen:
+class ParametersScreen(Screen):
     """ParametersScreen prompts to select a partion and a string to search.
 
     User is prompted to select a partition and a string to search in it.
@@ -25,7 +26,7 @@ class ParametersScreen:
         Args:
             master (PyCUI): PyCUI main object for UI
         """
-        self.master = master
+        super().__init__(master)
 
         self.partition_to_search = None
         self.string_to_search = None
@@ -83,7 +84,7 @@ class ParametersScreen:
             column_span=2,
             padx=1,
             pady=0,
-            command=screens.SCREENS_HANDLER.open_screen_config,
+            command=screen_handler.SCREENS_HANDLER.open_screen_config,
         )
         self.open_config_button.set_color(1)
 
@@ -182,8 +183,8 @@ class ParametersScreen:
             is_confirmed (bool): User popup selection
         """
         if is_confirmed:
-            screens.SCREENS_HANDLER.close_screen_parameters()
-            screens.SCREENS_HANDLER.open_screen_search(
+            screen_handler.SCREENS_HANDLER.close_screen_parameters()
+            screen_handler.SCREENS_HANDLER.open_screen_search(
                 partition=self.partition_to_search,
                 string_to_search=self.string_to_search.strip(),
             )

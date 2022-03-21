@@ -1,9 +1,9 @@
 from py_cui import PyCUI
 
-from recoverpy import screens as screens
+from recoverpy import screen_handler as screen_handler
 from recoverpy.utils.logger import LOGGER as LOGGER
 from recoverpy.utils.saver import SAVER as SAVER
-from recoverpy.screens.menu_with_block_display import MenuWithBlockDisplay
+from recoverpy.screens.screen_with_block_display import MenuWithBlockDisplay
 
 
 class ResultsScreen(MenuWithBlockDisplay):
@@ -27,7 +27,7 @@ class ResultsScreen(MenuWithBlockDisplay):
             partition (str): System partition to search.
             initial_block (int): Initial partition block number that will be displayed.
         """
-        super().__init__()
+        super().__init__(master)
 
         self.master = master
         self.partition = partition
@@ -105,7 +105,7 @@ class ResultsScreen(MenuWithBlockDisplay):
             column_span=2,
             padx=1,
             pady=0,
-            command=screens.SCREENS_HANDLER.results_go_back,
+            command=screen_handler.SCREENS_HANDLER.results_go_back,
         )
         self.go_back_button.set_color(2)
 

@@ -1,12 +1,13 @@
 from py_cui import PyCUI
 
-from recoverpy import screens as screens
+from recoverpy import screen_handler as screen_handler
 from recoverpy.config import config as CONFIG
+from recoverpy.screens.screen import Screen
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
 
 
-class ConfigScreen:
+class ConfigScreen(Screen):
     """ConfigScreen is used to display and edit configuration.
 
     Attributes:
@@ -19,7 +20,7 @@ class ConfigScreen:
         Args:
             master (PyCUI): PyCUI main object for UI.
         """
-        self.master = master
+        super().__init__(master)
         self._log_enabled = LOGGER.log_enabled
         self.create_ui_content()
 
@@ -112,7 +113,7 @@ class ConfigScreen:
             column_span=2,
             padx=0,
             pady=0,
-            command=screens.SCREENS_HANDLER.config_go_back,
+            command=screen_handler.SCREENS_HANDLER.config_go_back,
         ).set_color(2)
 
         self.set_yes_no_colors()
@@ -202,4 +203,4 @@ class ConfigScreen:
             log_path=log_path,
             enable_logging=self._log_enabled,
         )
-        screens.SCREENS_HANDLER.config_go_back()
+        screen_handler.SCREENS_HANDLER.config_go_back()

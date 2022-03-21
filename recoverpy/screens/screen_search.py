@@ -5,10 +5,10 @@ from time import sleep
 
 from py_cui import BLACK_ON_GREEN, PyCUI, keys
 
-from recoverpy import screens, search
+from recoverpy import screen_handler, search
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
-from recoverpy.screens.menu_with_block_display import MenuWithBlockDisplay
+from recoverpy.screens.screen_with_block_display import MenuWithBlockDisplay
 
 
 class SearchScreen(MenuWithBlockDisplay):
@@ -36,10 +36,7 @@ class SearchScreen(MenuWithBlockDisplay):
             partition (str): System partition to search
             string_to_search (str): String to search in partition blocks
         """
-        super().__init__()
-
-        self.master = master
-        self.master.set_refresh_timeout(1)
+        super().__init__(master)
 
         self.queue_object = Queue()
         self.result_index = 0
@@ -236,7 +233,7 @@ class SearchScreen(MenuWithBlockDisplay):
             )
             self.master.show_message_popup("", "Result saved.")
         elif choice == "Explore neighboring blocks and save it all":
-            screens.SCREENS_HANDLER.open_screen_results(
+            screen_handler.SCREENS_HANDLER.open_screen_results(
                 partition=self.partition,
                 block=self.current_block,
             )
