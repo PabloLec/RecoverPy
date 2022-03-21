@@ -1,4 +1,5 @@
 from py_cui import PyCUI
+from py_cui.widgets import ScrollMenu, ScrollTextBlock, Button
 
 from recoverpy.screens import handler as handler
 from recoverpy.config import config as CONFIG
@@ -21,12 +22,12 @@ class ConfigScreen(Screen):
             master (PyCUI): PyCUI main object for UI.
         """
         super().__init__(master)
-        self._log_enabled = LOGGER.log_enabled
+        self._log_enabled: bool = LOGGER.log_enabled
         self.create_ui_content()
 
     def create_ui_content(self):
         """Handle the creation of the UI elements."""
-        self.save_path_box = self.master.add_text_box(
+        self.save_path_box: ScrollTextBlock = self.master.add_text_box(
             title="Save Path",
             row=0,
             column=1,
@@ -36,6 +37,7 @@ class ConfigScreen(Screen):
             pady=0,
             initial_text=SAVER.save_path,
         )
+
         self.master.add_button(
             "Save",
             row=1,
@@ -46,7 +48,8 @@ class ConfigScreen(Screen):
             pady=0,
             command=self.set_save_path,
         ).set_color(1)
-        self.log_path_box = self.master.add_text_box(
+
+        self.log_path_box: ScrollTextBlock = self.master.add_text_box(
             title="Log Path",
             row=2,
             column=1,
@@ -56,6 +59,7 @@ class ConfigScreen(Screen):
             pady=0,
             initial_text=LOGGER.log_path,
         )
+
         self.master.add_button(
             "Save",
             row=3,
@@ -66,6 +70,7 @@ class ConfigScreen(Screen):
             pady=0,
             command=self.set_log_path,
         ).set_color(1)
+
         self.master.add_label(
             title="Enable Logging",
             row=4,
@@ -75,7 +80,8 @@ class ConfigScreen(Screen):
             padx=0,
             pady=0,
         ).selectable = False
-        self.yes_button = self.master.add_button(
+
+        self.yes_button: Button = self.master.add_button(
             "Yes",
             row=5,
             column=3,
@@ -85,7 +91,8 @@ class ConfigScreen(Screen):
             pady=0,
             command=self.enable_logging,
         )
-        self.no_button = self.master.add_button(
+
+        self.no_button: Button = self.master.add_button(
             "No",
             row=5,
             column=6,
@@ -95,6 +102,7 @@ class ConfigScreen(Screen):
             pady=0,
             command=self.disable_logging,
         )
+
         self.master.add_button(
             "Save & Exit",
             row=8,
@@ -105,6 +113,7 @@ class ConfigScreen(Screen):
             pady=0,
             command=self.save_all,
         ).set_color(4)
+
         self.master.add_button(
             "Cancel",
             row=8,
@@ -120,7 +129,7 @@ class ConfigScreen(Screen):
 
     def set_save_path(self):
         """Verify and set provided save path."""
-        user_input = self.save_path_box.get()
+        user_input: str = self.save_path_box.get()
         if not CONFIG.path_is_valid(path=user_input):
             self.master.show_error_popup("Path invalid", "Given save path is invalid.")
             return
@@ -135,7 +144,7 @@ class ConfigScreen(Screen):
 
     def set_log_path(self):
         """Verify and set provided log path."""
-        user_input = self.log_path_box.get()
+        user_input: str = self.log_path_box.get()
         if not CONFIG.path_is_valid(path=user_input):
             self.master.show_error_popup("Path invalid", "Given log path is invalid.")
             return
@@ -189,8 +198,8 @@ class ConfigScreen(Screen):
 
     def save_all(self):
         """Save full config and go back to first menu."""
-        save_path = self.save_path_box.get()
-        log_path = self.log_path_box.get()
+        save_path: str = self.save_path_box.get()
+        log_path: str = self.log_path_box.get()
         if not CONFIG.path_is_valid(path=save_path):
             self.master.show_error_popup("Path invalid", "Given save path is invalid.")
             return
