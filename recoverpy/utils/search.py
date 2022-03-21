@@ -79,7 +79,7 @@ def start_search(search_screen):
     LOGGER.write("debug", "Started searching thread")
 
     yield_results_thread = Thread(
-        target=search_screen.populate_result_list,
+        target=search_screen.dequeue_results,
         daemon=True,
     )
     yield_results_thread.start()
