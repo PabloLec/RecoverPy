@@ -3,8 +3,8 @@ from re import findall
 from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, PyCUI, keys
 from py_cui.widgets import ScrollMenu, ScrollTextBlock, Button
 
-from recoverpy.screens import handler
-from recoverpy.screens.screen import Screen
+from recoverpy.ui import handler
+from recoverpy.ui.screen import Screen
 from recoverpy.utils import helper
 from recoverpy.utils.logger import LOGGER
 

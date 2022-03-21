@@ -7,10 +7,10 @@ from py_cui import BLACK_ON_GREEN, PyCUI, keys
 from py_cui.widgets import ScrollMenu, ScrollTextBlock, Button
 
 from recoverpy.utils import search
-from recoverpy.screens import handler
+from recoverpy.ui import handler
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
-from recoverpy.screens.screen_with_block_display import MenuWithBlockDisplay
+from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 
 
 class SearchScreen(MenuWithBlockDisplay):

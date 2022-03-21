@@ -1,10 +1,10 @@
 from py_cui import PyCUI
 from py_cui.widgets import ScrollTextBlock, Button
 
-from recoverpy.screens import handler as handler
+from recoverpy.ui import handler as handler
 from recoverpy.utils.logger import LOGGER as LOGGER
 from recoverpy.utils.saver import SAVER as SAVER
-from recoverpy.screens.screen_with_block_display import MenuWithBlockDisplay
+from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 
 
 class ResultsScreen(MenuWithBlockDisplay):
