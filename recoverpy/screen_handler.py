@@ -63,17 +63,5 @@ class ScreensHandler:
         self.screens[self.current_screen]._stopped = False
         self.screens[self.current_screen].start()
 
-    def config_go_back(self):
-        """Go back from config screen to parameters screen."""
-        self.close_screen_config()
-        self._parameters_screen_window._stopped = False
-        self._parameters_screen_window.start()
-
-    def results_go_back(self):
-        """Go back from results screen to search screen."""
-        self.close_screen_results()
-        self._search_screen_window._stopped = False
-        self._search_screen_window.start()
-
 
 SCREENS_HANDLER = ScreensHandler()
