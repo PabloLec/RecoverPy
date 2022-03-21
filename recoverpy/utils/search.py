@@ -57,7 +57,7 @@ def start_search(search_screen):
         partition=search_screen.partition,
     )
 
-    if helper.is_installed(command="progress"):
+    if helper.is_dependency_installed(command="progress"):
         monitor_progress_thread = Thread(
             target=monitor_progress,
             args=(

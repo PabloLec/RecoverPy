@@ -71,11 +71,12 @@ class ParametersScreen(Screen):
         self.open_config_button.set_color(1)
 
     def get_system_partitions(self):
-        partitions_list: list = helper.lsblk()
-        self.partitions_dict = helper.format_partitions_list(
-            window=self.master,
-            raw_lsblk=partitions_list,
-        )
+        self.partitions_dict = helper.get_partitions()
+        if not self.partitions_dict:
+            LOGGER.write("Error", "No partition found !")
+            self.master.show_error_popup("Hum...", "No partition found.")
+            return
+
         self.add_partitions_to_list()
 
     def add_partitions_to_list(self):

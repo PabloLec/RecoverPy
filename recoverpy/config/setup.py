@@ -1,5 +1,5 @@
 from os import environ
-from recoverpy.utils.helper import is_installed
+from recoverpy.utils.helper import is_dependency_installed
 
 
 def verify_terminal_conf():
@@ -14,7 +14,7 @@ def verify_dependencies():
     needed_dependencies: list = ["grep", "dd", "lsblk"]
 
     for dep in needed_dependencies:
-        if not is_installed(command=dep):
+        if not is_dependency_installed(command=dep):
             raise OSError(
                 f"Command '{dep}' is unavailable on your system.\n"
                 "Please verify your configuration."
