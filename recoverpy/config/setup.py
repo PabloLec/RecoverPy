@@ -11,12 +11,8 @@ def verify_terminal_conf():
 
 
 def verify_dependencies():
-    """Verify the availability of mandatory dependencies.
-
-    Raises:
-        OSError: If a dependency is missing.
-    """
-    for dep in ["grep", "dd", "lsblk"]:
+    needed_dependencies: list = ["grep", "dd", "lsblk"]
+    for dep in needed_dependencies:
         if not is_installed(command=dep):
             raise OSError(
                 f"Command '{dep}' is unavailable on your system.\n"
