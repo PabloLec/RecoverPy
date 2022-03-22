@@ -1,43 +1,28 @@
-import logging
+from logging import Logger, getLogger, FileHandler, DEBUG
 from datetime import datetime
 
 
 class Logger:
-    """Encapsulates all logging related methods.
-
-    Attributes:
-        _log_path (str): Local path for search results saving.
-        _log_enabled (bool): Last saved file to inform user.
-        _logger (logging.Logger): Wrapped Logger object.
-    """
+    """Encapsulates all logging related methods."""
 
     def __init__(self):
-        """Initialize Logger."""
-        self.log_path = None
-        self.log_enabled = False
+        self.log_path: str = None
+        self.log_enabled: bool = False
         self._logger = None
 
     def start_logging(self):
-        """Initiate and configure the logger object."""
         time = datetime.now().strftime("%Y-%m-%d-%H%M%S")
-
         log_file_name = f"{self.log_path}recoverpy-{time}.log"
 
-        self._logger = logging.getLogger("main")
-        self._logger.setLevel(logging.DEBUG)
+        self._logger: Logger = getLogger("main")
+        self._logger.setLevel(DEBUG)
 
-        file_handler = logging.FileHandler(log_file_name)
-        file_handler.setLevel(logging.DEBUG)
+        file_handler = FileHandler(log_file_name)
+        file_handler.setLevel(DEBUG)
 
         self._logger.addHandler(file_handler)
 
     def write(self, log_type: str, text: str):
-        """Use logger object to write to file.
-
-        Args:
-            log_type (str): Log level
-            text (str): Message
-        """
         if not self.log_enabled:
             return
 
