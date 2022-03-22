@@ -1,7 +1,7 @@
 from re import findall
 
 from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, PyCUI, keys
-from py_cui.widgets import ScrollMenu, ScrollTextBlock, Button
+from py_cui.widgets import Button, ScrollMenu, ScrollTextBlock
 
 from recoverpy.ui import handler
 from recoverpy.ui.screen import Screen

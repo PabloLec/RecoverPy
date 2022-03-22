@@ -1,5 +1,5 @@
 from os import geteuid
-from subprocess import call, check_output, DEVNULL
+from subprocess import DEVNULL, call, check_output
 
 from py_cui import PyCUI
 

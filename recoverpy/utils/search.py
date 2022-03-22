@@ -1,12 +1,13 @@
 import re
 import time
+from io import BufferedReader
 from queue import Queue
 from subprocess import DEVNULL, PIPE, Popen, check_output
 from threading import Thread
-from io import BufferedReader
+
+from recoverpy.ui.screen_search import SearchScreen
 from recoverpy.utils import helper
 from recoverpy.utils.logger import LOGGER
-from recoverpy.ui.screen_search import SearchScreen
 
 
 def start_search(search_screen: SearchScreen):

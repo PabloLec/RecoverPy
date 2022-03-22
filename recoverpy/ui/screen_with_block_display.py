@@ -1,4 +1,5 @@
 from subprocess import CalledProcessError, check_output
+
 from py_cui import PyCUI
 
 from recoverpy.ui.screen import Screen

@@ -1,8 +1,8 @@
-from logging import Logger, getLogger, FileHandler, DEBUG
 from datetime import datetime
+from logging import DEBUG, FileHandler, Logger, getLogger
 
 
-class Logger:
+class CustomLogger:
     """Logging wrapper object."""
 
     def __init__(self):
@@ -38,4 +38,4 @@ class Logger:
             self._logger.critical(text)
 
 
-LOGGER = Logger()
+LOGGER = CustomLogger()

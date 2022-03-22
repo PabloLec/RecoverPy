@@ -1,12 +1,8 @@
-from typing import Any, Dict, Final, Type
+from typing import Dict, Final, Type
+
 from py_cui import PyCUI
 
-from recoverpy.ui import (
-    screen_block,
-    screen_config,
-    screen_parameters,
-    screen_search,
-)
+from recoverpy.ui import screen_block, screen_config, screen_parameters, screen_search
 
 
 class ScreensHandler:

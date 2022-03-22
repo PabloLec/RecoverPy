@@ -4,13 +4,13 @@ from shlex import quote
 from time import sleep
 
 from py_cui import BLACK_ON_GREEN, PyCUI, keys
-from py_cui.widgets import ScrollMenu, ScrollTextBlock, Button
+from py_cui.widgets import Button, ScrollMenu, ScrollTextBlock
 
-from recoverpy.utils import search
 from recoverpy.ui import handler
+from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
+from recoverpy.utils import search
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
-from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 
 
 class SearchScreen(MenuWithBlockDisplay):
