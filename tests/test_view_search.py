@@ -14,7 +14,7 @@ def test_search_ui(SEARCH_SCREEN):
 
 
 def test_blockqueue(SEARCH_SCREEN):
-    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.yield_new_results(
+    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.get_new_results(
         queue_object=SEARCH_SCREEN.queue_object, blockindex=SEARCH_SCREEN.blockindex
     )
 
@@ -30,7 +30,7 @@ def test_blockqueue(SEARCH_SCREEN):
     assert SEARCH_SCREEN.blockindex == 3
 
     SEARCH_SCREEN.queue_object.put("TEST 1")
-    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.yield_new_results(
+    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.get_new_results(
         queue_object=SEARCH_SCREEN.queue_object, blockindex=SEARCH_SCREEN.blockindex
     )
 
@@ -39,7 +39,7 @@ def test_blockqueue(SEARCH_SCREEN):
 
     SEARCH_SCREEN.queue_object.put("TEST 2")
     SEARCH_SCREEN.queue_object.put("TEST 3")
-    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.yield_new_results(
+    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.get_new_results(
         queue_object=SEARCH_SCREEN.queue_object, blockindex=SEARCH_SCREEN.blockindex
     )
 
@@ -50,7 +50,7 @@ def test_blockqueue(SEARCH_SCREEN):
 def test_blocklist_population(SEARCH_SCREEN):
     SEARCH_SCREEN.create_ui_content()
 
-    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.yield_new_results(
+    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.get_new_results(
         queue_object=SEARCH_SCREEN.queue_object, blockindex=SEARCH_SCREEN.blockindex
     )
     SEARCH_SCREEN.add_results_to_list(new_results=new_results)
@@ -67,7 +67,7 @@ def test_blocklist_population(SEARCH_SCREEN):
 def test_search_title(SEARCH_SCREEN):
     SEARCH_SCREEN.create_ui_content()
 
-    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.yield_new_results(
+    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.get_new_results(
         queue_object=SEARCH_SCREEN.queue_object, blockindex=SEARCH_SCREEN.blockindex
     )
     SEARCH_SCREEN.set_title()
@@ -75,7 +75,7 @@ def test_search_title(SEARCH_SCREEN):
     assert SEARCH_SCREEN.master._title == "3 results"
 
     SEARCH_SCREEN.queue_object.put("TEST 1")
-    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.yield_new_results(
+    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.get_new_results(
         queue_object=SEARCH_SCREEN.queue_object, blockindex=SEARCH_SCREEN.blockindex
     )
     SEARCH_SCREEN.grep_progress = "0.10% ( TEST )"
@@ -86,7 +86,7 @@ def test_search_title(SEARCH_SCREEN):
 
 def test_block_number_update(SEARCH_SCREEN):
     SEARCH_SCREEN.create_ui_content()
-    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.yield_new_results(
+    (new_results, SEARCH_SCREEN.blockindex,) = recoverpy.search.get_new_results(
         queue_object=SEARCH_SCREEN.queue_object, blockindex=SEARCH_SCREEN.blockindex
     )
     SEARCH_SCREEN.add_results_to_list(new_results=new_results)

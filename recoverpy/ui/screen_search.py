@@ -30,8 +30,6 @@ class SearchScreen(MenuWithBlockDisplay):
 
         self.queue_object: Queue = Queue()
         self.blockindex: int = 0
-
-        self.grep_progress: str = ""
         self.inodes: list = []
         self.partition: str = partition
         self.searched_string: str = string_to_search
@@ -45,14 +43,20 @@ class SearchScreen(MenuWithBlockDisplay):
             f"Formated searched string:\n{quote(self.searched_string)}",
         )
 
-    def set_title(self):
-        title: str = ""
-        if self.grep_progress != "":
-            title = f"{self.grep_progress} - {self.blockindex} results"
-        else:
-            title = f"{self.blockindex} results"
+    def set_title(self, grep_progress: str = None):
+        title: str = (
+            f"{grep_progress} - {self.blockindex} results"
+            if grep_progress
+            else f"{self.blockindex} results"
+        )
 
         self.master.set_title(title)
+
+        if "100%" in title:
+            if self.blockindex == 0:
+                self.master.title_bar.set_color(22)
+            else:
+                self.master.title_bar.set_color(30)
 
     def create_ui_content(self):
         self.search_results_scroll_menu: ScrollMenu = self.master.add_scroll_menu(
@@ -137,7 +141,7 @@ class SearchScreen(MenuWithBlockDisplay):
         while True:
             try:
                 new_results: list
-                new_results, self.blockindex = search.yield_new_results(
+                new_results, self.blockindex = search.get_new_results(
                     self.queue_object,
                     self.blockindex,
                 )
