@@ -5,12 +5,12 @@ from queue import Queue
 from subprocess import DEVNULL, PIPE, Popen, check_output
 from threading import Thread
 
-from recoverpy.ui.screen_search import SearchScreen
+from recoverpy.ui.screen import Screen
 from recoverpy.utils import helper
 from recoverpy.utils.logger import LOGGER
 
 
-def start_search(search_screen: SearchScreen):
+def start_search(search_screen: Screen):
     grep_process: Popen = create_grep_process(
         searched_string=search_screen.searched_string,
         partition=search_screen.partition,
@@ -30,7 +30,7 @@ def create_grep_process(searched_string: str, partition: str) -> Popen:
     )
 
 
-def start_progress_monitoring_thread(grep_process: Popen, search_screen: SearchScreen):
+def start_progress_monitoring_thread(grep_process: Popen, search_screen: Screen):
     if not helper.is_dependency_installed(command="progress"):
         return
 
@@ -42,7 +42,7 @@ def start_progress_monitoring_thread(grep_process: Popen, search_screen: SearchS
     LOGGER.write("debug", "Started progress monitoring thread")
 
 
-def start_result_enqueue_thread(grep_process: Popen, search_screen: SearchScreen):
+def start_result_enqueue_thread(grep_process: Popen, search_screen: Screen):
     Thread(
         target=enqueue_grep_output,
         args=(grep_process.stdout, search_screen.queue_object),
@@ -51,7 +51,7 @@ def start_result_enqueue_thread(grep_process: Popen, search_screen: SearchScreen
     LOGGER.write("debug", "Started grep searching thread")
 
 
-def start_result_dequeue_thread(grep_process: Popen, search_screen: SearchScreen):
+def start_result_dequeue_thread(grep_process: Popen, search_screen: Screen):
     Thread(
         target=search_screen.dequeue_results,
         daemon=True,
@@ -59,7 +59,7 @@ def start_result_dequeue_thread(grep_process: Popen, search_screen: SearchScreen
     LOGGER.write("debug", "Started grep output fetching thread")
 
 
-def monitor_search_progress(search_screen: SearchScreen, grep_pid: int):
+def monitor_search_progress(search_screen: Screen, grep_pid: int):
     while True:
         output: str = check_output(
             ["progress", "-p", str(grep_pid)], stderr=DEVNULL

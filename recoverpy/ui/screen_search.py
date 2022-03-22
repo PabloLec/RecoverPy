@@ -8,9 +8,9 @@ from py_cui.widgets import Button, ScrollMenu, ScrollTextBlock
 
 from recoverpy.ui import handler
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
-from recoverpy.utils import search
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
+from recoverpy.utils.search import get_new_results, start_search
 
 
 class SearchScreen(MenuWithBlockDisplay):
@@ -19,13 +19,6 @@ class SearchScreen(MenuWithBlockDisplay):
     block_size: int = 512
 
     def __init__(self, master: PyCUI, partition: str, string_to_search: str):
-        """Initialize SearchScreen.
-
-        Args:
-            master (PyCUI): PyCUI main object for UI
-            partition (str): System partition to search
-            string_to_search (str): String to search in partition blocks
-        """
         super().__init__(master)
 
         self.queue_object: Queue = Queue()
@@ -35,7 +28,7 @@ class SearchScreen(MenuWithBlockDisplay):
         self.searched_string: str = string_to_search
         self.create_ui_content()
 
-        search.start_search(self)
+        start_search(self)
 
         LOGGER.write(
             "info",
@@ -141,7 +134,7 @@ class SearchScreen(MenuWithBlockDisplay):
         while True:
             try:
                 new_results: list
-                new_results, self.blockindex = search.get_new_results(
+                new_results, self.blockindex = get_new_results(
                     self.queue_object,
                     self.blockindex,
                 )
