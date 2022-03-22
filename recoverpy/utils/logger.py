@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Logger:
-    """Logging wrapper object"""
+    """Logging wrapper object."""
 
     def __init__(self):
         self.log_path: str = None

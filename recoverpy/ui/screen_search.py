@@ -200,8 +200,5 @@ class SearchScreen(MenuWithBlockDisplay):
                 block=self.current_block,
             )
         elif choice == "Save currently displayed block":
-            SAVER.save_result(
-                current_block=self.current_block,
-                result=self.current_result,
-            )
+            SAVER.save_result_string(result=self.current_result)
             self.master.show_message_popup("", "Result saved.")

@@ -104,7 +104,7 @@ class BlockScreen(MenuWithBlockDisplay):
             self.master.show_message_popup("", "No result to save yet")
             return
 
-        SAVER.save_blockdict(self.saved_blocks_dict)
+        SAVER.save_result_dict(self.saved_blocks_dict)
 
         if len_results == 1:
             self.master.show_message_popup(
