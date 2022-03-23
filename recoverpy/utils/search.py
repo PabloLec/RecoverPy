@@ -6,7 +6,7 @@ from subprocess import DEVNULL, PIPE, Popen, check_output
 from threading import Thread
 
 from recoverpy.ui.screen import Screen
-from recoverpy.utils import helper
+from recoverpy.utils.helper import is_dependency_installed
 from recoverpy.utils.logger import LOGGER
 
 
@@ -31,7 +31,7 @@ def create_grep_process(searched_string: str, partition: str) -> Popen:
 
 
 def start_progress_monitoring_thread(grep_process: Popen, search_screen: Screen):
-    if not helper.is_dependency_installed(command="progress"):
+    if not is_dependency_installed(command="progress"):
         return
 
     Thread(
