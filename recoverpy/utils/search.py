@@ -1,9 +1,9 @@
-import re
-import time
 from io import BufferedReader
 from queue import Queue
+from re import findall
 from subprocess import DEVNULL, PIPE, Popen, check_output
 from threading import Thread
+from time import sleep
 
 from recoverpy.ui.screen import Screen
 from recoverpy.utils.helper import is_dependency_installed
@@ -69,13 +69,13 @@ def monitor_search_progress(search_screen: Screen, grep_pid: int):
             search_screen.set_title("100% - Search completed")
             return
 
-        progress: list = re.findall(r"([0-9]+\.[0-9]+\%[^\)]+\))", output)
+        progress: list = findall(r"([0-9]+\.[0-9]+\%[^\)]+\))", output)
         if not progress:
             continue
 
         LOGGER.write("debug", f"Progress: {progress[0]}")
         search_screen.set_title(progress[0])
-        time.sleep(1)
+        sleep(1)
 
 
 def enqueue_grep_output(out: BufferedReader, queue: Queue):
