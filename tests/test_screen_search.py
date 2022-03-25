@@ -1,7 +1,10 @@
 import pathlib
-import recoverpy
 from time import sleep
+
 from py_cui import keys
+
+import recoverpy
+
 
 def test_search_ui(SEARCH_SCREEN):
     instance_dir = dir(SEARCH_SCREEN)
@@ -28,6 +31,7 @@ def test_blocklist_population(SEARCH_SCREEN):
 def test_search_title(SEARCH_SCREEN):
     assert SEARCH_SCREEN.master._title == "100% - Search completed - 3 results"
 
+
 def test_block_number_update(SEARCH_SCREEN):
     SEARCH_SCREEN.search_results_scroll_menu._handle_key_press(keys.KEY_UP_ARROW)
     SEARCH_SCREEN.search_results_scroll_menu._handle_key_press(keys.KEY_ENTER)
@@ -35,7 +39,6 @@ def test_block_number_update(SEARCH_SCREEN):
 
     assert SEARCH_SCREEN.current_block == "1"
     assert SEARCH_SCREEN.search_results_scroll_menu.get() == item
-
 
 
 def test_save_search_result(SEARCH_SCREEN, tmp_path):

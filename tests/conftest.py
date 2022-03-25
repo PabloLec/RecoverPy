@@ -1,23 +1,28 @@
-from queue import Queue
-
-
 import pytest
 from py_cui import PyCUI
 
 import recoverpy
 
 from .fixtures.lsblk_output import MOCK_LSBLK_OUTPUT
-from .fixtures.mock_grep import create_grep_process
 from .fixtures.mock_check_output import check_output
+from .fixtures.mock_grep import create_grep_process
 
-@pytest.fixture(scope='session', autouse=True)
+
+@pytest.fixture(scope="session", autouse=True)
 def global_mock(session_mocker):
-    session_mocker.patch.object(recoverpy.utils.search.SearchEngine, "create_grep_process", new=create_grep_process)
-    session_mocker.patch.object(recoverpy.ui.screen_with_block_display, "check_output", new=check_output)
+    session_mocker.patch.object(
+        recoverpy.utils.search.SearchEngine,
+        "create_grep_process",
+        new=create_grep_process,
+    )
+    session_mocker.patch.object(
+        recoverpy.ui.screen_with_block_display, "check_output", new=check_output
+    )
     session_mocker.patch("py_cui.curses.wrapper", return_value=None)
     session_mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def SCREENS_HANDLER():
     return recoverpy.ui.handler.SCREENS_HANDLER
 
@@ -30,8 +35,11 @@ def PARAMETERS_SCREEN(SCREENS_HANDLER):
 
 @pytest.fixture(scope="module")
 def SEARCH_SCREEN(SCREENS_HANDLER):
-    SCREENS_HANDLER.open_screen("search", partition = "/dev/test", string_to_search = "test")
+    SCREENS_HANDLER.open_screen(
+        "search", partition="/dev/test", string_to_search="test"
+    )
     return SCREENS_HANDLER.screens["search"]
+
 
 @pytest.fixture()
 def RESULTS_SCREEN():
