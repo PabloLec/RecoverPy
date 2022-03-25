@@ -34,7 +34,9 @@ class ScreensHandler:
 
     def open_screen(self, screen_name: str, **kwargs):
         self.current_screen, self.previous_screen = screen_name, self.current_screen
+
         self.close_screen(self.previous_screen)
+
         self.screens[screen_name] = self.create_screen()
         self.SCREENS_CLASSES[screen_name](self.screens[screen_name], **kwargs)
         self.screens[screen_name].start()
@@ -54,4 +56,4 @@ class ScreensHandler:
         self.screens[self.current_screen].start()
 
 
-SCREENS_HANDLER = ScreensHandler()
+SCREENS_HANDLER: ScreensHandler = ScreensHandler()

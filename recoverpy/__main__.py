@@ -1,3 +1,4 @@
 import recoverpy
 
-recoverpy.main()
+if __name__ == "__main__":
+    recoverpy.main()

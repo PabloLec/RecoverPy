@@ -10,7 +10,7 @@ from recoverpy.ui import handler
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
-from recoverpy.utils.search import get_new_results, start_search
+from recoverpy.utils.search import SEARCH_ENGINE
 
 
 class SearchScreen(MenuWithBlockDisplay):
@@ -28,7 +28,7 @@ class SearchScreen(MenuWithBlockDisplay):
         self.searched_string: str = string_to_search
         self.create_ui_content()
 
-        start_search(self)
+        SEARCH_ENGINE.start_search(self)
 
         LOGGER.write(
             "info",
@@ -134,7 +134,7 @@ class SearchScreen(MenuWithBlockDisplay):
         while True:
             try:
                 new_results: list
-                new_results, self.blockindex = get_new_results(
+                new_results, self.blockindex = SEARCH_ENGINE.get_new_results(
                     self.queue_object,
                     self.blockindex,
                 )
@@ -192,9 +192,9 @@ class SearchScreen(MenuWithBlockDisplay):
     def handle_save_popup_choice(self, choice: str):
         if choice == "Explore neighboring blocks and save it all":
             handler.SCREENS_HANDLER.open_screen(
-                "screen",
+                "results",
                 partition=self.partition,
-                block=self.current_block,
+                initial_block=self.current_block,
             )
         elif choice == "Save currently displayed block":
             SAVER.save_result_string(result=self.current_result)
