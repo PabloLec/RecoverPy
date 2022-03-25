@@ -19,7 +19,7 @@ class SearchEngine:
 
         self.start_progress_monitoring_thread(grep_process, search_screen)
         self.start_result_enqueue_thread(grep_process, search_screen)
-        self.start_result_dequeue_thread(grep_process, search_screen)
+        self.start_result_dequeue_thread(search_screen)
 
     def create_grep_process(self, searched_string: str, partition: str) -> Popen:
         return Popen(
@@ -50,7 +50,7 @@ class SearchEngine:
         ).start()
         LOGGER.write("debug", "Started grep searching thread")
 
-    def start_result_dequeue_thread(self, grep_process: Popen, search_screen: Screen):
+    def start_result_dequeue_thread(self, search_screen: Screen):
         Thread(
             target=search_screen.dequeue_results,
             daemon=True,

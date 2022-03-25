@@ -1,45 +1,37 @@
 from queue import Queue
 
+
 import pytest
 from py_cui import PyCUI
 
 import recoverpy
 
-from .fixtures.lsblk import MOCK_LSBLK_OUTPUT
+from .fixtures.lsblk_output import MOCK_LSBLK_OUTPUT
+from .fixtures.mock_grep import create_grep_process
+from .fixtures.mock_check_output import check_output
 
+@pytest.fixture(scope='session', autouse=True)
+def global_mock(session_mocker):
+    session_mocker.patch.object(recoverpy.utils.search.SearchEngine, "create_grep_process", new=create_grep_process)
+    session_mocker.patch.object(recoverpy.ui.screen_with_block_display, "check_output", new=check_output)
+    session_mocker.patch("py_cui.curses.wrapper", return_value=None)
+    session_mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
 
-@pytest.fixture()
-def SCREENS_HANDLER(mocker):
-    mocker.patch("py_cui.curses.wrapper", return_value=None)
+@pytest.fixture(scope='session')
+def SCREENS_HANDLER():
     return recoverpy.ui.handler.SCREENS_HANDLER
 
 
-@pytest.fixture()
-def PARAMETERS_SCREEN(SCREENS_HANDLER, mocker):
-    mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
+@pytest.fixture(scope="module")
+def PARAMETERS_SCREEN(SCREENS_HANDLER):
     SCREENS_HANDLER.open_screen("parameters")
     return SCREENS_HANDLER.screens["parameters"]
 
 
-@pytest.fixture()
-def SEARCH_SCREEN():
-    screen = recoverpy.screens.screen_search.SearchScreen.__new__(
-        recoverpy.screens.screen_search.SearchScreen
-    )
-    screen.master = PyCUI(10, 10)
-    screen.queue_object = Queue()
-    lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-    screen.queue_object.put(f"- 1000: {lorem}")
-    screen.queue_object.put(f"- 2000: {lorem}")
-    screen.queue_object.put(f"- 3000: {lorem}")
-    screen.blockindex = 0
-    screen.grep_progress = ""
-    screen.block_size = 512
-    screen.searched_string = "test"
-    screen.inodes = [512, 1024, 2056]
-
-    return screen
-
+@pytest.fixture(scope="module")
+def SEARCH_SCREEN(SCREENS_HANDLER):
+    SCREENS_HANDLER.open_screen("search", partition = "/dev/test", string_to_search = "test")
+    return SCREENS_HANDLER.screens["search"]
 
 @pytest.fixture()
 def RESULTS_SCREEN():
