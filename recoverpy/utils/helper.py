@@ -23,7 +23,7 @@ def get_partitions() -> dict:
     return format_lsblk_output(lsblk_output)
 
 
-def lsblk() -> list:
+def lsblk() -> str:
     return check_output(
         ["lsblk", "-r", "-n", "-o", "NAME,TYPE,FSTYPE,MOUNTPOINT"],
         encoding="utf-8",

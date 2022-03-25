@@ -2,9 +2,6 @@ import recoverpy
 
 
 def test_partitions_parsing(PARAMETERS_SCREEN):
-    partitions_dict = recoverpy.utils.helper.format_partitions_list(
-        window=PARAMETERS_SCREEN.master, raw_lsblk=PARAMETERS_SCREEN.partitions_list
-    )
     expected_format = {
         "sda1": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/media/disk1"},
         "sdb1": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/media/disk2"},
@@ -18,7 +15,7 @@ def test_partitions_parsing(PARAMETERS_SCREEN):
         "vdb": {"FSTYPE": "LVM2_member", "IS_MOUNTED": False, "MOUNT_POINT": None},
         "vda2": {"FSTYPE": "LVM2_member", "IS_MOUNTED": False, "MOUNT_POINT": None},
     }
-    assert partitions_dict == expected_format
+    assert PARAMETERS_SCREEN.partitions_dict == expected_format
 
 
 def test_parameters_ui(PARAMETERS_SCREEN):

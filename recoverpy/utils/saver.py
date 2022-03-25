@@ -31,4 +31,4 @@ class Saver:
         LOGGER.write("info", f"Output saved in file {file_name}")
 
 
-SAVER = Saver()
+SAVER: Saver = Saver()

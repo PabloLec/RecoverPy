@@ -5,29 +5,20 @@ from py_cui import PyCUI
 
 import recoverpy
 
+from .fixtures.lsblk import MOCK_LSBLK_OUTPUT
+
 
 @pytest.fixture()
-def PARAMETERS_SCREEN():
-    screen = recoverpy.screens.screen_parameters.ParametersScreen.__new__(
-        recoverpy.screens.screen_parameters.ParametersScreen
-    )
-    screen.master = PyCUI(10, 10)
+def SCREENS_HANDLER(mocker):
+    mocker.patch("py_cui.curses.wrapper", return_value=None)
+    return recoverpy.ui.handler.SCREENS_HANDLER
 
-    partitions = [
-        ["sda", "disk"],
-        ["sda1", "part", "ext4", "/media/disk1"],
-        ["sdb", "disk"],
-        ["sdb1", "part", "ext4", "/media/disk2"],
-        ["mmcblk0", "disk"],
-        ["mmcblk0p1", "part", "vfat", "/boot/firmware"],
-        ["mmcblk0p2", "part", "ext4", "/"],
-        ["system-root", "lvm", "btrfs", "/test"],
-        ["vdb", "disk", "LVM2_member"],
-        ["vda2", "part", "LVM2_member"],
-    ]
-    screen.partitions_list = partitions
 
-    return screen
+@pytest.fixture()
+def PARAMETERS_SCREEN(SCREENS_HANDLER, mocker):
+    mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
+    SCREENS_HANDLER.open_screen("parameters")
+    return SCREENS_HANDLER.screens["parameters"]
 
 
 @pytest.fixture()
