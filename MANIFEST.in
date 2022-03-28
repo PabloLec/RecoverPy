@@ -1,1 +1,1 @@
-include recoverpy/*.yaml
+include recoverpy/config/*.yaml
