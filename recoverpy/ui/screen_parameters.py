@@ -1,7 +1,6 @@
 from re import findall
 
-from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, PyCUI, keys
-from py_cui.widgets import Button, ScrollMenu, ScrollTextBlock
+from py_cui import PyCUI
 
 from recoverpy.ui import handler
 from recoverpy.ui.screen import Screen
@@ -20,55 +19,8 @@ class ParametersScreen(Screen):
         self.partitions_dict: dict
 
         helper.is_user_root(window=self.master)
-
         self.create_ui_content()
         self.get_system_partitions()
-
-    def create_ui_content(self):
-        self.partitions_list_scroll_menu: ScrollMenu = self.master.add_scroll_menu(
-            "Select a partition to search:", 0, 0, row_span=9, column_span=5
-        )
-        self.partitions_list_scroll_menu.add_key_command(
-            keys.KEY_ENTER, self.select_partition
-        )
-        self.partitions_list_scroll_menu.add_text_color_rule(
-            "Mounted at",
-            YELLOW_ON_BLACK,
-            "contains",
-        )
-        self.partitions_list_scroll_menu.set_selected_color(GREEN_ON_BLACK)
-
-        self.string_text_box: ScrollTextBlock = self.master.add_text_block(
-            "Enter a text to search:",
-            0,
-            5,
-            row_span=9,
-            column_span=5,
-        )
-
-        self.confirm_search_button: Button = self.master.add_button(
-            "Start",
-            9,
-            4,
-            row_span=1,
-            column_span=2,
-            padx=0,
-            pady=0,
-            command=self.confirm_search,
-        )
-        self.confirm_search_button.set_color(4)
-
-        self.open_config_button: Button = self.master.add_button(
-            "Settings",
-            9,
-            8,
-            row_span=1,
-            column_span=2,
-            padx=1,
-            pady=0,
-            command=lambda: handler.SCREENS_HANDLER.open_screen("config"),
-        )
-        self.open_config_button.set_color(1)
 
     def get_system_partitions(self):
         self.partitions_dict = helper.get_partitions()

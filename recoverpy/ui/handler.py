@@ -49,7 +49,6 @@ class ScreensHandler:
             screen_name,
             self.current_screen,
         )
-
         created_screen_object.master.start()
 
     def close_screen(self, screen_name: str):
@@ -63,7 +62,6 @@ class ScreensHandler:
             self.previous_screen,
             self.current_screen,
         )
-        self.screens[self.current_screen].master._stopped = False
         self.screens[self.current_screen].master.start()
 
 

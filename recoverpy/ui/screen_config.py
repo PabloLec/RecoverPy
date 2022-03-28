@@ -1,5 +1,4 @@
 from py_cui import PyCUI
-from py_cui.widgets import Button, ScrollTextBlock
 
 from recoverpy.config import config as CONFIG
 from recoverpy.ui import handler as handler
@@ -15,106 +14,6 @@ class ConfigScreen(Screen):
         super().__init__(master)
         self._log_enabled: bool = LOGGER.log_enabled
         self.create_ui_content()
-
-    def create_ui_content(self):
-        self.save_path_box: ScrollTextBlock = self.master.add_text_box(
-            title="Save Path",
-            row=0,
-            column=1,
-            row_span=1,
-            column_span=8,
-            padx=0,
-            pady=0,
-            initial_text=SAVER.save_path,
-        )
-
-        self.master.add_button(
-            "Save",
-            row=1,
-            column=8,
-            row_span=1,
-            column_span=1,
-            padx=0,
-            pady=0,
-            command=self.set_save_path,
-        ).set_color(1)
-
-        self.log_path_box: ScrollTextBlock = self.master.add_text_box(
-            title="Log Path",
-            row=2,
-            column=1,
-            row_span=1,
-            column_span=8,
-            padx=0,
-            pady=0,
-            initial_text=LOGGER.log_path,
-        )
-
-        self.master.add_button(
-            "Save",
-            row=3,
-            column=8,
-            row_span=1,
-            column_span=1,
-            padx=0,
-            pady=0,
-            command=self.set_log_path,
-        ).set_color(1)
-
-        self.master.add_label(
-            title="Enable Logging",
-            row=4,
-            column=4,
-            row_span=1,
-            column_span=2,
-            padx=0,
-            pady=0,
-        ).selectable = False
-
-        self.yes_button: Button = self.master.add_button(
-            "Yes",
-            row=5,
-            column=3,
-            row_span=1,
-            column_span=1,
-            padx=0,
-            pady=0,
-            command=self.enable_logging,
-        )
-
-        self.no_button: Button = self.master.add_button(
-            "No",
-            row=5,
-            column=6,
-            row_span=1,
-            column_span=1,
-            padx=0,
-            pady=0,
-            command=self.disable_logging,
-        )
-
-        self.master.add_button(
-            "Save & Exit",
-            row=8,
-            column=2,
-            row_span=1,
-            column_span=2,
-            padx=0,
-            pady=0,
-            command=self.save_all,
-        ).set_color(4)
-
-        self.master.add_button(
-            "Cancel",
-            row=8,
-            column=6,
-            row_span=1,
-            column_span=2,
-            padx=0,
-            pady=0,
-            command=handler.SCREENS_HANDLER.go_back,
-        ).set_color(2)
-
         self.set_yes_no_colors()
 
     def set_yes_no_colors(self):
