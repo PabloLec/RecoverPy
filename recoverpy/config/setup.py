@@ -5,7 +5,7 @@ from recoverpy.utils.helper import is_dependency_installed
 
 def verify_terminal_conf():
     """Fix for older terminals."""
-    term: str = environ["TERM"]
+    term: str = environ.get("TERM")
 
     if term != "xterm-256color":
         environ["TERM"] = "xterm-256color"
