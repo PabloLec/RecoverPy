@@ -1,4 +1,4 @@
-from typing import Dict, Final, Type
+from typing import Dict, Type
 
 from py_cui import PyCUI
 
@@ -14,7 +14,7 @@ from recoverpy.ui import (
 class ScreensHandler:
     """Provide ui navigation logic."""
 
-    SCREENS_CLASSES: Final[Dict[str, Type]] = {
+    SCREENS_CLASSES: Dict[str, Type] = {
         "parameters": screen_parameters.ParametersScreen,
         "config": screen_config.ConfigScreen,
         "search": screen_search.SearchScreen,
