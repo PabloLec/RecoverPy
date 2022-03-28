@@ -1,6 +1,8 @@
+from os import environ
 from time import sleep
 
 from py_cui import keys
+from pytest.mark import skipif
 
 from recoverpy.utils.helper import is_dependency_installed
 
@@ -27,6 +29,10 @@ def test_blocklist_population(SEARCH_SCREEN):
     assert item_list == expected
 
 
+@skipif(
+    environ.get("IS_GITHUB_RUNNER") == "true",
+    reason="Privileges issues with GitHub Actions",
+)
 def test_search_title(SEARCH_SCREEN):
     if is_dependency_installed("progress"):
         assert SEARCH_SCREEN.master._title == "100% - Search completed - 3 results"
