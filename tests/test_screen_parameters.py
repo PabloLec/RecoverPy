@@ -1,3 +1,11 @@
+def test_parameters_ui(PARAMETERS_SCREEN):
+    instance_dir = dir(PARAMETERS_SCREEN)
+
+    assert "partitions_list_scroll_menu" in instance_dir
+    assert "string_text_box" in instance_dir
+    assert "confirm_search_button" in instance_dir
+
+
 def test_partitions_parsing(PARAMETERS_SCREEN):
     expected_format = {
         "sda1": {"FSTYPE": "ext4", "IS_MOUNTED": True, "MOUNT_POINT": "/media/disk1"},
@@ -14,14 +22,6 @@ def test_partitions_parsing(PARAMETERS_SCREEN):
     }
 
     assert PARAMETERS_SCREEN.partitions_dict == expected_format
-
-
-def test_parameters_ui(PARAMETERS_SCREEN):
-    instance_dir = dir(PARAMETERS_SCREEN)
-
-    assert "partitions_list_scroll_menu" in instance_dir
-    assert "string_text_box" in instance_dir
-    assert "confirm_search_button" in instance_dir
 
 
 def test_partitions_list_population(PARAMETERS_SCREEN):

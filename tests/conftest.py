@@ -57,24 +57,9 @@ def BLOCK_SCREEN(SCREENS_HANDLER):
 
 
 @pytest.fixture()
-def CONFIG_SCREEN():
-    screen = recoverpy.screens.screen_config.ConfigScreen.__new__(
-        recoverpy.screens.screen_config.ConfigScreen
-    )
-    screen.master = PyCUI(10, 10)
-    screen._log_enabled = True
-
-    return screen
-
-
-@pytest.fixture(scope="session")
-def TEST_FILE(tmp_path_factory):
-    lorem = "Integer vitae ultrices magna. Nam non cursus odio. In dapibus augue.\n"
-    file = tmp_path_factory.mktemp("data") / "file"
-    with file.open("w", encoding="utf-8") as f:
-        f.write(lorem * 20000 + "TEST STRING" + lorem * 20000)
-
-    return file
+def CONFIG_SCREEN(SCREENS_HANDLER):
+    SCREENS_HANDLER.open_screen("config")
+    return SCREENS_HANDLER.screens["config"]
 
 
 @pytest.fixture(scope="session")
