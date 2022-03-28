@@ -17,8 +17,8 @@ class Saver:
         self.write_to_file(file_name=file_name, content=result)
 
     def save_result_dict(self, results: dict):
-        ordered_blocks: dict = sorted(results)
-        final_output: str = "\n".join([*ordered_blocks.values()])
+        ordered_blocks: list = [results[num] for num in sorted(results.keys())]
+        final_output: str = "\n".join(ordered_blocks)
 
         self.save_result_string(final_output)
 

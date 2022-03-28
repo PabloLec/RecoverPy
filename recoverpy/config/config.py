@@ -37,14 +37,14 @@ def load_config():
     with open(_CONFIG_DIR / "config.yaml", "r") as config_file:
         config: dict = load(config_file, Loader=FullLoader)
 
-    if config["save_directory"] == "":
+    if "save_directory" not in config or config["save_directory"] == "":
         raise errors.NoSavePath
     if not is_path_valid(config["save_directory"]):
         raise errors.InvalidSavePath
 
     SAVER.save_path = config["save_directory"]
 
-    if config["log_directory"] == "":
+    if "log_directory" not in config or config["log_directory"] == "":
         LOGGER.log_enabled = False
     elif not is_path_valid(config["log_directory"]):
         raise errors.InvalidLogPath

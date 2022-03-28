@@ -3,9 +3,9 @@ from py_cui import PyCUI
 
 import recoverpy
 
-from .fixtures.lsblk_output import MOCK_LSBLK_OUTPUT
 from .fixtures.mock_check_output import check_output
 from .fixtures.mock_grep import create_grep_process
+from .fixtures.mock_lsblk_output import MOCK_LSBLK_OUTPUT
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -20,6 +20,15 @@ def global_mock(session_mocker):
     )
     session_mocker.patch("py_cui.curses.wrapper", return_value=None)
     session_mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def mock_config(session_mocker, tmpdir_factory):
+    test_dir = tmpdir_factory.mktemp("test_dir")
+    session_mocker.patch("recoverpy.config.config._CONFIG_DIR", test_dir)
+    recoverpy.config.config.write_config_to_file(
+        save_path=str(test_dir), log_path=str(test_dir), enable_logging=True
+    )
 
 
 @pytest.fixture(scope="session")
@@ -41,17 +50,10 @@ def SEARCH_SCREEN(SCREENS_HANDLER):
     return SCREENS_HANDLER.screens["search"]
 
 
-@pytest.fixture()
-def RESULTS_SCREEN():
-    screen = recoverpy.screens.screen_results.BlockScreen.__new__(
-        recoverpy.screens.screen_results.BlockScreen
-    )
-    screen.master = PyCUI(10, 10)
-    screen.partition = "/dev/sda1"
-    screen.saved_blocks_dict = {}
-    screen.current_block = 5
-
-    return screen
+@pytest.fixture(scope="module")
+def BLOCK_SCREEN(SCREENS_HANDLER):
+    SCREENS_HANDLER.open_screen("block", partition="/dev/test", initial_block=0)
+    return SCREENS_HANDLER.screens["block"]
 
 
 @pytest.fixture()

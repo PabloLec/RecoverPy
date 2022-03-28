@@ -1,9 +1,6 @@
-import pathlib
 from time import sleep
 
 from py_cui import keys
-
-import recoverpy
 
 
 def test_search_ui(SEARCH_SCREEN):
@@ -39,16 +36,3 @@ def test_block_number_update(SEARCH_SCREEN):
 
     assert SEARCH_SCREEN.current_block == "1"
     assert SEARCH_SCREEN.search_results_scroll_menu.get() == item
-
-
-def test_save_search_result(SEARCH_SCREEN, tmp_path):
-    recoverpy.utils.saver.SAVER.save_path = tmp_path
-
-    SEARCH_SCREEN.handle_save_popup_choice(choice="Save currently displayed block")
-
-    saved_file = recoverpy.utils.saver.SAVER.last_saved_file
-
-    content = pathlib.Path(saved_file).read_text()
-    expected = "TEST OUTPUT"
-
-    assert content == expected

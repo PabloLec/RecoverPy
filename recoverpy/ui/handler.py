@@ -18,7 +18,7 @@ class ScreensHandler:
         "parameters": screen_parameters.ParametersScreen,
         "config": screen_config.ConfigScreen,
         "search": screen_search.SearchScreen,
-        "results": screen_block.BlockScreen,
+        "block": screen_block.BlockScreen,
     }
 
     def __init__(self):
