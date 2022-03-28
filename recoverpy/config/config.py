@@ -50,7 +50,7 @@ def load_config():
         raise errors.InvalidLogPath
     else:
         LOGGER.log_path = config["log_directory"]
+        LOGGER.log_enabled = bool(config["enable_logging"])
 
-    LOGGER.log_enabled = bool(config["enable_logging"])
     if LOGGER.log_enabled:
         LOGGER.start_logging()

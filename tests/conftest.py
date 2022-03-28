@@ -29,6 +29,7 @@ def mock_config(session_mocker, tmpdir_factory):
     recoverpy.config.config.write_config_to_file(
         save_path=str(test_dir), log_path=str(test_dir), enable_logging=True
     )
+    return str(test_dir)
 
 
 @pytest.fixture(scope="session")
