@@ -2,7 +2,7 @@ from os import environ
 from time import sleep
 
 from py_cui import keys
-from pytest.mark import skipif
+from pytest import mark
 
 from recoverpy.utils.helper import is_dependency_installed
 
@@ -29,7 +29,7 @@ def test_blocklist_population(SEARCH_SCREEN):
     assert item_list == expected
 
 
-@skipif(
+@mark.skipif(
     environ.get("IS_GITHUB_RUNNER") == "true",
     reason="Privileges issues with GitHub Actions",
 )
