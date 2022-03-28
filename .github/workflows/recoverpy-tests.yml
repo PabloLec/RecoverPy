@@ -30,8 +30,8 @@ jobs:
     - name: Install dependencies
       run: |
         pip install --upgrade pip
-        pip install .
-        pip install pytest
+        pip install poetry
+        poetry export --dev > requirements.txt && pip install -r requirements.txt
         sudo apt install progress -y
     - name: Run unit tests
       run: |
