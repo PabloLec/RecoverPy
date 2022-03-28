@@ -1,5 +1,4 @@
 import pytest
-from py_cui import PyCUI
 
 import recoverpy
 
@@ -20,6 +19,7 @@ def global_mock(session_mocker):
     )
     session_mocker.patch("py_cui.curses.wrapper", return_value=None)
     session_mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
+    session_mocker.patch("recoverpy.utils.helper.is_user_root", return_value=True)
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -61,12 +61,3 @@ def BLOCK_SCREEN(SCREENS_HANDLER):
 def CONFIG_SCREEN(SCREENS_HANDLER):
     SCREENS_HANDLER.open_screen("config")
     return SCREENS_HANDLER.screens["config"]
-
-
-@pytest.fixture(scope="session")
-def TEST_SEARCH_SCREEN(TEST_FILE):
-    return recoverpy.screens.screen_search.SearchScreen(
-        master=PyCUI(10, 10),
-        partition=TEST_FILE,
-        string_to_search="TEST STRING",
-    )

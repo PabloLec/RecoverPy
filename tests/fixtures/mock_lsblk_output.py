@@ -4,7 +4,7 @@ sda1 part ext4 /media/disk1
 sdb disk
 sdb1 part ntfs /media/disk2
 mmcblk0 disk
-mmcblk0p1 part vfat /boot/firmware
+mmcblk0p1 part vfat
 nvme0n1 disk
 nvme0n1p1 part ext4 /
 system-root lvm btrfs /test
