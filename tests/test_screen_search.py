@@ -2,6 +2,8 @@ from time import sleep
 
 from py_cui import keys
 
+from recoverpy.utils.helper import is_dependency_installed
+
 
 def test_search_ui(SEARCH_SCREEN):
     instance_dir = dir(SEARCH_SCREEN)
@@ -26,7 +28,10 @@ def test_blocklist_population(SEARCH_SCREEN):
 
 
 def test_search_title(SEARCH_SCREEN):
-    assert SEARCH_SCREEN.master._title == "100% - Search completed - 3 results"
+    if is_dependency_installed("progress"):
+        assert SEARCH_SCREEN.master._title == "100% - Search completed - 3 results"
+    else:
+        assert SEARCH_SCREEN.master._title == "3 results"
 
 
 def test_block_number_update(SEARCH_SCREEN):
