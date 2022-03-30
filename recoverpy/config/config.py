@@ -30,7 +30,7 @@ def write_config_to_file(save_path: str, log_path: str, enable_logging: bool):
         }
 
         dump(config, config_file)
-        load_config()
+    load_config()
 
 
 def load_config():

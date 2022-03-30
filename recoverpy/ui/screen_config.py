@@ -68,11 +68,6 @@ class ConfigScreen(Screen):
 
     def set_log_state(self, enabled: bool):
         self._log_enabled = enabled
-        CONFIG.write_config_to_file(
-            save_path=SAVER.save_path,
-            log_path=LOGGER.log_path,
-            enable_logging=self._log_enabled,
-        )
         self.set_yes_no_colors()
 
     def save_all(self):
