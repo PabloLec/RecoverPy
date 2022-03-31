@@ -1,7 +1,11 @@
+from os import environ
+
 import pytest
 
 from recoverpy.config.config import write_config_to_file
+from recoverpy.config.setup import setup
 from recoverpy.utils.errors import InvalidLogPath, InvalidSavePath, NoSavePath
+from recoverpy.utils.helper import is_user_root
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
 
@@ -38,3 +42,23 @@ def test_conf_parsing(mock_config):
 
     assert SAVER.save_path == mock_config
     assert LOGGER.log_path == mock_config
+
+
+def test_missing_dependencies(MISSING_DEPENDENCY):
+    with pytest.raises(OSError):
+        setup()
+
+
+def test_terminal_env_var_fix():
+    environ["TERM"] = "test"
+    setup()
+
+    assert environ["TERM"] == "xterm-256color"
+
+
+def test_user_root(PARAMETERS_SCREEN, USER_IS_ROOT):
+    assert is_user_root(PARAMETERS_SCREEN.master) is True
+
+
+def test_user_not_root(PARAMETERS_SCREEN, USER_IS_NOT_ROOT):
+    assert is_user_root(PARAMETERS_SCREEN.master) is False

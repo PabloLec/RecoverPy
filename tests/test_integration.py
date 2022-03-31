@@ -226,6 +226,7 @@ def test_save_multiple_blocks():
 
     assert block_textbox.get_title() == "Block 1"
     add_block_button._handle_key_press(keys.KEY_ENTER)
+    add_block_button._handle_key_press(keys.KEY_ENTER)
 
     save_file_button._handle_key_press(keys.KEY_ENTER)
     saved_file_path = recoverpy.utils.saver.SAVER.last_saved_file

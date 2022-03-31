@@ -59,7 +59,22 @@ def BLOCK_SCREEN(SCREENS_HANDLER):
     return SCREENS_HANDLER.screens["block"]
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def CONFIG_SCREEN(SCREENS_HANDLER):
     SCREENS_HANDLER.open_screen("config")
     return SCREENS_HANDLER.screens["config"]
+
+
+@pytest.fixture(scope="function")
+def MISSING_DEPENDENCY(mocker):
+    mocker.patch("recoverpy.config.setup.is_dependency_installed", return_value=False)
+
+
+@pytest.fixture(scope="function")
+def USER_IS_ROOT(mocker):
+    mocker.patch("recoverpy.utils.helper.geteuid", return_value=0)
+
+
+@pytest.fixture(scope="function")
+def USER_IS_NOT_ROOT(mocker):
+    mocker.patch("recoverpy.utils.helper.geteuid", return_value=1)
