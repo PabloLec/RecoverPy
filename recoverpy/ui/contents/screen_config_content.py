@@ -14,7 +14,7 @@ def set(screen):
         column_span=8,
         padx=0,
         pady=0,
-        initial_text=SAVER.save_path,
+        initial_text=str(SAVER.save_path),
     )
 
     screen.master.add_button(
@@ -36,7 +36,7 @@ def set(screen):
         column_span=8,
         padx=0,
         pady=0,
-        initial_text=LOGGER.log_path,
+        initial_text=str(LOGGER.log_path),
     )
 
     screen.master.add_button(

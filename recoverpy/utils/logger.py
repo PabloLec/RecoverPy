@@ -1,18 +1,19 @@
 from datetime import datetime
 from logging import DEBUG, FileHandler, Logger, getLogger
+from pathlib import Path
 
 
 class CustomLogger:
     """Logging wrapper object."""
 
     def __init__(self):
-        self.log_path: str = None
+        self.log_path: Path = None
         self.log_enabled: bool = False
         self._logger = None
 
     def start_logging(self):
         time = datetime.now().strftime("%Y-%m-%d-%H%M%S")
-        log_file_name = f"{self.log_path}recoverpy-{time}.log"
+        log_file_name: Path = self.log_path / f"recoverpy-{time}.log"
 
         self._logger: Logger = getLogger("main")
         self._logger.setLevel(DEBUG)
