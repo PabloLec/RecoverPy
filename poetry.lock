@@ -408,7 +408,7 @@ importlib-metadata = {version = ">=0.9", markers = "python_version < \"3.8\""}
 
 [[package]]
 name = "flake8-spellcheck"
-version = "0.25.0"
+version = "0.26.0"
 description = "Spellcheck variables, comments and docstrings"
 category = "dev"
 optional = false
@@ -416,7 +416,6 @@ python-versions = "*"
 
 [package.dependencies]
 flake8 = ">3.0.0"
-importlib-resources = {version = ">=3", markers = "python_version < \"3.7\""}
 
 [[package]]
 name = "gitdb"
@@ -913,6 +912,7 @@ lock-version = "1.1"
 python-versions = "^3.6.2"
 content-hash = "6ebd0eed5f2956f667e4d88831e10f54fab787584d4e00e20303b3a678f60a71"
 
+
 [metadata.files]
 astor = [
     {file = "astor-0.8.1-py2.py3-none-any.whl", hash = "sha256:070a54e890cefb5b3739d19f30f5a5ec840ffc9c50ffa7d23cc9fc1a38ebbfc5"},
@@ -1115,8 +1115,8 @@ flake8-simplify = [
     {file = "flake8_simplify-0.18.2.tar.gz", hash = "sha256:9c4ccb709d7f91660cb43799f845903380cceacce4e5a76db73fb0beed4bb935"},
 ]
 flake8-spellcheck = [
-    {file = "flake8-spellcheck-0.25.0.tar.gz", hash = "sha256:17e539e9299dcc595f812e9f7233e12c413bdd4b2e614621aaa06e289605bb6a"},
-    {file = "flake8_spellcheck-0.25.0-py2.py3-none-any.whl", hash = "sha256:0f3df63e2638b55f57f3da7c1085baf45ebfec008922d3ebfeabd44dcf853450"},
+    {file = "flake8-spellcheck-0.26.0.tar.gz", hash = "sha256:882de0b5c374fa9312ea4165f71f5583e6f4616f1661c5598378353df50796f4"},
+    {file = "flake8_spellcheck-0.26.0-py2.py3-none-any.whl", hash = "sha256:78be6dd8b1dd91f8a6ad0cf36dcfee7851b3faed97842ef9a138021743e67bea"},
 ]
 gitdb = [
     {file = "gitdb-4.0.9-py3-none-any.whl", hash = "sha256:8033ad4e853066ba6ca92050b9df2f89301b8fc8bf7e9324d412a63f8bf1a8fd"},
