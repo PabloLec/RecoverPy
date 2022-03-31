@@ -39,7 +39,7 @@ include = ["recoverpy/config.yaml"]
 [tool.poetry.dependencies]
 python = "^3.6.2"
 PyYAML = "^5.4.1"
-py-cui = "^0.1.4"
+py-cui-fork = "^0.0.2"
 
 [tool.poetry.dev-dependencies]
 coverage = "^6.2"
