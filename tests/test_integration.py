@@ -162,7 +162,7 @@ def test_confirm_search():
 
     get_screen().master._popup._handle_key_press(keys.KEY_Y_LOWER)
     assert get_screen().master._popup is None
-    assert recoverpy.ui.handler.SCREENS_HANDLER.current_screen == "search"
+    assert "SearchScreen" in str(type(get_screen()))
 
 
 def test_select_search_result():
@@ -194,4 +194,40 @@ def test_save_displayed_block():
     get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
 
     saved_file_path = recoverpy.utils.saver.SAVER.last_saved_file
-    print(saved_file_path)
+    with open(saved_file_path, "r") as f:
+        assert f.read().strip() == "TEST OUTPUT"
+
+    assert get_screen().master._popup is not None
+    get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
+
+
+def test_go_to_block_screen():
+    save_button = get_screen().master.get_widgets()[4]
+    save_button._handle_key_press(keys.KEY_ENTER)
+
+    get_screen().master._popup.set_selected_item_index(1)
+    get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
+    assert "BlockScreen" in str(type(get_screen()))
+
+
+def test_save_multiple_blocks():
+    previous_button = get_screen().master.get_widgets()[0]
+    block_textbox = get_screen().master.get_widgets()[2]
+    add_block_button = get_screen().master.get_widgets()[3]
+    save_file_button = get_screen().master.get_widgets()[4]
+
+    assert block_textbox.get_title() == "Block 3"
+    add_block_button._handle_key_press(keys.KEY_ENTER)
+    previous_button._handle_key_press(keys.KEY_ENTER)
+
+    assert block_textbox.get_title() == "Block 2"
+    add_block_button._handle_key_press(keys.KEY_ENTER)
+    previous_button._handle_key_press(keys.KEY_ENTER)
+
+    assert block_textbox.get_title() == "Block 1"
+    add_block_button._handle_key_press(keys.KEY_ENTER)
+
+    save_file_button._handle_key_press(keys.KEY_ENTER)
+    saved_file_path = recoverpy.utils.saver.SAVER.last_saved_file
+    with open(saved_file_path, "r") as f:
+        assert f.read().strip() == "TEST OUTPUT\nTEST OUTPUT\nTEST OUTPUT"
