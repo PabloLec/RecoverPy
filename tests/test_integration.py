@@ -26,7 +26,7 @@ def test_open_config_screen():
     assert "ConfigScreen" in str(type(get_screen()))
 
 
-def test_wrong_save_path():
+def test_wrong_save_path_confirm():
     assert get_screen().master._popup is None
 
     save_path_textbox = get_screen().master.get_widgets()[0]
@@ -34,12 +34,38 @@ def test_wrong_save_path():
     save_path_confirm_button = get_screen().master.get_widgets()[1]
     save_path_confirm_button._handle_key_press(keys.KEY_ENTER)
     assert get_screen().master._popup is not None
+    assert get_screen().master._popup.get_title() == "Path invalid"
 
     get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
     assert get_screen().master._popup is None
 
 
-def test_wrong_log_path():
+def test_wrong_save_path_save_all():
+    save_button = get_screen().master.get_widgets()[7]
+    save_button._handle_key_press(keys.KEY_ENTER)
+
+    assert get_screen().master._popup is not None
+    assert get_screen().master._popup.get_title() == "Path invalid"
+
+    get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
+    assert get_screen().master._popup is None
+
+
+def test_correct_save_path_confirm():
+    save_path_textbox = get_screen().master.get_widgets()[0]
+    save_path_textbox.set_text(recoverpy.utils.saver.SAVER.save_path)
+
+    save_path_confirm_button = get_screen().master.get_widgets()[1]
+    save_path_confirm_button._handle_key_press(keys.KEY_ENTER)
+
+    assert get_screen().master._popup is not None
+    assert get_screen().master._popup._text == "Save path changed successfully"
+
+    get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
+    assert get_screen().master._popup is None
+
+
+def test_wrong_log_path_confirm():
     assert get_screen().master._popup is None
 
     log_path_textbox = get_screen().master.get_widgets()[2]
@@ -47,6 +73,32 @@ def test_wrong_log_path():
     log_path_confirm_button = get_screen().master.get_widgets()[3]
     log_path_confirm_button._handle_key_press(keys.KEY_ENTER)
     assert get_screen().master._popup is not None
+    assert get_screen().master._popup.get_title() == "Path invalid"
+
+    get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
+    assert get_screen().master._popup is None
+
+
+def test_wrong_log_path_save_all():
+    save_button = get_screen().master.get_widgets()[7]
+    save_button._handle_key_press(keys.KEY_ENTER)
+
+    assert get_screen().master._popup is not None
+    assert get_screen().master._popup.get_title() == "Path invalid"
+
+    get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
+    assert get_screen().master._popup is None
+
+
+def test_correct_log_path_confirm():
+    save_path_textbox = get_screen().master.get_widgets()[2]
+    save_path_textbox.set_text(recoverpy.utils.logger.LOGGER.log_path)
+
+    save_path_confirm_button = get_screen().master.get_widgets()[3]
+    save_path_confirm_button._handle_key_press(keys.KEY_ENTER)
+
+    assert get_screen().master._popup is not None
+    assert get_screen().master._popup._text == "Log path changed successfully"
 
     get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
     assert get_screen().master._popup is None
@@ -68,10 +120,12 @@ def test_set_logging():
     assert disable_logging_button.get_color() == 4
     assert recoverpy.utils.logger.LOGGER.log_enabled is True
 
+
+def test_correct_config_save_all():
     save_button = get_screen().master.get_widgets()[7]
     save_button._handle_key_press(keys.KEY_ENTER)
 
-    recoverpy.ui.handler.SCREENS_HANDLER.open_screen("parameters")
+    assert "ParametersScreen" in str(type(get_screen()))
 
 
 def test_select_partition():
