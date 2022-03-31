@@ -1,65 +1,64 @@
 from os import environ
-from pathlib import Path
 
 import pytest
-import yaml
 
-import recoverpy
-
-_CONFIG_FILE_PATH = (
-    Path(recoverpy.__file__).parent.absolute() / "config" / "config.yaml"
-)
-
-
-def set_config(save_directory: str = "/tmp/", log_directory: str = "/tmp/"):
-    config = {
-        "save_directory": save_directory,
-        "enable_logging": False,
-        "log_directory": log_directory,
-    }
-
-    with open(_CONFIG_FILE_PATH, "w") as file:
-        yaml.dump(config, file)
+from recoverpy.config.config import write_config_to_file
+from recoverpy.config.setup import setup
+from recoverpy.utils.errors import InvalidLogPath, InvalidSavePath, NoSavePath
+from recoverpy.utils.helper import is_user_root
+from recoverpy.utils.logger import LOGGER
+from recoverpy.utils.saver import SAVER
 
 
-def test_no_save_path():
-    set_config(save_directory="")
-
-    with pytest.raises(recoverpy.utils.errors.NoSavePath):
-        recoverpy.config.config.load_config()
+def test_no_save_path(mock_config):
+    with pytest.raises(NoSavePath):
+        write_config_to_file(save_path="", log_path=mock_config, enable_logging=False)
 
 
-def test_invalid_save_path():
-    set_config(save_directory="/foo/bar")
-
-    with pytest.raises(recoverpy.utils.errors.InvalidSavePath):
-        recoverpy.config.config.load_config()
-
-
-def test_no_log_path():
-    set_config(log_directory="")
-    recoverpy.config.config.load_config()
-
-    assert not recoverpy.utils.logger.LOGGER.log_enabled
+def test_invalid_save_path(mock_config):
+    with pytest.raises(InvalidSavePath):
+        write_config_to_file(
+            save_path="/foo/bar", log_path=mock_config, enable_logging=False
+        )
 
 
-def test_invalid_log_path():
-    set_config(log_directory="/foo/bar")
+def test_no_log_path(mock_config):
+    write_config_to_file(save_path=mock_config, log_path="", enable_logging=True)
 
-    with pytest.raises(recoverpy.utils.errors.InvalidLogPath):
-        recoverpy.config.config.load_config()
-
-
-def test_conf_parsing():
-    set_config()
-    recoverpy.config.config.load_config()
-
-    assert recoverpy.utils.saver.SAVER.save_path == "/tmp/"
-    assert recoverpy.utils.logger.LOGGER.log_path == "/tmp/"
+    assert not LOGGER.log_enabled
 
 
-def test_terminal_fix():
-    environ["TERM"] = "Dummy value"
-    recoverpy.verify_terminal_conf()
+def test_invalid_log_path(mock_config):
+    with pytest.raises(InvalidLogPath):
+        write_config_to_file(
+            save_path=mock_config, log_path="/foo/bar", enable_logging=True
+        )
+
+
+def test_conf_parsing(mock_config):
+    write_config_to_file(
+        save_path=mock_config, log_path=mock_config, enable_logging=True
+    )
+
+    assert SAVER.save_path == mock_config
+    assert LOGGER.log_path == mock_config
+
+
+def test_missing_dependencies(MISSING_DEPENDENCY):
+    with pytest.raises(OSError):
+        setup()
+
+
+def test_terminal_env_var_fix():
+    environ["TERM"] = "test"
+    setup()
 
     assert environ["TERM"] == "xterm-256color"
+
+
+def test_user_root(PARAMETERS_SCREEN, USER_IS_ROOT):
+    assert is_user_root(PARAMETERS_SCREEN.master) is True
+
+
+def test_user_not_root(PARAMETERS_SCREEN, USER_IS_NOT_ROOT):
+    assert is_user_root(PARAMETERS_SCREEN.master) is False

@@ -9,7 +9,6 @@ on: [push, pull_request]
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,7 +18,8 @@ jobs:
           - "3.8"
           - "3.9"
           - "3.10"
-
+    env:
+      IS_GITHUB_RUNNER: "true"
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -30,8 +30,8 @@ jobs:
     - name: Install dependencies
       run: |
         pip install --upgrade pip
-        pip install .
-        pip install pytest
+        pip install poetry
+        poetry export --dev --without-hashes > requirements.txt && pip install -r requirements.txt
         sudo apt install progress -y
     - name: Run unit tests
       run: |

@@ -1,6 +1,5 @@
-def test_config_ui(CONFIG_VIEW):
-    CONFIG_VIEW.create_ui_content()
-    instance_dir = dir(CONFIG_VIEW)
+def test_config_ui(CONFIG_SCREEN):
+    instance_dir = dir(CONFIG_SCREEN)
 
     assert "log_path_box" in instance_dir
     assert "save_path_box" in instance_dir

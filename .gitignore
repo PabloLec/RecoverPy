@@ -13,3 +13,4 @@ flake-report
 .pytest_cache
 .vscode
 .coverage
+cov_htmltests

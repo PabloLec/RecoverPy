@@ -1,93 +1,80 @@
-from queue import Queue
+from pathlib import Path
 
 import pytest
-from py_cui import PyCUI
 
 import recoverpy
 
+from .fixtures.mock_check_output import check_output
+from .fixtures.mock_grep import create_grep_process
+from .fixtures.mock_lsblk_output import MOCK_LSBLK_OUTPUT
 
-@pytest.fixture()
-def PARAMETERS_VIEW():
-    view = recoverpy.views.view_parameters.ParametersView.__new__(
-        recoverpy.views.view_parameters.ParametersView
+
+@pytest.fixture(scope="session", autouse=True)
+def global_mock(session_mocker):
+    session_mocker.patch.object(
+        recoverpy.utils.search.SearchEngine,
+        "create_grep_process",
+        new=create_grep_process,
     )
-    view.master = PyCUI(10, 10)
-
-    partitions = [
-        ["sda", "disk"],
-        ["sda1", "part", "ext4", "/media/disk1"],
-        ["sdb", "disk"],
-        ["sdb1", "part", "ext4", "/media/disk2"],
-        ["mmcblk0", "disk"],
-        ["mmcblk0p1", "part", "vfat", "/boot/firmware"],
-        ["mmcblk0p2", "part", "ext4", "/"],
-        ["system-root", "lvm", "btrfs", "/test"],
-        ["vdb", "disk", "LVM2_member"],
-        ["vda2", "part", "LVM2_member"],
-    ]
-    view.partitions_list = partitions
-
-    return view
-
-
-@pytest.fixture()
-def SEARCH_VIEW():
-    view = recoverpy.views.view_search.SearchView.__new__(
-        recoverpy.views.view_search.SearchView
+    session_mocker.patch.object(
+        recoverpy.ui.screen_with_block_display, "check_output", new=check_output
     )
-    view.master = PyCUI(10, 10)
-    view.queue_object = Queue()
-    lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-    view.queue_object.put(f"- 1000: {lorem}")
-    view.queue_object.put(f"- 2000: {lorem}")
-    view.queue_object.put(f"- 3000: {lorem}")
-    view.result_index = 0
-    view.grep_progress = ""
-    view.block_size = 512
-    view.searched_string = "test"
-    view.inodes = [512, 1024, 2056]
-
-    return view
+    session_mocker.patch("py_cui.curses.wrapper", return_value=None)
+    session_mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
+    session_mocker.patch("recoverpy.utils.helper.is_user_root", return_value=True)
 
 
-@pytest.fixture()
-def RESULTS_VIEW():
-    view = recoverpy.views.view_results.ResultsView.__new__(
-        recoverpy.views.view_results.ResultsView
+@pytest.fixture(scope="session", autouse=True)
+def mock_config(session_mocker, tmpdir_factory):
+    test_dir = tmpdir_factory.mktemp("test_dir")
+    session_mocker.patch("recoverpy.config.config._CONFIG_DIR", test_dir)
+    recoverpy.config.config.write_config_to_file(
+        save_path=str(test_dir), log_path=str(test_dir), enable_logging=True
     )
-    view.master = PyCUI(10, 10)
-    view.partition = "/dev/sda1"
-    view.saved_blocks_dict = {}
-    view.current_block = 5
-
-    return view
-
-
-@pytest.fixture()
-def CONFIG_VIEW():
-    view = recoverpy.views.view_config.ConfigView.__new__(
-        recoverpy.views.view_config.ConfigView
-    )
-    view.master = PyCUI(10, 10)
-    view._log_enabled = True
-
-    return view
+    return Path(test_dir)
 
 
 @pytest.fixture(scope="session")
-def TEST_FILE(tmp_path_factory):
-    lorem = "Integer vitae ultrices magna. Nam non cursus odio. In dapibus augue.\n"
-    file = tmp_path_factory.mktemp("data") / "file"
-    with file.open("w", encoding="utf-8") as f:
-        f.write(lorem * 20000 + "TEST STRING" + lorem * 20000)
-
-    return file
+def SCREENS_HANDLER():
+    return recoverpy.ui.handler.SCREENS_HANDLER
 
 
-@pytest.fixture(scope="session")
-def TEST_SEARCH_VIEW(TEST_FILE):
-    return recoverpy.views.view_search.SearchView(
-        master=PyCUI(10, 10),
-        partition=TEST_FILE,
-        string_to_search="TEST STRING",
+@pytest.fixture(scope="module")
+def PARAMETERS_SCREEN(SCREENS_HANDLER):
+    SCREENS_HANDLER.open_screen("parameters")
+    return SCREENS_HANDLER.screens["parameters"]
+
+
+@pytest.fixture(scope="module")
+def SEARCH_SCREEN(SCREENS_HANDLER):
+    SCREENS_HANDLER.open_screen(
+        "search", partition="/dev/test", string_to_search="test"
     )
+    return SCREENS_HANDLER.screens["search"]
+
+
+@pytest.fixture(scope="module")
+def BLOCK_SCREEN(SCREENS_HANDLER):
+    SCREENS_HANDLER.open_screen("block", partition="/dev/test", initial_block=0)
+    return SCREENS_HANDLER.screens["block"]
+
+
+@pytest.fixture(scope="module")
+def CONFIG_SCREEN(SCREENS_HANDLER):
+    SCREENS_HANDLER.open_screen("config")
+    return SCREENS_HANDLER.screens["config"]
+
+
+@pytest.fixture(scope="function")
+def MISSING_DEPENDENCY(mocker):
+    mocker.patch("recoverpy.config.setup.is_dependency_installed", return_value=False)
+
+
+@pytest.fixture(scope="function")
+def USER_IS_ROOT(mocker):
+    mocker.patch("recoverpy.utils.helper.geteuid", return_value=0)
+
+
+@pytest.fixture(scope="function")
+def USER_IS_NOT_ROOT(mocker):
+    mocker.patch("recoverpy.utils.helper.geteuid", return_value=1)

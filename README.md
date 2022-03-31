@@ -16,6 +16,10 @@
 <a href="https://pepy.tech/project/recoverpy" target="_blank">
     <img src="https://static.pepy.tech/personalized-badge/recoverpy?period=total&units=abbreviation&left_color=grey&right_color=red&left_text=downloads" alt="Downloads">
 </a>
+</a>
+<a href="#" target="_blank">
+    <img src="docs/assets/coverage.svg" alt="Coverage">
+</a>
 <a href="#" target="_blank">
     <img src="https://github.com/PabloLec/recoverpy/actions/workflows/recoverpy-tests.yml/badge.svg?branch=main" alt="Tests">
 </a>
@@ -84,7 +88,7 @@ Note that searching a string in a whole partition may take _a while_. (see [euph
 
 Default save path is `/tmp/`, click on Settings to edit configuration.
 
-:three: **Start search**, Results will appear in the left-hand box. 
+:three: **Start search**, Results will appear in the left-hand box.
 
 :four: **Select a result** to display the corresponding partition block content in the right-hand box.
 
