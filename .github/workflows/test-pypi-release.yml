@@ -18,3 +18,6 @@ jobs:
       - run: poetry config pypi-token.testpypi ${{ secrets.TEST_PYPI_TOKEN }}
       - name: Publish package
         run: poetry publish --build -r testpypi
+      - name: Publish failure (if tag already exists)
+        if: ${{ failure() }}
+        run: poetry publish --build -r testpypi --dry-run
