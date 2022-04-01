@@ -67,9 +67,14 @@ flake8-aaa = "^0.12.1"
 pytest-mock = "3.6.1"
 pytest-cov = "^3.0.0"
 coverage-badge = "^1.1.0"
+mypy = "^0.942"
 
 [tool.isort]
 profile = "black"
+
+[tool.mypy]
+python_version = 3.6
+ignore_missing_imports = "true"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
