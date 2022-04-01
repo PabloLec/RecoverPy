@@ -1,3 +1,4 @@
+from sys import exit
 from typing import Dict, Type
 
 from py_cui import PyCUI
@@ -35,6 +36,7 @@ class ScreensHandler:
         master: PyCUI = PyCUI(10, 10)
         master.toggle_unicode_borders()
         master.set_title("RecoverPy 1.5.0")
+        master.run_on_exit(exit)
 
         return master
 
