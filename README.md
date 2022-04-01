@@ -21,7 +21,7 @@
     <img src="docs/assets/coverage.svg" alt="Coverage">
 </a>
 <a href="#" target="_blank">
-    <img src="https://github.com/PabloLec/recoverpy/actions/workflows/recoverpy-tests.yml/badge.svg?branch=main" alt="Tests">
+    <img src="https://github.com/PabloLec/recoverpy/actions/workflows/pytest.yml/badge.svg?branch=main" alt="Tests">
 </a>
 </p>
 
