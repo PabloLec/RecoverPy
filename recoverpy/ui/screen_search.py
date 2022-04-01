@@ -7,6 +7,7 @@ from py_cui import PyCUI
 
 from recoverpy.ui import handler
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
+from recoverpy.utils.helper import decode_result
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
 from recoverpy.utils.search import SEARCH_ENGINE
@@ -71,9 +72,11 @@ class SearchScreen(MenuWithBlockDisplay):
 
     def add_results_to_list(self, new_results: list):
         for result in new_results:
-            string_result: str = str(result)[2:-1]
+            string_result: str = decode_result(result)
             inode: str = findall(r"^([0-9]+)\:", string_result)[0]
-            content: str = string_result[len(inode) + 1 :]
+
+            content_start: int = len(inode) + 1
+            content: str = string_result[content_start:]
 
             self.inodes.append(int(inode))
             self.search_results_scroll_menu.add_item(content)

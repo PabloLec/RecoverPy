@@ -3,6 +3,7 @@ from subprocess import CalledProcessError, check_output
 from py_cui import PyCUI
 
 from recoverpy.ui.screen import Screen
+from recoverpy.utils.helper import decode_result
 from recoverpy.utils.logger import LOGGER
 
 
@@ -41,11 +42,7 @@ class MenuWithBlockDisplay(Screen):
                     f"skip={block}",
                 ]
             )
-            # Try/Catch to decode raw result in utf-8
-            try:
-                self.current_result = dd_result.decode("utf-8")
-            except UnicodeDecodeError:
-                self.current_result = str(dd_result)
+            self.current_result = decode_result(dd_result)
             self.current_block = block
 
             LOGGER.write("debug", "dd command successful")

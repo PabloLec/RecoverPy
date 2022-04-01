@@ -61,3 +61,17 @@ def format_lsblk_output(lsblk_output: str) -> dict:
 
 def is_dependency_installed(command: str) -> bool:
     return call(["which", command], stdout=DEVNULL) == 0
+
+
+def decode_result(result):
+    codecs = ("unicode_escape", "utf-8")
+    for codec in codecs:
+        try:
+            decoded = result.decode(codec)
+            break
+        except UnicodeError:
+            continue
+    else:
+        decoded = str(result)[2:-1]
+
+    return "".join(([c for c in decoded if c.isprintable()]))
