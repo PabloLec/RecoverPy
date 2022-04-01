@@ -64,7 +64,7 @@ def is_dependency_installed(command: str) -> bool:
 
 
 def decode_result(result):
-    codecs = ("unicode_escape", "utf-8")
+    codecs = ("utf-8", "unicode_escape")
     for codec in codecs:
         try:
             decoded = result.decode(codec)
