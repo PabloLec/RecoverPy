@@ -1,5 +1,4 @@
 from os import environ
-from time import sleep
 
 from py_cui import keys
 from pytest import mark
@@ -19,7 +18,6 @@ def test_search_ui(SEARCH_SCREEN):
 
 
 def test_blocklist_population(SEARCH_SCREEN):
-    sleep(2.5)
     item_list = SEARCH_SCREEN.search_results_scroll_menu.get_item_list()
     expected = [
         " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do eiusmod",

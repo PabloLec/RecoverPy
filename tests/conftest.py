@@ -1,4 +1,5 @@
 from pathlib import Path
+from time import sleep
 from unittest.mock import MagicMock
 
 import pytest
@@ -61,12 +62,14 @@ def SEARCH_SCREEN(SCREENS_HANDLER):
     SCREENS_HANDLER.open_screen(
         "search", partition="/dev/test", string_to_search="test"
     )
+    sleep(2.5)
     return SCREENS_HANDLER.screens["search"]
 
 
 @pytest.fixture(scope="module")
 def BLOCK_SCREEN(SCREENS_HANDLER):
     SCREENS_HANDLER.open_screen("block", partition="/dev/test", initial_block=0)
+    sleep(2.5)
     return SCREENS_HANDLER.screens["block"]
 
 
