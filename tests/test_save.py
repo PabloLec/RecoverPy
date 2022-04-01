@@ -1,4 +1,5 @@
 import pathlib
+from time import sleep
 
 from py_cui import keys
 
@@ -6,6 +7,7 @@ import recoverpy
 
 
 def test_save_single_block(SEARCH_SCREEN):
+    sleep(1.5)
     SEARCH_SCREEN.search_results_scroll_menu._handle_key_press(keys.KEY_ENTER)
     SEARCH_SCREEN.handle_save_popup_choice(choice="Save currently displayed block")
 
