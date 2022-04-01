@@ -63,11 +63,11 @@ def is_dependency_installed(command: str) -> bool:
     return call(["which", command], stdout=DEVNULL) == 0
 
 
-def decode_result(result: str) -> str:
+def decode_result(result: bytes) -> str:
     return result.decode("utf-8", errors="ignore")
 
 
-def decode_printable(result: str) -> str:
+def decode_printable(result: bytes) -> str:
     return "".join(([c for c in decode_result(result) if c.isprintable()]))
 
 

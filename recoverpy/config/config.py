@@ -10,8 +10,8 @@ from recoverpy.utils.saver import SAVER
 _CONFIG_DIR = Path(__file__).parent.absolute()
 
 
-def is_path_valid(path: str) -> bool:
-    path: Path = Path(path)
+def is_path_valid(string_path: str) -> bool:
+    path: Path = Path(string_path)
     try:
         if not path.is_dir():
             return False
