@@ -1,6 +1,4 @@
-# This workflow uploads recoverpy to PyPI and AUR on new release.
-
-name: Upload Python Package
+name: Upload Python Package to PyPI
 
 on:
   release:
@@ -8,19 +6,6 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - name: pypi-github-sync
-      uses: PabloLec/pypi-github-sync@v1.0.2
-      with:
-          github_repo: PabloLec/recoverpy
-          twine_username: ${{ secrets.TWINE_USERNAME }}
-          twine_password: ${{ secrets.TWINE_PASSWORD }}
-          verify_metadata: true
-          skip_existing: true
-          verbose: true
-
-  aur-sync:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
