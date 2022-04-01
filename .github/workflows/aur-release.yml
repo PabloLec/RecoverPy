@@ -1,8 +1,6 @@
-name: Upload Python Package to PyPI
+name: Release on AUR
 
-on:
-  release:
-    types: [created]
+on: workflow_dispatch
 
 jobs:
   deploy:

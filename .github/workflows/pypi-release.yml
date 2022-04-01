@@ -1,6 +1,8 @@
-name: Upload Python Package to PyPI
+name: Release on PyPI
 
-on: workflow_dispatch
+on:
+  release:
+    types: [created]
 
 jobs:
   deploy:
