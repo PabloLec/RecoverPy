@@ -20,4 +20,4 @@ jobs:
         run: poetry publish --build -r testpypi
       - name: Publish failure (if tag already exists)
         if: ${{ failure() }}
-        run: poetry publish --build -r testpypi --dry-run
+        run: poetry publish -r testpypi --dry-run
