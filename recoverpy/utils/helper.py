@@ -63,15 +63,9 @@ def is_dependency_installed(command: str) -> bool:
     return call(["which", command], stdout=DEVNULL) == 0
 
 
-def decode_result(result):
-    codecs = ("utf-8", "unicode_escape")
-    for codec in codecs:
-        try:
-            decoded = result.decode(codec)
-            break
-        except UnicodeError:
-            continue
-    else:
-        decoded = str(result)[2:-1]
+def decode_result(result: str) -> str:
+    return result.decode("utf-8", errors="ignore")
 
-    return "".join(([c for c in decoded if c.isprintable()]))
+
+def decode_printable(result: str) -> str:
+    return "".join(([c for c in decode_result(result) if c.isprintable()]))
