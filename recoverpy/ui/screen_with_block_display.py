@@ -3,7 +3,7 @@ from subprocess import CalledProcessError, check_output
 from py_cui import PyCUI
 
 from recoverpy.ui.screen import Screen
-from recoverpy.utils.helper import decode_result
+from recoverpy.utils.helper import decode_result, get_block_size
 from recoverpy.utils.logger import LOGGER
 
 
@@ -39,6 +39,7 @@ class MenuWithBlockDisplay(Screen):
                     f"if={self.partition}",
                     "count=1",
                     "status=none",
+                    f"bs={get_block_size(self.partition)}",
                     f"skip={block}",
                 ]
             )
@@ -59,10 +60,14 @@ class MenuWithBlockDisplay(Screen):
     def update_textbox(self):
         self.update_horizontal_char_limit()
 
-        # Format raw result to display it in the text box
+        # Format raw result to fit in the text box
         blocklines = [
             str(self.current_result)[i : i + self.horizontal_char_limit]
-            for i in range(0, len(str(self.current_result)), self.horizontal_char_limit)
+            for i in range(
+                0,
+                len(str(self.current_result)) + self.horizontal_char_limit,
+                self.horizontal_char_limit,
+            )
         ]
         formated_result = "\n".join(blocklines)
 

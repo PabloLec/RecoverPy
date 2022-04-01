@@ -32,6 +32,12 @@ def set(screen):
         keys.KEY_F7,
         screen.display_next_block,
     )
+    screen.blockcontent_box.add_text_color_rule(
+        screen.searched_string,
+        BLACK_ON_GREEN,
+        "contains",
+        match_type="regex",
+    )
 
     screen.previous_button: Button = screen.master.add_button(
         "<",

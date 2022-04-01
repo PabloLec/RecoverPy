@@ -69,3 +69,12 @@ def decode_result(result: str) -> str:
 
 def decode_printable(result: str) -> str:
     return "".join(([c for c in decode_result(result) if c.isprintable()]))
+
+
+def get_block_size(partition: str) -> int:
+    return int(
+        check_output(
+            ["blockdev", "--getbsz", partition],
+            encoding="utf-8",
+        )
+    )

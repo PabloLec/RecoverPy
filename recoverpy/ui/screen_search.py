@@ -7,7 +7,7 @@ from py_cui import PyCUI
 
 from recoverpy.ui import handler
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
-from recoverpy.utils.helper import decode_printable
+from recoverpy.utils.helper import decode_printable, get_block_size
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
 from recoverpy.utils.search import SEARCH_ENGINE
@@ -16,16 +16,16 @@ from recoverpy.utils.search import SEARCH_ENGINE
 class SearchScreen(MenuWithBlockDisplay):
     """Display search results and corresponding blocks content."""
 
-    block_size: int = 512
-
     def __init__(self, master: PyCUI, partition: str, string_to_search: str):
         super().__init__(master)
 
         self.queue_object: Queue = Queue()
         self.blockindex: int = 0
-        self.inodes: list = []
+        self.block_numbers: list = []
         self.partition: str = partition
+        self.block_size: int = get_block_size(partition)
         self.searched_string: str = string_to_search
+        self._encoded_search_string: bytes = string_to_search.encode()
 
         self.create_ui_content()
 
@@ -74,18 +74,41 @@ class SearchScreen(MenuWithBlockDisplay):
         for result in new_results:
             string_result: str = decode_printable(result)
             inode: str = findall(r"^([0-9]+)\:", string_result)[0]
+            result_offset = self.find_result_offset(result)
 
-            content_start: int = len(inode) + 1
+            content_start: int = self.find_content_start(inode, string_result)
             content: str = string_result[content_start:]
-
-            self.inodes.append(int(inode))
+            self.block_numbers.append(
+                str(int(int(inode) / self.block_size) + result_offset)
+            )
             self.search_results_scroll_menu.add_item(content)
 
+    def find_result_offset(self, result: bytes) -> int:
+        result_index: int = result.index(self._encoded_search_string)
+        return int(result_index / self.block_size)
+
+    def find_content_start(self, inode: str, result: str) -> int:
+        searched_string_pos: int = result.index(self.searched_string)
+
+        row_start_pos: int = self.search_results_scroll_menu.get_absolute_start_pos()[0]
+        row_stop_pos: int = self.search_results_scroll_menu.get_absolute_stop_pos()[0]
+        row_length = row_stop_pos - row_start_pos
+
+        is_result_too_far: bool = (
+            searched_string_pos + len(self.searched_string) > row_length
+        )
+
+        if is_result_too_far and len(result) - searched_string_pos > row_length:
+            return searched_string_pos
+        elif is_result_too_far:
+            return len(result) - row_length
+        else:
+            return len(inode) + 1
+
     def update_block_number(self):
-        inode: str = self.inodes[
+        self.current_block = self.block_numbers[
             int(self.search_results_scroll_menu.get_selected_item_index())
         ]
-        self.current_block = str(int(inode / self.block_size))
 
         LOGGER.write("debug", f"Displayed block set to {self.current_block}")
 
