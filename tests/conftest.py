@@ -1,4 +1,5 @@
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -22,6 +23,16 @@ def global_mock(session_mocker):
     session_mocker.patch("py_cui.curses.wrapper", return_value=None)
     session_mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
     session_mocker.patch("recoverpy.utils.helper.is_user_root", return_value=True)
+    session_mocker.patch(
+        "recoverpy.utils.helper.get_block_size", MagicMock(return_value=4096)
+    )
+    session_mocker.patch(
+        "recoverpy.ui.screen_with_block_display.get_block_size",
+        MagicMock(return_value=4096),
+    )
+    session_mocker.patch(
+        "recoverpy.ui.screen_search.get_block_size", MagicMock(return_value=4096)
+    )
 
 
 @pytest.fixture(scope="session", autouse=True)

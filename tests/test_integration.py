@@ -211,20 +211,20 @@ def test_go_to_block_screen():
 
 
 def test_save_multiple_blocks():
-    previous_button = get_screen().master.get_widgets()[0]
+    next_button = get_screen().master.get_widgets()[1]
     block_textbox = get_screen().master.get_widgets()[2]
     add_block_button = get_screen().master.get_widgets()[3]
     save_file_button = get_screen().master.get_widgets()[4]
 
-    assert block_textbox.get_title() == "Block 3"
+    assert block_textbox.get_title() == "Block 0"
     add_block_button._handle_key_press(keys.KEY_ENTER)
-    previous_button._handle_key_press(keys.KEY_ENTER)
-
-    assert block_textbox.get_title() == "Block 2"
-    add_block_button._handle_key_press(keys.KEY_ENTER)
-    previous_button._handle_key_press(keys.KEY_ENTER)
+    next_button._handle_key_press(keys.KEY_ENTER)
 
     assert block_textbox.get_title() == "Block 1"
+    add_block_button._handle_key_press(keys.KEY_ENTER)
+    next_button._handle_key_press(keys.KEY_ENTER)
+
+    assert block_textbox.get_title() == "Block 2"
     add_block_button._handle_key_press(keys.KEY_ENTER)
     add_block_button._handle_key_press(keys.KEY_ENTER)
 

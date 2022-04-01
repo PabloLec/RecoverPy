@@ -74,16 +74,16 @@ class SearchScreen(MenuWithBlockDisplay):
         for result in new_results:
             string_result: str = decode_printable(result)
             inode: str = findall(r"^([0-9]+)\:", string_result)[0]
-            result_offset = self.find_result_offset(result)
+            result_block_offset = self.find_result_block_offset(result)
 
             content_start: int = self.find_content_start(inode, string_result)
             content: str = string_result[content_start:]
             self.block_numbers.append(
-                str(int(int(inode) / self.block_size) + result_offset)
+                str(int(int(inode) / self.block_size) + result_block_offset)
             )
             self.search_results_scroll_menu.add_item(content)
 
-    def find_result_offset(self, result: bytes) -> int:
+    def find_result_block_offset(self, result: bytes) -> int:
         result_index: int = result.index(self._encoded_search_string)
         return int(result_index / self.block_size)
 
