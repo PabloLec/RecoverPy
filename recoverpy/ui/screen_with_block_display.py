@@ -1,4 +1,5 @@
 from subprocess import CalledProcessError, check_output
+from typing import Optional
 
 from py_cui import PyCUI
 
@@ -15,13 +16,11 @@ class MenuWithBlockDisplay(Screen):
     def __init__(self, master: PyCUI):
         super().__init__(master)
 
-        self.horizontal_char_limit = 0
+        self.horizontal_char_limit: int = 0
 
-        self.current_block = None
-        self.current_result = None
-
-        self.blockcontent_box = None
-        self.partition = None
+        self.current_block: Optional[str] = None
+        self.current_result: Optional[str] = None
+        self.partition: Optional[str] = None
 
     def get_dd_result(self, block: str = None):
         if block is None:
@@ -61,7 +60,7 @@ class MenuWithBlockDisplay(Screen):
         self.update_horizontal_char_limit()
 
         # Format raw result to fit in the text box
-        blocklines = [
+        blocklines: list = [
             str(self.current_result)[i : i + self.horizontal_char_limit]
             for i in range(
                 0,
@@ -69,7 +68,7 @@ class MenuWithBlockDisplay(Screen):
                 self.horizontal_char_limit,
             )
         ]
-        formated_result = "\n".join(blocklines)
+        formated_result: str = "\n".join(blocklines)
 
         # Fix for embedded null character
         formated_result = formated_result.replace(chr(0), "")
@@ -101,8 +100,12 @@ class MenuWithBlockDisplay(Screen):
         self.update_textbox()
 
     def update_horizontal_char_limit(self):
-        text_box_dimensions = self.blockcontent_box.get_cursor_limits_horizontal()
-        self.horizontal_char_limit = text_box_dimensions[1] - text_box_dimensions[0]
+        text_box_dimensions: tuple = (
+            self.blockcontent_box.get_cursor_limits_horizontal()
+        )
+        self.horizontal_char_limit: int = (
+            text_box_dimensions[1] - text_box_dimensions[0]
+        )
         LOGGER.write(
             "debug",
             f"Textbox char limit set to {self.horizontal_char_limit}",
