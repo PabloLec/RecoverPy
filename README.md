@@ -41,8 +41,9 @@
 
 # RecoverPy
 
-You can already find plenty of solutions to recover deleted files, but it can be a hassle to recover overwritten files. RecoverPy searches through every block of your partition to find your request.
-
+RecoverPy is a powerful tool that leverages your system capabilities to recover lost files.
+Unlike others, you can not only recover deleted files but also **overwritten** data.
+Every block of your partition will be scanned. You can even find a string in binary files.
 ## Demo
 
 <p align="center">
@@ -74,9 +75,7 @@ To install all dependencies:
 python3 -m recoverpy
 ```
 
-:red_circle: **You must have root access to use recoverpy**.
-
-*If you are not logged as root use `sudo recoverpy` or log in with `su -` before execution.*<br/>
+:red_circle: **You must be root or use sudo**.
 
 ---
 
@@ -84,9 +83,7 @@ python3 -m recoverpy
 
 :two: **Type a text string to search**. See tips below for better results.
 
-Note that searching a string in a whole partition may take _a while_. (see [euphemism](https://en.wikipedia.org/wiki/Euphemism "euphemism"))
-
-Default save path is `/tmp/`, click on Settings to edit configuration.
+-> Default save path is `/tmp/`, click on Settings to edit configuration.
 
 :three: **Start search**, Results will appear in the left-hand box.
 
@@ -107,8 +104,9 @@ Regarding the searched string:
 - Stay simple, your string is escaped but exotic characters may affect your results.
 - Try to remember the last edit you have made to your file.
 
-When you found your file:
+When you have found your file:
 
+- You might see multiple results. Your system often use different partion blocks to save successive versions of a file. Make sure you've found the last version.
 - Use the option to explore neighboring blocks to make sure you do not miss some part of your file.
 
 ## Contributing
