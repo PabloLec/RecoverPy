@@ -1,4 +1,4 @@
-from subprocess import CalledProcessError, check_output
+from subprocess import CalledProcessError
 from typing import Optional
 
 from py_cui import PyCUI
@@ -6,6 +6,7 @@ from py_cui import PyCUI
 from recoverpy.ui.screen import Screen
 from recoverpy.utils.helper import decode_result, get_block_size
 from recoverpy.utils.logger import LOGGER
+from recoverpy.utils.search import SearchEngine
 
 
 class MenuWithBlockDisplay(Screen):
@@ -22,9 +23,9 @@ class MenuWithBlockDisplay(Screen):
         self.current_result: Optional[str] = None
         self.partition: Optional[str] = None
 
-    def get_dd_result(self, block: str = None):
-        if block is None:
-            block = self.current_block
+    def get_dd_result(self, block_number: str = None):
+        if block_number is None:
+            block_number = self.current_block
 
         LOGGER.write(
             "debug",
@@ -32,18 +33,14 @@ class MenuWithBlockDisplay(Screen):
         )
 
         try:
-            dd_result = check_output(
-                [
-                    "dd",
-                    f"if={self.partition}",
-                    "count=1",
-                    "status=none",
-                    f"bs={get_block_size(self.partition)}",
-                    f"skip={block}",
-                ]
+            dd_result = SearchEngine.get_dd_output(
+                partition=self.partition,
+                block_size=get_block_size(self.partition),
+                block_number=block_number,
             )
+
             self.current_result = decode_result(dd_result)
-            self.current_block = block
+            self.current_block = block_number
 
             LOGGER.write("debug", "dd command successful")
         except CalledProcessError:
@@ -92,11 +89,11 @@ class MenuWithBlockDisplay(Screen):
             LOGGER.write("error", f"Cannot display block {self.current_block} + 1")
             return
 
-    def display_block(self, block: str):
-        if int(block) < 0:
+    def display_block(self, block_number: str):
+        if int(block_number) < 0:
             return
 
-        self.get_dd_result(block=block)
+        self.get_dd_result(block_number=block_number)
         self.update_textbox()
 
     def update_horizontal_char_limit(self):

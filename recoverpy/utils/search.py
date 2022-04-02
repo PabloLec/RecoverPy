@@ -90,5 +90,18 @@ class SearchEngine:
 
         return new_results, new_blockindex
 
+    @staticmethod
+    def get_dd_output(partition: str, block_size: int, block_number: str) -> str:
+        return check_output(
+            [
+                "dd",
+                f"if={partition}",
+                "count=1",
+                "status=none",
+                f"bs={block_size}",
+                f"skip={block_number}",
+            ]
+        )
+
 
 SEARCH_ENGINE: SearchEngine = SearchEngine()

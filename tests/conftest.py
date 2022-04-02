@@ -6,7 +6,7 @@ import pytest
 
 import recoverpy
 
-from .fixtures.mock_check_output import check_output
+from .fixtures.mock_dd_output import DD_OUTPUT
 from .fixtures.mock_grep import create_grep_process
 from .fixtures.mock_lsblk_output import MOCK_LSBLK_OUTPUT
 
@@ -18,8 +18,9 @@ def global_mock(session_mocker):
         "create_grep_process",
         new=create_grep_process,
     )
-    session_mocker.patch.object(
-        recoverpy.ui.screen_with_block_display, "check_output", new=check_output
+    session_mocker.patch(
+        "recoverpy.utils.search.SearchEngine.get_dd_output",
+        MagicMock(return_value=DD_OUTPUT),
     )
     session_mocker.patch("py_cui.curses.wrapper", return_value=None)
     session_mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
