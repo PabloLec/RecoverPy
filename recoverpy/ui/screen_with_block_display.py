@@ -33,7 +33,7 @@ class MenuWithBlockDisplay(Screen):
         )
 
         try:
-            dd_result = SearchEngine.get_dd_output(
+            dd_result: bytes = SearchEngine.get_dd_output(
                 partition=self.partition,
                 block_size=get_block_size(self.partition),
                 block_number=block_number,

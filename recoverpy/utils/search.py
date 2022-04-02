@@ -91,7 +91,7 @@ class SearchEngine:
         return new_results, new_blockindex
 
     @staticmethod
-    def get_dd_output(partition: str, block_size: int, block_number: str) -> str:
+    def get_dd_output(partition: str, block_size: int, block_number: str) -> bytes:
         return check_output(
             [
                 "dd",
