@@ -53,55 +53,55 @@ class SearchScreen(MenuWithBlockDisplay):
 
     def dequeue_results(self):
         while True:
-            try:
-                new_results: list
-                new_results, self.blockindex = SEARCH_ENGINE.get_new_results(
-                    self.queue_object,
-                    self.blockindex,
-                )
-            except TypeError:
-                # If no new results
+            output: tuple = SEARCH_ENGINE.get_new_results(
+                self.queue_object, self.blockindex
+            )
+            if not output:
                 sleep(1)
                 continue
+            new_results: list = output[0]
+            self.blockindex = output[1]
 
             self.add_results_to_list(new_results=new_results)
             self.set_title()
 
-            # Sleeps to avoid unnecessary overload
+            # Sleep to avoid unnecessary overload
             sleep(1)
 
     def add_results_to_list(self, new_results: list):
         for result in new_results:
             string_result: str = decode_printable(result)
             inode: str = findall(r"^([0-9]+)\:", string_result)[0]
-            result_block_offset = self.find_result_block_offset(result)
-
-            content_start: int = self.find_content_start(inode, string_result)
-            content: str = string_result[content_start:]
-            self.block_numbers.append(
-                str(int(int(inode) / self.block_size) + result_block_offset)
+            result_block_offset = self.get_result_block_offset(result)
+            real_result_block_start: int = (
+                int(int(inode) / self.block_size) + result_block_offset
             )
+            self.block_numbers.append(str(real_result_block_start))
+
+            content_start: int = self.get_content_start(inode, string_result)
+            content: str = string_result[content_start:]
             self.search_results_scroll_menu.add_item(content)
 
-    def find_result_block_offset(self, result: bytes) -> int:
+    def get_result_block_offset(self, result: bytes) -> int:
         result_index: int = result.index(self._encoded_search_string)
         return int(result_index / self.block_size)
 
-    def find_content_start(self, inode: str, result: str) -> int:
+    def get_content_start(self, inode: str, result: str) -> int:
         searched_string_pos: int = result.index(self.searched_string)
 
-        row_start_pos: int = self.search_results_scroll_menu.get_absolute_start_pos()[0]
-        row_stop_pos: int = self.search_results_scroll_menu.get_absolute_stop_pos()[0]
-        row_length = row_stop_pos - row_start_pos
+        box_start_pos: int = self.search_results_scroll_menu.get_absolute_start_pos()[0]
+        box_stop_pos: int = self.search_results_scroll_menu.get_absolute_stop_pos()[0]
+        box_length: int = box_stop_pos - box_start_pos
 
-        is_result_too_far: bool = (
-            searched_string_pos + len(self.searched_string) > row_length
+        is_result_outside_box: bool = (
+            searched_string_pos + len(self.searched_string) > box_length
         )
+        is_result_longer_than_box: bool = len(result) - searched_string_pos > box_length
 
-        if is_result_too_far and len(result) - searched_string_pos > row_length:
+        if is_result_outside_box and is_result_longer_than_box:
             return searched_string_pos
-        elif is_result_too_far:
-            return len(result) - row_length
+        elif is_result_outside_box:
+            return len(result) - box_length
         else:
             return len(inode) + 1
 

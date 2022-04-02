@@ -82,7 +82,7 @@ class SearchEngine:
 
     def get_new_results(self, queue_object: Queue, current_blockindex: int) -> tuple:
         if len(list(queue_object.queue)) == current_blockindex:
-            return None
+            return tuple()
 
         queue_list: list = list(queue_object.queue)
         new_blockindex: int = len(queue_list)
