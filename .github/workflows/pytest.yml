@@ -33,4 +33,4 @@ jobs:
         pytest
     - name: Run Mypy
       run: |
-        mypy --ignore-missing-imports
+        mypy --ignore-missing-imports recoverpy
