@@ -79,7 +79,7 @@ python3 -m recoverpy
 
 :red_circle: **You must be root or use sudo**.
 
--> Default save path is `/tmp/`, click on Settings to edit configuration.
+:arrow_right: Default save path is `/tmp/`, click on Settings to edit configuration.
 
 ---
 
