@@ -1,6 +1,6 @@
 name: Test release upload
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   test_pypi_release:
