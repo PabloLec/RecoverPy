@@ -1,6 +1,9 @@
 name: Test release upload
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   test_pypi_release:
