@@ -67,7 +67,7 @@ flake8-aaa = "^0.12.1"
 pytest-mock = "3.6.1"
 pytest-cov = "^3.0.0"
 coverage-badge = "^1.1.0"
-mypy = "^0.942"
+mypy = "^0.950"
 types-PyYAML = "^6.0.7"
 
 [tool.isort]
