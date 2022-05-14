@@ -1,8 +1,8 @@
 from subprocess import PIPE, Popen
 
-MOCK_GREP_OUTPUT = """1000: Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do eiusmod
-2000: Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do eiusmod
-3000: Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do eiusmod"""
+MOCK_GREP_OUTPUT = """1000: Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do
+2000: Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do
+3000: Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do """
 
 
 def create_grep_process(self, searched_string: str, partition: str) -> Popen:
