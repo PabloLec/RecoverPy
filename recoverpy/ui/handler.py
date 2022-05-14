@@ -35,7 +35,7 @@ class ScreensHandler:
     def create_py_cui_master(self) -> PyCUI:
         master: PyCUI = PyCUI(10, 10)
         master.toggle_unicode_borders()
-        master.set_title("RecoverPy 1.5.0")
+        master.set_title("RecoverPy 1.5.1")
         master.run_on_exit(exit)
 
         return master
