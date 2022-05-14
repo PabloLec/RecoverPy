@@ -20,9 +20,9 @@ def test_search_ui(SEARCH_SCREEN):
 def test_blocklist_population(SEARCH_SCREEN):
     item_list = SEARCH_SCREEN.search_results_scroll_menu.get_item_list()
     expected = [
-        " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do  ",
-        " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do  ",
-        " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do  ",
+        " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do ",
+        " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed da ",
+        " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed du ",
     ]
     assert item_list == expected
 
@@ -41,7 +41,7 @@ def test_search_title(SEARCH_SCREEN):
 def test_block_number_update(SEARCH_SCREEN):
     SEARCH_SCREEN.search_results_scroll_menu._handle_key_press(keys.KEY_UP_ARROW)
     SEARCH_SCREEN.search_results_scroll_menu._handle_key_press(keys.KEY_ENTER)
-    item = " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do  "
+    item = " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do "
 
     assert SEARCH_SCREEN.current_block == "0"
     assert SEARCH_SCREEN.search_results_scroll_menu.get() == item
