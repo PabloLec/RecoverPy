@@ -6,7 +6,7 @@ from py_cui import PyCUI
 from recoverpy.ui.screen import Screen
 from recoverpy.utils.helper import decode_result, get_block_size
 from recoverpy.utils.logger import LOGGER
-from recoverpy.utils.search import SearchEngine
+from recoverpy.utils.search import SEARCH_ENGINE
 
 
 class MenuWithBlockDisplay(Screen):
@@ -33,7 +33,7 @@ class MenuWithBlockDisplay(Screen):
         )
 
         try:
-            dd_result: bytes = SearchEngine.get_dd_output(
+            dd_result: bytes = SEARCH_ENGINE.get_dd_output(
                 partition=self.partition,
                 block_size=get_block_size(self.partition),
                 block_number=block_number,

@@ -1,4 +1,5 @@
 from os import geteuid
+from re import findall
 from subprocess import DEVNULL, call, check_output
 
 from py_cui import PyCUI
@@ -67,8 +68,8 @@ def decode_result(result: bytes) -> str:
     return result.decode("utf-8", errors="ignore")
 
 
-def decode_printable(result: bytes) -> str:
-    return "".join(([c for c in decode_result(result) if c.isprintable()]))
+def get_printable(result: str) -> str:
+    return "".join(([c for c in result.replace("\n", " ") if c.isprintable()]))
 
 
 def get_block_size(partition: str) -> int:
@@ -78,3 +79,8 @@ def get_block_size(partition: str) -> int:
             encoding="utf-8",
         )
     )
+
+
+def get_inode(string: str) -> str:
+    match = findall(r"^([0-9]+)\:", string)
+    return match[0] if len(match) >= 1 else None

@@ -81,7 +81,6 @@ class ParametersScreen(Screen):
             return
 
         self.string_to_search = self.string_text_box.get()
-
         if not hasattr(self, "partition_to_search") or self.partition_to_search == "":
             # No partition selected
             self.master.show_message_popup(

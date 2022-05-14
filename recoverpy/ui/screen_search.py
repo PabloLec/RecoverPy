@@ -1,13 +1,11 @@
 from queue import Queue
-from re import findall
-from shlex import quote
 from time import sleep
 
 from py_cui import PyCUI
 
 from recoverpy.ui import handler
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
-from recoverpy.utils.helper import decode_printable, get_block_size
+from recoverpy.utils.helper import get_block_size, get_inode, get_printable
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
 from recoverpy.utils.search import SEARCH_ENGINE
@@ -25,16 +23,12 @@ class SearchScreen(MenuWithBlockDisplay):
         self.partition: str = partition
         self.block_size: int = get_block_size(partition)
         self.searched_string: str = string_to_search
-        self._encoded_search_string: bytes = string_to_search.encode()
+        self._first_line: str = string_to_search.strip().splitlines()[0]
 
         self.create_ui_content()
 
         SEARCH_ENGINE.start_search(self)
-        LOGGER.write(
-            "info",
-            f"Raw searched string:\n{self.searched_string}\n"
-            f"Formated searched string:\n{quote(self.searched_string)}",
-        )
+        LOGGER.write("info", f"Raw searched string:\n{self.searched_string}")
 
     def set_title(self, grep_progress: str = None):
         title: str = (
@@ -70,9 +64,10 @@ class SearchScreen(MenuWithBlockDisplay):
 
     def add_results_to_list(self, new_results: list):
         for result in new_results:
-            string_result: str = decode_printable(result)
-            inode: str = findall(r"^([0-9]+)\:", string_result)[0]
-            result_block_offset = self.get_result_block_offset(result)
+            string_result: str = get_printable(result)
+            inode: str = get_inode(string_result)
+            result_block_offset = self.get_result_block_offset(string_result)
+
             real_result_block_start: int = (
                 int(int(inode) / self.block_size) + result_block_offset
             )
@@ -82,13 +77,12 @@ class SearchScreen(MenuWithBlockDisplay):
             content: str = string_result[content_start:]
             self.search_results_scroll_menu.add_item(content)
 
-    def get_result_block_offset(self, result: bytes) -> int:
-        result_index: int = result.index(self._encoded_search_string)
+    def get_result_block_offset(self, result: str) -> int:
+        result_index: int = result.find(self._first_line)
         return int(result_index / self.block_size)
 
     def get_content_start(self, inode: str, result: str) -> int:
-        searched_string_pos: int = result.index(self.searched_string)
-
+        searched_string_pos: int = result.find(self._first_line)
         box_start_pos: int = self.search_results_scroll_menu.get_absolute_start_pos()[0]
         box_stop_pos: int = self.search_results_scroll_menu.get_absolute_stop_pos()[0]
         box_length: int = box_stop_pos - box_start_pos
@@ -101,7 +95,7 @@ class SearchScreen(MenuWithBlockDisplay):
         if is_result_outside_box and is_result_longer_than_box:
             return searched_string_pos
         elif is_result_outside_box:
-            return len(result) - box_length
+            return int(searched_string_pos - (box_length / 2))
         else:
             return len(inode) + 1
 
@@ -110,10 +104,15 @@ class SearchScreen(MenuWithBlockDisplay):
             int(self.search_results_scroll_menu.get_selected_item_index())
         ]
 
-        LOGGER.write("debug", f"Displayed block set to {self.current_block}")
+    def fix_block_number(self):
+        self.block_numbers[
+            int(self.search_results_scroll_menu.get_selected_item_index())
+        ] = SEARCH_ENGINE.fix_block_number(self.current_block)
+        self.update_block_number()
 
     def display_selected_block(self):
         self.update_block_number()
+        self.fix_block_number()
         self.display_block(self.current_block)
 
     def open_save_popup(self):
