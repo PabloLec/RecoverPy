@@ -4,8 +4,8 @@ from typing import Optional
 from py_cui import PyCUI
 
 from recoverpy.lib.helper import decode_result, get_block_size
-from recoverpy.lib.logger import LOGGER
 from recoverpy.lib.search import SearchEngine
+from recoverpy.ui import strings as STRINGS
 from recoverpy.ui.screen import Screen
 
 
@@ -28,11 +28,6 @@ class MenuWithBlockDisplay(Screen):
         if block_number is None:
             block_number = self.current_block
 
-        LOGGER.write(
-            "debug",
-            f"Getting 'dd' output for block {str(self.current_block)}",
-        )
-
         try:
             dd_result: bytes = self.search_engine.get_dd_output(
                 partition=self.partition,
@@ -42,16 +37,10 @@ class MenuWithBlockDisplay(Screen):
 
             self.current_result = decode_result(dd_result)
             self.current_block = block_number
-
-            LOGGER.write("debug", "dd command successful")
         except CalledProcessError:
             self.master.show_error_popup(
-                "Mmmmhhh...",
-                f"Error while opening block {str(self.current_block)}",
-            )
-            LOGGER.write(
-                "error",
-                f"Error while opening block {str(self.current_block)}",
+                STRINGS.title_generic_error,
+                f"{STRINGS.content_block_error} {str(self.current_block)}",
             )
 
     def update_textbox(self):
@@ -74,20 +63,16 @@ class MenuWithBlockDisplay(Screen):
         self.blockcontent_box.set_text(formated_result)
         self.blockcontent_box.set_title(f"Block {self.current_block}")
 
-        LOGGER.write("debug", f"Textbox updated with block {self.current_block}")
-
     def display_previous_block(self):
         try:
             self.display_block(str(int(self.current_block) - 1))
         except ValueError:
-            LOGGER.write("error", f"Cannot display block {self.current_block} - 1")
             return
 
     def display_next_block(self):
         try:
             self.display_block(str(int(self.current_block) + 1))
         except ValueError:
-            LOGGER.write("error", f"Cannot display block {self.current_block} + 1")
             return
 
     def display_block(self, block_number: str):
@@ -103,8 +88,4 @@ class MenuWithBlockDisplay(Screen):
         )
         self.horizontal_char_limit: int = (
             text_box_dimensions[1] - text_box_dimensions[0]
-        )
-        LOGGER.write(
-            "debug",
-            f"Textbox char limit set to {self.horizontal_char_limit}",
         )

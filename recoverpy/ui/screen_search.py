@@ -4,10 +4,10 @@ from time import sleep
 from py_cui import PyCUI
 
 from recoverpy.lib.helper import get_block_size, get_inode, get_printable
-from recoverpy.lib.logger import LOGGER
 from recoverpy.lib.saver import SAVER
 from recoverpy.lib.search import Results, SearchEngine
 from recoverpy.ui import handler
+from recoverpy.ui import strings as STRINGS
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 
 
@@ -28,7 +28,6 @@ class SearchScreen(MenuWithBlockDisplay):
 
         self.create_ui_content()
         self.search_engine.start_search(self)
-        LOGGER.write("info", f"Raw searched string:\n{self.searched_string}")
 
     def set_title(self, grep_progress: str = None):
         title: str = (
@@ -117,29 +116,31 @@ class SearchScreen(MenuWithBlockDisplay):
     def open_save_popup(self):
         if self.current_block is None:
             self.master.show_message_popup(
-                "",
-                "Please select a block first.",
+                STRINGS.title_empty,
+                STRINGS.content_no_block_selected,
             )
             return
 
         screen_choices: list = [
-            "Save currently displayed block",
-            "Explore neighboring blocks and save it all",
-            "Cancel",
+            STRINGS.choice_save_one,
+            STRINGS.choice_save_all,
+            STRINGS.choice_cancel,
         ]
         self.master.show_menu_popup(
-            "How do you want to save it ?",
+            STRINGS.title_save_choices,
             screen_choices,
             self.handle_save_popup_choice,
         )
 
     def handle_save_popup_choice(self, choice: str):
-        if choice == "Explore neighboring blocks and save it all":
+        if choice == STRINGS.choice_save_all:
             handler.SCREENS_HANDLER.open_screen(
                 "block",
                 partition=self.partition,
                 initial_block=self.current_block,
             )
-        elif choice == "Save currently displayed block":
+        elif choice == STRINGS.choice_save_one:
             SAVER.save_result_string(result=self.current_result)
-            self.master.show_message_popup("", "Result saved.")
+            self.master.show_message_popup(
+                STRINGS.title_empty, STRINGS.content_result_saved
+            )
