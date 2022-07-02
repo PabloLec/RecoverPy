@@ -3,8 +3,9 @@ from re import findall
 from py_cui import PyCUI
 
 from recoverpy.lib import helper
-from recoverpy.ui import contents, handler
+from recoverpy.ui import handler
 from recoverpy.ui import strings as STRINGS
+from recoverpy.ui.contents.screen_type import ScreenType
 from recoverpy.ui.screen import Screen
 
 
@@ -95,7 +96,7 @@ class ParametersScreen(Screen):
     def start_search(self, is_confirmed: bool):
         if is_confirmed:
             handler.SCREENS_HANDLER.open_screen(
-                contents.ScreenType.SEARCH,
+                ScreenType.SEARCH,
                 partition=self.partition_to_search,
                 string_to_search=self.string_to_search.strip(),
             )

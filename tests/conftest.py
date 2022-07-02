@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 import pytest
 
 import recoverpy
-from recoverpy.ui.contents import ScreenType
+from recoverpy.ui.contents.screen_type import ScreenType
 
 from .fixtures.mock_dd_output import DD_OUTPUT
 from .fixtures.mock_grep import start_grep_process

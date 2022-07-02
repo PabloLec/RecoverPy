@@ -1,4 +1,3 @@
-from enum import Enum
 from types import ModuleType
 from typing import Dict
 
@@ -8,14 +7,7 @@ from recoverpy.ui.contents import (
     screen_parameters_content,
     screen_search_content,
 )
-
-
-class ScreenType(Enum):
-    PARAMS = "ParametersScreen"
-    CONFIG = "ConfigScreen"
-    SEARCH = "SearchScreen"
-    BLOCK = "BlockScreen"
-
+from recoverpy.ui.contents.screen_type import ScreenType
 
 SCREEN_TYPE_TO_CONTENT: Dict[ScreenType, ModuleType] = {
     ScreenType.PARAMS: screen_parameters_content,
