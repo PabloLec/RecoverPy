@@ -4,23 +4,23 @@ from typing import Dict, Type
 from py_cui import PyCUI
 
 from recoverpy.ui import (
+    contents,
     screen,
     screen_block,
     screen_config,
     screen_parameters,
     screen_search,
 )
-from recoverpy.ui.contents import ScreenType
 
 
 class ScreensHandler:
     """Provide ui navigation logic."""
 
     SCREENS_CLASSES: Dict[str, Type] = {
-        ScreenType.PARAMS: screen_parameters.ParametersScreen,
-        ScreenType.CONFIG: screen_config.ConfigScreen,
-        ScreenType.SEARCH: screen_search.SearchScreen,
-        ScreenType.BLOCK: screen_block.BlockScreen,
+        contents.ScreenType.PARAMS: screen_parameters.ParametersScreen,
+        contents.ScreenType.CONFIG: screen_config.ConfigScreen,
+        contents.ScreenType.SEARCH: screen_search.SearchScreen,
+        contents.ScreenType.BLOCK: screen_block.BlockScreen,
     }
 
     def __init__(self):

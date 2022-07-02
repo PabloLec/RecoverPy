@@ -1,6 +1,6 @@
 from py_cui import PyCUI
 
-from recoverpy.ui.contents import init_ui
+from recoverpy.ui import contents
 
 
 class Screen:
@@ -9,4 +9,4 @@ class Screen:
         self.master.set_refresh_timeout(1)
 
     def create_ui_content(self):
-        init_ui(self)
+        contents.init_ui(self)

@@ -6,9 +6,8 @@ from py_cui import PyCUI
 from recoverpy.lib.helper import get_block_size, get_inode, get_printable
 from recoverpy.lib.saver import SAVER
 from recoverpy.lib.search import Results, SearchEngine
-from recoverpy.ui import handler
+from recoverpy.ui import contents, handler
 from recoverpy.ui import strings as STRINGS
-from recoverpy.ui.contents import ScreenType
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 
 
@@ -136,7 +135,7 @@ class SearchScreen(MenuWithBlockDisplay):
     def handle_save_popup_choice(self, choice: str):
         if choice == STRINGS.choice_save_all:
             handler.SCREENS_HANDLER.open_screen(
-                ScreenType.BLOCK,
+                contents.ScreenType.BLOCK,
                 partition=self.partition,
                 initial_block=self.current_block,
             )
