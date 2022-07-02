@@ -2,7 +2,7 @@
 title_empty = ""
 title_path_invalid = "Path invalid"
 title_generic_error = "Whoops !"
-title_unmout = "You probably should unmount first !"
+title_unmount = "You probably should unmount first !"
 title_confirm_search = "Do you want to search this text on partition "
 title_save_choices = "How do you want to save it ?"
 
