@@ -7,7 +7,7 @@ import pytest
 import recoverpy
 
 from .fixtures.mock_dd_output import DD_OUTPUT
-from .fixtures.mock_grep import create_grep_process
+from .fixtures.mock_grep import start_grep_process
 from .fixtures.mock_lsblk_output import MOCK_LSBLK_OUTPUT
 
 
@@ -15,8 +15,8 @@ from .fixtures.mock_lsblk_output import MOCK_LSBLK_OUTPUT
 def global_mock(session_mocker):
     session_mocker.patch.object(
         recoverpy.utils.search.SearchEngine,
-        "create_grep_process",
-        new=create_grep_process,
+        "start_grep_process",
+        new=start_grep_process,
     )
     session_mocker.patch(
         "recoverpy.utils.search.SearchEngine.get_dd_output",

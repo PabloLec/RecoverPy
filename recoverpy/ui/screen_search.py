@@ -8,7 +8,7 @@ from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 from recoverpy.utils.helper import get_block_size, get_inode, get_printable
 from recoverpy.utils.logger import LOGGER
 from recoverpy.utils.saver import SAVER
-from recoverpy.utils.search import SEARCH_ENGINE
+from recoverpy.utils.search import Results, SearchEngine
 
 
 class SearchScreen(MenuWithBlockDisplay):
@@ -18,45 +18,44 @@ class SearchScreen(MenuWithBlockDisplay):
         super().__init__(master)
 
         self.queue_object: Queue = Queue()
-        self.blockindex: int = 0
+        self.block_index: int = 0
         self.block_numbers: list = []
         self.partition: str = partition
         self.block_size: int = get_block_size(partition)
         self.searched_string: str = string_to_search
         self._first_line: str = string_to_search.strip().splitlines()[0]
+        self.search_engine: SearchEngine = SearchEngine()
 
         self.create_ui_content()
-
-        SEARCH_ENGINE.start_search(self)
+        self.search_engine.start_search(self)
         LOGGER.write("info", f"Raw searched string:\n{self.searched_string}")
 
     def set_title(self, grep_progress: str = None):
         title: str = (
-            f"{grep_progress} - {self.blockindex} results"
+            f"{grep_progress} - {self.block_index} results"
             if grep_progress
-            else f"{self.blockindex} results"
+            else f"{self.block_index} results"
         )
 
         self.master.set_title(title)
 
         if "100%" in title:
-            if self.blockindex == 0:
+            if self.block_index == 0:
                 self.master.title_bar.set_color(22)
             else:
                 self.master.title_bar.set_color(30)
 
     def dequeue_results(self):
         while True:
-            output: tuple = SEARCH_ENGINE.get_new_results(
-                self.queue_object, self.blockindex
+            results: Results = self.search_engine.get_new_results(
+                self.queue_object, self.block_index
             )
-            if not output:
+            if results.is_empty():
                 sleep(1)
                 continue
-            new_results: list = output[0]
-            self.blockindex = output[1]
+            self.block_index = results.block_index
 
-            self.add_results_to_list(new_results=new_results)
+            self.add_results_to_list(new_results=results.lines)
             self.set_title()
 
             # Sleep to avoid unnecessary overload
@@ -107,7 +106,7 @@ class SearchScreen(MenuWithBlockDisplay):
     def fix_block_number(self):
         self.block_numbers[
             int(self.search_results_scroll_menu.get_selected_item_index())
-        ] = SEARCH_ENGINE.fix_block_number(self.current_block)
+        ] = self.search_engine.fix_block_number(self.current_block)
         self.update_block_number()
 
     def display_selected_block(self):

@@ -1,4 +1,5 @@
 from os import environ
+from time import sleep
 
 from py_cui import keys
 
@@ -166,6 +167,7 @@ def test_confirm_search():
 
 
 def test_select_search_result():
+    sleep(2)
     assert get_screen().blockcontent_box.get().strip() == ""
 
     get_screen().search_results_scroll_menu._handle_key_press(keys.KEY_DOWN_ARROW)
