@@ -24,6 +24,8 @@ content_no_partition_selected = "You have to select a partition to search."
 content_no_text_entered = "You have to enter a text to search."
 content_no_block_selected = "Please select a block first."
 content_result_saved = "Result saved."
+content_block_error = "Error while opening block"
+
 
 one_block_saved = "Block saved in"
 multiple_blocks_saved = "blocks saved in"
