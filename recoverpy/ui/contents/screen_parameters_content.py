@@ -1,7 +1,7 @@
 from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, keys
 from py_cui.widgets import Button, ScrollMenu, ScrollTextBlock
 
-from recoverpy.ui import handler
+from recoverpy.ui import contents, handler
 
 
 def set(screen):
@@ -46,6 +46,6 @@ def set(screen):
         column_span=2,
         padx=1,
         pady=0,
-        command=lambda: handler.SCREENS_HANDLER.open_screen("config"),
+        command=lambda: handler.SCREENS_HANDLER.open_screen(contents.ScreenType.CONFIG),
     )
     screen.open_config_button.set_color(1)

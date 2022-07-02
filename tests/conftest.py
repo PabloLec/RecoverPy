@@ -5,6 +5,7 @@ from unittest.mock import MagicMock
 import pytest
 
 import recoverpy
+from recoverpy.ui.contents import ScreenType
 
 from .fixtures.mock_dd_output import DD_OUTPUT
 from .fixtures.mock_grep import start_grep_process
@@ -54,30 +55,32 @@ def SCREENS_HANDLER():
 
 @pytest.fixture(scope="module")
 def PARAMETERS_SCREEN(SCREENS_HANDLER):
-    SCREENS_HANDLER.open_screen("parameters")
-    return SCREENS_HANDLER.screens["parameters"]
+    SCREENS_HANDLER.open_screen(ScreenType.PARAMS)
+    return SCREENS_HANDLER.screens[ScreenType.PARAMS]
 
 
 @pytest.fixture(scope="module")
 def SEARCH_SCREEN(SCREENS_HANDLER):
     SCREENS_HANDLER.open_screen(
-        "search", partition="/dev/test", string_to_search="test"
+        ScreenType.SEARCH, partition="/dev/test", string_to_search="test"
     )
     sleep(2.5)
-    return SCREENS_HANDLER.screens["search"]
+    return SCREENS_HANDLER.screens[ScreenType.SEARCH]
 
 
 @pytest.fixture(scope="module")
 def BLOCK_SCREEN(SCREENS_HANDLER):
-    SCREENS_HANDLER.open_screen("block", partition="/dev/test", initial_block=0)
+    SCREENS_HANDLER.open_screen(
+        ScreenType.BLOCK, partition="/dev/test", initial_block=0
+    )
     sleep(2.5)
-    return SCREENS_HANDLER.screens["block"]
+    return SCREENS_HANDLER.screens[ScreenType.BLOCK]
 
 
 @pytest.fixture(scope="module")
 def CONFIG_SCREEN(SCREENS_HANDLER):
-    SCREENS_HANDLER.open_screen("config")
-    return SCREENS_HANDLER.screens["config"]
+    SCREENS_HANDLER.open_screen(ScreenType.CONFIG)
+    return SCREENS_HANDLER.screens[ScreenType.CONFIG]
 
 
 @pytest.fixture(scope="function")

@@ -10,16 +10,17 @@ from recoverpy.ui import (
     screen_parameters,
     screen_search,
 )
+from recoverpy.ui.contents import ScreenType
 
 
 class ScreensHandler:
     """Provide ui navigation logic."""
 
     SCREENS_CLASSES: Dict[str, Type] = {
-        "parameters": screen_parameters.ParametersScreen,
-        "config": screen_config.ConfigScreen,
-        "search": screen_search.SearchScreen,
-        "block": screen_block.BlockScreen,
+        ScreenType.PARAMS: screen_parameters.ParametersScreen,
+        ScreenType.CONFIG: screen_config.ConfigScreen,
+        ScreenType.SEARCH: screen_search.SearchScreen,
+        ScreenType.BLOCK: screen_block.BlockScreen,
     }
 
     def __init__(self):

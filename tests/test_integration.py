@@ -4,6 +4,7 @@ from time import sleep
 from py_cui import keys
 
 import recoverpy
+from recoverpy.ui.contents import ScreenType
 
 
 def get_screen():
@@ -15,7 +16,7 @@ def get_screen():
 def test_main(mock_config):
     recoverpy.main()
 
-    assert recoverpy.ui.handler.SCREENS_HANDLER.current_screen == "parameters"
+    assert recoverpy.ui.handler.SCREENS_HANDLER.current_screen == ScreenType.PARAMS
     assert environ["TERM"] == "xterm-256color"
     assert recoverpy.lib.saver.SAVER.save_path == mock_config
     assert recoverpy.lib.logger.LOGGER.log_path == mock_config
@@ -24,7 +25,7 @@ def test_main(mock_config):
 
 def test_open_config_screen():
     get_screen().open_config_button._handle_key_press(keys.KEY_ENTER)
-    assert "ConfigScreen" in str(type(get_screen()))
+    assert ScreenType.CONFIG.value in str(type(get_screen()))
 
 
 def test_wrong_save_path_confirm():
@@ -126,7 +127,7 @@ def test_correct_config_save_all():
     save_button = get_screen().master.get_widgets()[7]
     save_button._handle_key_press(keys.KEY_ENTER)
 
-    assert "ParametersScreen" in str(type(get_screen()))
+    assert ScreenType.PARAMS.value in str(type(get_screen()))
 
 
 def test_select_partition():
@@ -163,7 +164,7 @@ def test_confirm_search():
 
     get_screen().master._popup._handle_key_press(keys.KEY_Y_LOWER)
     assert get_screen().master._popup is None
-    assert "SearchScreen" in str(type(get_screen()))
+    assert ScreenType.SEARCH.value in str(type(get_screen()))
 
 
 def test_select_search_result():
@@ -209,7 +210,7 @@ def test_go_to_block_screen():
 
     get_screen().master._popup.set_selected_item_index(1)
     get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
-    assert "BlockScreen" in str(type(get_screen()))
+    assert ScreenType.BLOCK.value in str(type(get_screen()))
 
 
 def test_save_multiple_blocks():
