@@ -9,7 +9,7 @@ def test_save_single_block(SEARCH_SCREEN):
     SEARCH_SCREEN.search_results_scroll_menu._handle_key_press(keys.KEY_ENTER)
     SEARCH_SCREEN.handle_save_popup_choice(choice="Save currently displayed block")
 
-    saved_file = recoverpy.utils.saver.SAVER.last_saved_file
+    saved_file = recoverpy.lib.saver.SAVER.last_saved_file
     content = pathlib.Path(saved_file).read_text()
 
     expected = "TEST OUTPUT"
@@ -25,7 +25,7 @@ def test_save_multiple_blocks(BLOCK_SCREEN):
 
     BLOCK_SCREEN.save_file()
 
-    saved_file = recoverpy.utils.saver.SAVER.last_saved_file
+    saved_file = recoverpy.lib.saver.SAVER.last_saved_file
     content = pathlib.Path(saved_file).read_text()
 
     expected = "TEST 0\nTEST 1\nTEST 2"

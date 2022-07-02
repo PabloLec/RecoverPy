@@ -3,12 +3,12 @@ from time import sleep
 
 from py_cui import PyCUI
 
+from recoverpy.lib.helper import get_block_size, get_inode, get_printable
+from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.saver import SAVER
+from recoverpy.lib.search import Results, SearchEngine
 from recoverpy.ui import handler
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
-from recoverpy.utils.helper import get_block_size, get_inode, get_printable
-from recoverpy.utils.logger import LOGGER
-from recoverpy.utils.saver import SAVER
-from recoverpy.utils.search import Results, SearchEngine
 
 
 class SearchScreen(MenuWithBlockDisplay):

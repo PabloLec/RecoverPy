@@ -1,8 +1,8 @@
 from py_cui import PyCUI
 
+from recoverpy.lib.logger import LOGGER as LOGGER
+from recoverpy.lib.saver import SAVER as SAVER
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
-from recoverpy.utils.logger import LOGGER as LOGGER
-from recoverpy.utils.saver import SAVER as SAVER
 
 
 class BlockScreen(MenuWithBlockDisplay):

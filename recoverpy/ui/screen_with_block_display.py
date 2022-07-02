@@ -3,10 +3,10 @@ from typing import Optional
 
 from py_cui import PyCUI
 
+from recoverpy.lib.helper import decode_result, get_block_size
+from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.search import SearchEngine
 from recoverpy.ui.screen import Screen
-from recoverpy.utils.helper import decode_result, get_block_size
-from recoverpy.utils.logger import LOGGER
-from recoverpy.utils.search import SearchEngine
 
 
 class MenuWithBlockDisplay(Screen):

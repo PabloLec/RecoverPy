@@ -1,8 +1,8 @@
 from py_cui.widgets import Button, ScrollTextBlock
 
+from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.saver import SAVER
 from recoverpy.ui import handler
-from recoverpy.utils.logger import LOGGER
-from recoverpy.utils.saver import SAVER
 
 
 def set(screen):

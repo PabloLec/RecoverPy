@@ -1,4 +1,4 @@
-from recoverpy.utils.logger import LOGGER
+from recoverpy.lib.logger import LOGGER
 
 
 def get_log_file_content():

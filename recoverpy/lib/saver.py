@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from recoverpy.utils.logger import LOGGER
+from recoverpy.lib.logger import LOGGER
 
 
 class Saver:

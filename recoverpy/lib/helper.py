@@ -4,7 +4,7 @@ from subprocess import DEVNULL, call, check_output
 
 from py_cui import PyCUI
 
-from recoverpy.utils.logger import LOGGER
+from recoverpy.lib.logger import LOGGER
 
 _IGNORED_PARTITIONS_TYPES: tuple = (" loop ", "swap")
 

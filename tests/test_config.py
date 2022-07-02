@@ -4,10 +4,10 @@ import pytest
 
 from recoverpy.config.config import write_config_to_file
 from recoverpy.config.setup import setup
-from recoverpy.utils.errors import InvalidLogPath, InvalidSavePath, NoSavePath
-from recoverpy.utils.helper import is_user_root
-from recoverpy.utils.logger import LOGGER
-from recoverpy.utils.saver import SAVER
+from recoverpy.lib.errors import InvalidLogPath, InvalidSavePath, NoSavePath
+from recoverpy.lib.helper import is_user_root
+from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.saver import SAVER
 
 
 def test_no_save_path(mock_config):

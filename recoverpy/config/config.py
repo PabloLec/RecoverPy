@@ -3,9 +3,9 @@ from pathlib import Path
 
 from yaml import FullLoader, dump, load
 
-from recoverpy.utils import errors
-from recoverpy.utils.logger import LOGGER
-from recoverpy.utils.saver import SAVER
+from recoverpy.lib import errors
+from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.saver import SAVER
 
 _CONFIG_DIR = Path(__file__).parent.absolute()
 

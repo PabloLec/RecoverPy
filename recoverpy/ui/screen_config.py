@@ -1,10 +1,10 @@
 from py_cui import PyCUI
 
 from recoverpy.config import config as CONFIG
+from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.saver import SAVER
 from recoverpy.ui import handler as handler
 from recoverpy.ui.screen import Screen
-from recoverpy.utils.logger import LOGGER
-from recoverpy.utils.saver import SAVER
 
 
 class ConfigScreen(Screen):

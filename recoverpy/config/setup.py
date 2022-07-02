@@ -1,6 +1,6 @@
 from os import environ
 
-from recoverpy.utils.helper import is_dependency_installed
+from recoverpy.lib.helper import is_dependency_installed
 
 
 def verify_terminal_conf():

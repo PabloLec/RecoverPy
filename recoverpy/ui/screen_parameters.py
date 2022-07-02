@@ -2,10 +2,10 @@ from re import findall
 
 from py_cui import PyCUI
 
+from recoverpy.lib import helper
+from recoverpy.lib.logger import LOGGER
 from recoverpy.ui import handler
 from recoverpy.ui.screen import Screen
-from recoverpy.utils import helper
-from recoverpy.utils.logger import LOGGER
 
 
 class ParametersScreen(Screen):

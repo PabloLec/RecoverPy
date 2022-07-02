@@ -5,9 +5,9 @@ from subprocess import DEVNULL, PIPE, Popen, check_output
 from threading import Thread
 from time import sleep
 
+from recoverpy.lib.helper import decode_result, get_inode, is_dependency_installed
+from recoverpy.lib.meta_singleton import SingletonMeta
 from recoverpy.ui.screen import Screen
-from recoverpy.utils.helper import decode_result, get_inode, is_dependency_installed
-from recoverpy.utils.meta_singleton import SingletonMeta
 
 
 class Results:

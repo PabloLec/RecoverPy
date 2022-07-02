@@ -3,7 +3,7 @@ from os import environ
 from py_cui import keys
 from pytest import mark
 
-from recoverpy.utils.helper import is_dependency_installed
+from recoverpy.lib.helper import is_dependency_installed
 
 
 def test_search_ui(SEARCH_SCREEN):
