@@ -4,7 +4,7 @@ from typing import Optional
 from py_cui import PyCUI
 
 from recoverpy.lib.helper import decode_result, get_block_size
-from recoverpy.lib.search import SearchEngine
+from recoverpy.lib.search import SearchEngine, get_dd_output
 from recoverpy.ui import strings as STRINGS
 from recoverpy.ui.screen import Screen
 
@@ -29,7 +29,7 @@ class MenuWithBlockDisplay(Screen):
             block_number = self.current_block
 
         try:
-            dd_result: bytes = self.search_engine.get_dd_output(
+            dd_result: bytes = get_dd_output(
                 partition=self.partition,
                 block_size=get_block_size(self.partition),
                 block_number=block_number,
