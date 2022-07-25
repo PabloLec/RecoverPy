@@ -16,7 +16,7 @@ from recoverpy.ui.contents.screen_type import ScreenType
 def create_py_cui_master() -> PyCUI:
     master: PyCUI = PyCUI(10, 10)
     master.toggle_unicode_borders()
-    master.set_title("RecoverPy 1.5.1")
+    master.set_title("RecoverPy 1.5.2")
     master.run_on_exit(exit)
 
     return master
