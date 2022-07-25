@@ -4,9 +4,12 @@ from re import findall
 from subprocess import DEVNULL, PIPE, Popen, check_output
 from threading import Thread
 from time import sleep
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from recoverpy.ui.screen_search import SearchScreen
 
 from recoverpy.lib.helper import decode_result, get_inode, is_dependency_installed
-from recoverpy.ui.screen import Screen
 
 
 def start_grep_process(searched_string: str, partition: str) -> Popen:
@@ -18,14 +21,14 @@ def start_grep_process(searched_string: str, partition: str) -> Popen:
     )
 
 
-def start_result_dequeue_thread(search_screen: Screen):
+def start_result_dequeue_thread(search_screen: "SearchScreen"):
     Thread(
         target=search_screen.dequeue_results,
         daemon=True,
     ).start()
 
 
-def monitor_search_progress(search_screen: Screen, grep_pid: int):
+def monitor_search_progress(search_screen: "SearchScreen", grep_pid: int):
     while True:
         output: str = check_output(
             ["progress", "-p", str(grep_pid)], stderr=DEVNULL
@@ -35,7 +38,7 @@ def monitor_search_progress(search_screen: Screen, grep_pid: int):
             search_screen.set_title("100% - Search completed")
             return
 
-        progress: list = findall(r"([0-9]+\.[0-9]+\%[^\)]+\))", output)
+        progress: list = findall(r"([0-9]+\.[0-9]+%[^)]+\))", output)
         if not progress:
             continue
 
@@ -49,7 +52,7 @@ def enqueue_grep_output(out: BufferedReader, queue: Queue):
     out.close()
 
 
-def start_result_enqueue_thread(grep_process: Popen, search_screen: Screen):
+def start_result_enqueue_thread(grep_process: Popen, search_screen: "SearchScreen"):
     Thread(
         target=enqueue_grep_output,
         args=(grep_process.stdout, search_screen.queue_object),
@@ -57,7 +60,9 @@ def start_result_enqueue_thread(grep_process: Popen, search_screen: Screen):
     ).start()
 
 
-def start_progress_monitoring_thread(grep_process: Popen, search_screen: Screen):
+def start_progress_monitoring_thread(
+    grep_process: Popen, search_screen: "SearchScreen"
+):
     if not is_dependency_installed(command="progress"):
         return
 

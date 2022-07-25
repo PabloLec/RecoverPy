@@ -1,5 +1,9 @@
 from queue import Queue
 from subprocess import Popen
+from typing import TYPE_CHECKING, Optional
+
+if TYPE_CHECKING:
+    from recoverpy.ui.screen_search import SearchScreen
 
 from recoverpy.lib.helper import decode_result, get_inode
 from recoverpy.lib.meta_singleton import SingletonMeta
@@ -11,7 +15,6 @@ from recoverpy.lib.search.static import (
     start_result_dequeue_thread,
     start_result_enqueue_thread,
 )
-from recoverpy.ui.screen import Screen
 
 
 class Results:
@@ -31,12 +34,12 @@ class SearchEngine(metaclass=SingletonMeta):
     """
 
     def __init__(self):
-        self.partition: str = None
-        self.block_size: int = None
-        self.searched_lines: list = None
-        self.is_multineline: bool = None
+        self.partition: str = ""
+        self.block_size: int = 0
+        self.searched_lines: list = []
+        self.is_multineline: Optional[bool] = None
 
-    def start_search(self, search_screen: Screen):
+    def start_search(self, search_screen: "SearchScreen"):
         self.partition = search_screen.partition
         self.block_size = search_screen.block_size
         self.searched_lines = search_screen.searched_string.strip().splitlines()

@@ -75,7 +75,7 @@ class SearchScreen(MenuWithBlockDisplay):
             real_result_block_start: int = (
                 int(int(inode) / self.block_size) + result_block_offset
             )
-            self.block_numbers.append(str(real_result_block_start))
+            self.block_numbers.append(real_result_block_start)
 
             content_start: int = self.get_content_start(inode, string_result)
             content: str = string_result[content_start:]

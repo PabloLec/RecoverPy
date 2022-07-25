@@ -43,7 +43,7 @@ def test_block_number_update(SEARCH_SCREEN):
     SEARCH_SCREEN.search_results_scroll_menu._handle_key_press(keys.KEY_ENTER)
     item = " Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed do "
 
-    assert SEARCH_SCREEN.current_block == "0"
+    assert SEARCH_SCREEN.current_block == 0
     assert SEARCH_SCREEN.search_results_scroll_menu.get() == item
 
 
@@ -65,10 +65,10 @@ def test_dd(SEARCH_SCREEN):
 def test_previous_block(SEARCH_SCREEN):
     SEARCH_SCREEN.display_previous_block()
 
-    assert SEARCH_SCREEN.current_block == "0"
+    assert SEARCH_SCREEN.current_block == 0
 
 
 def test_next_block(SEARCH_SCREEN):
     SEARCH_SCREEN.display_next_block()
 
-    assert SEARCH_SCREEN.current_block == "1"
+    assert SEARCH_SCREEN.current_block == 1

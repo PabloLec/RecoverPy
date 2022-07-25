@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 
 from recoverpy.lib.logger import Logger
 from recoverpy.lib.meta_singleton import SingletonMeta
@@ -9,10 +10,12 @@ class Saver(metaclass=SingletonMeta):
     """Encapsulates all result saving related methods."""
 
     def __init__(self):
-        self.save_path: Path = None
-        self.last_saved_file: Path = None
+        self.save_path: Optional[Path] = None
+        self.last_saved_file: Optional[Path] = None
 
     def save_result_string(self, result: str):
+        if self.save_path is None:
+            return
         time_format: str = datetime.now().strftime("recoverpy-save-%Y-%m-%d-%H%M%S")
         file_name: Path = self.save_path / time_format
 

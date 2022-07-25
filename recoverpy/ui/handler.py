@@ -25,7 +25,7 @@ def create_py_cui_master() -> PyCUI:
 class ScreensHandler:
     """Provide ui navigation logic."""
 
-    SCREENS_CLASSES: Dict[str, Type] = {
+    SCREENS_CLASSES: Dict[ScreenType, Type] = {
         ScreenType.PARAMS: screen_parameters.ParametersScreen,
         ScreenType.CONFIG: screen_config.ConfigScreen,
         ScreenType.SEARCH: screen_search.SearchScreen,
@@ -41,10 +41,8 @@ class ScreensHandler:
         self.close_screen(self.current_screen)
 
         master = create_py_cui_master()
-        created_screen_object = self.SCREENS_CLASSES[screen_name.value](
-            master, **kwargs
-        )
-        self.screens[screen_name.value] = created_screen_object
+        created_screen_object = self.SCREENS_CLASSES[screen_name](master, **kwargs)
+        self.screens[screen_name] = created_screen_object
 
         self.current_screen, self.previous_screen = (
             screen_name,
@@ -53,7 +51,7 @@ class ScreensHandler:
         created_screen_object.master.start()
 
     def close_screen(self, screen_name: str):
-        if screen_name is None or self.screens[screen_name] is None:
+        if screen_name is None or screen_name not in self.screens:
             return
         self.screens[screen_name].master.stop()
 

@@ -24,8 +24,8 @@ def is_path_valid(string_path: str) -> bool:
 def write_config_to_file(save_path: str, log_path: str, enable_logging: bool):
     with open(_CONFIG_DIR / "config.yaml", "w") as config_file:
         config: dict = {
-            "save_directory": save_path,
-            "log_directory": log_path,
+            "save_directory": str(save_path),
+            "log_directory": str(log_path),
             "enable_logging": enable_logging,
         }
 
