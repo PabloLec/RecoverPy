@@ -35,11 +35,11 @@ class SearchEngine(metaclass=SingletonMeta):
         self.block_size = search_screen.block_size
         self.searched_lines = search_screen.searched_string.strip().splitlines()
         self.is_multineline = len(self.searched_lines) > 1
+
         grep_process: Popen = start_grep_process(
             searched_string=self.searched_lines[0],
             partition=self.partition,
         )
-
         start_progress_monitoring_thread(grep_process, search_screen)
         start_result_enqueue_thread(grep_process, search_screen)
         start_result_dequeue_thread(search_screen)

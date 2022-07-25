@@ -5,7 +5,7 @@ MOCK_GREP_OUTPUT = """1000: Lorem ipsum dolor sit amet, test consectetur adipisc
 3000: Lorem ipsum dolor sit amet, test consectetur adipiscing elit, sed du"""
 
 
-def start_grep_process(self, searched_string: str, partition: str) -> Popen:
+def start_grep_process(searched_string: str, partition: str) -> Popen:
     return Popen(
         ["echo", MOCK_GREP_OUTPUT],
         stdin=None,

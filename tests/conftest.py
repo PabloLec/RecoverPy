@@ -14,14 +14,12 @@ from .fixtures.mock_lsblk_output import MOCK_LSBLK_OUTPUT
 
 @pytest.fixture(scope="session", autouse=True)
 def global_mock(session_mocker):
-    session_mocker.patch.object(
-        recoverpy.lib.search.SearchEngine,
-        "start_grep_process",
-        new=start_grep_process,
-    )
     session_mocker.patch(
-        "recoverpy.lib.search.SearchEngine.get_dd_output",
-        MagicMock(return_value=DD_OUTPUT),
+        "recoverpy.lib.search.start_grep_process", new=start_grep_process
+    )
+    session_mocker.patch("recoverpy.lib.search.get_dd_output", return_value=DD_OUTPUT)
+    session_mocker.patch(
+        "recoverpy.ui.screen_with_block_display.get_dd_output", return_value=DD_OUTPUT
     )
     session_mocker.patch("py_cui.curses.wrapper", return_value=None)
     session_mocker.patch("recoverpy.lib.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
