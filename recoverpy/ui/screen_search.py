@@ -5,7 +5,7 @@ from py_cui import PyCUI
 
 from recoverpy.lib.helper import get_block_size, get_inode, get_printable
 from recoverpy.lib.saver import Saver
-from recoverpy.lib.search import Results, SearchEngine
+from recoverpy.lib.search.search_engine import Results, SearchEngine
 from recoverpy.ui import handler
 from recoverpy.ui import strings as STRINGS
 from recoverpy.ui.contents.screen_type import ScreenType

@@ -1,10 +1,10 @@
 from subprocess import CalledProcessError
-from typing import Optional
 
 from py_cui import PyCUI
 
 from recoverpy.lib.helper import decode_result, get_block_size
-from recoverpy.lib.search import SearchEngine, get_dd_output
+from recoverpy.lib.search.search_engine import SearchEngine
+from recoverpy.lib.search.static import get_dd_output
 from recoverpy.ui import strings as STRINGS
 from recoverpy.ui.screen import Screen
 
@@ -19,9 +19,9 @@ class MenuWithBlockDisplay(Screen):
 
         self.horizontal_char_limit: int = 0
 
-        self.current_block: Optional[str] = None
-        self.current_result: Optional[str] = None
-        self.partition: Optional[str] = None
+        self.current_block: str = ""
+        self.current_result: str = ""
+        self.partition: str = ""
         self.search_engine = SearchEngine()
 
     def get_dd_result(self, block_number: str = None):
@@ -32,7 +32,7 @@ class MenuWithBlockDisplay(Screen):
             dd_result: bytes = get_dd_output(
                 partition=self.partition,
                 block_size=get_block_size(self.partition),
-                block_number=block_number,
+                block_number=int(block_number),
             )
 
             self.current_result = decode_result(dd_result)
