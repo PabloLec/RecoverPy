@@ -20,6 +20,7 @@ class ConfigScreen(Screen):
         self.yes_button: Optional[Button] = None
         self.no_button: Optional[Button] = None
         self.save_path_box: Optional[ScrollTextBlock] = None
+        self.log_path_box: Optional[ScrollTextBlock] = None
 
         self._log_enabled: bool = Logger().log_enabled
         self.create_ui_content()

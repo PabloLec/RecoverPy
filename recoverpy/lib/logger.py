@@ -3,6 +3,7 @@ from logging import DEBUG, FileHandler
 from logging import Logger as _Logger
 from logging import getLogger
 from pathlib import Path
+from typing import Optional
 
 from recoverpy.lib.meta_singleton import SingletonMeta
 
@@ -11,7 +12,7 @@ class Logger(metaclass=SingletonMeta):
     """Logging wrapper object."""
 
     def __init__(self):
-        self.log_path: Path = None
+        self.log_path: Optional[Path] = None
         self.log_enabled: bool = False
         self._logger = None
 
