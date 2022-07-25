@@ -8,7 +8,7 @@ from recoverpy.lib.logger import Logger
 from recoverpy.lib.saver import Saver
 from recoverpy.ui import handler as handler
 from recoverpy.ui import strings
-from recoverpy.ui.screen import Screen
+from recoverpy.ui.screens.screen import Screen
 
 
 class ConfigScreen(Screen):

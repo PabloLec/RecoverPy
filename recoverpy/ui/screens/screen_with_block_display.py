@@ -8,7 +8,7 @@ from recoverpy.lib.helper import decode_result, get_block_size
 from recoverpy.lib.search.search_engine import SearchEngine
 from recoverpy.lib.search.static import get_dd_output
 from recoverpy.ui import strings
-from recoverpy.ui.screen import Screen
+from recoverpy.ui.screens.screen import Screen
 
 
 class MenuWithBlockDisplay(Screen):

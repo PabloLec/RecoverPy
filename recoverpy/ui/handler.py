@@ -1,10 +1,10 @@
 from sys import exit
-from typing import Dict, Type
+from typing import Dict, Optional, Type
 
 from py_cui import PyCUI
 
-from recoverpy.ui import screen
 from recoverpy.ui.screens import (
+    screen,
     screen_block,
     screen_config,
     screen_parameters,
@@ -33,27 +33,27 @@ class ScreensHandler:
     }
 
     def __init__(self):
-        self.screens: Dict[str, screen.Screen] = {}
-        self.current_screen: str = ""
-        self.previous_screen: str = ""
+        self.screens: Dict[ScreenType, screen.Screen] = {}
+        self.current_screen: ScreenType = Optional[None]
+        self.previous_screen: ScreenType = Optional[None]
 
-    def open_screen(self, screen_name: ScreenType, **kwargs):
+    def open_screen(self, screen_type: ScreenType, **kwargs):
         self.close_screen(self.current_screen)
 
         master = create_py_cui_master()
-        created_screen_object = self.SCREENS_CLASSES[screen_name](master, **kwargs)
-        self.screens[screen_name] = created_screen_object
+        created_screen_object = self.SCREENS_CLASSES[screen_type](master, **kwargs)
+        self.screens[screen_type] = created_screen_object
 
         self.current_screen, self.previous_screen = (
-            screen_name,
+            screen_type,
             self.current_screen,
         )
         created_screen_object.master.start()
 
-    def close_screen(self, screen_name: str):
-        if screen_name is None or screen_name not in self.screens:
+    def close_screen(self, screen_type: ScreenType):
+        if screen_type is None or screen_type not in self.screens:
             return
-        self.screens[screen_name].master.stop()
+        self.screens[screen_type].master.stop()
 
     def go_back(self):
         self.close_screen(self.current_screen)
