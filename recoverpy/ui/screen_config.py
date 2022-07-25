@@ -7,7 +7,7 @@ from recoverpy.config import config as CONFIG
 from recoverpy.lib.logger import Logger
 from recoverpy.lib.saver import Saver
 from recoverpy.ui import handler as handler
-from recoverpy.ui import strings as STRINGS
+from recoverpy.ui import strings
 from recoverpy.ui.screen import Screen
 
 
@@ -38,7 +38,7 @@ class ConfigScreen(Screen):
         user_input: str = self.save_path_box.get()
         if not CONFIG.is_path_valid(user_input):
             self.master.show_error_popup(
-                STRINGS.title_path_invalid, STRINGS.content_save_path_invalid
+                strings.title_path_invalid, strings.content_save_path_invalid
             )
             return
 
@@ -49,14 +49,14 @@ class ConfigScreen(Screen):
         )
 
         self.master.show_message_popup(
-            STRINGS.title_empty, STRINGS.content_save_path_changed
+            strings.title_empty, strings.content_save_path_changed
         )
 
     def set_log_path(self):
         user_input: str = self.log_path_box.get()
         if not CONFIG.is_path_valid(user_input):
             self.master.show_error_popup(
-                STRINGS.title_path_invalid, STRINGS.content_log_path_invalid
+                strings.title_path_invalid, strings.content_log_path_invalid
             )
             return
 
@@ -67,7 +67,7 @@ class ConfigScreen(Screen):
         )
 
         self.master.show_message_popup(
-            STRINGS.title_empty, STRINGS.content_log_path_changed
+            strings.title_empty, strings.content_log_path_changed
         )
 
     def enable_logging(self):
@@ -75,7 +75,7 @@ class ConfigScreen(Screen):
             return
 
         self.set_log_state(enabled=True)
-        self.master.show_message_popup(STRINGS.title_empty, STRINGS.content_log_enabled)
+        self.master.show_message_popup(strings.title_empty, strings.content_log_enabled)
 
     def disable_logging(self):
         if not self._log_enabled:
@@ -83,7 +83,7 @@ class ConfigScreen(Screen):
 
         self.set_log_state(enabled=False)
         self.master.show_message_popup(
-            STRINGS.title_empty, STRINGS.content_log_disabled
+            strings.title_empty, strings.content_log_disabled
         )
 
     def set_log_state(self, enabled: bool):
@@ -95,12 +95,12 @@ class ConfigScreen(Screen):
         log_path: str = self.log_path_box.get()
         if not CONFIG.is_path_valid(save_path):
             self.master.show_error_popup(
-                STRINGS.title_path_invalid, STRINGS.content_save_path_changed
+                strings.title_path_invalid, strings.content_save_path_changed
             )
             return
         if not CONFIG.is_path_valid(log_path):
             self.master.show_error_popup(
-                STRINGS.title_path_invalid, STRINGS.content_log_path_changed
+                strings.title_path_invalid, strings.content_log_path_changed
             )
             return
 

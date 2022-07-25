@@ -7,7 +7,7 @@ from py_cui.widgets import ScrollTextBlock
 from recoverpy.lib.helper import decode_result, get_block_size
 from recoverpy.lib.search.search_engine import SearchEngine
 from recoverpy.lib.search.static import get_dd_output
-from recoverpy.ui import strings as STRINGS
+from recoverpy.ui import strings
 from recoverpy.ui.screen import Screen
 
 
@@ -42,8 +42,8 @@ class MenuWithBlockDisplay(Screen):
             self.current_block = block_number
         except CalledProcessError:
             self.master.show_error_popup(
-                STRINGS.title_generic_error,
-                f"{STRINGS.content_block_error} {str(self.current_block)}",
+                strings.title_generic_error,
+                f"{strings.content_block_error} {str(self.current_block)}",
             )
 
     def update_textbox(self):

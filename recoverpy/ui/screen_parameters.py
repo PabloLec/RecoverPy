@@ -5,8 +5,7 @@ from py_cui import PyCUI
 from py_cui.widgets import ScrollMenu, ScrollTextBlock
 
 from recoverpy.lib import helper
-from recoverpy.ui import handler
-from recoverpy.ui import strings as STRINGS
+from recoverpy.ui import handler, strings
 from recoverpy.ui.contents.screen_type import ScreenType
 from recoverpy.ui.screen import Screen
 
@@ -32,7 +31,7 @@ class ParametersScreen(Screen):
         self.partitions_dict = helper.get_partitions()
         if not self.partitions_dict:
             self.master.show_error_popup(
-                STRINGS.title_generic_error, STRINGS.content_no_partition
+                strings.title_generic_error, strings.content_no_partition
             )
             return
 
@@ -64,12 +63,12 @@ class ParametersScreen(Screen):
         if self.partitions_dict[selected_partition]["IS_MOUNTED"]:
             # Warn the user to unmount his partition before searching in it
             self.master.show_warning_popup(
-                STRINGS.title_unmount, STRINGS.content_unmount
+                strings.title_unmount, strings.content_unmount
             )
         else:
             self.master.show_message_popup(
-                STRINGS.title_empty,
-                f"{STRINGS.content_partition_selected}: {selected_partition}",
+                strings.title_empty,
+                f"{strings.content_partition_selected}: {selected_partition}",
             )
 
         self.partition_to_search = f"/dev/{selected_partition.strip()}"
@@ -82,19 +81,19 @@ class ParametersScreen(Screen):
         if not hasattr(self, "partition_to_search") or self.partition_to_search == "":
             # No partition selected
             self.master.show_message_popup(
-                STRINGS.title_generic_error,
-                STRINGS.content_no_partition_selected,
+                strings.title_generic_error,
+                strings.content_no_partition_selected,
             )
         elif not self.string_to_search.strip():
             # Blank string to search
             self.master.show_message_popup(
-                STRINGS.title_generic_error,
-                STRINGS.content_no_text_entered,
+                strings.title_generic_error,
+                strings.content_no_text_entered,
             )
         else:
             # Prompt to confirm string
             self.master.show_yes_no_popup(
-                f"{STRINGS.title_confirm_search} {self.partition_to_search} ?",
+                f"{strings.title_confirm_search} {self.partition_to_search} ?",
                 self.start_search,
             )
 

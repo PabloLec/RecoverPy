@@ -8,8 +8,7 @@ from py_cui.widgets import ScrollMenu
 from recoverpy.lib.helper import get_block_size, get_inode, get_printable
 from recoverpy.lib.saver import Saver
 from recoverpy.lib.search.search_engine import Results, SearchEngine
-from recoverpy.ui import handler
-from recoverpy.ui import strings as STRINGS
+from recoverpy.ui import handler, strings
 from recoverpy.ui.contents.screen_type import ScreenType
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 
@@ -126,31 +125,31 @@ class SearchScreen(MenuWithBlockDisplay):
     def open_save_popup(self):
         if self.current_block is None:
             self.master.show_message_popup(
-                STRINGS.title_empty,
-                STRINGS.content_no_block_selected,
+                strings.title_empty,
+                strings.content_no_block_selected,
             )
             return
 
         screen_choices: list = [
-            STRINGS.choice_save_one,
-            STRINGS.choice_save_all,
-            STRINGS.choice_cancel,
+            strings.choice_save_one,
+            strings.choice_save_all,
+            strings.choice_cancel,
         ]
         self.master.show_menu_popup(
-            STRINGS.title_save_choices,
+            strings.title_save_choices,
             screen_choices,
             self.handle_save_popup_choice,
         )
 
     def handle_save_popup_choice(self, choice: str):
-        if choice == STRINGS.choice_save_all:
+        if choice == strings.choice_save_all:
             handler.SCREENS_HANDLER.open_screen(
                 ScreenType.BLOCK,
                 partition=self.partition,
                 initial_block=self.current_block,
             )
-        elif choice == STRINGS.choice_save_one:
+        elif choice == strings.choice_save_one:
             self.saver.save_result_string(result=self.current_result)
             self.master.show_message_popup(
-                STRINGS.title_empty, STRINGS.content_result_saved
+                strings.title_empty, strings.content_result_saved
             )

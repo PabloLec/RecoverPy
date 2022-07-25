@@ -1,7 +1,7 @@
 from py_cui import PyCUI
 
 from recoverpy.lib.saver import Saver
-from recoverpy.ui import strings as STRINGS
+from recoverpy.ui import strings
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
 
 
@@ -24,7 +24,7 @@ class BlockScreen(MenuWithBlockDisplay):
             return
 
         self.master.show_message_popup(
-            STRINGS.title_empty, STRINGS.content_result_added
+            strings.title_empty, strings.content_result_added
         )
         self.saved_blocks_dict[self.current_block] = self.current_result
 
@@ -33,7 +33,7 @@ class BlockScreen(MenuWithBlockDisplay):
 
         if len_results == 0:
             self.master.show_message_popup(
-                STRINGS.title_empty, STRINGS.content_no_result
+                strings.title_empty, strings.content_no_result
             )
             return
 
@@ -41,12 +41,12 @@ class BlockScreen(MenuWithBlockDisplay):
 
         if len_results == 1:
             self.master.show_message_popup(
-                STRINGS.title_empty,
-                f"{STRINGS.one_block_saved} {self.saver.last_saved_file}",
+                strings.title_empty,
+                f"{strings.one_block_saved} {self.saver.last_saved_file}",
             )
         else:
             self.master.show_message_popup(
-                STRINGS.title_empty,
-                f"{len_results} {STRINGS.multiple_blocks_saved} "
+                strings.title_empty,
+                f"{len_results} {strings.multiple_blocks_saved} "
                 f"{self.saver.last_saved_file}",
             )
