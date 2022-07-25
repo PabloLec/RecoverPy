@@ -6,7 +6,7 @@ title_unmount = "You probably should unmount first !"
 title_confirm_search = "Do you want to search this text on partition "
 title_save_choices = "How do you want to save it ?"
 
-# Popup contents
+# Popup widgets
 content_result_added = "Result added to file"
 content_no_result = "No result to save yet"
 content_save_path_invalid = "Given save path is invalid."

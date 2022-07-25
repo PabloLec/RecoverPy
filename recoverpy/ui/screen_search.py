@@ -9,8 +9,8 @@ from recoverpy.lib.helper import get_block_size, get_inode, get_printable
 from recoverpy.lib.saver import Saver
 from recoverpy.lib.search.search_engine import Results, SearchEngine
 from recoverpy.ui import handler, strings
-from recoverpy.ui.contents.screen_type import ScreenType
 from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
+from recoverpy.ui.widgets.screen_type import ScreenType
 
 
 class SearchScreen(MenuWithBlockDisplay):

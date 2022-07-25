@@ -1,7 +1,7 @@
 from py_cui import GREEN_ON_BLACK, YELLOW_ON_BLACK, keys
 
 from recoverpy.ui import handler
-from recoverpy.ui.contents.screen_type import ScreenType
+from recoverpy.ui.widgets.screen_type import ScreenType
 
 
 def set_content(screen):

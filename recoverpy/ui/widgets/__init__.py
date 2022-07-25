@@ -1,13 +1,13 @@
 from types import ModuleType
 from typing import Dict
 
-from recoverpy.ui.contents import (
+from recoverpy.ui.widgets import (
     screen_block_content,
     screen_config_content,
     screen_parameters_content,
     screen_search_content,
 )
-from recoverpy.ui.contents.screen_type import ScreenType
+from recoverpy.ui.widgets.screen_type import ScreenType
 
 SCREEN_TYPE_TO_CONTENT: Dict[ScreenType, ModuleType] = {
     ScreenType.PARAMS: screen_parameters_content,

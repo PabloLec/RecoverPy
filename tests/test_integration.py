@@ -4,7 +4,7 @@ from time import sleep
 from py_cui import keys
 
 import recoverpy
-from recoverpy.ui.contents.screen_type import ScreenType
+from recoverpy.ui.widgets.screen_type import ScreenType
 
 
 def get_screen():

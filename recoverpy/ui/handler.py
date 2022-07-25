@@ -10,7 +10,7 @@ from recoverpy.ui import (
     screen_parameters,
     screen_search,
 )
-from recoverpy.ui.contents.screen_type import ScreenType
+from recoverpy.ui.widgets.screen_type import ScreenType
 
 
 def create_py_cui_master() -> PyCUI:

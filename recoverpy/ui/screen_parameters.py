@@ -6,8 +6,8 @@ from py_cui.widgets import ScrollMenu, ScrollTextBlock
 
 from recoverpy.lib import helper
 from recoverpy.ui import handler, strings
-from recoverpy.ui.contents.screen_type import ScreenType
 from recoverpy.ui.screen import Screen
+from recoverpy.ui.widgets.screen_type import ScreenType
 
 
 class ParametersScreen(Screen):
