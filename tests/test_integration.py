@@ -19,8 +19,8 @@ def test_main(mock_config):
     assert recoverpy.ui.handler.SCREENS_HANDLER.current_screen == ScreenType.PARAMS
     assert environ["TERM"] == "xterm-256color"
     assert recoverpy.lib.saver.Saver().save_path == mock_config
-    assert recoverpy.lib.logger.LOGGER.log_path == mock_config
-    assert recoverpy.lib.logger.LOGGER.log_enabled is True
+    assert recoverpy.lib.logger.Logger().log_path == mock_config
+    assert recoverpy.lib.logger.Logger().log_enabled is True
 
 
 def test_open_config_screen():
@@ -94,7 +94,7 @@ def test_wrong_log_path_save_all():
 
 def test_correct_log_path_confirm():
     save_path_textbox = get_screen().master.get_widgets()[2]
-    save_path_textbox.set_text(str(recoverpy.lib.logger.LOGGER.log_path))
+    save_path_textbox.set_text(str(recoverpy.lib.logger.Logger().log_path))
 
     save_path_confirm_button = get_screen().master.get_widgets()[3]
     save_path_confirm_button._handle_key_press(keys.KEY_ENTER)
@@ -112,7 +112,7 @@ def test_set_logging():
 
     assert enable_logging_button.get_color() == 4
     assert disable_logging_button.get_color() == 1
-    assert recoverpy.lib.logger.LOGGER.log_enabled is True
+    assert recoverpy.lib.logger.Logger().log_enabled is True
 
     disable_logging_button._handle_key_press(keys.KEY_ENTER)
 
@@ -120,7 +120,7 @@ def test_set_logging():
 
     assert enable_logging_button.get_color() == 1
     assert disable_logging_button.get_color() == 4
-    assert recoverpy.lib.logger.LOGGER.log_enabled is True
+    assert recoverpy.lib.logger.Logger().log_enabled is True
 
 
 def test_correct_config_save_all():

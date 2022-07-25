@@ -1,7 +1,7 @@
 from py_cui import PyCUI
 
 from recoverpy.config import config as CONFIG
-from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.logger import Logger
 from recoverpy.lib.saver import Saver
 from recoverpy.ui import handler as handler
 from recoverpy.ui import strings as STRINGS
@@ -13,7 +13,7 @@ class ConfigScreen(Screen):
 
     def __init__(self, master: PyCUI):
         super().__init__(master)
-        self._log_enabled: bool = LOGGER.log_enabled
+        self._log_enabled: bool = Logger().log_enabled
         self.create_ui_content()
         self.set_yes_no_colors()
 
@@ -35,8 +35,8 @@ class ConfigScreen(Screen):
 
         CONFIG.write_config_to_file(
             save_path=user_input,
-            log_path=LOGGER.log_path,
-            enable_logging=LOGGER.log_enabled,
+            log_path=Logger().log_path,
+            enable_logging=Logger().log_enabled,
         )
 
         self.master.show_message_popup(
@@ -54,7 +54,7 @@ class ConfigScreen(Screen):
         CONFIG.write_config_to_file(
             save_path=Saver().save_path,
             log_path=user_input,
-            enable_logging=LOGGER.log_enabled,
+            enable_logging=Logger().log_enabled,
         )
 
         self.master.show_message_popup(

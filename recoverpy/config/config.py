@@ -4,7 +4,7 @@ from pathlib import Path
 from yaml import FullLoader, dump, load
 
 from recoverpy.lib import errors
-from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.logger import Logger
 from recoverpy.lib.saver import Saver
 
 _CONFIG_DIR = Path(__file__).parent.absolute()
@@ -45,12 +45,12 @@ def load_config():
     Saver().save_path = Path(config["save_directory"])
 
     if "log_directory" not in config or config["log_directory"] == "":
-        LOGGER.log_enabled = False
+        Logger().log_enabled = False
     elif not is_path_valid(config["log_directory"]):
         raise errors.InvalidLogPath
     else:
-        LOGGER.log_path = Path(config["log_directory"])
-        LOGGER.log_enabled = bool(config["enable_logging"])
+        Logger().log_path = Path(config["log_directory"])
+        Logger().log_enabled = bool(config["enable_logging"])
 
-    if LOGGER.log_enabled:
-        LOGGER.start_logging()
+    if Logger().log_enabled:
+        Logger().start_logging()

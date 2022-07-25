@@ -6,7 +6,7 @@ from recoverpy.config.config import write_config_to_file
 from recoverpy.config.setup import setup
 from recoverpy.lib.errors import InvalidLogPath, InvalidSavePath, NoSavePath
 from recoverpy.lib.helper import is_user_root
-from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.logger import Logger
 from recoverpy.lib.saver import Saver
 
 
@@ -25,7 +25,7 @@ def test_invalid_save_path(mock_config):
 def test_no_log_path(mock_config):
     write_config_to_file(save_path=mock_config, log_path="", enable_logging=True)
 
-    assert not LOGGER.log_enabled
+    assert not Logger().log_enabled
 
 
 def test_invalid_log_path(mock_config):
@@ -41,7 +41,7 @@ def test_conf_parsing(mock_config):
     )
 
     assert Saver().save_path == mock_config
-    assert LOGGER.log_path == mock_config
+    assert Logger().log_path == mock_config
 
 
 def test_missing_dependencies(MISSING_DEPENDENCY):

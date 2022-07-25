@@ -1,6 +1,6 @@
 from py_cui.widgets import Button, ScrollTextBlock
 
-from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.logger import Logger
 from recoverpy.lib.saver import Saver
 from recoverpy.ui import handler
 
@@ -36,7 +36,7 @@ def set(screen):
         column_span=8,
         padx=0,
         pady=0,
-        initial_text=str(LOGGER.log_path),
+        initial_text=str(Logger().log_path),
     )
 
     screen.master.add_button(

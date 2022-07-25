@@ -1,9 +1,13 @@
 from datetime import datetime
-from logging import DEBUG, FileHandler, Logger, getLogger
+from logging import DEBUG, FileHandler
+from logging import Logger as _Logger
+from logging import getLogger
 from pathlib import Path
 
+from recoverpy.lib.meta_singleton import SingletonMeta
 
-class CustomLogger:
+
+class Logger(metaclass=SingletonMeta):
     """Logging wrapper object."""
 
     def __init__(self):
@@ -15,7 +19,7 @@ class CustomLogger:
         time = datetime.now().strftime("%Y-%m-%d-%H%M%S")
         log_file_name: Path = self.log_path / f"recoverpy-{time}.log"
 
-        self._logger: Logger = getLogger("main")
+        self._logger: _Logger = getLogger("main")
         self._logger.setLevel(DEBUG)
 
         file_handler = FileHandler(log_file_name)
@@ -37,6 +41,3 @@ class CustomLogger:
             self._logger.error(text)
         elif log_type == "critical":
             self._logger.critical(text)
-
-
-LOGGER = CustomLogger()

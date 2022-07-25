@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from recoverpy.lib.logger import LOGGER
+from recoverpy.lib.logger import Logger
 from recoverpy.lib.meta_singleton import SingletonMeta
 
 
@@ -30,4 +30,4 @@ class Saver(metaclass=SingletonMeta):
 
         self.last_saved_file = file_name
 
-        LOGGER.write("info", f"Output saved in file {file_name}")
+        Logger().write("info", f"Output saved in file {file_name}")
