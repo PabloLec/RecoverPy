@@ -5,7 +5,7 @@ from yaml import FullLoader, dump, load
 
 from recoverpy.lib import errors
 from recoverpy.lib.logger import LOGGER
-from recoverpy.lib.saver import SAVER
+from recoverpy.lib.saver import Saver
 
 _CONFIG_DIR = Path(__file__).parent.absolute()
 
@@ -21,7 +21,7 @@ def is_path_valid(string_path: str) -> bool:
     return access(path, X_OK)
 
 
-def write_config_to_file(save_path: str, log_path: str, enable_logging: bool):
+def write_config_to_file(save_path: Path, log_path: str, enable_logging: bool):
     with open(_CONFIG_DIR / "config.yaml", "w") as config_file:
         config: dict = {
             "save_directory": str(save_path),
@@ -42,7 +42,7 @@ def load_config():
     if not is_path_valid(config["save_directory"]):
         raise errors.InvalidSavePath
 
-    SAVER.save_path = Path(config["save_directory"])
+    Saver().save_path = Path(config["save_directory"])
 
     if "log_directory" not in config or config["log_directory"] == "":
         LOGGER.log_enabled = False

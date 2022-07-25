@@ -2,7 +2,7 @@ from py_cui import PyCUI
 
 from recoverpy.config import config as CONFIG
 from recoverpy.lib.logger import LOGGER
-from recoverpy.lib.saver import SAVER
+from recoverpy.lib.saver import Saver
 from recoverpy.ui import handler as handler
 from recoverpy.ui import strings as STRINGS
 from recoverpy.ui.screen import Screen
@@ -52,7 +52,7 @@ class ConfigScreen(Screen):
             return
 
         CONFIG.write_config_to_file(
-            save_path=SAVER.save_path,
+            save_path=Saver().save_path,
             log_path=user_input,
             enable_logging=LOGGER.log_enabled,
         )

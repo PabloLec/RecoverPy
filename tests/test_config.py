@@ -7,7 +7,7 @@ from recoverpy.config.setup import setup
 from recoverpy.lib.errors import InvalidLogPath, InvalidSavePath, NoSavePath
 from recoverpy.lib.helper import is_user_root
 from recoverpy.lib.logger import LOGGER
-from recoverpy.lib.saver import SAVER
+from recoverpy.lib.saver import Saver
 
 
 def test_no_save_path(mock_config):
@@ -40,7 +40,7 @@ def test_conf_parsing(mock_config):
         save_path=mock_config, log_path=mock_config, enable_logging=True
     )
 
-    assert SAVER.save_path == mock_config
+    assert Saver().save_path == mock_config
     assert LOGGER.log_path == mock_config
 
 

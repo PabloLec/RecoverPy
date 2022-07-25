@@ -4,7 +4,7 @@ from time import sleep
 from py_cui import PyCUI
 
 from recoverpy.lib.helper import get_block_size, get_inode, get_printable
-from recoverpy.lib.saver import SAVER
+from recoverpy.lib.saver import Saver
 from recoverpy.lib.search import Results, SearchEngine
 from recoverpy.ui import handler
 from recoverpy.ui import strings as STRINGS
@@ -26,6 +26,7 @@ class SearchScreen(MenuWithBlockDisplay):
         self.searched_string: str = string_to_search
         self._first_line: str = string_to_search.strip().splitlines()[0]
         self.search_engine: SearchEngine = SearchEngine()
+        self.saver: Saver = Saver()
 
         self.create_ui_content()
         self.search_engine.start_search(self)
@@ -141,7 +142,7 @@ class SearchScreen(MenuWithBlockDisplay):
                 initial_block=self.current_block,
             )
         elif choice == STRINGS.choice_save_one:
-            SAVER.save_result_string(result=self.current_result)
+            self.saver.save_result_string(result=self.current_result)
             self.master.show_message_popup(
                 STRINGS.title_empty, STRINGS.content_result_saved
             )
