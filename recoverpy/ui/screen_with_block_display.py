@@ -1,6 +1,8 @@
 from subprocess import CalledProcessError
+from typing import Optional
 
 from py_cui import PyCUI
+from py_cui.widgets import ScrollTextBlock
 
 from recoverpy.lib.helper import decode_result, get_block_size
 from recoverpy.lib.search.search_engine import SearchEngine
@@ -17,8 +19,9 @@ class MenuWithBlockDisplay(Screen):
     def __init__(self, master: PyCUI):
         super().__init__(master)
 
-        self.horizontal_char_limit: int = 0
+        self.block_content_box: Optional[ScrollTextBlock] = None
 
+        self.horizontal_char_limit: int = 0
         self.current_block: int = 0
         self.current_result: str = ""
         self.partition: str = ""
@@ -60,18 +63,18 @@ class MenuWithBlockDisplay(Screen):
         # Fix for embedded null character
         formated_result = formated_result.replace(chr(0), "")
 
-        self.blockcontent_box.set_text(formated_result)
-        self.blockcontent_box.set_title(f"Block {self.current_block}")
+        self.block_content_box.set_text(formated_result)
+        self.block_content_box.set_title(f"Block {self.current_block}")
 
     def display_previous_block(self):
         try:
-            self.display_block(str(int(self.current_block) - 1))
+            self.display_block(int(self.current_block) - 1)
         except ValueError:
             return
 
     def display_next_block(self):
         try:
-            self.display_block(str(int(self.current_block) + 1))
+            self.display_block(int(self.current_block) + 1)
         except ValueError:
             return
 
@@ -84,7 +87,7 @@ class MenuWithBlockDisplay(Screen):
 
     def update_horizontal_char_limit(self):
         text_box_dimensions: tuple = (
-            self.blockcontent_box.get_cursor_limits_horizontal()
+            self.block_content_box.get_cursor_limits_horizontal()
         )
         self.horizontal_char_limit: int = (
             text_box_dimensions[1] - text_box_dimensions[0]

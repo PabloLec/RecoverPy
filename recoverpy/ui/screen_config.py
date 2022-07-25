@@ -1,4 +1,7 @@
+from typing import Optional
+
 from py_cui import PyCUI
+from py_cui.widgets import Button, ScrollTextBlock
 
 from recoverpy.config import config as CONFIG
 from recoverpy.lib.logger import Logger
@@ -13,6 +16,11 @@ class ConfigScreen(Screen):
 
     def __init__(self, master: PyCUI):
         super().__init__(master)
+
+        self.yes_button: Optional[Button] = None
+        self.no_button: Optional[Button] = None
+        self.save_path_box: Optional[ScrollTextBlock] = None
+
         self._log_enabled: bool = Logger().log_enabled
         self.create_ui_content()
         self.set_yes_no_colors()
@@ -35,7 +43,7 @@ class ConfigScreen(Screen):
 
         CONFIG.write_config_to_file(
             save_path=user_input,
-            log_path=Logger().log_path,
+            log_path=str(Logger().log_path),
             enable_logging=Logger().log_enabled,
         )
 
@@ -52,7 +60,7 @@ class ConfigScreen(Screen):
             return
 
         CONFIG.write_config_to_file(
-            save_path=Saver().save_path,
+            save_path=str(Saver().save_path),
             log_path=user_input,
             enable_logging=Logger().log_enabled,
         )

@@ -10,7 +10,7 @@ def test_search_ui(SEARCH_SCREEN):
     instance_dir = dir(SEARCH_SCREEN)
 
     assert "search_results_scroll_menu" in instance_dir
-    assert "blockcontent_box" in instance_dir
+    assert "block_content_box" in instance_dir
     assert "previous_button" in instance_dir
     assert "next_button" in instance_dir
     assert "save_file_button" in instance_dir
@@ -57,7 +57,7 @@ def test_dd(SEARCH_SCREEN):
     SEARCH_SCREEN.search_results_scroll_menu.set_selected_item_index(0)
     SEARCH_SCREEN.display_selected_block()
 
-    text = SEARCH_SCREEN.blockcontent_box.get()
+    text = SEARCH_SCREEN.block_content_box.get()
 
     assert "TEST OUTPUT" in text
 

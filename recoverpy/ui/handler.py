@@ -13,6 +13,15 @@ from recoverpy.ui import (
 from recoverpy.ui.contents.screen_type import ScreenType
 
 
+def create_py_cui_master() -> PyCUI:
+    master: PyCUI = PyCUI(10, 10)
+    master.toggle_unicode_borders()
+    master.set_title("RecoverPy 1.5.1")
+    master.run_on_exit(exit)
+
+    return master
+
+
 class ScreensHandler:
     """Provide ui navigation logic."""
 
@@ -25,28 +34,17 @@ class ScreensHandler:
 
     def __init__(self):
         self.screens: Dict[str, screen.Screen] = {}
-        self.init_screens()
-        self.current_screen: str = None
-        self.previous_screen: str = None
+        self.current_screen: str = ""
+        self.previous_screen: str = ""
 
-    def init_screens(self):
-        for screen_class in self.SCREENS_CLASSES:
-            self.screens[screen_class] = None
-
-    def create_py_cui_master(self) -> PyCUI:
-        master: PyCUI = PyCUI(10, 10)
-        master.toggle_unicode_borders()
-        master.set_title("RecoverPy 1.5.1")
-        master.run_on_exit(exit)
-
-        return master
-
-    def open_screen(self, screen_name: str, **kwargs):
+    def open_screen(self, screen_name: ScreenType, **kwargs):
         self.close_screen(self.current_screen)
 
-        master = self.create_py_cui_master()
-        created_screen_object = self.SCREENS_CLASSES[screen_name](master, **kwargs)
-        self.screens[screen_name] = created_screen_object
+        master = create_py_cui_master()
+        created_screen_object = self.SCREENS_CLASSES[screen_name.value](
+            master, **kwargs
+        )
+        self.screens[screen_name.value] = created_screen_object
 
         self.current_screen, self.previous_screen = (
             screen_name,

@@ -1,7 +1,9 @@
 from queue import Queue
 from time import sleep
+from typing import Optional
 
 from py_cui import PyCUI
+from py_cui.widgets import ScrollMenu
 
 from recoverpy.lib.helper import get_block_size, get_inode, get_printable
 from recoverpy.lib.saver import Saver
@@ -17,6 +19,8 @@ class SearchScreen(MenuWithBlockDisplay):
 
     def __init__(self, master: PyCUI, partition: str, string_to_search: str):
         super().__init__(master)
+
+        self.search_results_scroll_menu: Optional[ScrollMenu] = None
 
         self.queue_object: Queue = Queue()
         self.block_index: int = 0
@@ -75,6 +79,8 @@ class SearchScreen(MenuWithBlockDisplay):
 
             content_start: int = self.get_content_start(inode, string_result)
             content: str = string_result[content_start:]
+            if self.search_results_scroll_menu is None:
+                return
             self.search_results_scroll_menu.add_item(content)
 
     def get_result_block_offset(self, result: str) -> int:
@@ -83,6 +89,8 @@ class SearchScreen(MenuWithBlockDisplay):
 
     def get_content_start(self, inode: str, result: str) -> int:
         searched_string_pos: int = result.find(self._first_line)
+        if self.search_results_scroll_menu is None:
+            return 0
         box_start_pos: int = self.search_results_scroll_menu.get_absolute_start_pos()[0]
         box_stop_pos: int = self.search_results_scroll_menu.get_absolute_stop_pos()[0]
         box_length: int = box_stop_pos - box_start_pos

@@ -20,6 +20,6 @@ SCREEN_TYPE_TO_CONTENT: Dict[ScreenType, ModuleType] = {
 def init_ui(screen):
     for screen_type in SCREEN_TYPE_TO_CONTENT:
         if screen_type.value in str(type(screen)):
-            SCREEN_TYPE_TO_CONTENT[screen_type].set(screen)
+            SCREEN_TYPE_TO_CONTENT[screen_type].set_content(screen)
             return
     raise ValueError(f"Unknown screen type: {type(screen)}")

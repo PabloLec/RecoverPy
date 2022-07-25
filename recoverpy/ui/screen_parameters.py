@@ -1,6 +1,8 @@
 from re import findall
+from typing import Optional
 
 from py_cui import PyCUI
+from py_cui.widgets import ScrollMenu, ScrollTextBlock
 
 from recoverpy.lib import helper
 from recoverpy.ui import handler
@@ -15,9 +17,12 @@ class ParametersScreen(Screen):
     def __init__(self, master: PyCUI):
         super().__init__(master)
 
-        self.partition_to_search: str
-        self.string_to_search: str
-        self.partitions_dict: dict
+        self.partitions_list_scroll_menu: Optional[ScrollMenu] = None
+        self.string_text_box: Optional[ScrollTextBlock] = None
+
+        self.partition_to_search: Optional[str] = None
+        self.string_to_search: Optional[str] = None
+        self.partitions_dict: Optional[dict] = None
 
         helper.is_user_root(window=self.master)
         self.create_ui_content()
@@ -52,7 +57,7 @@ class ParametersScreen(Screen):
 
     def select_partition(self):
         selected_partition = findall(
-            r"Name\:\ ([^\ \n]+)\ ",
+            r"Name: ([^ \n]+) ",
             self.partitions_list_scroll_menu.get(),
         )[0]
 
@@ -94,7 +99,7 @@ class ParametersScreen(Screen):
             )
 
     def start_search(self, is_confirmed: bool):
-        if is_confirmed:
+        if is_confirmed and self.string_to_search:
             handler.SCREENS_HANDLER.open_screen(
                 ScreenType.SEARCH,
                 partition=self.partition_to_search,
