@@ -19,12 +19,12 @@ class MenuWithBlockDisplay(Screen):
 
         self.horizontal_char_limit: int = 0
 
-        self.current_block: str = ""
+        self.current_block: int = 0
         self.current_result: str = ""
         self.partition: str = ""
         self.search_engine = SearchEngine()
 
-    def get_dd_result(self, block_number: str = None):
+    def get_dd_result(self, block_number: int = None):
         if block_number is None:
             block_number = self.current_block
 
@@ -32,7 +32,7 @@ class MenuWithBlockDisplay(Screen):
             dd_result: bytes = get_dd_output(
                 partition=self.partition,
                 block_size=get_block_size(self.partition),
-                block_number=int(block_number),
+                block_number=block_number,
             )
 
             self.current_result = decode_result(dd_result)
@@ -75,8 +75,8 @@ class MenuWithBlockDisplay(Screen):
         except ValueError:
             return
 
-    def display_block(self, block_number: str):
-        if int(block_number) < 0:
+    def display_block(self, block_number: int):
+        if block_number < 0:
             return
 
         self.get_dd_result(block_number=block_number)
