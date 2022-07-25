@@ -21,7 +21,8 @@ def global_mock(session_mocker):
         "recoverpy.lib.search.search_engine.get_dd_output", return_value=DD_OUTPUT
     )
     session_mocker.patch(
-        "recoverpy.ui.screen_with_block_display.get_dd_output", return_value=DD_OUTPUT
+        "recoverpy.ui.screens.screen_with_block_display.get_dd_output",
+        return_value=DD_OUTPUT,
     )
     session_mocker.patch("py_cui.curses.wrapper", return_value=None)
     session_mocker.patch("recoverpy.lib.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
@@ -30,11 +31,12 @@ def global_mock(session_mocker):
         "recoverpy.lib.helper.get_block_size", MagicMock(return_value=4096)
     )
     session_mocker.patch(
-        "recoverpy.ui.screen_with_block_display.get_block_size",
+        "recoverpy.ui.screens.screen_with_block_display.get_block_size",
         MagicMock(return_value=4096),
     )
     session_mocker.patch(
-        "recoverpy.ui.screen_search.get_block_size", MagicMock(return_value=4096)
+        "recoverpy.ui.screens.screen_search.get_block_size",
+        MagicMock(return_value=4096),
     )
 
 

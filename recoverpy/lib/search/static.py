@@ -7,7 +7,7 @@ from time import sleep
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from recoverpy.ui.screen_search import SearchScreen
+    from recoverpy.ui.screens.screen_search import SearchScreen
 
 from recoverpy.lib.helper import decode_result, get_inode, is_dependency_installed
 

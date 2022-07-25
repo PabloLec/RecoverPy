@@ -3,7 +3,7 @@ from subprocess import Popen
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from recoverpy.ui.screen_search import SearchScreen
+    from recoverpy.ui.screens.screen_search import SearchScreen
 
 from recoverpy.lib.helper import decode_result, get_inode
 from recoverpy.lib.meta_singleton import SingletonMeta

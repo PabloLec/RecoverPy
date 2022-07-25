@@ -2,7 +2,7 @@ from py_cui import PyCUI
 
 from recoverpy.lib.saver import Saver
 from recoverpy.ui import strings
-from recoverpy.ui.screen_with_block_display import MenuWithBlockDisplay
+from recoverpy.ui.screens.screen_with_block_display import MenuWithBlockDisplay
 
 
 class BlockScreen(MenuWithBlockDisplay):

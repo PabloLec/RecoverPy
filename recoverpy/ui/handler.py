@@ -3,8 +3,8 @@ from typing import Dict, Type
 
 from py_cui import PyCUI
 
-from recoverpy.ui import (
-    screen,
+from recoverpy.ui import screen
+from recoverpy.ui.screens import (
     screen_block,
     screen_config,
     screen_parameters,
