@@ -38,7 +38,7 @@ def monitor_search_progress(search_screen: "SearchScreen", grep_pid: int):
             search_screen.set_title("100% - Search completed")
             return
 
-        progress: list = findall(r"([0-9]+\.[0-9]+%[^)]+\))", output)
+        progress: list = findall(r"(\d+\.\d+%[^)]+\))", output)
         if not progress:
             continue
 

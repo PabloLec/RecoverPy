@@ -82,5 +82,5 @@ def get_block_size(partition: str) -> int:
 
 
 def get_inode(string: str) -> str:
-    match = findall(r"^([0-9]+):", string)
+    match = findall(r"^(\d+):", string)
     return match[0] if len(match) >= 1 else None
