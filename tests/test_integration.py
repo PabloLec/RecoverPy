@@ -1,8 +1,10 @@
 from os import environ
+from time import sleep
 
 from py_cui import keys
 
 import recoverpy
+from recoverpy.ui.widgets.screen_type import ScreenType
 
 
 def get_screen():
@@ -14,16 +16,16 @@ def get_screen():
 def test_main(mock_config):
     recoverpy.main()
 
-    assert recoverpy.ui.handler.SCREENS_HANDLER.current_screen == "parameters"
+    assert recoverpy.ui.handler.SCREENS_HANDLER.current_screen == ScreenType.PARAMS
     assert environ["TERM"] == "xterm-256color"
-    assert recoverpy.utils.saver.SAVER.save_path == mock_config
-    assert recoverpy.utils.logger.LOGGER.log_path == mock_config
-    assert recoverpy.utils.logger.LOGGER.log_enabled is True
+    assert recoverpy.lib.saver.Saver().save_path == mock_config
+    assert recoverpy.lib.logger.Logger().log_path == mock_config
+    assert recoverpy.lib.logger.Logger().log_enabled is True
 
 
 def test_open_config_screen():
     get_screen().open_config_button._handle_key_press(keys.KEY_ENTER)
-    assert "ConfigScreen" in str(type(get_screen()))
+    assert ScreenType.CONFIG.value in str(type(get_screen()))
 
 
 def test_wrong_save_path_confirm():
@@ -53,7 +55,7 @@ def test_wrong_save_path_save_all():
 
 def test_correct_save_path_confirm():
     save_path_textbox = get_screen().master.get_widgets()[0]
-    save_path_textbox.set_text(str(recoverpy.utils.saver.SAVER.save_path))
+    save_path_textbox.set_text(str(recoverpy.lib.saver.Saver().save_path))
 
     save_path_confirm_button = get_screen().master.get_widgets()[1]
     save_path_confirm_button._handle_key_press(keys.KEY_ENTER)
@@ -92,7 +94,7 @@ def test_wrong_log_path_save_all():
 
 def test_correct_log_path_confirm():
     save_path_textbox = get_screen().master.get_widgets()[2]
-    save_path_textbox.set_text(str(recoverpy.utils.logger.LOGGER.log_path))
+    save_path_textbox.set_text(str(recoverpy.lib.logger.Logger().log_path))
 
     save_path_confirm_button = get_screen().master.get_widgets()[3]
     save_path_confirm_button._handle_key_press(keys.KEY_ENTER)
@@ -110,7 +112,7 @@ def test_set_logging():
 
     assert enable_logging_button.get_color() == 4
     assert disable_logging_button.get_color() == 1
-    assert recoverpy.utils.logger.LOGGER.log_enabled is True
+    assert recoverpy.lib.logger.Logger().log_enabled is True
 
     disable_logging_button._handle_key_press(keys.KEY_ENTER)
 
@@ -118,14 +120,14 @@ def test_set_logging():
 
     assert enable_logging_button.get_color() == 1
     assert disable_logging_button.get_color() == 4
-    assert recoverpy.utils.logger.LOGGER.log_enabled is True
+    assert recoverpy.lib.logger.Logger().log_enabled is True
 
 
 def test_correct_config_save_all():
     save_button = get_screen().master.get_widgets()[7]
     save_button._handle_key_press(keys.KEY_ENTER)
 
-    assert "ParametersScreen" in str(type(get_screen()))
+    assert ScreenType.PARAMS.value in str(type(get_screen()))
 
 
 def test_select_partition():
@@ -162,16 +164,17 @@ def test_confirm_search():
 
     get_screen().master._popup._handle_key_press(keys.KEY_Y_LOWER)
     assert get_screen().master._popup is None
-    assert "SearchScreen" in str(type(get_screen()))
+    assert ScreenType.SEARCH.value in str(type(get_screen()))
 
 
 def test_select_search_result():
-    assert get_screen().blockcontent_box.get().strip() == ""
+    sleep(2)
+    assert get_screen().block_content_box.get().strip() == ""
 
     get_screen().search_results_scroll_menu._handle_key_press(keys.KEY_DOWN_ARROW)
     get_screen().search_results_scroll_menu._handle_key_press(keys.KEY_ENTER)
 
-    assert get_screen().blockcontent_box.get().strip() == "TEST OUTPUT"
+    assert get_screen().block_content_box.get().strip() == "TEST OUTPUT"
 
 
 def test_open_save_popup():
@@ -193,7 +196,7 @@ def test_save_displayed_block():
     get_screen().master._popup.set_selected_item_index(0)
     get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
 
-    saved_file_path = recoverpy.utils.saver.SAVER.last_saved_file
+    saved_file_path = recoverpy.lib.saver.Saver().last_saved_file
     with open(saved_file_path, "r") as f:
         assert f.read().strip() == "TEST OUTPUT"
 
@@ -207,7 +210,7 @@ def test_go_to_block_screen():
 
     get_screen().master._popup.set_selected_item_index(1)
     get_screen().master._popup._handle_key_press(keys.KEY_ENTER)
-    assert "BlockScreen" in str(type(get_screen()))
+    assert ScreenType.BLOCK.value in str(type(get_screen()))
 
 
 def test_save_multiple_blocks():
@@ -229,6 +232,6 @@ def test_save_multiple_blocks():
     add_block_button._handle_key_press(keys.KEY_ENTER)
 
     save_file_button._handle_key_press(keys.KEY_ENTER)
-    saved_file_path = recoverpy.utils.saver.SAVER.last_saved_file
+    saved_file_path = recoverpy.lib.saver.Saver().last_saved_file
     with open(saved_file_path, "r") as f:
         assert f.read().strip() == "TEST OUTPUT\nTEST OUTPUT\nTEST OUTPUT"

@@ -4,18 +4,18 @@ from subprocess import DEVNULL, call, check_output
 
 from py_cui import PyCUI
 
-from recoverpy.utils.logger import LOGGER
+from recoverpy.lib.logger import Logger
 
 _IGNORED_PARTITIONS_TYPES: tuple = (" loop ", "swap")
 
 
 def is_user_root(window: PyCUI) -> bool:
     if geteuid() == 0:
-        LOGGER.write("info", "User is root")
+        Logger().write("info", "User is root")
         return True
 
     window.show_error_popup("Not root :(", "You have to be root or use sudo.")
-    LOGGER.write("warning", "User is not root")
+    Logger().write("warning", "User is not root")
     return False
 
 
@@ -82,5 +82,5 @@ def get_block_size(partition: str) -> int:
 
 
 def get_inode(string: str) -> str:
-    match = findall(r"^([0-9]+)\:", string)
+    match = findall(r"^(\d+):", string)
     return match[0] if len(match) >= 1 else None

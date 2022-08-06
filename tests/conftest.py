@@ -5,35 +5,38 @@ from unittest.mock import MagicMock
 import pytest
 
 import recoverpy
+from recoverpy.ui.widgets.screen_type import ScreenType
 
 from .fixtures.mock_dd_output import DD_OUTPUT
-from .fixtures.mock_grep import create_grep_process
+from .fixtures.mock_grep import start_grep_process
 from .fixtures.mock_lsblk_output import MOCK_LSBLK_OUTPUT
 
 
 @pytest.fixture(scope="session", autouse=True)
 def global_mock(session_mocker):
-    session_mocker.patch.object(
-        recoverpy.utils.search.SearchEngine,
-        "create_grep_process",
-        new=create_grep_process,
+    session_mocker.patch(
+        "recoverpy.lib.search.search_engine.start_grep_process", new=start_grep_process
     )
     session_mocker.patch(
-        "recoverpy.utils.search.SearchEngine.get_dd_output",
-        MagicMock(return_value=DD_OUTPUT),
+        "recoverpy.lib.search.search_engine.get_dd_output", return_value=DD_OUTPUT
+    )
+    session_mocker.patch(
+        "recoverpy.ui.screens.screen_with_block_display.get_dd_output",
+        return_value=DD_OUTPUT,
     )
     session_mocker.patch("py_cui.curses.wrapper", return_value=None)
-    session_mocker.patch("recoverpy.utils.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
-    session_mocker.patch("recoverpy.utils.helper.is_user_root", return_value=True)
+    session_mocker.patch("recoverpy.lib.helper.lsblk", return_value=MOCK_LSBLK_OUTPUT)
+    session_mocker.patch("recoverpy.lib.helper.is_user_root", return_value=True)
     session_mocker.patch(
-        "recoverpy.utils.helper.get_block_size", MagicMock(return_value=4096)
+        "recoverpy.lib.helper.get_block_size", MagicMock(return_value=4096)
     )
     session_mocker.patch(
-        "recoverpy.ui.screen_with_block_display.get_block_size",
+        "recoverpy.ui.screens.screen_with_block_display.get_block_size",
         MagicMock(return_value=4096),
     )
     session_mocker.patch(
-        "recoverpy.ui.screen_search.get_block_size", MagicMock(return_value=4096)
+        "recoverpy.ui.screens.screen_search.get_block_size",
+        MagicMock(return_value=4096),
     )
 
 
@@ -54,30 +57,32 @@ def SCREENS_HANDLER():
 
 @pytest.fixture(scope="module")
 def PARAMETERS_SCREEN(SCREENS_HANDLER):
-    SCREENS_HANDLER.open_screen("parameters")
-    return SCREENS_HANDLER.screens["parameters"]
+    SCREENS_HANDLER.open_screen(ScreenType.PARAMS)
+    return SCREENS_HANDLER.screens[ScreenType.PARAMS]
 
 
 @pytest.fixture(scope="module")
 def SEARCH_SCREEN(SCREENS_HANDLER):
     SCREENS_HANDLER.open_screen(
-        "search", partition="/dev/test", string_to_search="test"
+        ScreenType.SEARCH, partition="/dev/test", string_to_search="test"
     )
     sleep(2.5)
-    return SCREENS_HANDLER.screens["search"]
+    return SCREENS_HANDLER.screens[ScreenType.SEARCH]
 
 
 @pytest.fixture(scope="module")
 def BLOCK_SCREEN(SCREENS_HANDLER):
-    SCREENS_HANDLER.open_screen("block", partition="/dev/test", initial_block=0)
+    SCREENS_HANDLER.open_screen(
+        ScreenType.BLOCK, partition="/dev/test", initial_block=0
+    )
     sleep(2.5)
-    return SCREENS_HANDLER.screens["block"]
+    return SCREENS_HANDLER.screens[ScreenType.BLOCK]
 
 
 @pytest.fixture(scope="module")
 def CONFIG_SCREEN(SCREENS_HANDLER):
-    SCREENS_HANDLER.open_screen("config")
-    return SCREENS_HANDLER.screens["config"]
+    SCREENS_HANDLER.open_screen(ScreenType.CONFIG)
+    return SCREENS_HANDLER.screens[ScreenType.CONFIG]
 
 
 @pytest.fixture(scope="function")
@@ -87,9 +92,9 @@ def MISSING_DEPENDENCY(mocker):
 
 @pytest.fixture(scope="function")
 def USER_IS_ROOT(mocker):
-    mocker.patch("recoverpy.utils.helper.geteuid", return_value=0)
+    mocker.patch("recoverpy.lib.helper.geteuid", return_value=0)
 
 
 @pytest.fixture(scope="function")
 def USER_IS_NOT_ROOT(mocker):
-    mocker.patch("recoverpy.utils.helper.geteuid", return_value=1)
+    mocker.patch("recoverpy.lib.helper.geteuid", return_value=1)

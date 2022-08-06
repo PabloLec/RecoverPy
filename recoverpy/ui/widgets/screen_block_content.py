@@ -1,10 +1,8 @@
-from py_cui.widgets import Button, ScrollTextBlock
-
 from recoverpy.ui import handler
 
 
-def set(screen):
-    screen.previous_button: Button = screen.master.add_button(
+def set_content(screen):
+    screen.previous_button = screen.master.add_button(
         "<",
         3,
         0,
@@ -16,7 +14,7 @@ def set(screen):
     )
     screen.previous_button.set_color(1)
 
-    screen.next_button: Button = screen.master.add_button(
+    screen.next_button = screen.master.add_button(
         ">",
         3,
         9,
@@ -28,12 +26,12 @@ def set(screen):
     )
     screen.next_button.set_color(1)
 
-    screen.blockcontent_box: ScrollTextBlock = screen.master.add_text_block(
+    screen.block_content_box = screen.master.add_text_block(
         "Block content:", 0, 1, row_span=9, column_span=8, padx=1, pady=0
     )
-    screen.blockcontent_box.set_title(f"Block {screen.current_block}")
+    screen.block_content_box.set_title(f"Block {screen.current_block}")
 
-    screen.add_blockbutton: Button = screen.master.add_button(
+    screen.add_blockbutton = screen.master.add_button(
         "Add current block to file",
         9,
         0,
@@ -45,7 +43,7 @@ def set(screen):
     )
     screen.add_blockbutton.set_color(6)
 
-    screen.save_file_button: Button = screen.master.add_button(
+    screen.save_file_button = screen.master.add_button(
         "Save file",
         9,
         5,
@@ -57,7 +55,7 @@ def set(screen):
     )
     screen.save_file_button.set_color(4)
 
-    screen.go_back_button: Button = screen.master.add_button(
+    screen.go_back_button = screen.master.add_button(
         "Go back to previous screen",
         9,
         8,

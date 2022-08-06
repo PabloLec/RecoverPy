@@ -1,12 +1,10 @@
-from py_cui.widgets import Button, ScrollTextBlock
-
+from recoverpy.lib.logger import Logger
+from recoverpy.lib.saver import Saver
 from recoverpy.ui import handler
-from recoverpy.utils.logger import LOGGER
-from recoverpy.utils.saver import SAVER
 
 
-def set(screen):
-    screen.save_path_box: ScrollTextBlock = screen.master.add_text_box(
+def set_content(screen):
+    screen.save_path_box = screen.master.add_text_box(
         title="Save Path",
         row=0,
         column=1,
@@ -14,7 +12,7 @@ def set(screen):
         column_span=8,
         padx=0,
         pady=0,
-        initial_text=str(SAVER.save_path),
+        initial_text=str(Saver().save_path),
     )
 
     screen.master.add_button(
@@ -28,7 +26,7 @@ def set(screen):
         command=screen.set_save_path,
     ).set_color(1)
 
-    screen.log_path_box: ScrollTextBlock = screen.master.add_text_box(
+    screen.log_path_box = screen.master.add_text_box(
         title="Log Path",
         row=2,
         column=1,
@@ -36,7 +34,7 @@ def set(screen):
         column_span=8,
         padx=0,
         pady=0,
-        initial_text=str(LOGGER.log_path),
+        initial_text=str(Logger().log_path),
     )
 
     screen.master.add_button(
@@ -60,7 +58,7 @@ def set(screen):
         pady=0,
     ).selectable = False
 
-    screen.yes_button: Button = screen.master.add_button(
+    screen.yes_button = screen.master.add_button(
         "Yes",
         row=5,
         column=3,
@@ -71,7 +69,7 @@ def set(screen):
         command=screen.enable_logging,
     )
 
-    screen.no_button: Button = screen.master.add_button(
+    screen.no_button = screen.master.add_button(
         "No",
         row=5,
         column=6,
