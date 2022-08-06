@@ -79,7 +79,7 @@ class MenuWithBlockDisplay(Screen):
             return
 
     def display_block(self, block_number: int):
-        if block_number < 0:
+        if int(block_number) < 0:
             return
 
         self.get_dd_result(block_number=block_number)
