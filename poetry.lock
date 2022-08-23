@@ -243,7 +243,7 @@ pycodestyle = "*"
 
 [[package]]
 name = "flake8-bugbear"
-version = "22.7.1"
+version = "22.8.22"
 description = "A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle."
 category = "dev"
 optional = false
@@ -923,7 +923,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "ee0b43f752c8e7982e20b648872528271efea53c4669b85840b15eb0d962582c"
+content-hash = "5afb3208a192a6a056a51a1c6a6f42aaf3b4a791b7f150fee4bfc93f8c95e230"
 
 [metadata.files]
 astor = [
@@ -1075,8 +1075,8 @@ flake8-bandit = [
     {file = "flake8_bandit-2.1.2.tar.gz", hash = "sha256:687fc8da2e4a239b206af2e54a90093572a60d0954f3054e23690739b0b0de3b"},
 ]
 flake8-bugbear = [
-    {file = "flake8-bugbear-22.7.1.tar.gz", hash = "sha256:e450976a07e4f9d6c043d4f72b17ec1baf717fe37f7997009c8ae58064f88305"},
-    {file = "flake8_bugbear-22.7.1-py3-none-any.whl", hash = "sha256:db5d7a831ef4412a224b26c708967ff816818cabae415e76b8c58df156c4b8e5"},
+    {file = "flake8-bugbear-22.8.22.tar.gz", hash = "sha256:1d240736dc93ecad9ff21e1d521283b9461d132b3ff2170569bd5ff3dacda385"},
+    {file = "flake8_bugbear-22.8.22-py3-none-any.whl", hash = "sha256:b5718bf5d0d28a4cfd15054f4706fc2936f7339ed8366b919a1979eb5df50764"},
 ]
 flake8-builtins = [
     {file = "flake8-builtins-1.5.3.tar.gz", hash = "sha256:09998853b2405e98e61d2ff3027c47033adbdc17f9fe44ca58443d876eb00f3b"},
