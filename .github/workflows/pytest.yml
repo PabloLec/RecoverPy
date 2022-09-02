@@ -26,7 +26,8 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install poetry
-        poetry export --dev --without-hashes > requirements.txt && pip install -r requirements.txt
+        poetry export --dev --without-hashes --output requirements.txt
+        pip install -r requirements.txt
         sudo apt install progress -y
     - name: Run unit tests
       run: |
