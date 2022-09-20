@@ -74,7 +74,7 @@ class MenuWithBlockDisplay(Screen):
 
     def display_next_block(self):
         try:
-            self.display_block(self.current_block + 1)
+            self.display_block(int(self.current_block) + 1)
         except ValueError:
             return
 
