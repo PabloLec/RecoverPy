@@ -68,7 +68,7 @@ pytest-mock = "3.6.1"
 pytest-cov = "^3.0.0"
 coverage-badge = "^1.1.0"
 mypy = "^0.971"
-types-PyYAML = "^6.0.11"
+types-PyYAML = "^6.0.12"
 
 [tool.isort]
 profile = "black"
