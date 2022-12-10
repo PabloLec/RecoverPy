@@ -10,14 +10,17 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
       - name: Install Poetry
-        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
-        run: echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+        run: |
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+          echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
       - name: Install dependencies
-        run: poetry install
-        run: sudo apt-get install progress
+        run: |
+          poetry install
+          sudo apt-get install progress
       - name: Run tests
         run: poetry run pytest
       - name: Publish
-        run: poetry config repositories.testpypi https://test.pypi.org/legacy/
-        run: poetry config pypi-token.testpypi ${{ secrets.TEST_PYPI_TOKEN }}
-        run: poetry publish --build -r testpypi --dry-run
+        run: |
+          poetry config repositories.testpypi https://test.pypi.org/legacy/
+          poetry config pypi-token.testpypi ${{ secrets.TEST_PYPI_TOKEN }}
+          poetry publish --build -r testpypi --dry-run
