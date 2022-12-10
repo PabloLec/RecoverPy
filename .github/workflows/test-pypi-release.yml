@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-python@v4
       - name: Install Poetry
         run: |
-          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+          curl -sSL https://install.python-poetry.org | python3 -
           echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
       - name: Install dependencies
         run: |
