@@ -1,15 +1,11 @@
 from logging import getLogger
 
-from recoverpy.config.config import load_config
-from recoverpy.config.setup import setup
-from recoverpy.ui.handler import SCREENS_HANDLER
-from recoverpy.ui.widgets.screen_type import ScreenType
+from ui.app import RecoverPyApp
 
 getLogger(__name__)
 
+def main() -> None:
+    RecoverPyApp().run()
 
-def main():
-    """Set configuration and start UI."""
-    setup()
-    load_config()
-    SCREENS_HANDLER.open_screen(ScreenType.PARAMS)
+if __name__ == "__main__":
+    main()
