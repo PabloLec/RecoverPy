@@ -1,10 +1,19 @@
 from textual.widgets import ListView, ListItem, Label
 
+from lib.lsblk import get_partitions
+
+from models.partition import Partition
+
+
+def _get_label(partition: Partition):
+    return Label(f"{partition.name} | {partition.fs_type} | {partition.is_mounted} | {partition.mount_point}")
+
 
 class PartitionList(ListView):
     def __init__(self, *children, **kwargs):
         super().__init__(*children, **kwargs)
-        self.append(ListItem(Label("One")))
-        self.append(ListItem(Label("Two")))
-        self.append(ListItem(Label("Three")))
-        self.append(ListItem(Label("Four")))
+        self._append_partitions()
+
+    def _append_partitions(self):
+        for partition in get_partitions():
+            self.append(ListItem(_get_label(partition)))
