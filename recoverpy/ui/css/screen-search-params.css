@@ -1,7 +1,40 @@
 Screen {
-    background: blue;
+    background: darkslategray;
+}
+
+Screen > Label {
+    margin: 1 0 0 1;
+    align-horizontal: center;
+}
+
+Input {
+    margin: 1;
+    background: slategrey;
 }
 
 PartitionList {
-    background: red;
+    margin: 1 1 0 1;
+    max-height: 80%;
+    background: slategrey;
+    height: auto;
+}
+
+ListItem {
+    background: slategrey;
+    padding: 0 0 0 1;
+}
+
+ListItem.--highlight {
+    background: darkturquoise;
+}
+
+#start-search-button {
+    dock: bottom;
+    margin: 1 1 1 1;
+    align-horizontal: center;
+    background: peachpuff;
+}
+
+#start-search-button:hover {
+    background: papayawhip;
 }
