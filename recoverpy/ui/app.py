@@ -11,3 +11,6 @@ class RecoverPyApp(App):
 
     def on_mount(self) -> None:
         self.push_screen("params")
+
+    def on_search_params_screen_continue(self, message: SearchParamsScreen.Continue) -> None:
+        exit()
