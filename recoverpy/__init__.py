@@ -1,12 +1,12 @@
 from logging import getLogger
 
-from ui.app import RecoverPyApp
+from ui.app import RecoverpyApp
 
 getLogger(__name__)
 
 
 def main() -> None:
-    RecoverPyApp().run()
+    RecoverpyApp().run()
 
 
 if __name__ == "__main__":

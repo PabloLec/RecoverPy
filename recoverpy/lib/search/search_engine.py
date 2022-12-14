@@ -1,13 +1,13 @@
 from queue import Queue
 from subprocess import Popen
-from typing import TYPE_CHECKING, Optional
+from time import sleep
+from typing import Optional
 
-if TYPE_CHECKING:
-    from recoverpy.ui.screens.screen_search import SearchScreen
+from models.progress import Progress
 
-from recoverpy.lib.helper import decode_result, get_inode
-from recoverpy.lib.meta_singleton import SingletonMeta
-from recoverpy.lib.search.static import (
+from lib.helper import decode_result, get_inode, get_block_size
+from lib.meta_singleton import SingletonMeta
+from lib.search.static import (
     format_multine_line_results,
     get_dd_output,
     start_grep_process,
@@ -33,25 +33,40 @@ class SearchEngine(metaclass=SingletonMeta):
     and consume its output.
     """
 
-    def __init__(self):
-        self.partition: str = ""
-        self.block_size: int = 0
-        self.searched_lines: list = []
-        self.is_multineline: Optional[bool] = None
+    def __init__(self, partition: str, searched_string: str):
+        self.partition: str = partition
+        self.block_size: int = get_block_size(partition)
+        self.searched_lines: list = searched_string.strip().splitlines()
+        self.is_multi_line: Optional[bool] = len(self.searched_lines) > 1
 
-    def start_search(self, search_screen: "SearchScreen"):
-        self.partition = search_screen.partition
-        self.block_size = search_screen.block_size
-        self.searched_lines = search_screen.searched_string.strip().splitlines()
-        self.is_multineline = len(self.searched_lines) > 1
+        self.queue = Queue()
+        self.block_index: int = 0
 
+    def start_search(self):
         grep_process: Popen = start_grep_process(
             searched_string=self.searched_lines[0],
             partition=self.partition,
         )
-        start_progress_monitoring_thread(grep_process, search_screen)
-        start_result_enqueue_thread(grep_process, search_screen)
-        start_result_dequeue_thread(search_screen)
+        progress = Progress()
+        start_progress_monitoring_thread(grep_process, progress)
+        start_result_enqueue_thread(grep_process, self.queue)
+        start_result_dequeue_thread(self.dequeue_results)
+
+    def dequeue_results(self):
+        while True:
+            results: Results = self.get_new_results(
+                self.queue, self.block_index
+            )
+            if results.is_empty():
+                sleep(1)
+                continue
+            self.block_index = results.block_index
+
+            #self.add_results_to_list(new_results=results.lines)
+            #self.set_title()
+
+            # Sleep to avoid unnecessary overload
+            sleep(0.5)
 
     def get_new_results(self, queue_object: Queue, current_blockindex: int) -> Results:
         """Consume grep output queue and format results."""
@@ -64,7 +79,7 @@ class SearchEngine(metaclass=SingletonMeta):
         new_results: list = queue_list[current_blockindex:]
         one_lined_results: list = format_multine_line_results(new_results)
 
-        if not self.is_multineline:
+        if not self.is_multi_line:
             return Results(lines=one_lined_results, block_index=new_block_index)
 
         final_results = [

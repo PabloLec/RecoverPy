@@ -12,8 +12,11 @@ def _get_label(partition: Partition):
 class PartitionList(ListView):
     def __init__(self, *children, **kwargs):
         super().__init__(*children, **kwargs)
+        self.list_items = {}
         self._append_partitions()
 
     def _append_partitions(self):
         for partition in get_partitions():
-            self.append(ListItem(_get_label(partition)))
+            list_item = ListItem(_get_label(partition))
+            self.list_items[list_item.id] = partition
+            self.append(list_item)

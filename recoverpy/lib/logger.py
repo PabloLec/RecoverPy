@@ -5,7 +5,7 @@ from logging import getLogger
 from pathlib import Path
 from typing import Optional
 
-from recoverpy.lib.meta_singleton import SingletonMeta
+from lib.meta_singleton import SingletonMeta
 
 
 class Logger(metaclass=SingletonMeta):

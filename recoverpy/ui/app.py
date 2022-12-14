@@ -4,13 +4,20 @@ from ui.screens.screen_search_params import SearchParamsScreen
 
 from ui.css import get_css
 
+from ui.screens.screen_search import SearchScreen
 
-class RecoverPyApp(App):
-    SCREENS = {"params": SearchParamsScreen()}
+
+class RecoverpyApp(App):
+    SCREENS = {"params": SearchParamsScreen(),
+               "search": SearchScreen()}
     CSS_PATH = get_css()
 
     def on_mount(self) -> None:
         self.push_screen("params")
 
-    def on_search_params_screen_continue(self, message: SearchParamsScreen.Continue) -> None:
-        exit()
+    async def on_search_params_screen_continue(self, message: SearchParamsScreen.Continue) -> None:
+        self.pop_screen()
+        await self.push_screen("search")
+        await self.get_screen("search").post_message(
+            SearchScreen.Start(self, message.searched_string, message.selected_partition)
+        )

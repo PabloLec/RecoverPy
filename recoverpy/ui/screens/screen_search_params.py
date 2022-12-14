@@ -6,14 +6,16 @@ from textual.widgets import Input, Button, Label
 
 from ui.widgets.partition_list import PartitionList
 
+from models.partition import Partition
+
 
 class SearchParamsScreen(Screen):
     _partition_list = None
     _search_input = None
 
     class Continue(Message):
-        def __init__(self, sender: MessageTarget, search_text: str, selected_partition: str) -> None:
-            self.search_text = search_text
+        def __init__(self, sender: MessageTarget, searched_string: str, selected_partition: str) -> None:
+            self.searched_string = searched_string
             self.selected_partition = selected_partition
             super().__init__(sender)
 
@@ -28,11 +30,11 @@ class SearchParamsScreen(Screen):
         yield Button(label="Start search", id="start-search-button")
 
     async def on_button_pressed(self) -> None:
-        search_text = self._search_input.value.strip()
-        if len(search_text) == 0:
+        searched_string = self._search_input.value.strip()
+        if len(searched_string) == 0:
             # TODO: show error message
             pass
-        selected_partition = self._partition_list.highlighted_child
+        selected_partition: Partition = self._partition_list.list_items[self._partition_list.highlighted_child.id]
 
-        await self.app.post_message(self.Continue(self, search_text, selected_partition))
+        await self.app.post_message(self.Continue(self, searched_string, selected_partition.get_full_name()))
 

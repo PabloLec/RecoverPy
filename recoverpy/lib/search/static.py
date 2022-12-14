@@ -4,12 +4,14 @@ from re import findall
 from subprocess import DEVNULL, PIPE, Popen, check_output
 from threading import Thread
 from time import sleep
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
+
+from models.progress import Progress
 
 if TYPE_CHECKING:
     from recoverpy.ui.screens.screen_search import SearchScreen
 
-from recoverpy.lib.helper import decode_result, get_inode, is_dependency_installed
+from lib.helper import decode_result, get_inode, is_dependency_installed
 
 
 def start_grep_process(searched_string: str, partition: str) -> Popen:
@@ -21,28 +23,28 @@ def start_grep_process(searched_string: str, partition: str) -> Popen:
     )
 
 
-def start_result_dequeue_thread(search_screen: "SearchScreen"):
+def start_result_dequeue_thread(dequeue_results: Callable):
     Thread(
-        target=search_screen.dequeue_results,
+        target=dequeue_results,
         daemon=True,
     ).start()
 
 
-def monitor_search_progress(search_screen: "SearchScreen", grep_pid: int):
+def monitor_search_progress(progress: Progress, grep_pid: int):
     while True:
         output: str = check_output(
             ["progress", "-p", str(grep_pid)], stderr=DEVNULL
         ).decode("utf8")
 
         if not output:
-            search_screen.set_title("100% - Search completed")
+            progress.percent = 100.0
             return
 
-        progress: list = findall(r"(\d+\.\d+%[^)]+\))", output)
-        if not progress:
+        percent: list = findall(r"(\d+\.\d+%[^)]+\))", output)
+        if not percent:
             continue
 
-        search_screen.set_title(progress[0])
+        progress.percent = float(percent[0])
         sleep(1)
 
 
@@ -52,23 +54,23 @@ def enqueue_grep_output(out: BufferedReader, queue: Queue):
     out.close()
 
 
-def start_result_enqueue_thread(grep_process: Popen, search_screen: "SearchScreen"):
+def start_result_enqueue_thread(grep_process: Popen, queue: Queue):
     Thread(
         target=enqueue_grep_output,
-        args=(grep_process.stdout, search_screen.queue_object),
+        args=(grep_process.stdout, queue),
         daemon=True,
     ).start()
 
 
 def start_progress_monitoring_thread(
-    grep_process: Popen, search_screen: "SearchScreen"
+    grep_process: Popen, progress: Progress
 ):
     if not is_dependency_installed(command="progress"):
         return
 
     Thread(
         target=monitor_search_progress,
-        args=(search_screen, grep_process.pid),
+        args=(progress, grep_process.pid),
         daemon=True,
     ).start()
 
