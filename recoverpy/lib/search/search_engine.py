@@ -1,14 +1,8 @@
 import asyncio
-from dataclasses import dataclass, field
 from queue import Queue
-from random import randint
 from subprocess import Popen
-from asyncio import ensure_future, to_thread
 from time import sleep
 from typing import Optional, Callable, List
-from psutil import Process
-
-from models.progress import Progress
 
 from lib.helper import decode_result, get_inode, get_block_size
 from lib.meta_singleton import SingletonMeta
@@ -16,37 +10,16 @@ from lib.search.static import (
     format_multine_line_results,
     get_dd_output,
     start_grep_process,
-    start_progress_monitoring_thread,
     start_result_dequeue_thread,
     start_result_enqueue_thread,
 )
-
-from lib.search.static import enqueue_grep_output
-from textual._types import MessageTarget
-from textual.message import Message
-from textual.widgets import Label, ListItem
-
 from models.grep_result import GrepResult
-
-
-@dataclass
-class Results:
-    block_index: int
-    lines: List[str] = field(default_factory=list)
-
-    def is_empty(self):
-        return len(self.lines) == 0
 
 
 class SearchEngine(metaclass=SingletonMeta):
     """Core search class spawning a grep process and multiple threads to monitor
     and consume its output.
     """
-
-    class NewResults(Message):
-        def __init__(self, sender: MessageTarget, results: Results) -> None:
-            self.results = results
-            super().__init__(sender)
 
     def __init__(self, partition: str, searched_string: str):
         self.partition: str = partition
@@ -56,8 +29,6 @@ class SearchEngine(metaclass=SingletonMeta):
         self.new_results_callback = None
         self.results_queue = Queue()
         self.list_items_queue = asyncio.Queue()
-
-        self.block_index: int = 0
 
     async def start_search(self, search_sreen, progress_callback: Callable):
         grep_process: Popen = start_grep_process(
@@ -69,46 +40,41 @@ class SearchEngine(metaclass=SingletonMeta):
 
     def dequeue_results(self, search_sreen):
         loop = asyncio.new_event_loop()
+        result_index = 0
         while True:
-            results: Results = self.get_new_results(
-                self.results_queue, self.block_index
-            )
-            self.block_index = results.block_index
-            for result in results.lines:
+            results = self.get_new_results(self.results_queue)
+            for result in results:
                 grep_result = GrepResult(result)
                 grep_result.inode = self.fix_block_number(grep_result.inode)
                 grep_result.line = self.fix_line_start(grep_result.line)
-                grep_result.create_list_item()
-
-                loop.run_until_complete(
-
-                    self.list_items_queue.put(grep_result))
+                grep_result.create_list_item("grep-result-odd" if result_index % 2 == 0 else "grep-result-even")
+                loop.run_until_complete(self.list_items_queue.put(grep_result))
+                result_index += 1
             sleep(0.1)
 
     def post_result(self, result: str):
         self.new_results_callback(result)
 
-    def get_new_results(self, queue_object: Queue, current_block_index: int) -> Results:
+    def get_new_results(self, queue_object: Queue) -> List[str]:
         """Consume grep output queue and format results."""
 
         queue_list: list = list(queue_object.queue)
         queue_size = len(queue_list)
         queue_object.queue.clear()
         if queue_size == 0:
-            return Results(block_index=current_block_index)
+            return []
 
-        new_block_index: int = current_block_index + queue_size
         one_lined_results: list = format_multine_line_results(queue_list)
 
         if not self.is_multi_line:
-            return Results(lines=one_lined_results, block_index=new_block_index)
+            return one_lined_results
 
         final_results = [
             result
             for result in one_lined_results
             if self.is_result_format_valid(result)
         ]
-        return Results(lines=final_results, block_index=new_block_index)
+        return final_results
 
     def is_result_format_valid(self, result) -> bool:
         """Check if all searched lines are present in result block and next adjacent

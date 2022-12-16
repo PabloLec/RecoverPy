@@ -1,4 +1,5 @@
 from textual.app import App
+from textual.reactive import Reactive
 
 from ui.screens.screen_search_params import SearchParamsScreen
 
@@ -13,6 +14,7 @@ class RecoverpyApp(App):
     CSS_PATH = get_css()
 
     def on_mount(self) -> None:
+        self.dark = Reactive(True)
         self.push_screen("params")
 
     async def on_search_params_screen_continue(self, message: SearchParamsScreen.Continue) -> None:

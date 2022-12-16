@@ -1,5 +1,5 @@
 SearchParamsScreen {
-    background: darkslategray;
+    background: $primary-background-darken-3;
 }
 
 SearchParamsScreen > Label {
@@ -9,7 +9,11 @@ SearchParamsScreen > Label {
 
 SearchParamsScreen > Input {
     margin: 1;
-    background: slategrey;
+    background: $primary-background;
+}
+
+SearchParamsScreen > Input:focus {
+    border: $accent tall;
 }
 
 PartitionList {
@@ -24,16 +28,16 @@ PartitionList > ListItem {
 }
 
 PartitionList > ListItem.--highlight {
-    background: darkturquoise;
+    background: $accent;
 }
 
 #start-search-button {
     dock: bottom;
     margin: 1 1 1 1;
     align-horizontal: center;
-    background: peachpuff;
+    background: $secondary-darken-2;
 }
 
 #start-search-button:hover {
-    background: papayawhip;
+    background: $secondary-lighten-2;
 }
