@@ -10,8 +10,8 @@ from models.partition import Partition
 
 
 class SearchParamsScreen(Screen):
-    _partition_list = None
-    _search_input = None
+    _partition_list: PartitionList
+    _search_input: Input
 
     class Continue(Message):
         def __init__(self, sender: MessageTarget, searched_string: str, selected_partition: str) -> None:

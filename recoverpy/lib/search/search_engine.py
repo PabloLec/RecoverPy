@@ -1,7 +1,10 @@
+import asyncio
 from queue import Queue
 from subprocess import Popen
+from asyncio import ensure_future, to_thread
 from time import sleep
-from typing import Optional
+from typing import Optional, Callable
+from psutil import Process
 
 from models.progress import Progress
 
@@ -15,6 +18,10 @@ from lib.search.static import (
     start_result_dequeue_thread,
     start_result_enqueue_thread,
 )
+
+from lib.search.static import enqueue_grep_output
+from textual._types import MessageTarget
+from textual.message import Message
 
 
 class Results:
@@ -33,51 +40,52 @@ class SearchEngine(metaclass=SingletonMeta):
     and consume its output.
     """
 
+    class NewResults(Message):
+        def __init__(self, sender: MessageTarget, results: Results) -> None:
+            self.results = results
+            super().__init__(sender)
+
     def __init__(self, partition: str, searched_string: str):
         self.partition: str = partition
         self.block_size: int = get_block_size(partition)
         self.searched_lines: list = searched_string.strip().splitlines()
         self.is_multi_line: Optional[bool] = len(self.searched_lines) > 1
-
+        self.new_results_callback = None
         self.queue = Queue()
         self.block_index: int = 0
 
-    def start_search(self):
+    async def start_search(self, search_sreen, progress_callback: Callable):
         grep_process: Popen = start_grep_process(
             searched_string=self.searched_lines[0],
             partition=self.partition,
         )
-        progress = Progress()
-        start_progress_monitoring_thread(grep_process, progress)
         start_result_enqueue_thread(grep_process, self.queue)
-        start_result_dequeue_thread(self.dequeue_results)
+        start_result_dequeue_thread(self.dequeue_results, search_sreen)
 
-    def dequeue_results(self):
+    def dequeue_results(self, search_sreen):
+        loop = asyncio.new_event_loop()
         while True:
             results: Results = self.get_new_results(
                 self.queue, self.block_index
             )
-            if results.is_empty():
-                sleep(1)
-                continue
             self.block_index = results.block_index
-
-            #self.add_results_to_list(new_results=results.lines)
-            #self.set_title()
-
-            # Sleep to avoid unnecessary overload
-            sleep(0.5)
+            if not results.is_empty():
+                loop.run_until_complete(search_sreen.post_message(self.NewResults(search_sreen, results)))
+            sleep(0.1)
+    def post_result(self, result: str):
+        self.new_results_callback(result)
 
     def get_new_results(self, queue_object: Queue, current_blockindex: int) -> Results:
         """Consume grep output queue and format results."""
 
-        if len(list(queue_object.queue)) == current_blockindex:
-            return Results()
-
         queue_list: list = list(queue_object.queue)
-        new_block_index: int = len(queue_list)
-        new_results: list = queue_list[current_blockindex:]
-        one_lined_results: list = format_multine_line_results(new_results)
+        queue_size = len(queue_list)
+        queue_object.queue.clear()
+        if queue_size == 0:
+            return Results(block_index=current_blockindex)
+
+        new_block_index: int = current_blockindex + queue_size
+        one_lined_results: list = format_multine_line_results(queue_list)
 
         if not self.is_multi_line:
             return Results(lines=one_lined_results, block_index=new_block_index)

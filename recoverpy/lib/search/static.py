@@ -1,3 +1,4 @@
+import asyncio
 from io import BufferedReader
 from queue import Queue
 from re import findall
@@ -7,9 +8,6 @@ from time import sleep
 from typing import TYPE_CHECKING, Callable
 
 from models.progress import Progress
-
-if TYPE_CHECKING:
-    from recoverpy.ui.screens.screen_search import SearchScreen
 
 from lib.helper import decode_result, get_inode, is_dependency_installed
 
@@ -23,14 +21,16 @@ def start_grep_process(searched_string: str, partition: str) -> Popen:
     )
 
 
-def start_result_dequeue_thread(dequeue_results: Callable):
+def start_result_dequeue_thread(dequeue_results: Callable, search_sreen):
+    print("Starting result dequeue thread")
     Thread(
         target=dequeue_results,
+        args=(search_sreen,),
         daemon=True,
     ).start()
 
 
-def monitor_search_progress(progress: Progress, grep_pid: int):
+def monitor_search_progress(progress: Progress, grep_pid: int, callback: Callable):
     while True:
         output: str = check_output(
             ["progress", "-p", str(grep_pid)], stderr=DEVNULL
@@ -38,6 +38,7 @@ def monitor_search_progress(progress: Progress, grep_pid: int):
 
         if not output:
             progress.percent = 100.0
+            callback(progress)
             return
 
         percent: list = findall(r"(\d+\.\d+%[^)]+\))", output)
@@ -45,16 +46,24 @@ def monitor_search_progress(progress: Progress, grep_pid: int):
             continue
 
         progress.percent = float(percent[0])
-        sleep(1)
+        callback(progress)
+        sleep(0.5)
 
 
 def enqueue_grep_output(out: BufferedReader, queue: Queue):
+    loop = asyncio.new_event_loop()
+    loop.run_until_complete(read_grep_buffer(out, queue))
+    loop.close()
+
+
+def read_grep_buffer(out: BufferedReader, queue: Queue):
     for line in iter(out.readline, b""):
         queue.put(line)
     out.close()
 
 
 def start_result_enqueue_thread(grep_process: Popen, queue: Queue):
+    print("Starting result enqueue thread")
     Thread(
         target=enqueue_grep_output,
         args=(grep_process.stdout, queue),
@@ -63,14 +72,16 @@ def start_result_enqueue_thread(grep_process: Popen, queue: Queue):
 
 
 def start_progress_monitoring_thread(
-    grep_process: Popen, progress: Progress
+        grep_process: Popen, callback: Callable
 ):
     if not is_dependency_installed(command="progress"):
         return
 
+    progress = Progress()
+    print("Starting progress monitoring thread")
     Thread(
         target=monitor_search_progress,
-        args=(progress, grep_process.pid),
+        args=(progress, grep_process.pid, callback),
         daemon=True,
     ).start()
 

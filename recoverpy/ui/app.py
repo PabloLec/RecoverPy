@@ -21,3 +21,5 @@ class RecoverpyApp(App):
         await self.get_screen("search").post_message(
             SearchScreen.Start(self, message.searched_string, message.selected_partition)
         )
+        print("start search message sent")
+
