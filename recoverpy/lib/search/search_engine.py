@@ -26,7 +26,7 @@ from textual._types import MessageTarget
 from textual.message import Message
 from textual.widgets import Label, ListItem
 
-from lib.search.grep_result import GrepResult
+from models.grep_result import GrepResult
 
 
 @dataclass

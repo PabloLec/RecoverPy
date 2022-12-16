@@ -1,0 +1,8 @@
+GrepResultList {
+    max-width: 80%;
+}
+
+GrepResultList > ListItem > Label{
+    padding: 0 0 0 1;
+    max-width: 98%;
+}

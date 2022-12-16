@@ -1,13 +1,13 @@
-Screen {
+SearchParamsScreen {
     background: darkslategray;
 }
 
-Screen > Label {
+SearchParamsScreen > Label {
     margin: 1 0 0 1;
     align-horizontal: center;
 }
 
-Input {
+SearchParamsScreen > Input {
     margin: 1;
     background: slategrey;
 }
@@ -19,12 +19,11 @@ PartitionList {
     height: auto;
 }
 
-ListItem {
-    background: slategrey;
+PartitionList > ListItem {
     padding: 0 0 0 1;
 }
 
-ListItem.--highlight {
+PartitionList > ListItem.--highlight {
     background: darkturquoise;
 }
 
