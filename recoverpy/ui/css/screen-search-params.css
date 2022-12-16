@@ -1,7 +1,3 @@
-SearchParamsScreen {
-    background: $primary-background-darken-3;
-}
-
 SearchParamsScreen > Label {
     margin: 1 0 0 1;
     align-horizontal: center;
