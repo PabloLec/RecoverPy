@@ -35,6 +35,5 @@ class SearchParamsScreen(Screen):
             # TODO: show error message
             pass
         selected_partition: Partition = self._partition_list.list_items[self._partition_list.highlighted_child.id]
-
         await self.app.post_message(self.Continue(self, searched_string, selected_partition.get_full_name()))
 

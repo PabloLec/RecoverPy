@@ -1,9 +1,11 @@
 import asyncio
+from dataclasses import dataclass, field
 from queue import Queue
+from random import randint
 from subprocess import Popen
 from asyncio import ensure_future, to_thread
 from time import sleep
-from typing import Optional, Callable
+from typing import Optional, Callable, List
 from psutil import Process
 
 from models.progress import Progress
@@ -22,14 +24,15 @@ from lib.search.static import (
 from lib.search.static import enqueue_grep_output
 from textual._types import MessageTarget
 from textual.message import Message
+from textual.widgets import Label, ListItem
+
+from lib.search.grep_result import GrepResult
 
 
+@dataclass
 class Results:
-    def __init__(self, lines=None, block_index: int = 0):
-        if lines is None:
-            lines = list()
-        self.lines: list = lines
-        self.block_index: int = block_index
+    block_index: int
+    lines: List[str] = field(default_factory=list)
 
     def is_empty(self):
         return len(self.lines) == 0
@@ -51,7 +54,9 @@ class SearchEngine(metaclass=SingletonMeta):
         self.searched_lines: list = searched_string.strip().splitlines()
         self.is_multi_line: Optional[bool] = len(self.searched_lines) > 1
         self.new_results_callback = None
-        self.queue = Queue()
+        self.results_queue = Queue()
+        self.list_items_queue = asyncio.Queue()
+
         self.block_index: int = 0
 
     async def start_search(self, search_sreen, progress_callback: Callable):
@@ -59,32 +64,40 @@ class SearchEngine(metaclass=SingletonMeta):
             searched_string=self.searched_lines[0],
             partition=self.partition,
         )
-        start_result_enqueue_thread(grep_process, self.queue)
+        start_result_enqueue_thread(grep_process, self.results_queue)
         start_result_dequeue_thread(self.dequeue_results, search_sreen)
 
     def dequeue_results(self, search_sreen):
         loop = asyncio.new_event_loop()
         while True:
             results: Results = self.get_new_results(
-                self.queue, self.block_index
+                self.results_queue, self.block_index
             )
             self.block_index = results.block_index
-            if not results.is_empty():
-                loop.run_until_complete(search_sreen.post_message(self.NewResults(search_sreen, results)))
+            for result in results.lines:
+                grep_result = GrepResult(result)
+                grep_result.inode = self.fix_block_number(grep_result.inode)
+                grep_result.line = self.fix_line_start(grep_result.line)
+                grep_result.create_list_item()
+
+                loop.run_until_complete(
+
+                    self.list_items_queue.put(grep_result))
             sleep(0.1)
+
     def post_result(self, result: str):
         self.new_results_callback(result)
 
-    def get_new_results(self, queue_object: Queue, current_blockindex: int) -> Results:
+    def get_new_results(self, queue_object: Queue, current_block_index: int) -> Results:
         """Consume grep output queue and format results."""
 
         queue_list: list = list(queue_object.queue)
         queue_size = len(queue_list)
         queue_object.queue.clear()
         if queue_size == 0:
-            return Results(block_index=current_blockindex)
+            return Results(block_index=current_block_index)
 
-        new_block_index: int = current_blockindex + queue_size
+        new_block_index: int = current_block_index + queue_size
         one_lined_results: list = format_multine_line_results(queue_list)
 
         if not self.is_multi_line:
@@ -114,17 +127,22 @@ class SearchEngine(metaclass=SingletonMeta):
         )
         return all(line in both_block_output for line in self.searched_lines)
 
-    def fix_block_number(self, block_number: str) -> str:
+    def fix_line_start(self, line: str) -> str:
+        result_index: int = line.find(self.searched_lines[0])
+        return line[min(result_index, 15):]
+
+    def fix_block_number(self, block_number: int) -> int:
         """Fix result block number if search string is too far from beginning of
         returned inode number.
         """
 
-        fixed_block = int(block_number)
+        block_number = int(block_number / self.block_size)
+
         for _ in range(10):
             dd_output: str = decode_result(
-                get_dd_output(self.partition, self.block_size, fixed_block)
+                get_dd_output(self.partition, self.block_size, block_number)
             )
             if self.searched_lines[0] in dd_output:
-                return str(fixed_block)
-            fixed_block += 1
+                return block_number
+            block_number += 1
         return block_number

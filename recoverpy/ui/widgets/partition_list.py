@@ -17,6 +17,6 @@ class PartitionList(ListView):
 
     def _append_partitions(self):
         for partition in get_partitions():
-            list_item = ListItem(_get_label(partition))
+            list_item = ListItem(_get_label(partition), id=partition.name)
             self.list_items[list_item.id] = partition
             self.append(list_item)
