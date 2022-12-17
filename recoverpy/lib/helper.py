@@ -4,8 +4,6 @@ from subprocess import DEVNULL, call, check_output
 
 from py_cui import PyCUI
 
-from lib.logger import Logger
-
 _IGNORED_PARTITIONS_TYPES: tuple = (" loop ", "swap")
 
 
@@ -84,3 +82,16 @@ def get_block_size(partition: str) -> int:
 def get_inode(string: str) -> int:
     match = findall(r"^(\d+):", string)
     return int(match[0]) if len(match) >= 1 else None
+
+
+def get_dd_output(partition: str, block_size: int, block_number: int) -> bytes:
+    return check_output(
+        [
+            "dd",
+            f"if={partition}",
+            "count=1",
+            "status=none",
+            f"bs={block_size}",
+            f"skip={block_number}",
+        ]
+    )

@@ -3,7 +3,7 @@ from typing import List
 
 from lib.helper import decode_result
 from lib.helper import get_inode
-from lib.search.static import get_dd_output
+from lib.helper import get_dd_output
 
 from models.search_params import SearchParams
 

@@ -2,11 +2,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from recoverpy.lib.logger import Logger
-from recoverpy.lib.meta_singleton import SingletonMeta
 
-
-class Saver(metaclass=SingletonMeta):
+class Saver():
     """Encapsulates all result saving related methods."""
 
     def __init__(self):
@@ -33,4 +30,3 @@ class Saver(metaclass=SingletonMeta):
 
         self.last_saved_file = file_name
 
-        Logger().write("info", f"Output saved in file {file_name}")

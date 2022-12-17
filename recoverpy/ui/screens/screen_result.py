@@ -4,7 +4,7 @@ from textual.events import Event
 from textual.screen import Screen
 from textual.widgets import Label, Button, TextLog
 
-from lib.search.static import get_dd_output
+from lib.helper import get_dd_output
 
 from lib.helper import decode_result
 
