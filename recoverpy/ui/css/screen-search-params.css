@@ -8,10 +8,6 @@ SearchParamsScreen > Input {
     background: $primary-background;
 }
 
-SearchParamsScreen > Input:focus {
-    border: $accent tall;
-}
-
 PartitionList {
     margin: 1 1 0 1;
     max-height: 80%;

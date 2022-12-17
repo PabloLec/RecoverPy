@@ -41,7 +41,7 @@ class SearchScreen(Screen):
         self.search_engine = SearchEngine(message.selected_partition, message.searched_string)
         while self._grep_result_list not in self.visible_widgets:
             continue
-        await self.search_engine.start_search(self, self.progress_callback)
+        await self.search_engine.start_search()
         ensure_future(self._grep_result_list.start_consumer(self.search_engine.list_items_queue))
 
     async def progress_callback(self, progress: int):

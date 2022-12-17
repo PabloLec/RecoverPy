@@ -12,22 +12,6 @@ from models.progress import Progress
 from lib.helper import decode_result, get_inode, is_dependency_installed
 
 
-def start_grep_process(searched_string: str, partition: str) -> Popen:
-    return Popen(
-        ["grep", "-a", "-b", f"{searched_string}", partition],
-        stdin=None,
-        stdout=PIPE,
-        stderr=None,
-    )
-
-
-def start_result_dequeue_thread(dequeue_results: Callable, search_sreen):
-    print("Starting result dequeue thread")
-    Thread(
-        target=dequeue_results,
-        args=(search_sreen,),
-        daemon=True,
-    ).start()
 
 
 def monitor_search_progress(progress: Progress, grep_pid: int, callback: Callable):
@@ -50,25 +34,10 @@ def monitor_search_progress(progress: Progress, grep_pid: int, callback: Callabl
         sleep(0.5)
 
 
-def enqueue_grep_output(out: BufferedReader, queue: Queue):
-    loop = asyncio.new_event_loop()
-    loop.run_until_complete(read_grep_buffer(out, queue))
-    loop.close()
 
 
-def read_grep_buffer(out: BufferedReader, queue: Queue):
-    for line in iter(out.readline, b""):
-        queue.put(line)
-    out.close()
 
 
-def start_result_enqueue_thread(grep_process: Popen, queue: Queue):
-    print("Starting result enqueue thread")
-    Thread(
-        target=enqueue_grep_output,
-        args=(grep_process.stdout, queue),
-        daemon=True,
-    ).start()
 
 
 def start_progress_monitoring_thread(
@@ -84,26 +53,6 @@ def start_progress_monitoring_thread(
         args=(progress, grep_process.pid, callback),
         daemon=True,
     ).start()
-
-
-def format_multine_line_results(results: list) -> list:
-    """Format all new results to fit in one line."""
-
-    decoded_results = [decode_result(r) for r in results]
-    inodes_indexes = [
-        i for i, x in enumerate(decoded_results) if get_inode(x) is not None
-    ]
-
-    full_results = []
-    for i, inode_index in enumerate(inodes_indexes):
-        if i == len(inodes_indexes) - 1:
-            full_results.append("".join(decoded_results[inode_index:]))
-        else:
-            stop_index = inodes_indexes[i + 1]
-            full_results.append("".join(decoded_results[inode_index:stop_index]))
-
-    return full_results
-
 
 def get_dd_output(partition: str, block_size: int, block_number: int) -> bytes:
     return check_output(

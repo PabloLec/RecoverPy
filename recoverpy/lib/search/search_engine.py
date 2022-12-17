@@ -7,8 +7,10 @@ from typing import Optional, Callable, List
 from lib.helper import decode_result, get_inode, get_block_size
 from lib.meta_singleton import SingletonMeta
 from lib.search.static import (
-    format_multine_line_results,
     get_dd_output,
+)
+
+from lib.search.thread_factory import (
     start_grep_process,
     start_result_dequeue_thread,
     start_result_enqueue_thread,
@@ -30,15 +32,15 @@ class SearchEngine(metaclass=SingletonMeta):
         self.results_queue = Queue()
         self.list_items_queue = asyncio.Queue()
 
-    async def start_search(self, search_sreen, progress_callback: Callable):
+    async def start_search(self):
         grep_process: Popen = start_grep_process(
             searched_string=self.searched_lines[0],
             partition=self.partition,
         )
         start_result_enqueue_thread(grep_process, self.results_queue)
-        start_result_dequeue_thread(self.dequeue_results, search_sreen)
+        start_result_dequeue_thread(self.dequeue_results)
 
-    def dequeue_results(self, search_sreen):
+    def dequeue_results(self):
         loop = asyncio.new_event_loop()
         result_index = 0
         while True:
@@ -52,9 +54,6 @@ class SearchEngine(metaclass=SingletonMeta):
                 result_index += 1
             sleep(0.1)
 
-    def post_result(self, result: str):
-        self.new_results_callback(result)
-
     def get_new_results(self, queue_object: Queue) -> List[str]:
         """Consume grep output queue and format results."""
 
@@ -64,14 +63,14 @@ class SearchEngine(metaclass=SingletonMeta):
         if queue_size == 0:
             return []
 
-        one_lined_results: list = format_multine_line_results(queue_list)
+        decoded_results: List[str] = [decode_result(r) for r in queue_list]
 
         if not self.is_multi_line:
-            return one_lined_results
+            return decoded_results
 
         final_results = [
             result
-            for result in one_lined_results
+            for result in decoded_results
             if self.is_result_format_valid(result)
         ]
         return final_results
