@@ -27,9 +27,9 @@ PartitionList > ListItem.--highlight {
     dock: bottom;
     margin: 1 1 1 1;
     align-horizontal: center;
-    background: $success-darken-2;
+    background: $primary-darken-2;
 }
 
 #start-search-button:hover {
-    background: $success-lighten-2;
+    background: $primary-lighten-2;
 }
