@@ -5,6 +5,7 @@ from tkinter import Widget
 from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.containers import Vertical, Horizontal
+from textual.events import Event
 from textual.message import Message
 from textual.screen import Screen
 
@@ -55,6 +56,7 @@ class SearchScreen(Screen):
             id="info-bar",
         )
         yield Button("Open", id="open-button")
+        yield Button("Exit", id="exit-button")
 
     async def on_search_screen_start(self, message: Start) -> None:
         self.search_engine = SearchEngine(message.selected_partition, message.searched_string)
@@ -72,3 +74,10 @@ class SearchScreen(Screen):
                     self._progress_title_label.update("- progress -")
                 self._progress_label.update(f"{self.search_engine.search_progress.progress_percent}%")
             await asyncio.sleep(0.1)
+
+    async def on_button_pressed(self, event: Event) -> None:
+        button_id = event.sender.id
+        if button_id == "exit-button":
+            self.search_engine.stop_search()
+            self.app.exit()
+            exit()

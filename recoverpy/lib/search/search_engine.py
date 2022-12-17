@@ -23,6 +23,7 @@ class SearchEngine:
     """Core search class spawning a grep process and multiple threads to monitor
     and consume its output.
     """
+    _grep_process: Popen
 
     def __init__(self, partition: str, searched_string: str):
         self.search_params = SearchParams(partition, searched_string)
@@ -32,14 +33,13 @@ class SearchEngine:
         self.list_items_queue = asyncio.Queue()
 
     async def start_search(self):
-        grep_process: Popen = start_grep_process(
+        self._grep_process = start_grep_process(
             searched_string=self.search_params.searched_lines[0],
             partition=self.search_params.partition,
         )
-        start_result_enqueue_thread(grep_process, self.results_queue)
+        start_result_enqueue_thread(self._grep_process, self.results_queue)
         start_result_dequeue_thread(self.dequeue_results)
-        start_progress_monitoring_thread(grep_process, self.search_progress)
-
+        start_progress_monitoring_thread(self._grep_process, self.search_progress)
 
     def dequeue_results(self):
         loop = asyncio.new_event_loop()
@@ -58,3 +58,5 @@ class SearchEngine:
         grep_result.create_list_item("grep-result-odd" if result_index % 2 == 0 else "grep-result-even")
         return grep_result
 
+    def stop_search(self):
+        self._grep_process.kill()
