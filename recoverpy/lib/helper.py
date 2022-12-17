@@ -84,7 +84,7 @@ def get_inode(string: str) -> int:
     return int(match[0]) if len(match) >= 1 else None
 
 
-def get_dd_output(partition: str, block_size: int, block_number: int) -> bytes:
+def get_dd_output(partition: str, block_size: int, inode: int) -> bytes:
     return check_output(
         [
             "dd",
@@ -92,6 +92,6 @@ def get_dd_output(partition: str, block_size: int, block_number: int) -> bytes:
             "count=1",
             "status=none",
             f"bs={block_size}",
-            f"skip={block_number}",
+            f"skip={inode}",
         ]
     )

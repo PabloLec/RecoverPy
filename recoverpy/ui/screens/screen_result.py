@@ -10,30 +10,36 @@ from lib.helper import decode_result
 
 from lib.helper import get_printable
 
+from lib.saver import Saver
+
 
 class ResultScreen(Screen):
     def __init__(self, *args, **kwargs):
+        self.saver = Saver()
         self._partition = ""
         self._block_size = 0
         self._inode = 0
         self._inode_label = Label("", id="inode-label")
         self._block_content = TextLog(markup=False, wrap=True)
+        self._raw_block_content = None
         super().__init__(*args, **kwargs)
 
     def set(self, partition: str, block_size: int, inode: int) -> None:
+        self.saver.reset()
         self._partition = partition
         self._block_size = block_size
         self._inode = inode
         self.update_inode_label()
         self.update_block_content()
+        self.saver.add(self._inode, self._raw_block_content)
 
     def update_inode_label(self) -> None:
         self._inode_label.update(f"Result for inode {self._inode}")
 
     def update_block_content(self) -> None:
         self._block_content.clear()
-        self._block_content.write(
-            get_printable(decode_result(get_dd_output(self._partition, self._block_size, self._inode))))
+        self._raw_block_content = decode_result(get_dd_output(self._partition, self._block_size, self._inode))
+        self._block_content.write(get_printable(self._raw_block_content))
 
     def compose(self) -> ComposeResult:
         yield Horizontal(self._inode_label, id="inode-label-container")
@@ -59,10 +65,10 @@ class ResultScreen(Screen):
             self.update_inode_label()
             self.update_block_content()
         elif button_id == "add-block-button":
-            pass
+            self.saver.add(self._inode, self._raw_block_content)
         elif button_id == "next-button":
             self._inode += 1
             self.update_inode_label()
             self.update_block_content()
         elif button_id == "save-button":
-            pass
+            self.saver.save()

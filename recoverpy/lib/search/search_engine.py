@@ -53,7 +53,7 @@ class SearchEngine:
 
     def create_grep_result(self, result: str, result_index: int) -> GrepResult:
         grep_result = GrepResult(result)
-        grep_result.inode = self.result_processor.fix_block_number(grep_result.inode)
+        grep_result.inode = self.result_processor.fix_inode(grep_result.inode)
         grep_result.line = self.result_processor.fix_line_start(grep_result.line)
         grep_result.create_list_item("grep-result-odd" if result_index % 2 == 0 else "grep-result-even")
         return grep_result

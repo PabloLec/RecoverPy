@@ -54,18 +54,18 @@ class ResultProcessor:
         result_index: int = line.find(self.search_params.searched_lines[0])
         return line[min(result_index, 15):]
 
-    def fix_block_number(self, block_number: int) -> int:
+    def fix_inode(self, inode: int) -> int:
         """Fix result block number if search string is too far from beginning of
         returned inode number.
         """
 
-        block_number = int(block_number / self.search_params.block_size)
+        inode = int(inode / self.search_params.block_size)
 
         for _ in range(10):
             dd_output: str = decode_result(
-                get_dd_output(self.search_params.partition, self.search_params.block_size, block_number)
+                get_dd_output(self.search_params.partition, self.search_params.block_size, inode)
             )
             if self.search_params.searched_lines[0] in dd_output:
-                return block_number
-            block_number += 1
-        return block_number
+                return inode
+            inode += 1
+        return inode
