@@ -39,7 +39,7 @@ class SearchEngine:
         start_result_enqueue_thread(grep_process, self.results_queue)
         start_result_dequeue_thread(self.dequeue_results)
         start_progress_monitoring_thread(grep_process, self.search_progress)
-        ensure_future(self.get_progress())
+
 
     def dequeue_results(self):
         loop = asyncio.new_event_loop()
@@ -57,9 +57,4 @@ class SearchEngine:
         grep_result.line = self.result_processor.fix_line_start(grep_result.line)
         grep_result.create_list_item("grep-result-odd" if result_index % 2 == 0 else "grep-result-even")
         return grep_result
-
-    async def get_progress(self):
-        while True:
-            print("PROGRESS", self.search_progress.result_count, self.search_progress.progress_percent)
-            await asyncio.sleep(0.1)
 

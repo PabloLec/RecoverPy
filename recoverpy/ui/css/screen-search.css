@@ -1,5 +1,44 @@
+SearchScreen {
+    layout: grid;
+    grid-size: 2 2;
+    grid-columns: 7fr 1fr;
+    grid-rows: 8fr 1fr;
+}
+
+#info-bar {
+    height: auto;
+    align: center top;
+}
+
+.info-container {
+    height: auto;
+    align: center top;
+    width: 100%;
+}
+
+#result-count-title {
+    margin: 1 0 0 0;
+}
+
+#progress-title {
+    margin: 1 0 0 0;
+}
+
+#open-button {
+    content-align: center bottom;
+    width: 100%;
+    margin: 0 1 0 1;
+    background: $secondary-darken-2;
+}
+
+#open-button:hover {
+    background: $secondary-lighten-2;
+}
+
 GrepResultList {
-    max-width: 80%;
+    row-span: 5;
+    column-span: 1;
+    height: 100%;
 }
 
 GrepResultList > ListItem > Label {
