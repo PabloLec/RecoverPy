@@ -1,3 +1,5 @@
+from asyncio import sleep
+
 from textual.app import App
 from textual.reactive import Reactive
 
@@ -7,10 +9,14 @@ from ui.css import get_css
 
 from ui.screens.screen_search import SearchScreen
 
+from ui.screens.screen_result import ResultScreen
+
 
 class RecoverpyApp(App):
     SCREENS = {"params": ParamsScreen(),
-               "search": SearchScreen()}
+               "search": SearchScreen(),
+               "result": ResultScreen(),
+               }
     CSS_PATH = get_css()
 
     def on_mount(self) -> None:
@@ -24,3 +30,6 @@ class RecoverpyApp(App):
             SearchScreen.Start(self, message.searched_string, message.selected_partition)
         )
 
+    async def on_search_screen_open(self, message: SearchScreen.Open) -> None:
+        self.get_screen("result").set_inode(message.grep_result.inode)
+        await self.push_screen("result")

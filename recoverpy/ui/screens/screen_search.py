@@ -1,5 +1,6 @@
 import asyncio
 from asyncio import ensure_future, to_thread, get_event_loop
+from time import sleep
 from tkinter import Widget
 
 from textual._types import MessageTarget
@@ -15,6 +16,8 @@ from textual.widgets import Label, Button
 
 from ui.widgets.grep_result_list import GrepResultList
 
+from models.grep_result import GrepResult
+
 
 class SearchScreen(Screen):
     _grep_result_list: GrepResultList
@@ -29,18 +32,18 @@ class SearchScreen(Screen):
             self.selected_partition = selected_partition
             super().__init__(sender)
 
+    class Open(Message):
+        def __init__(self, sender: MessageTarget, grep_result: GrepResult) -> None:
+            self.grep_result = grep_result
+            super().__init__(sender)
+
     class InfoContainer(Horizontal):
         def __init__(self, *args, **kwargs):
             super().__init__(classes="info-container", *args, **kwargs)
 
-    def __init__(
-            self,
-            name: str | None = None,
-            id: str | None = None,
-            classes: str | None = None,
-    ):
-        super().__init__(name, id, classes)
+    def __init__(self, *args, **kwargs):
         self.results = []
+        super().__init__(*args, **kwargs)
 
     def compose(self) -> ComposeResult:
         self._grep_result_list = GrepResultList()
@@ -81,3 +84,6 @@ class SearchScreen(Screen):
             self.search_engine.stop_search()
             self.app.exit()
             exit()
+        elif button_id == "open-button":
+            await self.app.post_message(self.Open(self, self._grep_result_list.grep_results[self._grep_result_list.index]))
+
