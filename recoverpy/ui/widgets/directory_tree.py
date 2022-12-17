@@ -113,6 +113,8 @@ class DirectoryTree(Tree[DirEntry]):
             key=lambda path: (not path.is_dir(), path.name.lower()),
         )
         for path in directory:
+            if not path.is_dir():
+                continue
             node.add(
                 path.name,
                 data=DirEntry(str(path), path.is_dir()),
