@@ -13,7 +13,6 @@ def monitor_search_progress(grep_pid: int, progress: SearchProgress):
 
         if not output:
             progress.progress_percent = 100.0
-            return
 
         percent: list = findall(r"(\d+\.\d+)%", output)
 

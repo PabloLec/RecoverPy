@@ -33,8 +33,10 @@ class SearchScreen(Screen):
             super().__init__(sender)
 
     class Open(Message):
-        def __init__(self, sender: MessageTarget, grep_result: GrepResult) -> None:
-            self.grep_result = grep_result
+        def __init__(self, sender: MessageTarget, inode: int, block_size: int, partition: str) -> None:
+            self.inode = inode
+            self.block_size = block_size
+            self.partition = partition
             super().__init__(sender)
 
     class InfoContainer(Horizontal):
@@ -85,5 +87,11 @@ class SearchScreen(Screen):
             self.app.exit()
             exit()
         elif button_id == "open-button":
-            await self.app.post_message(self.Open(self, self._grep_result_list.grep_results[self._grep_result_list.index]))
+            await self.app.post_message(
+                self.Open(self,
+                          self._grep_result_list.grep_results[self._grep_result_list.index].inode,
+                          self.search_engine.search_params.block_size,
+                          self.search_engine.search_params.partition,
+                          )
+            )
 

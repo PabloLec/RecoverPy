@@ -31,6 +31,5 @@ class RecoverpyApp(App):
         )
 
     async def on_search_screen_open(self, message: SearchScreen.Open) -> None:
-        print("open", message.grep_result.inode)
-        self.get_screen("result").set_inode(message.grep_result.inode)
+        self.get_screen("result").set(message.partition, message.block_size, message.inode)
         await self.push_screen("result")
