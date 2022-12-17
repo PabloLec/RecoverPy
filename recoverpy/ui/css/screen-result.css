@@ -1,6 +1,6 @@
 ResultScreen {
     layout: grid;
-    grid-size: 5 3;
+    grid-size: 5 4;
     grid-rows: 1fr 10fr 3fr;
 }
 

@@ -11,11 +11,14 @@ from ui.screens.screen_search import SearchScreen
 
 from ui.screens.screen_result import ResultScreen
 
+from ui.screens.screen_save import SaveScreen
+
 
 class RecoverpyApp(App):
     SCREENS = {"params": ParamsScreen(),
                "search": SearchScreen(),
                "result": ResultScreen(),
+               "save": SaveScreen(),
                }
     CSS_PATH = get_css()
 

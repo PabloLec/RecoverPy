@@ -15,7 +15,7 @@ from lib.saver import Saver
 
 class ResultScreen(Screen):
     def __init__(self, *args, **kwargs):
-        self.saver = Saver()
+        self._saver = Saver()
         self._partition = ""
         self._block_size = 0
         self._inode = 0
@@ -25,13 +25,13 @@ class ResultScreen(Screen):
         super().__init__(*args, **kwargs)
 
     def set(self, partition: str, block_size: int, inode: int) -> None:
-        self.saver.reset()
+        self._saver.reset()
         self._partition = partition
         self._block_size = block_size
         self._inode = inode
         self.update_inode_label()
         self.update_block_content()
-        self.saver.add(self._inode, self._raw_block_content)
+        self._saver.add(self._inode, self._raw_block_content)
 
     def update_inode_label(self) -> None:
         self._inode_label.update(f"Result for inode {self._inode}")
@@ -65,10 +65,11 @@ class ResultScreen(Screen):
             self.update_inode_label()
             self.update_block_content()
         elif button_id == "add-block-button":
-            self.saver.add(self._inode, self._raw_block_content)
+            self._saver.add(self._inode, self._raw_block_content)
         elif button_id == "next-button":
             self._inode += 1
             self.update_inode_label()
             self.update_block_content()
         elif button_id == "save-button":
-            self.saver.save()
+            self.app.get_screen("save").set_saver(self._saver)
+            await self.app.push_screen("save")
