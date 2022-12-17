@@ -24,6 +24,9 @@ class Saver:
 
         self._save_result_string(final_output)
 
+    def update_save_path(self, path: str):
+        self.save_path = pathlib.Path(path)
+
     def _save_result_string(self, result: str):
         if self.save_path is None:
             return
