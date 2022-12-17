@@ -9,7 +9,7 @@ from ui.widgets.partition_list import PartitionList
 from models.partition import Partition
 
 
-class SearchParamsScreen(Screen):
+class ParamsScreen(Screen):
     _partition_list: PartitionList
     _search_input: Input
 

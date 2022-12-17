@@ -1,9 +1,9 @@
-SearchParamsScreen > Label {
+ParamsScreen > Label {
     margin: 1 0 0 1;
     align-horizontal: center;
 }
 
-SearchParamsScreen > Input {
+ParamsScreen > Input {
     margin: 1;
     background: $primary-background;
 }
