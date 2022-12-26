@@ -1,0 +1,19 @@
+#modal-container {
+   grid-size: 2;
+   grid-gutter: 1 2;
+   margin: 1 2;
+   height: 80%;
+}
+
+#modal-message {
+    column-span: 2;
+    content-align: center bottom;
+    width: 100%;
+    height: 100%;
+}
+
+#modal-button-container {
+    column-span: 2;
+    align: center bottom;
+    height: auto;
+}

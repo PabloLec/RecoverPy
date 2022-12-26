@@ -1,7 +1,9 @@
 from asyncio import Event
 
+from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
+from textual.message import Message
 from textual.screen import Screen
 
 from lib.saver import Saver
@@ -11,6 +13,11 @@ from ui.screens.screen_path_edit import PathEditScreen
 
 
 class SaveScreen(Screen):
+    class Saved(Message):
+        def __init__(self, sender: MessageTarget, save_path: str) -> None:
+            self.save_path = save_path
+            super().__init__(sender)
+
     def __init__(self, *args, **kwargs):
         self._saver = None
         self._save_path_label = Label("", id="save-path-label")
@@ -24,12 +31,13 @@ class SaveScreen(Screen):
         yield Vertical(
             Label("Current save path:", id="save-path-title-label"),
             self._save_path_label,
-            id="save-path-container")
+            id="save-path-container",
+        )
         yield Horizontal(
             Button("Go back", id="go-back-button"),
             Button("Edit save path", id="edit-save-path-button"),
             Button("Save", id="save-button"),
-            id="action-buttons-container"
+            id="action-buttons-container",
         )
 
     def _set_save_path(self):
@@ -44,6 +52,7 @@ class SaveScreen(Screen):
         elif button_id == "save-button":
             self._saver.save()
             self.app.pop_screen()
+            await self.app.post_message(self.Saved(self, str(self._saver.save_path/self._saver.last_saved_file)))
 
     async def on_path_edit_screen_confirm(self, event: PathEditScreen.Confirm) -> None:
         print(event.selected_dir)
