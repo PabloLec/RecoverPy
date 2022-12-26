@@ -5,7 +5,7 @@ from time import sleep
 from recoverpy.models.search_progress import SearchProgress
 
 
-def monitor_search_progress(grep_pid: int, progress: SearchProgress):
+def monitor_search_progress(grep_pid: int, progress: SearchProgress) -> None:
     while True:
         output: str = check_output(
             ["progress", "-p", str(grep_pid)], stderr=DEVNULL

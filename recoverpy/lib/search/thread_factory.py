@@ -1,4 +1,4 @@
-from multiprocessing import Queue
+from queue import Queue
 from subprocess import PIPE, Popen
 from threading import Thread
 from typing import Callable
@@ -18,7 +18,7 @@ def start_grep_process(searched_string: str, partition: str) -> Popen:
     )
 
 
-def start_result_enqueue_thread(grep_process: Popen, queue: Queue):
+def start_result_enqueue_thread(grep_process: Popen, queue: Queue) -> None:
     Thread(
         target=enqueue_grep_output,
         args=(grep_process.stdout, queue),
@@ -26,14 +26,16 @@ def start_result_enqueue_thread(grep_process: Popen, queue: Queue):
     ).start()
 
 
-def start_result_dequeue_thread(dequeue_results: Callable):
+def start_result_dequeue_thread(dequeue_results: Callable) -> None:
     Thread(
         target=dequeue_results,
         daemon=True,
     ).start()
 
 
-def start_progress_monitoring_thread(grep_process: Popen, progress: SearchProgress):
+def start_progress_monitoring_thread(
+    grep_process: Popen, progress: SearchProgress
+) -> None:
     if not is_dependency_installed(command="progress"):
         return
 

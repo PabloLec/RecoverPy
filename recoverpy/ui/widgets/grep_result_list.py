@@ -1,8 +1,9 @@
 """A Textual ListView widget consuming an asyncio Queue"""
 
 from asyncio import Lock, Queue, sleep
+from typing import cast
 
-from textual.widgets import ListItem, ListView
+from textual.widgets import Label, ListItem, ListView
 
 from recoverpy.models.grep_result import GrepResult
 
@@ -22,9 +23,11 @@ class GrepResultList(ListView):
                 await sleep(0.1)
                 continue
             grep_result = await queue.get()
-            await self.append(grep_result)
+            await self._append(grep_result)
 
-    async def append(self, grep_result: GrepResult) -> None:
+    async def _append(self, grep_result: GrepResult) -> None:
+        if grep_result.list_item is None:
+            return
         async with self.lock:
             self.grep_results.append(grep_result)
             self._resize_item(len(self.grep_results) - 1, grep_result.list_item)
@@ -45,4 +48,4 @@ class GrepResultList(ListView):
         max_item_width = self.size.width - self.size.width // 20
         grep_result_line = self.grep_results[index].line
 
-        item.children[0].update(grep_result_line[:max_item_width])
+        cast(Label, item.children[0]).update(grep_result_line[:max_item_width])

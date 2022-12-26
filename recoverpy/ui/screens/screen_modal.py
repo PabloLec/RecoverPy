@@ -11,7 +11,7 @@ class ModalScreen(Screen):
     _message_label = Label("", id="modal-message")
     _callback: Callable
 
-    def set(self, message: str, callback: Optional[Callable]) -> None:
+    def set(self, message: str, callback: Optional[Callable] = None) -> None:
         self._message_label.update(message)
         if callback:
             self._callback = callback

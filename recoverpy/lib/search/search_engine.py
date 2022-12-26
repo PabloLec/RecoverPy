@@ -1,4 +1,5 @@
-import asyncio
+from asyncio import Queue as AsyncQueue
+from asyncio import new_event_loop
 from queue import Queue
 from subprocess import Popen
 from time import sleep
@@ -26,10 +27,10 @@ class SearchEngine:
         self.search_params = SearchParams(partition, searched_string)
         self.search_progress = SearchProgress()
         self.result_processor = ResultProcessor(self.search_params)
-        self.results_queue = Queue()
-        self.list_items_queue = asyncio.Queue()
+        self.results_queue: Queue = Queue()
+        self.list_items_queue: AsyncQueue = AsyncQueue()
 
-    async def start_search(self):
+    async def start_search(self) -> None:
         self._grep_process = start_grep_process(
             searched_string=self.search_params.searched_lines[0],
             partition=self.search_params.partition,
@@ -38,8 +39,8 @@ class SearchEngine:
         start_result_dequeue_thread(self.dequeue_results)
         start_progress_monitoring_thread(self._grep_process, self.search_progress)
 
-    def dequeue_results(self):
-        loop = asyncio.new_event_loop()
+    def dequeue_results(self) -> None:
+        loop = new_event_loop()
         while True:
             results = self.result_processor.get_new_results(self.results_queue)
             for result in results:
@@ -59,5 +60,5 @@ class SearchEngine:
         )
         return grep_result
 
-    def stop_search(self):
+    def stop_search(self) -> None:
         self._grep_process.kill()

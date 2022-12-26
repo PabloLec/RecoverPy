@@ -41,11 +41,11 @@ class SaveScreen(Screen):
             id="action-buttons-container",
         )
 
-    def _set_save_path(self):
+    def _set_save_path(self) -> None:
         self._save_path_label.update(str(self._saver.save_path))
 
-    async def on_button_pressed(self, event: Event) -> None:
-        button_id = event.sender.id
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
+        button_id = event.button.id
         if button_id == "go-back-button":
             self.app.pop_screen()
         elif button_id == "edit-save-path-button":

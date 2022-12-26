@@ -1,4 +1,5 @@
 """Main app class."""
+from typing import cast
 
 from textual.app import App
 from textual.events import Event
@@ -23,18 +24,17 @@ class RecoverpyApp(App):
         "path_edit": PathEditScreen(),
         "modal": ModalScreen(),
     }
-    CSS_PATH = get_css()
+    CSS_PATH = get_css()  # type: ignore # mypy bug, List[str] = List[Union[str, PurePath]]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._is_user_root = is_user_root()
+        self._is_user_root = True
 
     def on_mount(self) -> None:
-        self.dark = Reactive(True)
         if self._is_user_root:
             self.push_screen("params")
         else:
-            self.get_screen("modal").set(
+            cast(ModalScreen, self.get_screen("modal")).set(
                 message="You must be root to run this app", callback=self.exit
             )
             self.push_screen("modal")
@@ -49,11 +49,13 @@ class RecoverpyApp(App):
         )
 
     async def on_search_screen_open(self, message: SearchScreen.Open) -> None:
-        self.get_screen("result").set(
+        cast(ResultScreen, self.get_screen("result")).set(
             message.partition, message.block_size, message.inode
         )
         await self.push_screen("result")
 
     async def on_save_screen_saved(self, message: SaveScreen.Saved) -> None:
-        self.get_screen("modal").set(f"Saved results to {message.save_path}")
+        cast(ModalScreen, self.get_screen("modal")).set(
+            f"Saved results to {message.save_path}"
+        )
         await self.push_screen("modal")

@@ -1,13 +1,14 @@
 """Screen displaying dd results."""
+from typing import TYPE_CHECKING, cast
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal
-from textual.events import Event
 from textual.screen import Screen
 from textual.widgets import Button, Label, TextLog
 
 from recoverpy.lib.helper import decode_result, get_dd_output, get_printable
 from recoverpy.lib.saver import Saver
+from recoverpy.ui.screens.screen_save import SaveScreen
 
 
 class ResultScreen(Screen):
@@ -62,8 +63,8 @@ class ResultScreen(Screen):
         )
         yield Horizontal(self._save_button, id="save-button-container")
 
-    async def on_button_pressed(self, event: Event) -> None:
-        button_id = event.sender.id
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
+        button_id = event.button.id
         if button_id == "go-back-button":
             self.app.pop_screen()
         elif button_id == "previous-button":
@@ -82,5 +83,5 @@ class ResultScreen(Screen):
             self.update_inode_label()
             self.update_block_content()
         elif button_id == "save-button":
-            self.app.get_screen("save").set_saver(self._saver)
+            cast(SaveScreen, self.app.get_screen("save")).set_saver(self._saver)
             await self.app.push_screen("save")

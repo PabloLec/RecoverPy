@@ -91,8 +91,8 @@ class SearchScreen(Screen):
                 )
             await asyncio.sleep(0.1)
 
-    async def on_button_pressed(self, event: Event) -> None:
-        button_id = event.sender.id
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
+        button_id = event.button.id
         if button_id == "exit-button":
             self.search_engine.stop_search()
             self.app.exit()

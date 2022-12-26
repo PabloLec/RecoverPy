@@ -1,4 +1,4 @@
-from multiprocessing import Queue
+from queue import Queue
 from typing import List
 
 from recoverpy.lib.helper import decode_result, get_dd_output, get_inode

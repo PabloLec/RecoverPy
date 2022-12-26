@@ -39,6 +39,8 @@ class ParamsScreen(Screen):
         yield self._start_search_button
 
     async def on_button_pressed(self) -> None:
+        if self._partition_list.highlighted_child is None:
+            return
         searched_string = self._search_input.value.strip()
         if len(searched_string) == 0:
             return

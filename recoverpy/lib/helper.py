@@ -32,7 +32,7 @@ def get_block_size(partition: str) -> int:
 
 def get_inode(string: str) -> int:
     match = findall(r"^(\d+):", string)
-    return int(match[0]) if len(match) >= 1 else None
+    return int(match[0])
 
 
 def get_dd_output(partition: str, block_size: int, inode: int) -> bytes:

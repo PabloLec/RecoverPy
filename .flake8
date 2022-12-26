@@ -16,6 +16,7 @@ ignore = D100,
         E203,
         D107,
         D102,
+        D103,
         D101
 
 per-file-ignores = tests/*.py:D103,S101,PL
