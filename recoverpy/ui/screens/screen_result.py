@@ -1,4 +1,5 @@
 """Screen displaying dd results."""
+from subprocess import CalledProcessError
 from typing import TYPE_CHECKING, cast
 
 from textual.app import ComposeResult
@@ -30,9 +31,15 @@ class ResultScreen(Screen):
         self._partition = partition
         self._block_size = block_size
         self._inode = inode
-        self._update_inode_label()
-        self._update_block_content()
+        self._update()
         self._block_count_label.update("0 block selected")
+
+    def _update(self):
+        self._update_inode_label()
+        try:
+            self._update_block_content()
+        except CalledProcessError:
+            self._block_content.write(f"Cannot read block {self._inode}")
 
     def _update_inode_label(self) -> None:
         self._inode_label.update(f"Result for inode {self._inode}")
@@ -66,10 +73,9 @@ class ResultScreen(Screen):
         button_id = event.button.id
         if button_id == "go-back-button":
             self.app.pop_screen()
-        elif button_id == "previous-button":
+        elif button_id == "previous-button" and self._inode > 0:
             self._inode -= 1
-            self._update_inode_label()
-            self._update_block_content()
+            self._update()
         elif button_id == "add-block-button":
             self._saver.add(self._inode, self._raw_block_content)
             count = self._saver.get_selected_blocks_count()
@@ -79,8 +85,7 @@ class ResultScreen(Screen):
             self._save_button.disabled = False
         elif button_id == "next-button":
             self._inode += 1
-            self._update_inode_label()
-            self._update_block_content()
+            self._update()
         elif button_id == "save-button":
             cast(SaveScreen, self.app.get_screen("save")).set_saver(self._saver)
             await self.app.push_screen("save")
