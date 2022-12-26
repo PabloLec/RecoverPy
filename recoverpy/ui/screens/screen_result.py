@@ -30,14 +30,14 @@ class ResultScreen(Screen):
         self._partition = partition
         self._block_size = block_size
         self._inode = inode
-        self.update_inode_label()
-        self.update_block_content()
+        self._update_inode_label()
+        self._update_block_content()
         self._block_count_label.update("0 block selected")
 
-    def update_inode_label(self) -> None:
+    def _update_inode_label(self) -> None:
         self._inode_label.update(f"Result for inode {self._inode}")
 
-    def update_block_content(self) -> None:
+    def _update_block_content(self) -> None:
         self._block_content.clear()
         self._raw_block_content = decode_result(
             get_dd_output(self._partition, self._block_size, self._inode)
@@ -45,7 +45,6 @@ class ResultScreen(Screen):
         self._block_content.write(get_printable(self._raw_block_content))
 
     def compose(self) -> ComposeResult:
-
         yield Horizontal(self._inode_label, id="inode-label-container")
         yield Horizontal(self._block_content, id="block-content-container")
         yield Horizontal(
@@ -69,8 +68,8 @@ class ResultScreen(Screen):
             self.app.pop_screen()
         elif button_id == "previous-button":
             self._inode -= 1
-            self.update_inode_label()
-            self.update_block_content()
+            self._update_inode_label()
+            self._update_block_content()
         elif button_id == "add-block-button":
             self._saver.add(self._inode, self._raw_block_content)
             count = self._saver.get_selected_blocks_count()
@@ -80,8 +79,8 @@ class ResultScreen(Screen):
             self._save_button.disabled = False
         elif button_id == "next-button":
             self._inode += 1
-            self.update_inode_label()
-            self.update_block_content()
+            self._update_inode_label()
+            self._update_block_content()
         elif button_id == "save-button":
             cast(SaveScreen, self.app.get_screen("save")).set_saver(self._saver)
             await self.app.push_screen("save")

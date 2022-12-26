@@ -49,10 +49,10 @@ class RecoverpyApp(App):
         )
 
     async def on_search_screen_open(self, message: SearchScreen.Open) -> None:
+        await self.push_screen("result")
         cast(ResultScreen, self.get_screen("result")).set(
             message.partition, message.block_size, message.inode
         )
-        await self.push_screen("result")
 
     async def on_save_screen_saved(self, message: SaveScreen.Saved) -> None:
         cast(ModalScreen, self.get_screen("modal")).set(
