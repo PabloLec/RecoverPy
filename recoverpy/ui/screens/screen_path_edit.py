@@ -10,7 +10,6 @@ from ui.widgets.directory_tree import DirectoryTree
 
 
 class PathEditScreen(Screen):
-
     def __init__(self, *args, **kwargs):
         self._directory_tree = DirectoryTree("/")
         super().__init__(*args, **kwargs)
@@ -23,11 +22,12 @@ class PathEditScreen(Screen):
     def compose(self) -> ComposeResult:
         yield self._directory_tree
         yield Horizontal(
-            Button("Confirm", id="confirm-button"),
-            id="path-edit-button-container"
+            Button("Confirm", id="confirm-button"), id="path-edit-button-container"
         )
 
     async def on_button_pressed(self, event: Event) -> None:
         event.stop()
-        await self.app.get_screen("save").post_message(self.Confirm(self, self._directory_tree.selected_dir))
+        await self.app.get_screen("save").post_message(
+            self.Confirm(self, self._directory_tree.selected_dir)
+        )
         self.app.pop_screen()

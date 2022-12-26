@@ -1,15 +1,15 @@
 import asyncio
-from random import randint
 
+from textual._types import MessageTarget
+from textual.message import Message
 from textual.widgets import ListView, ListItem, Label
-
-from lib.helper import get_printable
 
 from models.grep_result import GrepResult
 
 
 class GrepResultList(ListView):
     list_items_background_color = {0: "red", 1: "green"}
+
     def __init__(self, *children, **kwargs):
         super().__init__(*children, **kwargs)
         self.results = []

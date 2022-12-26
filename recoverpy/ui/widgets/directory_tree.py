@@ -53,13 +53,14 @@ class DirectoryTree(Tree[DirEntry]):
         color: $text 50%;        
     }
     """
+
     def __init__(
-            self,
-            path: str,
-            *,
-            name: str | None = None,
-            id: str | None = None,
-            classes: str | None = None,
+        self,
+        path: str,
+        *,
+        name: str | None = None,
+        id: str | None = None,
+        classes: str | None = None,
     ) -> None:
         self.path = path
         self.selected_dir = path
@@ -142,4 +143,3 @@ class DirectoryTree(Tree[DirEntry]):
         if dir_entry.is_dir:
             self.selected_dir = dir_entry.path
             print("Selected dir:", self.selected_dir)
-

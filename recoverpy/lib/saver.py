@@ -19,7 +19,9 @@ class Saver:
         self._results = {}
 
     def save(self):
-        ordered_blocks: list = [self._results[num] for num in sorted(self._results.keys())]
+        ordered_blocks: list = [
+            self._results[num] for num in sorted(self._results.keys())
+        ]
         final_output: str = "\n".join(ordered_blocks)
 
         self._save_result_string(final_output)
@@ -44,4 +46,3 @@ class Saver:
             save_file.write(content)
 
         self.last_saved_file = file_name
-

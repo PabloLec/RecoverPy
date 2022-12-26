@@ -52,7 +52,11 @@ class SaveScreen(Screen):
         elif button_id == "save-button":
             self._saver.save()
             self.app.pop_screen()
-            await self.app.post_message(self.Saved(self, str(self._saver.save_path/self._saver.last_saved_file)))
+            await self.app.post_message(
+                self.Saved(
+                    self, str(self._saver.save_path / self._saver.last_saved_file)
+                )
+            )
 
     async def on_path_edit_screen_confirm(self, event: PathEditScreen.Confirm) -> None:
         print(event.selected_dir)

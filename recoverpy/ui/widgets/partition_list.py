@@ -6,7 +6,9 @@ from models.partition import Partition
 
 
 def _get_label(partition: Partition):
-    return Label(f"{partition.name} | {partition.fs_type} | {partition.is_mounted} | {partition.mount_point}")
+    return Label(
+        f"{partition.name} | {partition.fs_type} | {partition.is_mounted} | {partition.mount_point}"
+    )
 
 
 class PartitionList(ListView):

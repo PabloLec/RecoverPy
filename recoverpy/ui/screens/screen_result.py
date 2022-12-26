@@ -24,10 +24,12 @@ class ResultScreen(Screen):
         self._block_count_label = Label("0 block selected", id="block-count")
         self._block_content = TextLog(markup=False, wrap=True)
         self._raw_block_content = None
+        self._save_button = Button(label="Save", id="save-button", disabled=True)
         super().__init__(*args, **kwargs)
 
     def set(self, partition: str, block_size: int, inode: int) -> None:
         self._saver.reset()
+        self._save_button.disabled = True
         self._partition = partition
         self._block_size = block_size
         self._inode = inode
@@ -46,6 +48,7 @@ class ResultScreen(Screen):
         self._block_content.write(get_printable(self._raw_block_content))
 
     def compose(self) -> ComposeResult:
+
         yield Horizontal(self._inode_label, id="inode-label-container")
         yield Horizontal(self._block_content, id="block-content-container")
         yield Horizontal(
@@ -61,7 +64,7 @@ class ResultScreen(Screen):
             Button("Next", id="next-button"),
             id="block-buttons-container",
         )
-        yield Horizontal(Button("Save", id="save-button"), id="save-button-container")
+        yield Horizontal(self._save_button, id="save-button-container")
 
     async def on_button_pressed(self, event: Event) -> None:
         button_id = event.sender.id
@@ -74,7 +77,10 @@ class ResultScreen(Screen):
         elif button_id == "add-block-button":
             self._saver.add(self._inode, self._raw_block_content)
             count = self._saver.get_selected_blocks_count()
-            self._block_count_label.update(f"{count} block{'s' if count > 1 else ''} selected")
+            self._block_count_label.update(
+                f"{count} block{'s' if count > 1 else ''} selected"
+            )
+            self._save_button.disabled = False
         elif button_id == "next-button":
             self._inode += 1
             self.update_inode_label()

@@ -38,6 +38,13 @@ def _format_lsblk_output(lsblk_output: str) -> List[Partition]:
             is_mounted = True
             mount_point = values[3]
 
-        partitions.append(Partition(name=values[0], fs_type=values[2], is_mounted=is_mounted, mount_point=mount_point))
+        partitions.append(
+            Partition(
+                name=values[0],
+                fs_type=values[2],
+                is_mounted=is_mounted,
+                mount_point=mount_point,
+            )
+        )
 
     return partitions

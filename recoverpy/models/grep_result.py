@@ -9,4 +9,6 @@ class GrepResult:
         self.list_item = None
 
     def create_list_item(self, css_class: str) -> None:
-        self.list_item = ListItem(Label(str(self.line), markup=False), classes=css_class)
+        self.list_item = ListItem(
+            Label(str(self.line), markup=False), classes=css_class
+        )
