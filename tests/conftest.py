@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 from .fixtures import lsblk_output, dd_output, grep_output
 
+
 @pytest.fixture(scope="session", autouse=True)
 def system_calls_mock(session_mocker):
     session_mocker.patch(
