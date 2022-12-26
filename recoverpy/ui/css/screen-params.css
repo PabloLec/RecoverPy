@@ -23,6 +23,11 @@ PartitionList > ListItem.--highlight {
     background: $accent;
 }
 
+.mounted {
+    color: orange;
+}
+
+
 #start-search-button {
     dock: bottom;
     margin: 1 1 1 1;

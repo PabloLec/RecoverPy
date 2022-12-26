@@ -7,10 +7,10 @@ from recoverpy.models.partition import Partition
 
 
 def _get_label(partition: Partition):
-    return Label(
-        f"{partition.name} | {partition.fs_type} | "
-        f"{partition.is_mounted} | {partition.mount_point}"
-    )
+    label_content = f"{partition.name} | {partition.fs_type}"
+    if partition.is_mounted:
+        label_content += f" | Mounted on: {partition.mount_point}"
+    return Label(label_content)
 
 
 class PartitionList(ListView):
@@ -22,5 +22,7 @@ class PartitionList(ListView):
     def _append_partitions(self):
         for partition in get_partitions():
             list_item = ListItem(_get_label(partition), id=partition.name)
+            if partition.is_mounted:
+                list_item.add_class("mounted")
             self.list_items[list_item.id] = partition
             self.append(list_item)
