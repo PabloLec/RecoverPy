@@ -1,9 +1,7 @@
-from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.containers import Grid, Horizontal
-from textual.message import Message
 from textual.screen import Screen
-from textual.widgets import Button, Static, Label
+from textual.widgets import Button, Label
 
 
 class ModalScreen(Screen):

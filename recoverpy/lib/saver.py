@@ -1,7 +1,7 @@
 import pathlib
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Dict, Optional
 
 
 class Saver:

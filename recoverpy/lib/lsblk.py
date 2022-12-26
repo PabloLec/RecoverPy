@@ -1,7 +1,7 @@
 from subprocess import check_output
 from typing import List
 
-from models.partition import Partition
+from recoverpy.models.partition import Partition
 
 _IGNORED_PARTITIONS_TYPES: tuple = (" loop ", "swap")
 

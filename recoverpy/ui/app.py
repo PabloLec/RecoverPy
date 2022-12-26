@@ -1,21 +1,13 @@
-from asyncio import sleep
-
 from textual.app import App
 from textual.reactive import Reactive
 
-from ui.screens.screen_params import ParamsScreen
-
-from ui.css import get_css
-
-from ui.screens.screen_search import SearchScreen
-
-from ui.screens.screen_result import ResultScreen
-
-from ui.screens.screen_save import SaveScreen
-
-from ui.screens.screen_path_edit import PathEditScreen
-
-from ui.screens.screen_modal import ModalScreen
+from recoverpy.ui.css import get_css
+from recoverpy.ui.screens.screen_modal import ModalScreen
+from recoverpy.ui.screens.screen_params import ParamsScreen
+from recoverpy.ui.screens.screen_path_edit import PathEditScreen
+from recoverpy.ui.screens.screen_result import ResultScreen
+from recoverpy.ui.screens.screen_save import SaveScreen
+from recoverpy.ui.screens.screen_search import SearchScreen
 
 
 class RecoverpyApp(App):

@@ -1,5 +1,6 @@
-from lib.helper import get_inode, get_printable
-from textual.widgets import ListItem, Label
+from textual.widgets import Label, ListItem
+
+from recoverpy.lib.helper import get_inode, get_printable
 
 
 class GrepResult:

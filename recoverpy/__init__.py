@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from ui.app import RecoverpyApp
+from recoverpy.ui.app import RecoverpyApp
 
 getLogger(__name__)
 

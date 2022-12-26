@@ -2,16 +2,10 @@ from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.events import Event
 from textual.screen import Screen
-from textual.widgets import Label, Button, TextLog
-from textual.reactive import reactive
+from textual.widgets import Button, Label, TextLog
 
-from lib.helper import get_dd_output
-
-from lib.helper import decode_result
-
-from lib.helper import get_printable
-
-from lib.saver import Saver
+from recoverpy.lib.helper import decode_result, get_dd_output, get_printable
+from recoverpy.lib.saver import Saver
 
 
 class ResultScreen(Screen):

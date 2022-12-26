@@ -1,13 +1,13 @@
-from textual.widgets import ListView, ListItem, Label
+from textual.widgets import Label, ListItem, ListView
 
-from lib.lsblk import get_partitions
-
-from models.partition import Partition
+from recoverpy.lib.lsblk import get_partitions
+from recoverpy.models.partition import Partition
 
 
 def _get_label(partition: Partition):
     return Label(
-        f"{partition.name} | {partition.fs_type} | {partition.is_mounted} | {partition.mount_point}"
+        f"{partition.name} | {partition.fs_type} | "
+        f"{partition.is_mounted} | {partition.mount_point}"
     )
 
 

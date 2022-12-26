@@ -1,22 +1,16 @@
 import asyncio
-from asyncio import ensure_future, to_thread, get_event_loop
-from time import sleep
-from tkinter import Widget
+from asyncio import ensure_future
 
 from textual._types import MessageTarget
 from textual.app import ComposeResult
-from textual.containers import Vertical, Horizontal
+from textual.containers import Horizontal, Vertical
 from textual.events import Event
 from textual.message import Message
 from textual.screen import Screen
+from textual.widgets import Button, Label
 
-from lib.search.search_engine import SearchEngine
-from textual.scrollbar import ScrollDown
-from textual.widgets import Label, Button
-
-from ui.widgets.grep_result_list import GrepResultList
-
-from models.grep_result import GrepResult
+from recoverpy.lib.search.search_engine import SearchEngine
+from recoverpy.ui.widgets.grep_result_list import GrepResultList
 
 
 class SearchScreen(Screen):

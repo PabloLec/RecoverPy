@@ -6,7 +6,7 @@ from textual.message import Message
 from textual.screen import Screen
 from textual.widgets import Button
 
-from ui.widgets.directory_tree import DirectoryTree
+from recoverpy.ui.widgets.directory_tree import DirectoryTree
 
 
 class PathEditScreen(Screen):

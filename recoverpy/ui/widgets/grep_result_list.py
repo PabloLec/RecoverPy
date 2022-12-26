@@ -1,10 +1,8 @@
 import asyncio
 
-from textual._types import MessageTarget
-from textual.message import Message
-from textual.widgets import ListView, ListItem, Label
+from textual.widgets import ListItem, ListView
 
-from models.grep_result import GrepResult
+from recoverpy.models.grep_result import GrepResult
 
 
 class GrepResultList(ListView):

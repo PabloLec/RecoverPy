@@ -2,11 +2,10 @@ from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.message import Message
 from textual.screen import Screen
-from textual.widgets import Input, Button, Label
+from textual.widgets import Button, Input, Label
 
-from ui.widgets.partition_list import PartitionList
-
-from models.partition import Partition
+from recoverpy.models.partition import Partition
+from recoverpy.ui.widgets.partition_list import PartitionList
 
 
 class ParamsScreen(Screen):
@@ -38,8 +37,7 @@ class ParamsScreen(Screen):
     async def on_button_pressed(self) -> None:
         searched_string = self._search_input.value.strip()
         if len(searched_string) == 0:
-            # TODO: show error message
-            pass
+            return
         selected_partition: Partition = self._partition_list.list_items[
             self._partition_list.highlighted_child.id
         ]

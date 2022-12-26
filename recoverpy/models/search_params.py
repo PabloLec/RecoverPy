@@ -1,4 +1,4 @@
-from lib.helper import get_block_size
+from recoverpy.lib.helper import get_block_size
 
 
 class SearchParams:

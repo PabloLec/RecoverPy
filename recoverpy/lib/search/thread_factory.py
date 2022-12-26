@@ -1,14 +1,12 @@
 from multiprocessing import Queue
-from subprocess import Popen, PIPE
+from subprocess import PIPE, Popen
 from threading import Thread
 from typing import Callable
 
-from lib.search.grep_consumer import enqueue_grep_output
-
-from lib.helper import is_dependency_installed
-from lib.search.progress_monitoring import monitor_search_progress
-
-from models.search_progress import SearchProgress
+from recoverpy.lib.helper import is_dependency_installed
+from recoverpy.lib.search.grep_consumer import enqueue_grep_output
+from recoverpy.lib.search.progress_monitoring import monitor_search_progress
+from recoverpy.models.search_progress import SearchProgress
 
 
 def start_grep_process(searched_string: str, partition: str) -> Popen:

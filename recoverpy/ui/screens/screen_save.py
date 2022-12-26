@@ -5,11 +5,10 @@ from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.message import Message
 from textual.screen import Screen
+from textual.widgets import Button, Label
 
-from lib.saver import Saver
-from textual.widgets import Label, Button
-
-from ui.screens.screen_path_edit import PathEditScreen
+from recoverpy.lib.saver import Saver
+from recoverpy.ui.screens.screen_path_edit import PathEditScreen
 
 
 class SaveScreen(Screen):

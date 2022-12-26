@@ -1,8 +1,8 @@
 from re import findall
-from subprocess import check_output, DEVNULL
+from subprocess import DEVNULL, check_output
 from time import sleep
 
-from models.search_progress import SearchProgress
+from recoverpy.models.search_progress import SearchProgress
 
 
 def monitor_search_progress(grep_pid: int, progress: SearchProgress):

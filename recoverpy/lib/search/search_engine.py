@@ -1,22 +1,18 @@
 import asyncio
-from asyncio import ensure_future
 from queue import Queue
 from subprocess import Popen
 from time import sleep
 
-from lib.search.thread_factory import (
+from recoverpy.lib.search.result_processor import ResultProcessor
+from recoverpy.lib.search.thread_factory import (
     start_grep_process,
+    start_progress_monitoring_thread,
     start_result_dequeue_thread,
     start_result_enqueue_thread,
 )
-from models.grep_result import GrepResult
-
-from lib.search.result_processor import ResultProcessor
-from models.search_params import SearchParams
-
-from models.search_progress import SearchProgress
-
-from lib.search.thread_factory import start_progress_monitoring_thread
+from recoverpy.models.grep_result import GrepResult
+from recoverpy.models.search_params import SearchParams
+from recoverpy.models.search_progress import SearchProgress
 
 
 class SearchEngine:
