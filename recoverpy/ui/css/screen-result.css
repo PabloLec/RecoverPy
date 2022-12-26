@@ -1,7 +1,7 @@
 ResultScreen {
     layout: grid;
-    grid-size: 5 4;
-    grid-rows: 1fr 10fr 3fr;
+    grid-size: 5 5;
+    grid-rows: 1fr 10fr 1fr 3fr;
 }
 
 #inode-label-container {
@@ -23,6 +23,11 @@ TextLog {
     column-span: 5;
     min-height: 40%;
     max-height: 80%;
+}
+
+#block-count-container {
+    column-span: 5;
+    align: center bottom;
 }
 
 #go-back-button-container {

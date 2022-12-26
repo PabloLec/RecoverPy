@@ -23,9 +23,13 @@ class Saver:
         final_output: str = "\n".join(ordered_blocks)
 
         self._save_result_string(final_output)
+        self.reset()
 
     def update_save_path(self, path: str):
         self.save_path = pathlib.Path(path)
+
+    def get_selected_blocks_count(self):
+        return len(self._results)
 
     def _save_result_string(self, result: str):
         if self.save_path is None:
