@@ -1,6 +1,7 @@
 """Main app class."""
 
 from textual.app import App
+from textual.events import Event
 from textual.reactive import Reactive
 
 from recoverpy.lib.helper import is_user_root
@@ -30,7 +31,13 @@ class RecoverpyApp(App):
 
     def on_mount(self) -> None:
         self.dark = Reactive(True)
-        self.push_screen("params")
+        if self._is_user_root:
+            self.push_screen("params")
+        else:
+            self.get_screen("modal").set(
+                message="You must be root to run this app", callback=self.exit
+            )
+            self.push_screen("modal")
 
     async def on_params_screen_continue(self, message: ParamsScreen.Continue) -> None:
         self.pop_screen()
@@ -48,5 +55,5 @@ class RecoverpyApp(App):
         await self.push_screen("result")
 
     async def on_save_screen_saved(self, message: SaveScreen.Saved) -> None:
-        self.get_screen("modal").set_message(f"Saved results to {message.save_path}")
+        self.get_screen("modal").set(f"Saved results to {message.save_path}")
         await self.push_screen("modal")
