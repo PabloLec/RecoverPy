@@ -1,3 +1,5 @@
+"""Screen used to display a modal dialog."""
+
 from textual.app import ComposeResult
 from textual.containers import Grid, Horizontal
 from textual.screen import Screen

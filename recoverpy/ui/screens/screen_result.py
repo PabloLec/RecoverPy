@@ -1,3 +1,5 @@
+"""Screen displaying dd results."""
+
 from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.events import Event

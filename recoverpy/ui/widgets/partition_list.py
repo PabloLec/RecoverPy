@@ -1,3 +1,5 @@
+"""A Textual ListView Widget for displaying partitions."""
+
 from textual.widgets import Label, ListItem, ListView
 
 from recoverpy.lib.lsblk import get_partitions

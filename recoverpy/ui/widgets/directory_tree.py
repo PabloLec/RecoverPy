@@ -1,3 +1,6 @@
+"""Taken from official Textual official widget,
+modified to allow directory selection."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

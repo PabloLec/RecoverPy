@@ -1,3 +1,7 @@
+"""First screen displayed to the user.
+Allows user to enter search string and select partition."""
+
+
 from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.message import Message

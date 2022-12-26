@@ -1,6 +1,9 @@
+"""Main app class."""
+
 from textual.app import App
 from textual.reactive import Reactive
 
+from recoverpy.lib.helper import is_user_root
 from recoverpy.ui.css import get_css
 from recoverpy.ui.screens.screen_modal import ModalScreen
 from recoverpy.ui.screens.screen_params import ParamsScreen
@@ -20,6 +23,10 @@ class RecoverpyApp(App):
         "modal": ModalScreen(),
     }
     CSS_PATH = get_css()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._is_user_root = is_user_root()
 
     def on_mount(self) -> None:
         self.dark = Reactive(True)

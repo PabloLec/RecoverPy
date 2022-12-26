@@ -1,3 +1,5 @@
+"""Screen displaying grep results."""
+
 import asyncio
 from asyncio import ensure_future
 

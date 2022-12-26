@@ -1,4 +1,6 @@
-import asyncio
+"""A Textual ListView widget consuming an asyncio Queue"""
+
+from asyncio import Lock, Queue, sleep
 
 from textual.widgets import ListItem, ListView
 
@@ -11,13 +13,13 @@ class GrepResultList(ListView):
     def __init__(self, *children, **kwargs):
         super().__init__(*children, **kwargs)
         self.results = []
-        self.lock = asyncio.Lock()
+        self.lock = Lock()
         self.grep_results = []
 
-    async def start_consumer(self, queue: asyncio.Queue):
+    async def start_consumer(self, queue: Queue):
         while True:
             if not self._should_add_more():
-                await asyncio.sleep(0.1)
+                await sleep(0.1)
                 continue
             grep_result = await queue.get()
             await self.append(grep_result)

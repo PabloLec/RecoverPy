@@ -1,3 +1,5 @@
+"""Screen used to confirm save."""
+
 from asyncio import Event
 
 from textual._types import MessageTarget

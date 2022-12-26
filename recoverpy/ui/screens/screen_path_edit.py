@@ -1,3 +1,5 @@
+"""Screen used to select ressult save path."""
+
 from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.containers import Horizontal
