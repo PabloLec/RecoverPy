@@ -13,11 +13,18 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
       - name: Install Poetry
-        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
       - name: Add Poetry to path
         run: echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
       - run: poetry install
-      - run: poetry run pytest
+      - name: Install dependencies
+        run: |
+          poetry install
+          sudo apt-get install progress
+      - name: Run tests
+        run: poetry run pytest
       - run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
       - name: Publish package
         run: poetry publish --build
