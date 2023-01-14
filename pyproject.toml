@@ -2,7 +2,7 @@
 name = "recoverpy"
 version = "2.0.0"
 description = "A TUI to recover overwritten or deleted data."
-authors = ["PabloLec <pablo.lecolinet@gmail.com>"]
+authors = ["PabloLec <pablolec@pm.me>"]
 license = "GPL-3.0 License"
 readme = "README.md"
 homepage = "https://github.com/PabloLec/recoverpy"
@@ -15,11 +15,19 @@ keywords = ["data",
             "console",
             "cui",
             "tui",
+            "ncurses",
             "terminal",
             "cybersec",
             "cybersecurity",
             "security",
             "pentesting",
+            "pentest",
+            "forensics",
+            "forensic",
+            "hack",
+            "hacking",
+            "data recovery",
+            "data recovery tool",
             "grep",
             "linux",
             "unix"]
@@ -31,14 +39,12 @@ classifiers = [
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ]
-include = ["recoverpy/config.yaml"]
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-PyYAML = "^5.4.1"
 textual = "^0.8.1"
-
 
 [tool.poetry.dev-dependencies]
 coverage = "^7.0.1"
@@ -73,7 +79,7 @@ pytest-asyncio = "^0.20.3"
 profile = "black"
 
 [tool.mypy]
-python_version = 3.6
+python_version = 3.8
 ignore_missing_imports = "true"
 
 [build-system]
