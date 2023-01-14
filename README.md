@@ -55,7 +55,7 @@ Every block of your partition will be scanned. You can even find a string in bin
 
 #### :arrow_right: Dependancies
 
-**Mandatory:** To list and search through your partitions, recoverpy uses `grep`, `dd`, and `lsblk` commands.
+**Mandatory:** To list and search through your partitions, recoverpy uses `grep`, `dd`, and `lsblk` commands. Although, if you're running a major Linux distrucition these tools should already be installed.
 
 **Optional:** To display real time grep progress, you can install `progress`.
 
@@ -84,7 +84,7 @@ python3 -m recoverpy
 
 :three: **Start search**, Results will appear in the left-hand box.
 
-:four: **Select a result** to display the corresponding partition block content in the right-hand box.
+:four: **Select a result**.
 
 :five: Once you have found your precious, **select `Open`**.
 
@@ -104,7 +104,7 @@ Regarding the searched string:
 When you have found your file:
 
 - You might see multiple results. Your system often use different partion blocks to save successive versions of a file. Make sure you've found the last version.
-- Use the option to explore neighboring blocks to make sure you do not miss some part of your file.
+- Try exploring neighboring blocks to be sure to save your whole file.
 
 ## Contributing
 
