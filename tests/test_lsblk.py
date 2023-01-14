@@ -1,4 +1,4 @@
-from recoverpy.lib.lsblk import get_partitions, _IGNORED_PARTITIONS_TYPES
+from recoverpy.lib.lsblk import _IGNORED_PARTITIONS_TYPES, get_partitions
 
 
 def test_get_partitions():
