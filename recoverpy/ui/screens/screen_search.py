@@ -1,6 +1,6 @@
 """Screen displaying grep results."""
 
-from asyncio import sleep, ensure_future
+from asyncio import ensure_future, sleep
 
 from textual._types import MessageTarget
 from textual.app import ComposeResult
