@@ -1,4 +1,3 @@
-import os
 from os import chdir
 
 from recoverpy.lib.saver import Saver

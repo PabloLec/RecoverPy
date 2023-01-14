@@ -2,10 +2,7 @@
 from typing import cast
 
 from textual.app import App
-from textual.events import Event
-from textual.reactive import Reactive
 
-from recoverpy.lib.helper import is_user_root
 from recoverpy.ui.css import get_css
 from recoverpy.ui.screens.screen_modal import ModalScreen
 from recoverpy.ui.screens.screen_params import ParamsScreen

@@ -1,6 +1,6 @@
 """Screen displaying dd results."""
 from subprocess import CalledProcessError
-from typing import TYPE_CHECKING, cast
+from typing import cast
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal
