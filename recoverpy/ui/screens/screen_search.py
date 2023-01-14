@@ -1,7 +1,6 @@
 """Screen displaying grep results."""
 
-import asyncio
-from asyncio import ensure_future
+from asyncio import sleep, ensure_future
 
 from textual._types import MessageTarget
 from textual.app import ComposeResult
@@ -88,7 +87,7 @@ class SearchScreen(Screen):
                 self._progress_label.update(
                     f"{self.search_engine.search_progress.progress_percent}%"
                 )
-            await asyncio.sleep(0.1)
+            await sleep(0.1)
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         button_id = event.button.id
