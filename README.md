@@ -76,8 +76,6 @@ python3 -m recoverpy
 
 :red_circle: **You must be root or use sudo**.
 
-:arrow_right: Default save path is `/tmp/`, click on Settings to edit configuration.
-
 ---
 
 :one: **Select the system partition** in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
