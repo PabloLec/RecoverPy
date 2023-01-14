@@ -26,7 +26,7 @@ def system_calls_mock(session_mocker):
         "recoverpy.lib.lsblk._lsblk", return_value=mock_lsblk_output.MOCK_LSBLK_OUTPUT
     )
     session_mocker.patch(
-        "recoverpy.lib.helper.get_block_size", MagicMock(return_value=4096)
+        "recoverpy.models.search_params.get_block_size", MagicMock(return_value=4096)
     )
     session_mocker.patch(
         "recoverpy.lib.search.thread_factory.is_dependency_installed",
