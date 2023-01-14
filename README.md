@@ -86,7 +86,7 @@ python3 -m recoverpy
 
 :four: **Select a result** to display the corresponding partition block content in the right-hand box.
 
-:five: Once you have found your precious, **select `Save`**.
+:five: Once you have found your precious, **select `Open`**.
 
 :six: You can now either save this block individually or explore neighboring blocks for the remaining parts of the file. You could then save it all in one file.
 
