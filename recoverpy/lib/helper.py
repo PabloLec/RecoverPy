@@ -2,8 +2,6 @@ from os import geteuid
 from re import findall
 from subprocess import DEVNULL, call, check_output
 
-_IGNORED_PARTITIONS_TYPES: tuple = (" loop ", "swap")
-
 
 def is_user_root() -> bool:
     return geteuid() == 0
