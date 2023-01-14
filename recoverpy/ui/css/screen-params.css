@@ -1,0 +1,39 @@
+ParamsScreen > Label {
+    margin: 1 0 0 1;
+    align-horizontal: center;
+}
+
+ParamsScreen > Input {
+    margin: 1;
+    background: $primary-background;
+}
+
+PartitionList {
+    margin: 1 1 0 1;
+    max-height: 80%;
+    background: slategrey;
+    height: auto;
+}
+
+PartitionList > ListItem {
+    padding: 0 0 0 1;
+}
+
+PartitionList > ListItem.--highlight {
+    background: $accent;
+}
+
+.mounted {
+    color: orange;
+}
+
+#start-search-button {
+    dock: bottom;
+    margin: 1 1 1 1;
+    align-horizontal: center;
+    background: $primary-darken-2;
+}
+
+#start-search-button:hover {
+    background: $primary-lighten-2;
+}

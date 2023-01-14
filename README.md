@@ -16,10 +16,7 @@
 <a href="https://pepy.tech/project/recoverpy" target="_blank">
     <img src="https://static.pepy.tech/personalized-badge/recoverpy?period=total&units=abbreviation&left_color=grey&right_color=red&left_text=downloads" alt="Downloads">
 </a>
-</a>
-<a href="#" target="_blank">
-    <img src="docs/assets/coverage.svg" alt="Coverage">
-</a>
+
 <a href="#" target="_blank">
     <img src="https://github.com/PabloLec/recoverpy/actions/workflows/pytest.yml/badge.svg?branch=main" alt="Tests">
 </a>

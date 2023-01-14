@@ -1,155 +1,111 @@
-from queue import Queue
-from time import sleep
-from typing import Optional
+"""Screen displaying grep results."""
 
-from py_cui import PyCUI
-from py_cui.widgets import ScrollMenu
+from asyncio import ensure_future, sleep
 
-from recoverpy.lib.helper import get_block_size, get_inode, get_printable
-from recoverpy.lib.saver import Saver
-from recoverpy.lib.search.search_engine import Results, SearchEngine
-from recoverpy.ui import handler, strings
-from recoverpy.ui.screens.screen_with_block_display import MenuWithBlockDisplay
-from recoverpy.ui.widgets.screen_type import ScreenType
+from textual._types import MessageTarget
+from textual.app import ComposeResult
+from textual.containers import Horizontal, Vertical
+from textual.message import Message
+from textual.screen import Screen
+from textual.widgets import Button, Label
+
+from recoverpy.lib.search.search_engine import SearchEngine
+from recoverpy.ui.widgets.grep_result_list import GrepResultList
 
 
-class SearchScreen(MenuWithBlockDisplay):
-    """Display search results and corresponding blocks content."""
+class SearchScreen(Screen):
+    _grep_result_list: GrepResultList
+    _result_count_label: Label
+    _progress_title_label: Label
+    _progress_label: Label
+    _open_button: Button
+    search_engine: SearchEngine
 
-    def __init__(self, master: PyCUI, partition: str, string_to_search: str):
-        super().__init__(master)
+    class Start(Message):
+        def __init__(
+            self, sender: MessageTarget, searched_string: str, selected_partition: str
+        ) -> None:
+            self.searched_string = searched_string
+            self.selected_partition = selected_partition
+            super().__init__(sender)
 
-        self.search_results_scroll_menu: Optional[ScrollMenu] = None
+    class Open(Message):
+        def __init__(
+            self, sender: MessageTarget, inode: int, block_size: int, partition: str
+        ) -> None:
+            self.inode = inode
+            self.block_size = block_size
+            self.partition = partition
+            super().__init__(sender)
 
-        self.queue_object: Queue = Queue()
-        self.block_index: int = 0
-        self.block_numbers: list = []
-        self.partition: str = partition
-        self.block_size: int = get_block_size(partition)
-        self.searched_string: str = string_to_search
-        self._first_line: str = string_to_search.strip().splitlines()[0]
-        self.search_engine: SearchEngine = SearchEngine()
-        self.saver: Saver = Saver()
+    class InfoContainer(Horizontal):
+        def __init__(self, *args, **kwargs):
+            super().__init__(classes="info-container", *args, **kwargs)
 
-        self.create_ui_content()
-        self.search_engine.start_search(self)
+    def __init__(self, *args, **kwargs):
+        self.results = []
+        super().__init__(*args, **kwargs)
 
-    def set_title(self, grep_progress: str = None):
-        title: str = (
-            f"{grep_progress} - {self.block_index} results"
-            if grep_progress
-            else f"{self.block_index} results"
+    def compose(self) -> ComposeResult:
+        self._grep_result_list = GrepResultList()
+        self._result_count_label = Label("0", id="result-count")
+        self._progress_title_label = Label("", id="progress-title")
+        self._progress_label = Label("", id="progress")
+        self._open_button = Button(label="Open", id="open-button", disabled=True)
+
+        yield self._grep_result_list
+        yield Vertical(
+            self.InfoContainer(Label("- result count -", id="result-count-title")),
+            self.InfoContainer(self._result_count_label),
+            self.InfoContainer(self._progress_title_label),
+            self.InfoContainer(self._progress_label),
+            id="info-bar",
         )
+        yield self._open_button
+        yield Button("Exit", id="exit-button")
 
-        self.master.set_title(title)
+    async def on_search_screen_start(self, message: Start) -> None:
+        self.search_engine = SearchEngine(
+            message.selected_partition, message.searched_string
+        )
+        while self._grep_result_list not in self.visible_widgets:
+            continue
+        await self.search_engine.start_search()
+        ensure_future(
+            self._grep_result_list.start_consumer(self.search_engine.list_items_queue)
+        )
+        ensure_future(self.get_progress())
 
-        if "100%" in title:
-            if self.block_index == 0:
-                self.master.title_bar.set_color(22)
-            else:
-                self.master.title_bar.set_color(30)
-
-    def dequeue_results(self):
+    async def get_progress(self):
         while True:
-            results: Results = self.search_engine.get_new_results(
-                self.queue_object, self.block_index
+            self._result_count_label.update(
+                str(self.search_engine.search_progress.result_count)
             )
-            if results.is_empty():
-                sleep(1)
-                continue
-            self.block_index = results.block_index
+            if self.search_engine.search_progress.progress_percent != 0.0:
+                if self._progress_title_label.renderable == "":
+                    self._progress_title_label.update("- progress -")
+                self._progress_label.update(
+                    f"{self.search_engine.search_progress.progress_percent}%"
+                )
+            await sleep(0.1)
 
-            self.add_results_to_list(new_results=results.lines)
-            self.set_title()
-
-            # Sleep to avoid unnecessary overload
-            sleep(1)
-
-    def add_results_to_list(self, new_results: list):
-        for result in new_results:
-            string_result: str = get_printable(result)
-            inode: str = get_inode(string_result)
-            result_block_offset = self.get_result_block_offset(string_result)
-
-            real_result_block_start: int = (
-                int(int(inode) / self.block_size) + result_block_offset
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
+        button_id = event.button.id
+        if button_id == "exit-button":
+            self.search_engine.stop_search()
+            self.app.exit()
+            exit()
+        elif button_id == "open-button":
+            await self.app.post_message(
+                self.Open(
+                    self,
+                    self._grep_result_list.grep_results[
+                        self._grep_result_list.index
+                    ].inode,
+                    self.search_engine.search_params.block_size,
+                    self.search_engine.search_params.partition,
+                )
             )
-            self.block_numbers.append(real_result_block_start)
 
-            content_start: int = self.get_content_start(inode, string_result)
-            content: str = string_result[content_start:]
-            if self.search_results_scroll_menu is None:
-                return
-            self.search_results_scroll_menu.add_item(content)
-
-    def get_result_block_offset(self, result: str) -> int:
-        result_index: int = result.find(self._first_line)
-        return int(result_index / self.block_size)
-
-    def get_content_start(self, inode: str, result: str) -> int:
-        searched_string_pos: int = result.find(self._first_line)
-        if self.search_results_scroll_menu is None:
-            return 0
-        box_start_pos: int = self.search_results_scroll_menu.get_absolute_start_pos()[0]
-        box_stop_pos: int = self.search_results_scroll_menu.get_absolute_stop_pos()[0]
-        box_length: int = box_stop_pos - box_start_pos
-
-        is_result_outside_box: bool = (
-            searched_string_pos + len(self.searched_string) > box_length
-        )
-        is_result_longer_than_box: bool = len(result) - searched_string_pos > box_length
-
-        if is_result_outside_box and is_result_longer_than_box:
-            return searched_string_pos
-        elif is_result_outside_box:
-            return int(searched_string_pos - (box_length / 2))
-        else:
-            return len(inode) + 1
-
-    def update_block_number(self):
-        self.current_block = self.block_numbers[
-            int(self.search_results_scroll_menu.get_selected_item_index())
-        ]
-
-    def fix_block_number(self):
-        self.block_numbers[
-            int(self.search_results_scroll_menu.get_selected_item_index())
-        ] = self.search_engine.fix_block_number(self.current_block)
-        self.update_block_number()
-
-    def display_selected_block(self):
-        self.update_block_number()
-        self.fix_block_number()
-        self.display_block(self.current_block)
-
-    def open_save_popup(self):
-        if self.current_block is None:
-            self.master.show_message_popup(
-                strings.title_empty,
-                strings.content_no_block_selected,
-            )
-            return
-
-        screen_choices: list = [
-            strings.choice_save_one,
-            strings.choice_save_all,
-            strings.choice_cancel,
-        ]
-        self.master.show_menu_popup(
-            strings.title_save_choices,
-            screen_choices,
-            self.handle_save_popup_choice,
-        )
-
-    def handle_save_popup_choice(self, choice: str):
-        if choice == strings.choice_save_all:
-            handler.SCREENS_HANDLER.open_screen(
-                ScreenType.BLOCK,
-                partition=self.partition,
-                initial_block=self.current_block,
-            )
-        elif choice == strings.choice_save_one:
-            self.saver.save_result_string(result=self.current_result)
-            self.master.show_message_popup(
-                strings.title_empty, strings.content_result_saved
-            )
+    async def on_list_view_highlighted(self) -> None:
+        self._open_button.disabled = False

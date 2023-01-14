@@ -1,0 +1,71 @@
+SearchScreen {
+    layout: grid;
+    grid-size: 2 3;
+    grid-columns: 7fr 1fr;
+    grid-rows: 8fr 1fr 1fr;
+}
+
+#info-bar {
+    height: auto;
+    align: center top;
+}
+
+.info-container {
+    height: auto;
+    align: center top;
+    width: 100%;
+}
+
+#result-count-title {
+    margin: 1 0 0 0;
+}
+
+#progress-title {
+    margin: 1 0 0 0;
+}
+
+#open-button {
+    content-align: center bottom;
+    width: 100%;
+    margin: 0 1 0 1;
+    background: $success-darken-2;
+}
+
+#open-button:hover {
+    background: $success-lighten-2;
+}
+
+#exit-button {
+    content-align: center bottom;
+    width: 100%;
+    margin: 0 1 0 1;
+    background: $error-darken-2;
+}
+
+#exit-button:hover {
+    background: $error-lighten-2;
+}
+
+GrepResultList {
+    row-span: 5;
+    column-span: 1;
+    height: 100%;
+}
+
+GrepResultList > ListItem > Label {
+    padding: 0 0 0 1;
+    max-width: 98%;
+    overflow: hidden;
+}
+
+GrepResultList > ListItem.--highlight {
+    background: $accent
+}
+
+.grep-result-odd {
+    background: $surface;
+}
+
+.grep-result-even {
+    background: $surface-lighten-2;
+}

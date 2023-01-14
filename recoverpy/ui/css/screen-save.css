@@ -1,0 +1,33 @@
+SaveScreen {
+    layout: grid;
+    grid-size: 2 3;
+    grid-gutter: 1 2;
+    margin: 1 2;
+}
+
+#save-path-container {
+    column-span: 3;
+    align: center bottom;
+    width: 100%;
+    height: 100%;
+}
+
+#save-path-title-label {
+    margin: 1;
+}
+
+#save-path-label {
+    margin: 1;
+}
+
+#action-buttons-container {
+    column-span: 3;
+    align: center middle;
+    width: 100%;
+    height: 100%;
+}
+
+#action-buttons-container > Button {
+    height: auto;
+    margin: 0 0 0 5;
+}

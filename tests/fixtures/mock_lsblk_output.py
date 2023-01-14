@@ -1,4 +1,5 @@
 MOCK_LSBLK_OUTPUT = """loop1 loop squashfs /snap/core18/2284
+loop0 loop squashfs /snap/chromium/2238
 sda disk
 sda1 part ext4 /media/disk1
 sdb disk

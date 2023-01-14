@@ -1,0 +1,80 @@
+ResultScreen {
+    layout: grid;
+    grid-size: 5 5;
+    grid-rows: 1fr 10fr 1fr 3fr;
+}
+
+#inode-label-container {
+    column-span: 5;
+    width: 100%;
+    height: 100%;
+    align: center middle;
+}
+
+#block-content-container {
+    column-span: 5;
+    width: 100%;
+    height: 100%;
+    align: center middle;
+}
+
+TextLog {
+    height: auto;
+    column-span: 5;
+    min-height: 40%;
+    max-height: 80%;
+}
+
+#block-count-container {
+    column-span: 5;
+    align: center bottom;
+}
+
+#go-back-button-container {
+    height: 100%;
+    margin: 0 0 2 2;
+    align-vertical: bottom;
+}
+
+#go-back-button {
+    background: $warning-darken-2;
+}
+
+#go-back-button:hover {
+    background: $warning-lighten-2;
+}
+
+#block-buttons-container {
+    height: 100%;
+    margin: 0 0 2 0;
+    align-vertical: bottom;
+    align-horizontal: center;
+    width: 100%;
+    column-span: 3;
+
+}
+
+#block-buttons-container > Button {
+    margin: 0 0 0 1;
+    background: $primary-darken-2;
+}
+
+#block-buttons-container > Button:hover {
+    background: $primary-lighten-2;
+}
+
+#save-button-container {
+    height: 100%;
+    margin: 0 2 2 0;
+    align-vertical: bottom;
+    align-horizontal: right;
+    width: 100%;
+}
+
+#save-button {
+    background: $success-darken-2;
+}
+
+#save-button:hover {
+    background: $success-lighten-2;
+}

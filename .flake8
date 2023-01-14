@@ -9,13 +9,15 @@ exclude = .git,
         flake-report,
         dev.py
 
-ignore = D100, # Missing docstring in public module
-        PLC0114, #Missing module docstring (missing-module-docstring)
-        D104, # Missing docstring in public package
-        SC200, # Probably mispelled word
-        SC100, # Possibly mispelled word
-        E203, # whitespace before ':'
-        PLW1514, # Using open without explicitly specifying an encoding (unspecified-encoding)
+ignore = D100,
+        D104,
+        SC200,
+        SC100,
+        E203,
+        D107,
+        D102,
+        D103,
+        D101
 
 per-file-ignores = tests/*.py:D103,S101,PL
                 tests/test_conf.py:D103,S101,S108,PL
