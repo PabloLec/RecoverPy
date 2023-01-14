@@ -1,4 +1,3 @@
-import pathlib
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Optional
@@ -28,7 +27,7 @@ class Saver:
         self.reset()
 
     def update_save_path(self, path: str) -> None:
-        self.save_path = pathlib.Path(path)
+        self.save_path = Path(path)
 
     def get_selected_blocks_count(self) -> int:
         return len(self._results)
