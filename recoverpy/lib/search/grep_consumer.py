@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from io import BufferedReader
 from multiprocessing import Queue
 
