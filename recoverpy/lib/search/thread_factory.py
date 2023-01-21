@@ -3,7 +3,7 @@ from __future__ import annotations
 from queue import Queue
 from subprocess import PIPE, Popen
 from threading import Thread
-from typing import AnyStr, Callable
+from typing import Callable
 
 from recoverpy.lib.helper import is_dependency_installed
 from recoverpy.lib.search.grep_consumer import enqueue_grep_output
