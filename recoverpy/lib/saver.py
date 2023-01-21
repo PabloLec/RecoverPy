@@ -1,12 +1,12 @@
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 
 class Saver:
     """Encapsulates all result saving related methods."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.save_path: Path = Path().absolute()
         self.last_saved_file: Optional[Path] = None
         self._results: Dict[int, str] = {}
@@ -18,7 +18,7 @@ class Saver:
         self._results = {}
 
     def save(self) -> None:
-        ordered_blocks: list = [
+        ordered_blocks: List[str] = [
             self._results[num] for num in sorted(self._results.keys())
         ]
         final_output: str = "\n".join(ordered_blocks)

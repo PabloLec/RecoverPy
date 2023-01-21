@@ -81,6 +81,7 @@ profile = "black"
 [tool.mypy]
 python_version = 3.8
 ignore_missing_imports = "true"
+disallow_untyped_calls = "false"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

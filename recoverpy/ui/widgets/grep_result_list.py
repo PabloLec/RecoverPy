@@ -1,7 +1,7 @@
 """A Textual ListView widget consuming an asyncio Queue"""
 
 from asyncio import Lock, Queue, sleep
-from typing import cast
+from typing import List, cast
 
 from textual.widget import Widget
 from textual.widgets import Label, ListView
@@ -12,13 +12,13 @@ from recoverpy.models.grep_result import GrepResult
 class GrepResultList(ListView):
     list_items_background_color = {0: "red", 1: "green"}
 
-    def __init__(self, *children, **kwargs):
+    def __init__(self, *children, **kwargs) -> None:  # type: ignore
         super().__init__(*children, **kwargs)
-        self.results = []
+        self.results: List[str] = []
         self.lock = Lock()
-        self.grep_results = []
+        self.grep_results: List[GrepResult] = []
 
-    async def start_consumer(self, queue: Queue):
+    async def start_consumer(self, queue: Queue[GrepResult]) -> None:
         while True:
             if not self._should_add_more():
                 await sleep(0.1)

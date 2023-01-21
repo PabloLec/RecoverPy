@@ -12,7 +12,7 @@ from recoverpy.ui.widgets.directory_tree import DirectoryTree
 
 
 class PathEditScreen(Screen):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:  # type: ignore
         self._directory_tree = DirectoryTree("/")
         super().__init__(*args, **kwargs)
 

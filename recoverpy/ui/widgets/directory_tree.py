@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from rich.style import Style
 from rich.text import Text, TextType
@@ -73,7 +73,7 @@ class DirectoryTree(Tree[DirEntry]):
             classes=classes,
         )
 
-    def process_label(self, label: TextType):
+    def process_label(self, label: TextType) -> Text:
         """Process a str or Text in to a label.
         Maybe overridden in a subclass to change modify how labels are rendered.
 
@@ -90,7 +90,9 @@ class DirectoryTree(Tree[DirEntry]):
         first_line = text_label.split()[0]
         return first_line
 
-    def render_label(self, node: TreeNode[DirEntry], base_style: Style, style: Style):
+    def render_label(
+        self, node: TreeNode[DirEntry], base_style: Style, style: Style
+    ) -> Text:
         node_label = node._label.copy()
         node_label.stylize(style)
 
@@ -128,7 +130,7 @@ class DirectoryTree(Tree[DirEntry]):
     def on_mount(self) -> None:
         self.load_directory(self.root)
 
-    def on_tree_node_expanded(self, event: Tree.NodeSelected) -> None:
+    def on_tree_node_expanded(self, event: Tree.NodeSelected[Any]) -> None:
         event.stop()
         dir_entry = event.node.data
         if dir_entry is None:
@@ -137,7 +139,7 @@ class DirectoryTree(Tree[DirEntry]):
             if not dir_entry.loaded:
                 self.load_directory(event.node)
 
-    def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
+    def on_tree_node_selected(self, event: Tree.NodeSelected[Any]) -> None:
         event.stop()
         dir_entry = event.node.data
         if dir_entry is None:

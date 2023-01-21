@@ -1,6 +1,7 @@
 """Screen displaying grep results."""
 
 from asyncio import ensure_future, sleep
+from typing import List
 
 from textual._types import MessageTarget
 from textual.app import ComposeResult
@@ -39,11 +40,11 @@ class SearchScreen(Screen):
             super().__init__(sender)
 
     class InfoContainer(Horizontal):
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args, **kwargs) -> None:  # type: ignore
             super().__init__(classes="info-container", *args, **kwargs)
 
-    def __init__(self, *args, **kwargs):
-        self.results = []
+    def __init__(self, *args, **kwargs) -> None:  # type: ignore
+        self.results: List[str] = []
         super().__init__(*args, **kwargs)
 
     def compose(self) -> ComposeResult:
@@ -76,7 +77,7 @@ class SearchScreen(Screen):
         )
         ensure_future(self.get_progress())
 
-    async def get_progress(self):
+    async def get_progress(self) -> None:
         while True:
             self._result_count_label.update(
                 str(self.search_engine.search_progress.result_count)
