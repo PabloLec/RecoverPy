@@ -9,14 +9,11 @@ from textual.widgets import Button, Label
 
 class ModalScreen(Screen):
     _message_label = Label("", id="modal-message")
-    _callback: Callable
+    _callback: Callable  # type: ignore
 
-    def set(self, message: str, callback: Optional[Callable] = None) -> None:
+    def set(self, message: str, callback: Optional[Callable] = None) -> None:  # type: ignore
         self._message_label.update(message)
-        if callback:
-            self._callback = callback
-        else:
-            self._callback = self.app.pop_screen
+        self._callback = callback or self.app.pop_screen
 
     def compose(self) -> ComposeResult:
         yield Grid(

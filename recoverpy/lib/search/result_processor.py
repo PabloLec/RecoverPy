@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from queue import Queue
 from typing import List
 
@@ -9,10 +11,10 @@ class ResultProcessor:
     def __init__(self, search_params: SearchParams):
         self.search_params = search_params
 
-    def get_new_results(self, queue_object: Queue) -> List[str]:
+    def get_new_results(self, queue_object: Queue[bytes]) -> List[str]:
         """Consume grep output queue and format results."""
 
-        queue_list: list = list(queue_object.queue)
+        queue_list: List[bytes] = list(queue_object.queue)
         queue_size = len(queue_list)
         queue_object.queue.clear()
         if queue_size == 0:
@@ -28,7 +30,7 @@ class ResultProcessor:
         ]
         return final_results
 
-    def is_result_format_valid(self, result) -> bool:
+    def is_result_format_valid(self, result: str) -> bool:
         """Check if all searched lines are present in result block and next adjacent
         block, else result is a false positive and will not be displayed.
         """

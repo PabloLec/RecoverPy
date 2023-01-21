@@ -1,4 +1,5 @@
 """Screen used to confirm save."""
+from typing import Optional
 
 from textual._types import MessageTarget
 from textual.app import ComposeResult
@@ -17,8 +18,8 @@ class SaveScreen(Screen):
             self.save_path = save_path
             super().__init__(sender)
 
-    def __init__(self, *args, **kwargs):
-        self._saver = None
+    def __init__(self, *args, **kwargs) -> None:  # type: ignore
+        self._saver: Optional[Saver] = None
         self._save_path_label = Label("", id="save-path-label")
         super().__init__(*args, **kwargs)
 
@@ -40,7 +41,8 @@ class SaveScreen(Screen):
         )
 
     def _set_save_path(self) -> None:
-        self._save_path_label.update(str(self._saver.save_path))
+        if self._saver:
+            self._save_path_label.update(str(self._saver.save_path))
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         button_id = event.button.id
@@ -48,16 +50,17 @@ class SaveScreen(Screen):
             self.app.pop_screen()
         elif button_id == "edit-save-path-button":
             await self.app.push_screen("path_edit")
-        elif button_id == "save-button":
+        elif button_id == "save-button" and self._saver:
             self._saver.save()
             self.app.pop_screen()
-            await self.app.post_message(
-                self.Saved(
-                    self, str(self._saver.save_path / self._saver.last_saved_file)
+            if self._saver.last_saved_file:
+                await self.app.post_message(
+                    self.Saved(
+                        self, str(self._saver.save_path / self._saver.last_saved_file)
+                    )
                 )
-            )
 
     async def on_path_edit_screen_confirm(self, event: PathEditScreen.Confirm) -> None:
-        print(event.selected_dir)
-        self._saver.update_save_path(event.selected_dir)
-        self._set_save_path()
+        if self._saver:
+            self._saver.update_save_path(event.selected_dir)
+            self._set_save_path()

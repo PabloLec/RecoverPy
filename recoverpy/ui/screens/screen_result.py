@@ -1,6 +1,6 @@
 """Screen displaying dd results."""
 from subprocess import CalledProcessError
-from typing import cast
+from typing import Optional, cast
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal
@@ -13,7 +13,7 @@ from recoverpy.ui.screens.screen_save import SaveScreen
 
 
 class ResultScreen(Screen):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:  # type: ignore
         self._saver = Saver()
         self._partition = ""
         self._block_size = 0
@@ -21,7 +21,7 @@ class ResultScreen(Screen):
         self._inode_label = Label("", id="inode-label")
         self._block_count_label = Label("0 block selected", id="block-count")
         self._block_content = TextLog(markup=False, wrap=True)
-        self._raw_block_content = None
+        self._raw_block_content: Optional[str] = None
         self._save_button = Button(label="Save", id="save-button", disabled=True)
         super().__init__(*args, **kwargs)
 
@@ -34,7 +34,7 @@ class ResultScreen(Screen):
         self._update()
         self._block_count_label.update("0 block selected")
 
-    def _update(self):
+    def _update(self) -> None:
         self._update_inode_label()
         try:
             self._update_block_content()
@@ -76,7 +76,7 @@ class ResultScreen(Screen):
         elif button_id == "previous-button" and self._inode > 0:
             self._inode -= 1
             self._update()
-        elif button_id == "add-block-button":
+        elif button_id == "add-block-button" and self._raw_block_content:
             self._saver.add(self._inode, self._raw_block_content)
             count = self._saver.get_selected_blocks_count()
             self._block_count_label.update(

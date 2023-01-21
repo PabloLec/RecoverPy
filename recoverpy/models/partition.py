@@ -9,5 +9,5 @@ class Partition:
     is_mounted: bool
     mount_point: Optional[str]
 
-    def get_full_name(self):
+    def get_full_name(self) -> str:
         return f"/dev/{self.name}"

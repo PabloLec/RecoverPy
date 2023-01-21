@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from asyncio import Queue as AsyncQueue
 from asyncio import new_event_loop
 from queue import Queue
@@ -21,14 +23,14 @@ class SearchEngine:
     and consume its output.
     """
 
-    _grep_process: Popen
+    _grep_process: Popen[bytes]
 
     def __init__(self, partition: str, searched_string: str):
         self.search_params = SearchParams(partition, searched_string)
         self.search_progress = SearchProgress()
         self.result_processor = ResultProcessor(self.search_params)
-        self.results_queue: Queue = Queue()
-        self.list_items_queue: AsyncQueue = AsyncQueue()
+        self.results_queue: Queue[bytes] = Queue()
+        self.list_items_queue: AsyncQueue[GrepResult] = AsyncQueue()
 
     async def start_search(self) -> None:
         self._grep_process = start_grep_process(

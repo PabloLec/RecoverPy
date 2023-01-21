@@ -1,9 +1,9 @@
 from subprocess import check_output
-from typing import List
+from typing import List, Tuple
 
 from recoverpy.models.partition import Partition
 
-_IGNORED_PARTITIONS_TYPES: tuple = (" loop ", "swap")
+_IGNORED_PARTITIONS_TYPES: Tuple[str, str] = (" loop ", "swap")
 
 
 def get_partitions() -> List[Partition]:

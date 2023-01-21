@@ -12,7 +12,7 @@ from recoverpy.ui.screens.screen_save import SaveScreen
 from recoverpy.ui.screens.screen_search import SearchScreen
 
 
-class RecoverpyApp(App):
+class RecoverpyApp(App):  # type: ignore
     SCREENS = {
         "params": ParamsScreen(),
         "search": SearchScreen(),
@@ -23,7 +23,7 @@ class RecoverpyApp(App):
     }
     CSS_PATH = get_css()  # type: ignore # mypy bug, List[str] = List[Union[str, PurePath]]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
         self._is_user_root = True
 
