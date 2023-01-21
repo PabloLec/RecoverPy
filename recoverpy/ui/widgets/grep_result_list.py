@@ -3,7 +3,8 @@
 from asyncio import Lock, Queue, sleep
 from typing import cast
 
-from textual.widgets import Label, ListItem, ListView
+from textual.widget import Widget
+from textual.widgets import Label, ListView
 
 from recoverpy.models.grep_result import GrepResult
 
@@ -44,7 +45,7 @@ class GrepResultList(ListView):
         for index, item in enumerate(self.children):
             self._resize_item(index, item)
 
-    def _resize_item(self, index: int, item: ListItem) -> None:
+    def _resize_item(self, index: int, item: Widget) -> None:
         max_item_width = self.size.width - self.size.width // 20
         grep_result_line = self.grep_results[index].line
 
