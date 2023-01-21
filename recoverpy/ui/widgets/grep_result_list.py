@@ -1,5 +1,7 @@
 """A Textual ListView widget consuming an asyncio Queue"""
 
+from __future__ import annotations
+
 from asyncio import Lock, Queue, sleep
 from typing import List, cast
 
@@ -35,8 +37,7 @@ class GrepResultList(ListView):
             await super().append(grep_result.list_item)
 
     def _get_list_index_to_show(self) -> int:
-        size_with_overflow = self.size.height + int(self.scroll_y) + 10
-        return size_with_overflow
+        return self.size.height + int(self.scroll_y) + 10
 
     def _should_add_more(self) -> bool:
         return len(self.children) < self._get_list_index_to_show()
