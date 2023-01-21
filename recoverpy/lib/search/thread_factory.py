@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from queue import Queue
 from subprocess import PIPE, Popen
 from threading import Thread
