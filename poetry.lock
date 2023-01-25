@@ -925,14 +925,14 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pre-commit"
-version = "2.21.0"
+version = "3.0.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "pre_commit-2.21.0-py2.py3-none-any.whl", hash = "sha256:e2f91727039fc39a92f58a588a25b87f936de6567eed4f0e673e0507edc75bad"},
-    {file = "pre_commit-2.21.0.tar.gz", hash = "sha256:31ef31af7e474a8d8995027fefdfcf509b5c913ff31f2015b4ec4beb26a6f658"},
+    {file = "pre_commit-3.0.0-py2.py3-none-any.whl", hash = "sha256:6af0a0b4137c0903794632f77b7223c4af0373f5cd3337056d2dab32aa3a5caf"},
+    {file = "pre_commit-3.0.0.tar.gz", hash = "sha256:de265f74325f0c3ff1a727a974449315ea9b11975cf6b02c11f26e50acfa48f1"},
 ]
 
 [package.dependencies]
@@ -1430,4 +1430,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "4e40d55d84432fe9435cfd5229a65273295e3f03b41704295fe679714e4d912a"
+content-hash = "d8dfa8d58997be5b995e83e7ce383476663159da96ddf5e803383aeeb9a3c314"
