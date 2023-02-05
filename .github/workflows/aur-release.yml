@@ -4,7 +4,6 @@ on: workflow_dispatch
 
 jobs:
   deploy:
-    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - name: Sync AUR package with Github release
