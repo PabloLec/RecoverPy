@@ -6,7 +6,20 @@ jobs:
   aur-publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+
+      - name: Install and fix pip2pkgbuild
+        run: |
+          git clone https://github.com/wenLiangcan/pip2pkgbuild.git
+          sed -i "s/\/usr\/share\/licenses\/common/\//g" pip2pkgbuild/pip2pkgbuild/pip2pkgbuild.py
+
+      - name: Create PKGBUILD
+        run: |
+          python3 pip2pkgbuild/pip2pkgbuild/pip2pkgbuild.py recoverpy
+      - name: Fix license
+        run: |
+          sed -i "s/license\=$PARTITION_COLUMN.*/license\=(GNU GPLv3)/" PKGBUILD
 
       - name: Publish AUR package
         uses: KSXGitHub/github-actions-deploy-aur@2.6.0
