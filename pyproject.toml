@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "recoverpy"
-version = "2.0.0"
+version = "2.0.1"
 description = "A TUI to recover overwritten or deleted data."
 authors = ["PabloLec <pablolec@pm.me>"]
 license = "GPL-3.0 License"
@@ -30,17 +30,46 @@ keywords = ["data",
             "data recovery tool",
             "grep",
             "linux",
-            "unix"]
+            "unix",
+            "education",
+            "teaching",
+            "training",
+            "teach",
+            "learn",
+            "textual",
+            "asyncio",
+            "async",
+]
 classifiers = [
         "Development Status :: 5 - Production/Stable",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: POSIX :: Linux",
         "Environment :: Console",
+        "Environment :: Console :: Curses",
+        "Environment :: Console :: Textual",
         "Intended Audience :: End Users/Desktop",
+        "Intended Audience :: Developers",
+        "Intended Audience :: System Administrators",
+        "Intended Audience :: Information Technology",
+        "Intended Audience :: Education",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
-    ]
+        "Programming Language :: Python :: 3.12",
+        "Topic :: Security",
+        "Topic :: System :: Filesystems",
+        "Topic :: System :: Archiving :: Backup",
+        "Topic :: System :: Recovery Tools",
+        "Topic :: System :: Shells",
+        "Topic :: System :: Systems Administration",
+        "Topic :: Terminals",
+        "Topic :: Utilities",
+        "Typing :: Typed",
+        "Typing :: Type Hints",
+        "Framework :: AsyncIO",
+        "Framework :: Textual",
+]
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
