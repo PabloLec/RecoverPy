@@ -73,7 +73,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-textual = ">=0.9,<0.11"
+textual = ">=0.9,<0.12"
 
 [tool.poetry.dev-dependencies]
 coverage = "^7.1.0"
