@@ -46,7 +46,6 @@ classifiers = [
         "Operating System :: POSIX :: Linux",
         "Environment :: Console",
         "Environment :: Console :: Curses",
-        "Environment :: Console :: Textual",
         "Intended Audience :: End Users/Desktop",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
@@ -66,9 +65,7 @@ classifiers = [
         "Topic :: Terminals",
         "Topic :: Utilities",
         "Typing :: Typed",
-        "Typing :: Type Hints",
         "Framework :: AsyncIO",
-        "Framework :: Textual",
 ]
 
 [tool.poetry.dependencies]
