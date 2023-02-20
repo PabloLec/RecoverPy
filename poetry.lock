@@ -367,14 +367,14 @@ pyflakes = ">=3.0.0,<3.1.0"
 
 [[package]]
 name = "flake8-aaa"
-version = "0.12.2"
+version = "0.13.0"
 description = "A Flake8 plugin that checks Python tests follow the Arrange-Act-Assert pattern"
 category = "dev"
 optional = false
 python-versions = ">=3.7, <4"
 files = [
-    {file = "flake8-aaa-0.12.2.tar.gz", hash = "sha256:38b5009248d8bc1e9568c8cc6f00870582f0e6b1be168d2f880a404796029e83"},
-    {file = "flake8_aaa-0.12.2-py3-none-any.whl", hash = "sha256:80840d34885506128a94e4912281bbab315591c414befd496dd041da640a1546"},
+    {file = "flake8-aaa-0.13.0.tar.gz", hash = "sha256:21cbd08b87a1af845c98df0ddf018e766e884878b9e8b47b5c1d326c733d6432"},
+    {file = "flake8_aaa-0.13.0-py3-none-any.whl", hash = "sha256:93c14d703de00a6617a207e5e0537a4fb53bffb94794dd64d5bd5f0d77e23834"},
 ]
 
 [package.dependencies]
@@ -1686,4 +1686,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "b6c20a135d4a4d138337a129ae36ea64a51bf0d8ea42228d0ec52fdb82ba8505"
+content-hash = "abc880963b09a981f57819237943154f4ae63786091aa1c89d3f0ed8595c7615"
