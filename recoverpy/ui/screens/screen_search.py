@@ -69,7 +69,7 @@ class SearchScreen(Screen):
         self.search_engine = SearchEngine(
             message.selected_partition, message.searched_string
         )
-        while self._grep_result_list not in self.visible_widgets:
+        while self._grep_result_list not in self.focus_chain:
             continue
         await self.search_engine.start_search()
         ensure_future(
