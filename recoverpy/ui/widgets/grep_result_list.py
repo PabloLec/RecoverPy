@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from asyncio import Lock, Queue, sleep
-from typing import List, cast
+from typing import List, cast, Optional, SupportsIndex
 
 from textual.widget import Widget
 from textual.widgets import Label, ListView
@@ -27,6 +27,10 @@ class GrepResultList(ListView):
                 continue
             grep_result = await queue.get()
             await self._append(grep_result)
+
+    def get_index(self) -> int:
+        list_index: Optional[int] = self.index
+        return list_index if list_index else 0
 
     async def _append(self, grep_result: GrepResult) -> None:
         if grep_result.list_item is None:

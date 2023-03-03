@@ -101,7 +101,7 @@ class SearchScreen(Screen):
                 self.Open(
                     self,
                     self._grep_result_list.grep_results[
-                        self._grep_result_list.index
+                        self._grep_result_list.get_index()
                     ].inode,
                     self.search_engine.search_params.block_size,
                     self.search_engine.search_params.partition,
