@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from asyncio import Lock, Queue, sleep
-from typing import List, cast, Optional, SupportsIndex
+from typing import List, Optional, cast
 
 from textual.widget import Widget
 from textual.widgets import Label, ListView

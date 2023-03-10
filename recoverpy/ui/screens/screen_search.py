@@ -3,7 +3,6 @@
 from asyncio import ensure_future, sleep
 from typing import List
 
-from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.message import Message
@@ -23,21 +22,17 @@ class SearchScreen(Screen):
     search_engine: SearchEngine
 
     class Start(Message):
-        def __init__(
-            self, sender: MessageTarget, searched_string: str, selected_partition: str
-        ) -> None:
+        def __init__(self, searched_string: str, selected_partition: str) -> None:
             self.searched_string = searched_string
             self.selected_partition = selected_partition
-            super().__init__(sender)
+            super().__init__()
 
     class Open(Message):
-        def __init__(
-            self, sender: MessageTarget, inode: int, block_size: int, partition: str
-        ) -> None:
+        def __init__(self, inode: int, block_size: int, partition: str) -> None:
             self.inode = inode
             self.block_size = block_size
             self.partition = partition
-            super().__init__(sender)
+            super().__init__()
 
     class InfoContainer(Horizontal):
         def __init__(self, *args, **kwargs) -> None:  # type: ignore
@@ -97,9 +92,8 @@ class SearchScreen(Screen):
             self.app.exit()
             exit()
         elif button_id == "open-button":
-            await self.app.post_message(
+            self.app.post_message(
                 self.Open(
-                    self,
                     self._grep_result_list.grep_results[
                         self._grep_result_list.get_index()
                     ].inode,

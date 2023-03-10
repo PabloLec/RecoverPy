@@ -1,6 +1,5 @@
 """Screen used to select ressult save path."""
 
-from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.events import Event
@@ -17,9 +16,9 @@ class PathEditScreen(Screen):
         super().__init__(*args, **kwargs)
 
     class Confirm(Message):
-        def __init__(self, sender: MessageTarget, selected_dir: str) -> None:
+        def __init__(self, selected_dir: str) -> None:
             self.selected_dir = selected_dir
-            super().__init__(sender)
+            super().__init__()
 
     def compose(self) -> ComposeResult:
         yield self._directory_tree
@@ -29,7 +28,7 @@ class PathEditScreen(Screen):
 
     async def on_button_pressed(self, event: Event) -> None:
         event.stop()
-        await self.app.get_screen("save").post_message(
-            self.Confirm(self, self._directory_tree.selected_dir)
+        self.app.get_screen("save").post_message(
+            self.Confirm(self._directory_tree.selected_dir)
         )
         self.app.pop_screen()

@@ -1,7 +1,6 @@
 """Screen used to confirm save."""
 from typing import Optional
 
-from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.message import Message
@@ -14,9 +13,9 @@ from recoverpy.ui.screens.screen_path_edit import PathEditScreen
 
 class SaveScreen(Screen):
     class Saved(Message):
-        def __init__(self, sender: MessageTarget, save_path: str) -> None:
+        def __init__(self, save_path: str) -> None:
             self.save_path = save_path
-            super().__init__(sender)
+            super().__init__()
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         self._saver: Optional[Saver] = None
@@ -54,10 +53,8 @@ class SaveScreen(Screen):
             self._saver.save()
             self.app.pop_screen()
             if self._saver.last_saved_file:
-                await self.app.post_message(
-                    self.Saved(
-                        self, str(self._saver.save_path / self._saver.last_saved_file)
-                    )
+                self.app.post_message(
+                    self.Saved(str(self._saver.save_path / self._saver.last_saved_file))
                 )
 
     async def on_path_edit_screen_confirm(self, event: PathEditScreen.Confirm) -> None:
