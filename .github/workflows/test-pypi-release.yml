@@ -2,6 +2,12 @@ name: Test release upload
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test_pypi_release:
