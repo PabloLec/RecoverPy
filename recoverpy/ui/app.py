@@ -39,10 +39,8 @@ class RecoverpyApp(App):  # type: ignore
     async def on_params_screen_continue(self, message: ParamsScreen.Continue) -> None:
         self.pop_screen()
         await self.push_screen("search")
-        await self.get_screen("search").post_message(
-            SearchScreen.Start(
-                self, message.searched_string, message.selected_partition
-            )
+        self.get_screen("search").post_message(
+            SearchScreen.Start(message.searched_string, message.selected_partition)
         )
 
     async def on_search_screen_open(self, message: SearchScreen.Open) -> None:

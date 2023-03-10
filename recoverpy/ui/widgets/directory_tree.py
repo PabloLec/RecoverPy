@@ -13,6 +13,7 @@ from textual.widgets import Tree
 from textual.widgets._tree import TOGGLE_STYLE
 from textual.widgets.tree import TreeNode
 
+
 @dataclass
 class DirEntry:
     """Attaches directory information ot a node."""

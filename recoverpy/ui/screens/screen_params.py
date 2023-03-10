@@ -1,7 +1,6 @@
 """First screen displayed to the user.
 Allows user to enter search string and select partition."""
 
-from textual._types import MessageTarget
 from textual.app import ComposeResult
 from textual.message import Message
 from textual.screen import Screen
@@ -17,12 +16,10 @@ class ParamsScreen(Screen):
     _start_search_button: Button
 
     class Continue(Message):
-        def __init__(
-            self, sender: MessageTarget, searched_string: str, selected_partition: str
-        ) -> None:
+        def __init__(self, searched_string: str, selected_partition: str) -> None:
             self.searched_string = searched_string
             self.selected_partition = selected_partition
-            super().__init__(sender)
+            super().__init__()
 
     def compose(self) -> ComposeResult:
         self._partition_list = PartitionList()
@@ -46,8 +43,8 @@ class ParamsScreen(Screen):
         selected_partition: Partition = self._partition_list.list_items[
             self._partition_list.highlighted_child.id
         ]
-        await self.app.post_message(
-            self.Continue(self, searched_string, selected_partition.get_full_name())
+        self.app.post_message(
+            self.Continue(searched_string, selected_partition.get_full_name())
         )
 
     async def on_input_changed(self, event: Input.Changed) -> None:
