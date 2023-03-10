@@ -1,6 +1,13 @@
 name: Release on AUR
 
 on: workflow_dispatch
+on:
+  workflow_run:
+    workflows: ["Release on PyPI"]
+    branches: [main]
+    types:
+      - completed
+
 
 jobs:
   aur-publish:
