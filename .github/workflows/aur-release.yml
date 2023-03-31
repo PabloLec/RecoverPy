@@ -23,7 +23,7 @@ jobs:
 
       - name: Create PKGBUILD
         run: |
-          python3 pip2pkgbuild/pip2pkgbuild/pip2pkgbuild.py recoverpy
+          python3 pip2pkgbuild/pip2pkgbuild/pip2pkgbuild.py --pep517 recoverpy
       - name: Fix license
         run: |
           sed -i "s/license\=$PARTITION_COLUMN.*/license\=(GNU GPLv3)/" PKGBUILD
