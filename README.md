@@ -29,6 +29,7 @@
    * [Installation](#Installation)
       * [Dependancies](#arrow_right-dependancies)
       * [Installation from pip](#arrow_right-installation-from-pip)
+      * [Installation from AUR](#arrow_right-installation-from-aur)
    * [Usage](#Usage)
    * [Tips](#Tips)
    * [Contributing](#Contributing)
@@ -67,6 +68,10 @@ To install all dependencies:
 #### :arrow_right: Installation from pip
 
 `python3 -m pip install recoverpy`
+
+#### :arrow_right: Installation from AUR
+
+`yay -S python-recoverpy`
 
 ## Usage
 
