@@ -1311,14 +1311,14 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
 name = "textual"
-version = "0.19.0"
+version = "0.19.1"
 description = "Modern Text User Interface framework"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "textual-0.19.0-py3-none-any.whl", hash = "sha256:39b6143211f33e199f18db5acf562909e3561b7d364e6232624a8a8d192cb1f0"},
-    {file = "textual-0.19.0.tar.gz", hash = "sha256:79b83b05180465ccbc923080878f9390d6fef0386801910d3db647dd1bf036f3"},
+    {file = "textual-0.19.1-py3-none-any.whl", hash = "sha256:13a9d48b3eb3bb4f04a8d2f27760861f68d77e1ed942372d447322a387123223"},
+    {file = "textual-0.19.1.tar.gz", hash = "sha256:5a82c68f83c58aad1a93180f598e5bc604695dc8f2d15d00e6c44b9eb1393b81"},
 ]
 
 [package.dependencies]
