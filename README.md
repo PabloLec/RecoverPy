@@ -27,9 +27,10 @@
 <!--ts-->
    * [Demo](#Demo)
    * [Installation](#Installation)
-      * [Dependancies](#arrow_right-dependancies)
-      * [Installation from pip](#arrow_right-installation-from-pip)
-      * [Installation from AUR](#arrow_right-installation-from-aur)
+      * [Dependencies](#dependencies)
+      * [Run with pipx](#run-with-pipx)
+      * [Installation from pip](#installation-from-pip)
+      * [Installation from AUR](#installation-from-aur)
    * [Usage](#Usage)
    * [Tips](#Tips)
    * [Contributing](#Contributing)
@@ -52,9 +53,10 @@ Every block of your partition will be scanned. You can even find a string in bin
 
 ## Installation
 
-:penguin: RecoverPy is currently only available on Linux systems.
+:penguin: RecoverPy is currently only available on Linux systems.  
+:red_circle: **You must be root or use sudo**.
 
-#### :arrow_right: Dependancies
+### Dependencies
 
 **Mandatory:** To list and search through your partitions, recoverpy uses `grep`, `dd`, and `lsblk` commands. Although, if you're running a major Linux distrucition these tools should already be installed.
 
@@ -65,11 +67,20 @@ To install all dependencies:
 - Arch: `pacman -S grep coreutils util-linux progress`
 - Fedora: `dnf install grep coreutils util-linux progress`
 
-#### :arrow_right: Installation from pip
+
+### Run with pipx
+
+You can **directly run recoverpy with pipx in an isolated environment** without installing it.  
+To install pipx, follow the [official documentation](https://pipxproject.github.io/pipx/installation/).  
+To run recoverpy with pipx, simply run:  
+
+`sudo pipx run recoverpy`
+
+#### Installation from pip
 
 `python3 -m pip install recoverpy`
 
-#### :arrow_right: Installation from AUR
+#### Installation from AUR
 
 `yay -S python-recoverpy`
 
@@ -79,21 +90,19 @@ To install all dependencies:
 python3 -m recoverpy
 ```
 
-:red_circle: **You must be root or use sudo**.
-
 ---
 
-:one: **Select the system partition** in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
+- **Select the system partition** in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
 
-:two: **Type a text string to search**. See tips below for better results.
+- **Type a text string to search**. See tips below for better results.
 
-:three: **Start search**, Results will appear in the left-hand box.
+- **Start search**, Results will appear in the left-hand box.
 
-:four: **Select a result**.
+- **Select a result**.
 
-:five: Once you have found your precious, **select `Open`**.
+- Once you have found your precious, **select `Open`**.
 
-:six: You can now either save this block individually or explore neighboring blocks for the remaining parts of the file. You could then save it all in one file.
+- You can now either save this block individually or explore neighboring blocks for the remaining parts of the file. You could then save it all in one file.
 
 ## Tips
 
