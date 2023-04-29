@@ -1311,14 +1311,14 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
 name = "textual"
-version = "0.20.1"
+version = "0.22.1"
 description = "Modern Text User Interface framework"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "textual-0.20.1-py3-none-any.whl", hash = "sha256:8495ea90388c8361ea125dca463358201e98a85ec765ff4fddb6d668fabeb490"},
-    {file = "textual-0.20.1.tar.gz", hash = "sha256:51d668ed5b2422e20ae29f506d52fd2c52fa254fb80e85a01ef08aa5d616ab9f"},
+    {file = "textual-0.22.1-py3-none-any.whl", hash = "sha256:1a8fbb0d791d442674e2f871341df70f8e348eb9e95f110dad44bd5651a1d720"},
+    {file = "textual-0.22.1.tar.gz", hash = "sha256:277407ab1beee474420ae76fb77dbe4c284300a124132907f786764da6b12f6f"},
 ]
 
 [package.dependencies]
@@ -1507,4 +1507,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "0bec72679608c7b6fa09505e64727d678d77a98c2b54966e728b1ff8ca05b2a6"
+content-hash = "41d44e5fbcec07bbe5fb91366e22973e3844ae2bda9e40a63b66071f506126fb"
