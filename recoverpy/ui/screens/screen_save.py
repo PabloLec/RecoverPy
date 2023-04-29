@@ -11,8 +11,8 @@ from recoverpy.lib.saver import Saver
 from recoverpy.ui.screens.screen_path_edit import PathEditScreen
 
 
-class SaveScreen(Screen):
-    class Saved(Message):
+class SaveScreen(Screen):  # type:ignore[misc]
+    class Saved(Message):  # type:ignore[misc]
         def __init__(self, save_path: str) -> None:
             self.save_path = save_path
             super().__init__()

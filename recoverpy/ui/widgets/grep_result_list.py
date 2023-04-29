@@ -11,7 +11,7 @@ from textual.widgets import Label, ListView
 from recoverpy.models.grep_result import GrepResult
 
 
-class GrepResultList(ListView):
+class GrepResultList(ListView):  # type:ignore[misc]
     list_items_background_color = {0: "red", 1: "green"}
 
     def __init__(self, *children, **kwargs) -> None:  # type: ignore
@@ -41,7 +41,7 @@ class GrepResultList(ListView):
             await super().append(grep_result.list_item)
 
     def _get_list_index_to_show(self) -> int:
-        return self.size.height + int(self.scroll_y) + 10
+        return int(self.size.height) + int(self.scroll_y) + 10
 
     def _should_add_more(self) -> bool:
         return len(self.children) < self._get_list_index_to_show()

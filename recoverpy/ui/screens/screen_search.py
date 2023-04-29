@@ -13,7 +13,7 @@ from recoverpy.lib.search.search_engine import SearchEngine
 from recoverpy.ui.widgets.grep_result_list import GrepResultList
 
 
-class SearchScreen(Screen):
+class SearchScreen(Screen):  # type:ignore[misc]
     _grep_result_list: GrepResultList
     _result_count_label: Label
     _progress_title_label: Label
@@ -21,20 +21,20 @@ class SearchScreen(Screen):
     _open_button: Button
     search_engine: SearchEngine
 
-    class Start(Message):
+    class Start(Message):  # type:ignore[misc]
         def __init__(self, searched_string: str, selected_partition: str) -> None:
             self.searched_string = searched_string
             self.selected_partition = selected_partition
             super().__init__()
 
-    class Open(Message):
+    class Open(Message):  # type:ignore[misc]
         def __init__(self, inode: int, block_size: int, partition: str) -> None:
             self.inode = inode
             self.block_size = block_size
             self.partition = partition
             super().__init__()
 
-    class InfoContainer(Horizontal):
+    class InfoContainer(Horizontal):  # type:ignore[misc]
         def __init__(self, *args, **kwargs) -> None:  # type: ignore
             super().__init__(classes="info-container", *args, **kwargs)
 

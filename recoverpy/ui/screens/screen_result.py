@@ -12,7 +12,7 @@ from recoverpy.lib.saver import Saver
 from recoverpy.ui.screens.screen_save import SaveScreen
 
 
-class ResultScreen(Screen):
+class ResultScreen(Screen):  # type:ignore[misc]
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         self._saver = Saver()
         self._partition = ""

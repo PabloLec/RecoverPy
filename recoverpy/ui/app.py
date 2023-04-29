@@ -21,7 +21,7 @@ class RecoverpyApp(App):  # type: ignore
         "path_edit": PathEditScreen(),
         "modal": ModalScreen(),
     }
-    CSS_PATH = get_css()  # type: ignore # mypy bug, List[str] = List[Union[str, PurePath]]
+    CSS_PATH = get_css()
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)

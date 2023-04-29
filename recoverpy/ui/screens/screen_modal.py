@@ -7,7 +7,7 @@ from textual.screen import Screen
 from textual.widgets import Button, Label
 
 
-class ModalScreen(Screen):
+class ModalScreen(Screen):  # type:ignore[misc]
     _message_label = Label("", id="modal-message")
     _callback: Callable  # type: ignore
 
