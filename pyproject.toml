@@ -68,6 +68,9 @@ classifiers = [
         "Framework :: AsyncIO",
 ]
 
+[tool.poetry.scripts]
+recoverpy = "recoverpy.__init__:main"
+
 [tool.poetry.dependencies]
 python = "^3.8.1"
 textual = ">=0.17.1,<0.23.0"
