@@ -11,7 +11,9 @@ class ModalScreen(Screen):  # type:ignore[misc]
     _message_label = Label("", id="modal-message")
     _callback: Callable  # type: ignore
 
-    def set(self, message: str, callback: Optional[Callable] = None) -> None:  # type: ignore
+    def set(
+        self, message: str, callback: Optional[Callable] = None
+    ) -> None:  # type: ignore
         self._message_label.update(message)
         self._callback = callback or self.app.pop_screen
 
