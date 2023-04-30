@@ -23,7 +23,7 @@ class DirEntry:
     loaded: bool = False
 
 
-class DirectoryTree(Tree[DirEntry]):  # type:ignore[misc]
+class DirectoryTree(Tree[DirEntry]):
     COMPONENT_CLASSES: ClassVar[set[str]] = {
         "tree--label",
         "tree--guides",

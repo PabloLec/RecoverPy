@@ -7,13 +7,13 @@ from textual.screen import Screen
 from textual.widgets import Button, Label
 
 
-class ModalScreen(Screen):  # type:ignore[misc]
+class ModalScreen(Screen[None]):
     _message_label = Label("", id="modal-message")
     _callback: Callable  # type: ignore
 
     def set(
-        self, message: str, callback: Optional[Callable] = None
-    ) -> None:  # type: ignore
+        self, message: str, callback: Optional[Callable] = None  # type: ignore
+    ) -> None:
         self._message_label.update(message)
         self._callback = callback or self.app.pop_screen
 

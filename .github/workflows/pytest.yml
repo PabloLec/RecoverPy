@@ -32,6 +32,6 @@ jobs:
       run: |
         pytest
     - name: Run Mypy
-      continue-on-error: true
+      continue-on-error: false
       run: |
         mypy recoverpy --strict

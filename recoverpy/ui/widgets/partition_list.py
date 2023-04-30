@@ -14,7 +14,7 @@ def _get_label(partition: Partition) -> Label:
     return Label(label_content)
 
 
-class PartitionList(ListView):  # type:ignore[misc]
+class PartitionList(ListView):
     def __init__(self, *children, **kwargs) -> None:  # type: ignore
         super().__init__(*children, **kwargs)
         self.list_items: Dict[Optional[str], Partition] = {}

@@ -10,12 +10,12 @@ from textual.widgets import Button
 from recoverpy.ui.widgets.directory_tree import DirectoryTree
 
 
-class PathEditScreen(Screen):  # type:ignore[misc]
+class PathEditScreen(Screen[None]):
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         self._directory_tree = DirectoryTree("/")
         super().__init__(*args, **kwargs)
 
-    class Confirm(Message):  # type:ignore[misc]
+    class Confirm(Message):
         def __init__(self, selected_dir: str) -> None:
             self.selected_dir = selected_dir
             super().__init__()

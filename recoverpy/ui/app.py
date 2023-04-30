@@ -12,7 +12,7 @@ from recoverpy.ui.screens.screen_save import SaveScreen
 from recoverpy.ui.screens.screen_search import SearchScreen
 
 
-class RecoverpyApp(App):  # type: ignore
+class RecoverpyApp(App[None]):
     SCREENS = {
         "params": ParamsScreen(),
         "search": SearchScreen(),
@@ -21,7 +21,7 @@ class RecoverpyApp(App):  # type: ignore
         "path_edit": PathEditScreen(),
         "modal": ModalScreen(),
     }
-    CSS_PATH = get_css()
+    CSS_PATH = get_css()  # type: ignore[assignment]
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)

@@ -11,7 +11,7 @@ from textual.widgets import Label, ListView
 from recoverpy.models.grep_result import GrepResult
 
 
-class GrepResultList(ListView):  # type:ignore[misc]
+class GrepResultList(ListView):
     list_items_background_color = {0: "red", 1: "green"}
 
     def __init__(self, *children, **kwargs) -> None:  # type: ignore
