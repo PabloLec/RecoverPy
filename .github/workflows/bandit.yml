@@ -22,4 +22,5 @@ jobs:
         uses: shundor/python-bandit-scan@9cc5aa4a006482b8a7f91134412df6772dbda22c
         with:
           exit_zero: true # optional, default is DEFAULT
+          excluded_paths: tests
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
