@@ -1275,23 +1275,20 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
 name = "textual"
-version = "0.27.0"
+version = "0.31.0"
 description = "Modern Text User Interface framework"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "textual-0.27.0-py3-none-any.whl", hash = "sha256:dc45eaf7da330686c56d6f76f59d05fd216ce6aad90fa44ee269881efc622151"},
-    {file = "textual-0.27.0.tar.gz", hash = "sha256:8bdcb09dc35a706ef939b1276ccfdec10eaaee6147b41cb7587cf33298a8dd33"},
+    {file = "textual-0.31.0-py3-none-any.whl", hash = "sha256:1243bccadb28e1ff46bdfe676ee25a6ce52756842bc9dca4d824e0bc4d7d9a42"},
+    {file = "textual-0.31.0.tar.gz", hash = "sha256:e2b43f1c26b21731ee83f558f8d6cb4f7163e3a713854c36cd7785139a0e4e51"},
 ]
 
 [package.dependencies]
 importlib-metadata = ">=4.11.3"
-markdown-it-py = {version = ">=2.1.0,<3.0.0", extras = ["linkify", "plugins"]}
+markdown-it-py = {version = ">=2.1.0", extras = ["linkify", "plugins"]}
 rich = ">=13.3.3"
 typing-extensions = ">=4.4.0,<5.0.0"
-
-[package.extras]
-dev = ["aiohttp (>=3.8.1)", "click (>=8.1.2)", "msgpack (>=1.0.3)"]
 
 [[package]]
 name = "tomli"
@@ -1462,4 +1459,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "83be724074da776d2bf63b665f196d4d8c148389b0914b3e3353237212c570e9"
+content-hash = "b4bd6b4a097fc9f4b9cae0c3a0d736f73824417ea7417ba609cdf2f456ad221f"
