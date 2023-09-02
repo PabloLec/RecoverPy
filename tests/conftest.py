@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from unittest.mock import MagicMock
 
 import pytest
@@ -12,8 +13,10 @@ from .fixtures import (
     mock_progress,
 )
 
+TEST_BLOCK_SIZE = 4096
 
-@pytest.fixture(scope="session", autouse=True)
+
+@pytest.fixture(scope="module", autouse=True)
 def system_calls_mock(session_mocker):
     session_mocker.patch(
         "recoverpy.lib.search.search_engine.start_grep_process",
@@ -21,13 +24,18 @@ def system_calls_mock(session_mocker):
     )
     session_mocker.patch(
         "recoverpy.lib.search.result_processor.get_dd_output",
-        return_value=mock_dd_output.MOCK_DD_OUTPUT,
+        side_effect=mock_dd_output.mock_dd_string_output,
+    )
+    session_mocker.patch(
+        "recoverpy.ui.screens.screen_result.get_dd_output",
+        side_effect=mock_dd_output.mock_dd_string_output,
     )
     session_mocker.patch(
         "recoverpy.lib.lsblk._lsblk", return_value=mock_lsblk_output.MOCK_LSBLK_OUTPUT
     )
     session_mocker.patch(
-        "recoverpy.models.search_params.get_block_size", MagicMock(return_value=4096)
+        "recoverpy.models.search_params.get_block_size",
+        MagicMock(return_value=TEST_BLOCK_SIZE),
     )
     session_mocker.patch(
         "recoverpy.lib.search.thread_factory.is_dependency_installed",
@@ -39,11 +47,12 @@ def system_calls_mock(session_mocker):
     )
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="function")
+@asynccontextmanager
 async def pilot():
     app = RecoverpyApp()
-    async with app.run_test() as pilot:
-        yield pilot
+    async with app.run_test() as pilot_instance:
+        yield pilot_instance
 
 
 @pytest.fixture(scope="module")

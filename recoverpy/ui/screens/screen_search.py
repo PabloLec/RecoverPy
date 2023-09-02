@@ -10,6 +10,7 @@ from textual.screen import Screen
 from textual.widgets import Button, Label
 
 from recoverpy.lib.search.search_engine import SearchEngine
+from recoverpy.models.grep_result import GrepResult
 from recoverpy.ui.widgets.grep_result_list import GrepResultList
 
 
@@ -94,9 +95,7 @@ class SearchScreen(Screen[None]):
         elif button_id == "open-button":
             self.app.post_message(
                 self.Open(
-                    self._grep_result_list.grep_results[
-                        self._grep_result_list.get_index()
-                    ].inode,
+                    self._get_selected_grep_result().inode,
                     self.search_engine.search_params.block_size,
                     self.search_engine.search_params.partition,
                 )
@@ -104,3 +103,6 @@ class SearchScreen(Screen[None]):
 
     async def on_list_view_highlighted(self) -> None:
         self._open_button.disabled = False
+
+    def _get_selected_grep_result(self) -> GrepResult:
+        return self._grep_result_list.grep_results[self._grep_result_list.get_index()]

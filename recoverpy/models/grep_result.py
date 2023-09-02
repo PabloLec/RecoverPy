@@ -14,7 +14,9 @@ class GrepResult:
     def create_list_item(self, css_class: str) -> None:
         try:
             self.list_item = ListItem(
-                Label(str(self.line), markup=False), classes=css_class
+                Label(str(self.line), markup=False),
+                classes=css_class,
+                id=f"grep-result-{self.inode}",
             )
         except RuntimeError:
             # No running event loop exception during tests in python 3.8

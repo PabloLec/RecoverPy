@@ -23,7 +23,9 @@ class ParamsScreen(Screen[None]):
 
     def compose(self) -> ComposeResult:
         self._partition_list = PartitionList()
-        self._search_input = Input(name="search", placeholder="Search")
+        self._search_input = Input(
+            name="search", id="search-input", placeholder="Search"
+        )
         self._start_search_button = Button(
             label="Start search", id="start-search-button", disabled=True
         )

@@ -1,1 +1,2 @@
-MOCK_DD_OUTPUT = "Lorem ipsum dolor sit amet".encode("utf8")
+def mock_dd_string_output(partition, block_size, inode):
+    return f"Lorem ipsum - partition = {partition}, block_size = {block_size}, inode = {inode}".encode()

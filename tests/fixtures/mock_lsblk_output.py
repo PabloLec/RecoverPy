@@ -11,3 +11,5 @@ nvme0n1p1 part ext4 /
 system-root lvm btrfs /test
 vdb disk LVM2_member
 vda2 part LVM2_member"""
+
+VISIBLE_PARTITION_COUNT = 7

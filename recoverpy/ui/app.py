@@ -14,8 +14,8 @@ from recoverpy.ui.screens.screen_search import SearchScreen
 
 
 class RecoverpyApp(App[None]):
-    APP_SCREENS: dict[str, Screen] = {}
-    APP_CSS_PATH = get_css()  # type: ignore[assignment]
+    screens: dict[str, Screen]
+    CSS_PATH = get_css()  # type: ignore[assignment]
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
@@ -23,14 +23,16 @@ class RecoverpyApp(App[None]):
         self.load_screens()
 
     def load_screens(self):
-        self.APP_SCREENS = {
-            "params": ParamsScreen(),
-            "search": SearchScreen(),
-            "result": ResultScreen(),
-            "save": SaveScreen(),
-            "path_edit": PathEditScreen(),
-            "modal": ModalScreen(),
+        self.screens = {
+            "params": ParamsScreen(name="params"),
+            "search": SearchScreen(name="search"),
+            "result": ResultScreen(name="result"),
+            "save": SaveScreen(name="save"),
+            "path_edit": PathEditScreen(name="path_edit"),
+            "modal": ModalScreen(name="modal"),
         }
+        for screen in self.screens:
+            self.install_screen(self.screens[screen], screen)
 
     def on_mount(self) -> None:
         if self._is_user_root:

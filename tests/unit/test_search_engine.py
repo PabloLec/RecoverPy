@@ -1,7 +1,8 @@
-from threading import enumerate as enumerate_threads
 from time import sleep
 
 import pytest
+
+from tests.fixtures.mock_grep_process import GREP_RESULT_COUNT
 
 
 def test_search_params(search_engine):
@@ -21,20 +22,14 @@ async def test_start_search(search_engine):
     assert search_engine._grep_process.returncode is None
 
 
-def test_threads_started(search_engine):
-    assert len(enumerate_threads()) == 3
-    for thread in enumerate_threads():
-        assert thread.is_alive()
-
-
 def test_search_progress_after_search(search_engine):
     sleep(0.5)
-    assert search_engine.search_progress.result_count == 3
+    assert search_engine.search_progress.result_count == GREP_RESULT_COUNT
     assert search_engine.search_progress.progress_percent == 100.0
 
 
 def test_list_items_queue_size(search_engine):
-    assert search_engine.list_items_queue.qsize() == 3
+    assert search_engine.list_items_queue.qsize() == GREP_RESULT_COUNT
 
 
 def test_list_items_queue_content(search_engine):

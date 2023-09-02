@@ -14,15 +14,19 @@ def _get_label(partition: Partition) -> Label:
     return Label(label_content)
 
 
+def _get_partition_id(partition: Partition) -> str:
+    return "".join([c for c in partition.name if c.isalnum()])
+
+
 class PartitionList(ListView):
     def __init__(self, *children, **kwargs) -> None:  # type: ignore
-        super().__init__(*children, **kwargs)
+        super().__init__(id="partition-list", *children, **kwargs)
         self.list_items: Dict[Optional[str], Partition] = {}
         self._append_partitions()
 
     def _append_partitions(self) -> None:
         for partition in get_partitions():
-            list_item = ListItem(_get_label(partition), id=partition.name)
+            list_item = ListItem(_get_label(partition), id=_get_partition_id(partition))
             if partition.is_mounted:
                 list_item.add_class("mounted")
             self.list_items[list_item.id] = partition

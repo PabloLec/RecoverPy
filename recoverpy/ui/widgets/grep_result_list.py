@@ -19,6 +19,7 @@ class GrepResultList(ListView):
         self.results: List[str] = []
         self.lock = Lock()
         self.grep_results: List[GrepResult] = []
+        self.id = "grep-result-list"
 
     async def start_consumer(self, queue: Queue[GrepResult]) -> None:
         while True:
