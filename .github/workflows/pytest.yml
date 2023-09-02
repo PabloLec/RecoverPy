@@ -12,6 +12,7 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+      fail-fast: false
     env:
       IS_GITHUB_RUNNER: "true"
     steps:
