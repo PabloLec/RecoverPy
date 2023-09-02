@@ -1,5 +1,5 @@
 """Main app class."""
-from typing import cast
+from typing import cast, Dict
 
 from textual.app import App
 from textual.screen import Screen
@@ -14,7 +14,7 @@ from recoverpy.ui.screens.screen_search import SearchScreen
 
 
 class RecoverpyApp(App[None]):
-    screens: dict[str, Screen]
+    screens: Dict[str, Screen[None]]
     CSS_PATH = get_css()  # type: ignore[assignment]
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
@@ -22,7 +22,7 @@ class RecoverpyApp(App[None]):
         self._is_user_root = True
         self.load_screens()
 
-    def load_screens(self):
+    def load_screens(self) -> None:
         self.screens = {
             "params": ParamsScreen(name="params"),
             "search": SearchScreen(name="search"),
