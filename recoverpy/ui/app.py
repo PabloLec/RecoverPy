@@ -2,6 +2,7 @@
 from typing import cast
 
 from textual.app import App
+from textual.screen import Screen
 
 from recoverpy.ui.css import get_css
 from recoverpy.ui.screens.screen_modal import ModalScreen
@@ -13,19 +14,23 @@ from recoverpy.ui.screens.screen_search import SearchScreen
 
 
 class RecoverpyApp(App[None]):
-    SCREENS = {
-        "params": ParamsScreen(),
-        "search": SearchScreen(),
-        "result": ResultScreen(),
-        "save": SaveScreen(),
-        "path_edit": PathEditScreen(),
-        "modal": ModalScreen(),
-    }
-    CSS_PATH = get_css()  # type: ignore[assignment]
+    APP_SCREENS: dict[str, Screen] = {}
+    APP_CSS_PATH = get_css()  # type: ignore[assignment]
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
         self._is_user_root = True
+        self.load_screens()
+
+    def load_screens(self):
+        self.APP_SCREENS = {
+            "params": ParamsScreen(),
+            "search": SearchScreen(),
+            "result": ResultScreen(),
+            "save": SaveScreen(),
+            "path_edit": PathEditScreen(),
+            "modal": ModalScreen(),
+        }
 
     def on_mount(self) -> None:
         if self._is_user_root:

@@ -5,7 +5,7 @@ from typing import Optional, cast
 from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.screen import Screen
-from textual.widgets import Button, Label, TextLog
+from textual.widgets import Button, Label, RichLog
 
 from recoverpy.lib.helper import decode_result, get_dd_output, get_printable
 from recoverpy.lib.saver import Saver
@@ -20,7 +20,7 @@ class ResultScreen(Screen[None]):
         self._inode = 0
         self._inode_label = Label("", id="inode-label")
         self._block_count_label = Label("0 block selected", id="block-count")
-        self._block_content = TextLog(markup=False, wrap=True)
+        self._block_content = RichLog(markup=False, wrap=True)
         self._raw_block_content: Optional[str] = None
         self._save_button = Button(label="Save", id="save-button", disabled=True)
         super().__init__(*args, **kwargs)
