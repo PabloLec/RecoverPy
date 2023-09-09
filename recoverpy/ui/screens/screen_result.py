@@ -46,7 +46,7 @@ class ResultScreen(Screen[None]):
         log.debug("result - Result screen composed")
 
     def set(self, partition: str, block_size: int, inode: int) -> None:
-        self._saver.reset()
+        self._saver.reset_results()
         self._save_button.disabled = True
         self._partition = partition
         self._block_size = block_size
@@ -99,8 +99,8 @@ class ResultScreen(Screen[None]):
     async def _handle_add_block(self) -> None:
         if self._raw_block_content:
             log.info("Add block button pressed")
-            self._saver.add(self._inode, self._raw_block_content)
-            count = self._saver.get_selected_blocks_count()
+            self._saver.add_result(self._inode, self._raw_block_content)
+            count = self._saver.get_blocks_to_save_count()
             self._block_count_label.update(
                 f"{count} block{'s' if count > 1 else ''} selected"
             )

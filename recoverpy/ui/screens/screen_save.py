@@ -70,7 +70,7 @@ class SaveScreen(Screen[None]):
     async def _handle_save(self) -> None:
         if self._saver:
             log.info("save - Save button pressed")
-            self._saver.save()
+            self._saver.save_results()
             self.app.pop_screen()
             if self._saver.last_saved_file:
                 self.app.post_message(
@@ -81,7 +81,7 @@ class SaveScreen(Screen[None]):
 
     async def on_path_edit_screen_confirm(self, event: PathEditScreen.Confirm) -> None:
         if self._saver:
-            self._saver.update_save_path(event.selected_dir)
+            self._saver.set_save_path(event.selected_dir)
             self._update_save_path_label()
         else:
             log.error("save - Saver not set for path editing")

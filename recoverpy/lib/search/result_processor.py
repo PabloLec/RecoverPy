@@ -33,46 +33,40 @@ class ResultProcessor:
         return final_results
 
     def is_result_format_valid(self, result: str) -> bool:
-        """Check if all searched lines are present in result block and next adjacent
-        block, else result is a false positive and will not be displayed.
-        """
+        inode = int(get_inode(result))
+        block_factor = self.search_params.block_size * 8
 
-        inode: int = int(get_inode(result))
-        block_output: bytes = get_dd_output(
-            self.search_params.partition,
-            self.search_params.block_size * 8,
-            int(inode / (self.search_params.block_size * 8)),
-        )
-        next_block_output: bytes = get_dd_output(
-            self.search_params.partition,
-            self.search_params.block_size * 8,
-            int(inode / (self.search_params.block_size * 8) + 1),
-        )
-        both_block_output: str = decode_result(block_output) + decode_result(
-            next_block_output
-        )
+        both_block_output = self._get_combined_block_output(inode, block_factor)
         return all(
             line in both_block_output for line in self.search_params.searched_lines
         )
+
+    def _get_combined_block_output(self, inode: int, block_factor: int) -> str:
+        block_index = inode // block_factor
+        block_output = get_dd_output(
+            self.search_params.partition, block_factor, block_index
+        )
+        next_block_output = get_dd_output(
+            self.search_params.partition, block_factor, block_index + 1
+        )
+
+        return decode_result(block_output) + decode_result(next_block_output)
 
     def fix_line_start(self, line: str) -> str:
         result_index: int = line.find(self.search_params.searched_lines[0])
         return line[min(result_index, 15) :]
 
     def fix_inode(self, inode: int) -> int:
-        """Fix result block number if search string is too far from beginning of
-        returned inode number.
-        """
-
-        inode = int(inode / self.search_params.block_size)
+        inode //= self.search_params.block_size
 
         for _ in range(10):
-            dd_output: str = decode_result(
-                get_dd_output(
-                    self.search_params.partition, self.search_params.block_size, inode
-                )
-            )
-            if self.search_params.searched_lines[0] in dd_output:
+            dd_output = self._get_dd_output(inode)
+            if self.search_params.searched_lines[0] in decode_result(dd_output):
                 return inode
             inode += 1
         return inode
+
+    def _get_dd_output(self, inode: int) -> bytes:
+        return get_dd_output(
+            self.search_params.partition, self.search_params.block_size, inode
+        )

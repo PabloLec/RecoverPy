@@ -29,7 +29,8 @@ def system_calls_mock(session_mocker):
         side_effect=mock_dd_output.mock_dd_string_output,
     )
     session_mocker.patch(
-        "recoverpy.lib.lsblk._lsblk", return_value=mock_lsblk_output.MOCK_LSBLK_OUTPUT
+        "recoverpy.lib.lsblk._fetch_lsblk_output",
+        return_value=mock_lsblk_output.MOCK_LSBLK_OUTPUT,
     )
     session_mocker.patch(
         "recoverpy.models.search_params.get_block_size",
