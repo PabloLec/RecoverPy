@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from asyncio import AbstractEventLoop
 from asyncio import Queue as AsyncQueue
-from asyncio import new_event_loop, set_event_loop
+from asyncio import new_event_loop
 from queue import Queue
 from subprocess import Popen
 from time import sleep
