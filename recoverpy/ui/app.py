@@ -1,5 +1,5 @@
 """Main app class."""
-from typing import cast, Dict
+from typing import Dict, cast
 
 from textual.app import App
 from textual.screen import Screen

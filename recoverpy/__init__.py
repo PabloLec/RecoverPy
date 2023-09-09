@@ -1,10 +1,11 @@
+import argparse
 import logging
+from datetime import datetime
 from os import path
 from tempfile import gettempdir
-from datetime import datetime
 
 from recoverpy.ui.app import RecoverpyApp
-import argparse
+from recoverpy.log.logger import log
 
 
 def _set_logger() -> None:
