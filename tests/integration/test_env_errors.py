@@ -10,6 +10,8 @@ async def test_not_root(
     async with pilot as p:
         assert p.app is not None
         await assert_with_timeout(lambda: p.app.screen.name == "root-error-modal")
+        await p.click("#ok-button")
+        await assert_with_timeout(lambda: p.app.screen.name == "params")
 
 
 @pytest.mark.asyncio
@@ -28,6 +30,8 @@ async def test_not_linux(
     async with pilot as p:
         assert p.app is not None
         await assert_with_timeout(lambda: p.app.screen.name == "linux-error-modal")
+        await p.click("#ok-button")
+        await assert_with_timeout(lambda: p.app.screen.name == "params")
 
 
 @pytest.mark.asyncio
@@ -39,3 +43,21 @@ async def test_dependencies_not_installed(
         await assert_with_timeout(
             lambda: p.app.screen.name == "dependencies-error-modal"
         )
+        await p.click("#ok-button")
+        await assert_with_timeout(lambda: p.app.screen.name == "params")
+
+
+@pytest.mark.asyncio
+async def test_multiple_errors(
+    pilot,
+    mock_not_root,
+    mock_not_linux,
+    mock_valid_version,
+    mock_dependencies_not_installed,
+):
+    async with pilot as p:
+        assert p.app is not None
+        for _ in range(3):
+            await assert_with_timeout(lambda: "error" in p.app.screen.name)
+            await p.click("#ok-button")
+        await assert_with_timeout(lambda: p.app.screen.name == "params")

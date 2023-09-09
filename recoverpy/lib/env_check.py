@@ -1,13 +1,12 @@
 from os import geteuid
 from platform import system
 from sys import exit, version_info
-from typing import Callable, Optional
 
 from textual.app import App
 
 from recoverpy.lib.helper import is_dependency_installed
 from recoverpy.log.logger import log
-from recoverpy.ui.screens.modal import Modal, install_and_push_modal
+from recoverpy.ui.screens.modal import install_and_push_modal
 
 _root_error_message = "The current user is not root, the search is likely to not work. Run this app as root or use sudo."
 _version_error_message = (
