@@ -68,6 +68,7 @@ async def start_search(p: Pilot):
     await p.click("#start-search-button")
 
     assert p.app.screen.name == "search"
+    await assert_with_timeout(lambda: hasattr(p.app.screen, "search_engine"))
     assert p.app.screen.search_engine.search_params.search_string == "TEST"
     assert p.app.screen.search_engine.search_params.partition == TEST_FULL_PARTITION
 
