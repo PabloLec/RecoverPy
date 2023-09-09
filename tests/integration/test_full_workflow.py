@@ -1,6 +1,7 @@
 import pytest
 from textual.pilot import Pilot
 
+from recoverpy import RecoverpyApp
 from tests.conftest import TEST_BLOCK_SIZE
 from tests.fixtures.mock_grep_process import GREP_RESULT_COUNT
 from tests.fixtures.mock_lsblk_output import VISIBLE_PARTITION_COUNT
@@ -16,9 +17,9 @@ from tests.integration.helper import (
 
 @pytest.mark.asyncio
 async def test_init_app(
-    pilot, mock_root, mock_linux, mock_valid_version, mock_dependencies_installed
+    mock_root, mock_linux, mock_valid_version, mock_dependencies_installed
 ):
-    async with pilot as p:
+    async with RecoverpyApp().run_test() as p:
         await init_app(p)
         await input_search_params(p)
         await start_search(p)
