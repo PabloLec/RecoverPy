@@ -13,13 +13,13 @@ from recoverpy.ui.widgets.directory_tree import DirectoryTree
 
 class PathEditScreen(Screen[None]):
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
-        self._directory_tree = DirectoryTree("/")
         super().__init__(*args, **kwargs)
+        self._directory_tree = DirectoryTree("/")
 
     class Confirm(Message):
         def __init__(self, selected_dir: str) -> None:
-            self.selected_dir = selected_dir
             super().__init__()
+            self.selected_dir = selected_dir
 
     def compose(self) -> ComposeResult:
         yield self._directory_tree

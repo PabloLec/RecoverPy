@@ -25,16 +25,16 @@ class SearchScreen(Screen[None]):
 
     class Start(Message):
         def __init__(self, searched_string: str, selected_partition: str) -> None:
+            super().__init__()
             self.searched_string = searched_string
             self.selected_partition = selected_partition
-            super().__init__()
 
     class Open(Message):
         def __init__(self, inode: int, block_size: int, partition: str) -> None:
+            super().__init__()
             self.inode = inode
             self.block_size = block_size
             self.partition = partition
-            super().__init__()
 
     class InfoContainer(Horizontal):
         def __init__(self, *args, **kwargs) -> None:  # type: ignore
@@ -67,48 +67,70 @@ class SearchScreen(Screen[None]):
         self.search_engine = SearchEngine(
             message.selected_partition, message.searched_string
         )
+        await self._wait_for_grep_list_focus()
+        await self._start_search_engine()
+
+    async def _wait_for_grep_list_focus(self):
         while self._grep_result_list not in self.focus_chain:
             continue
+
+    async def _start_search_engine(self):
         await self.search_engine.start_search()
         ensure_future(
             self._grep_result_list.start_consumer(self.search_engine.list_items_queue)
         )
-        ensure_future(self.get_progress())
-        log.debug("search - Search engine started")
+        ensure_future(self._update_progress_labels())
 
-    async def get_progress(self) -> None:
+    async def _update_progress_labels(self) -> None:
         while True:
             self._result_count_label.update(
                 str(self.search_engine.search_progress.result_count)
             )
-            if self.search_engine.search_progress.progress_percent != 0.0:
-                if self._progress_title_label.renderable == "":
-                    self._progress_title_label.update("- progress -")
-                self._progress_label.update(
-                    f"{self.search_engine.search_progress.progress_percent}%"
-                )
+            self._update_progress_percent_title()
+
             await sleep(0.1)
 
-    async def on_button_pressed(self, event: Button.Pressed) -> None:
-        button_id = event.button.id
-        if button_id == "exit-button":
-            log.info("search - User clicked exit button")
-            self.search_engine.stop_search()
-            self.app.exit()
-            exit()
-        elif button_id == "open-button":
-            log.info("search - User clicked open button")
-            log.info(f"search - Opening inode {self._get_selected_grep_result().inode}")
-            self.app.post_message(
-                self.Open(
-                    self._get_selected_grep_result().inode,
-                    self.search_engine.search_params.block_size,
-                    self.search_engine.search_params.partition,
-                )
-            )
+    def _update_progress_percent_title(self) -> None:
+        if self.search_engine.search_progress.progress_percent == 0.0:
+            return
 
-    async def on_list_view_highlighted(self) -> None:
-        self._open_button.disabled = False
+        if self._progress_title_label.renderable == "":
+            self._progress_title_label.update("- progress -")
+
+        self._progress_label.update(
+            f"{self.search_engine.search_progress.progress_percent}%"
+        )
+
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
+        actions = {
+            "exit-button": self._handle_exit_button,
+            "open-button": self._handle_open_button,
+        }
+
+        button_id = event.button.id
+        if button_id in actions:
+            await actions[button_id]()
+
+    async def _handle_exit_button(self) -> None:
+        log.info("search - User clicked exit button")
+        self.search_engine.stop_search()
+        self.app.exit()
+        exit()
+
+    async def _handle_open_button(self) -> None:
+        log.info("search - User clicked open button")
+        selected_grep_result = self._get_selected_grep_result()
+        log.info(f"search - Opening inode {selected_grep_result.inode}")
+        self.app.post_message(
+            self.Open(
+                selected_grep_result.inode,
+                self.search_engine.search_params.block_size,
+                self.search_engine.search_params.partition,
+            )
+        )
 
     def _get_selected_grep_result(self) -> GrepResult:
         return self._grep_result_list.grep_results[self._grep_result_list.get_index()]
+
+    async def on_list_view_highlighted(self) -> None:
+        self._open_button.disabled = False

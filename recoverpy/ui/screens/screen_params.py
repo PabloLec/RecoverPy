@@ -18,9 +18,9 @@ class ParamsScreen(Screen[None]):
 
     class Continue(Message):
         def __init__(self, searched_string: str, selected_partition: str) -> None:
+            super().__init__()
             self.searched_string = searched_string
             self.selected_partition = selected_partition
-            super().__init__()
 
     def compose(self) -> ComposeResult:
         self._partition_list = PartitionList()
@@ -39,19 +39,25 @@ class ParamsScreen(Screen[None]):
         log.debug("params - Parameters screen composed")
 
     async def on_button_pressed(self) -> None:
-        if self._partition_list.highlighted_child is None:
-            log.warn("params - No partition selected for search")
-            return
+        highlighted_child = self._partition_list.highlighted_child
         searched_string = self._search_input.value.strip()
-        if len(searched_string) == 0:
-            log.warn("params - No search string entered")
+
+        if highlighted_child is None:
+            log.warn("No partition selected for search")
             return
+
+        if not searched_string:
+            log.warn("No search string entered")
+            return
+
         selected_partition: Partition = self._partition_list.list_items[
-            self._partition_list.highlighted_child.id
+            highlighted_child.id
         ]
+
         log.info(
-            f"params - User selected partition {selected_partition.get_full_name()} and search string `{searched_string}`"
+            f"User selected partition {selected_partition.get_full_name()} and search string `{searched_string}`"
         )
+
         self.app.post_message(
             self.Continue(searched_string, selected_partition.get_full_name())
         )
