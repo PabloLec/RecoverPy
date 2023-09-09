@@ -16,13 +16,6 @@ from recoverpy.ui.widgets.grep_result_list import GrepResultList
 
 
 class SearchScreen(Screen[None]):
-    _grep_result_list: GrepResultList
-    _result_count_label: Label
-    _progress_title_label: Label
-    _progress_label: Label
-    _open_button: Button
-    search_engine: SearchEngine
-
     class Start(Message):
         def __init__(self, searched_string: str, selected_partition: str) -> None:
             super().__init__()
@@ -70,11 +63,11 @@ class SearchScreen(Screen[None]):
         await self._wait_for_grep_list_focus()
         await self._start_search_engine()
 
-    async def _wait_for_grep_list_focus(self):
+    async def _wait_for_grep_list_focus(self) -> None:
         while self._grep_result_list not in self.focus_chain:
             continue
 
-    async def _start_search_engine(self):
+    async def _start_search_engine(self) -> None:
         await self.search_engine.start_search()
         ensure_future(
             self._grep_result_list.start_consumer(self.search_engine.list_items_queue)

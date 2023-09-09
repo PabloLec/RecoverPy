@@ -10,11 +10,11 @@ from tests.fixtures.mock_lsblk_output import VISIBLE_PARTITION_COUNT
 from tests.integration.helper import (
     TEST_FULL_PARTITION,
     TEST_PARTITION,
+    add_expected_save_result,
     assert_current_result_is_selected_for_save,
     assert_with_timeout,
     get_block_content_text,
     get_expected_block_content_text,
-    add_expected_save_result,
     get_expected_save_result,
 )
 
