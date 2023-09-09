@@ -21,7 +21,7 @@ class RecoverpyApp(App[None]):
     screens: Dict[str, Screen[None]]
     CSS_PATH = get_css()  # type: ignore[assignment]
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
         self._is_user_root = False
         self._initialize_screens()
