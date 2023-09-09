@@ -3,6 +3,7 @@ from typing import Optional
 from textual.widgets import Label, ListItem
 
 from recoverpy.lib.helper import get_inode, get_printable
+from recoverpy.log.logger import log
 
 
 class GrepResult:
@@ -18,6 +19,6 @@ class GrepResult:
                 classes=css_class,
                 id=f"grep-result-{self.inode}",
             )
-        except RuntimeError:
-            # No running event loop exception during tests in python 3.8
+        except RuntimeError as e:
+            log.error(f"grep_result - Error creating list item: {e}")
             return

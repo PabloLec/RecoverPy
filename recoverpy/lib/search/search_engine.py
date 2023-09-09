@@ -62,6 +62,7 @@ class SearchEngine:
         grep_result.create_list_item(
             "grep-result-odd" if result_index % 2 == 0 else "grep-result-even"
         )
+        log.debug(f"search_engine - Created grep result {grep_result.inode}")
         return grep_result
 
     def stop_search(self) -> None:
