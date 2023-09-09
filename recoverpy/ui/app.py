@@ -4,6 +4,7 @@ from typing import cast, Dict
 from textual.app import App
 from textual.screen import Screen
 
+from recoverpy.log.logger import log
 from recoverpy.ui.css import get_css
 from recoverpy.ui.screens.screen_modal import ModalScreen
 from recoverpy.ui.screens.screen_params import ParamsScreen
@@ -21,6 +22,7 @@ class RecoverpyApp(App[None]):
         super().__init__(*args, **kwargs)
         self._is_user_root = True
         self.load_screens()
+        log.debug("app - Recoverpy app initialized")
 
     def load_screens(self) -> None:
         self.screens = {
@@ -33,17 +35,20 @@ class RecoverpyApp(App[None]):
         }
         for screen in self.screens:
             self.install_screen(self.screens[screen], screen)
+            log.debug(f"app - Installed screen {screen}")
 
     def on_mount(self) -> None:
         if self._is_user_root:
             self.push_screen("params")
         else:
+            log.warn("app - User is not root")
             cast(ModalScreen, self.get_screen("modal")).set(
                 message="You must be root to run this app", callback=self.exit
             )
             self.push_screen("modal")
 
     async def on_params_screen_continue(self, message: ParamsScreen.Continue) -> None:
+        log.info("app - User clicked continue on parameters screen")
         self.pop_screen()
         await self.push_screen("search")
         self.get_screen("search").post_message(
@@ -51,12 +56,14 @@ class RecoverpyApp(App[None]):
         )
 
     async def on_search_screen_open(self, message: SearchScreen.Open) -> None:
+        log.info("app - User clicked open on search screen")
         await self.push_screen("result")
         cast(ResultScreen, self.get_screen("result")).set(
             message.partition, message.block_size, message.inode
         )
 
     async def on_save_screen_saved(self, message: SaveScreen.Saved) -> None:
+        log.info("app - User clicked save on save screen")
         cast(ModalScreen, self.get_screen("modal")).set(
             f"Saved results to {message.save_path}"
         )

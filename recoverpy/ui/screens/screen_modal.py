@@ -6,6 +6,8 @@ from textual.containers import Grid, Horizontal
 from textual.screen import Screen
 from textual.widgets import Button, Label
 
+from recoverpy.log.logger import log
+
 
 class ModalScreen(Screen[None]):
     _message_label = Label("", id="modal-message")
@@ -26,6 +28,7 @@ class ModalScreen(Screen[None]):
             ),
             id="modal-container",
         )
+        log.info("modal - Modal screen composed")
 
     def on_button_pressed(self) -> None:
         self._callback()

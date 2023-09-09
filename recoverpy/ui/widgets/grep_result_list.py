@@ -8,6 +8,7 @@ from typing import List, Optional, cast
 from textual.widget import Widget
 from textual.widgets import Label, ListView
 
+from recoverpy.log.logger import log
 from recoverpy.models.grep_result import GrepResult
 
 
@@ -22,19 +23,25 @@ class GrepResultList(ListView):
         self.id = "grep-result-list"
 
     async def start_consumer(self, queue: Queue[GrepResult]) -> None:
+        log.debug("grep_result_list - Starting consumer")
         while True:
             if not self._should_add_more():
                 await sleep(0.1)
                 continue
             grep_result = await queue.get()
             await self._append(grep_result)
+        log.debug("grep_result_list - Consumer stopped")
 
     def get_index(self) -> int:
         list_index: Optional[int] = self.index
         return list_index if list_index else 0
 
     async def _append(self, grep_result: GrepResult) -> None:
+        log.debug(f"grep_result_list - Appending inode {grep_result.inode}")
         if grep_result.list_item is None:
+            log.error(
+                f"grep_result_list - Grep result {grep_result.inode} has no list item"
+            )
             return
         async with self.lock:
             self.grep_results.append(grep_result)

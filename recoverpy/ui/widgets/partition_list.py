@@ -4,6 +4,7 @@ from typing import Dict, Optional
 from textual.widgets import Label, ListItem, ListView
 
 from recoverpy.lib.lsblk import get_partitions
+from recoverpy.log.logger import log
 from recoverpy.models.partition import Partition
 
 
@@ -26,6 +27,7 @@ class PartitionList(ListView):
 
     def _append_partitions(self) -> None:
         for partition in get_partitions():
+            log.debug(f"partition_list - Appending partition {partition.name}")
             list_item = ListItem(_get_label(partition), id=_get_partition_id(partition))
             if partition.is_mounted:
                 list_item.add_class("mounted")

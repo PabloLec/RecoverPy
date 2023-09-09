@@ -13,6 +13,7 @@ from recoverpy.lib.search.thread_factory import (
     start_result_dequeue_thread,
     start_result_enqueue_thread,
 )
+from recoverpy.log.logger import log
 from recoverpy.models.grep_result import GrepResult
 from recoverpy.models.search_params import SearchParams
 from recoverpy.models.search_progress import SearchProgress
@@ -51,6 +52,7 @@ class SearchEngine:
                 )
                 loop.run_until_complete(self.list_items_queue.put(grep_result))
                 self.search_progress.result_count += 1
+            log.debug(f"search_engine - Dequeued {len(results)} results")
             sleep(0.1)
 
     def create_grep_result(self, result: str, result_index: int) -> GrepResult:

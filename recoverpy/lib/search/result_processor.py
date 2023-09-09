@@ -4,6 +4,7 @@ from queue import Queue
 from typing import List
 
 from recoverpy.lib.helper import decode_result, get_dd_output, get_inode
+from recoverpy.log.logger import log
 from recoverpy.models.search_params import SearchParams
 
 
@@ -28,6 +29,7 @@ class ResultProcessor:
         final_results = [
             result for result in decoded_results if self.is_result_format_valid(result)
         ]
+        log.debug(f"result_processor - Found {len(final_results)} new results")
         return final_results
 
     def is_result_format_valid(self, result: str) -> bool:

@@ -9,6 +9,7 @@ from textual.widgets import Button, Label, RichLog
 
 from recoverpy.lib.helper import decode_result, get_dd_output, get_printable
 from recoverpy.lib.saver import Saver
+from recoverpy.log.logger import log
 from recoverpy.ui.screens.screen_save import SaveScreen
 
 
@@ -39,6 +40,7 @@ class ResultScreen(Screen[None]):
         try:
             self._update_block_content()
         except CalledProcessError:
+            log.error(f"result - Cannot read block {self._inode}")
             self._block_content.write(f"Cannot read block {self._inode}")
 
     def _update_inode_label(self) -> None:
@@ -50,6 +52,7 @@ class ResultScreen(Screen[None]):
             get_dd_output(self._partition, self._block_size, self._inode)
         )
         self._block_content.write(get_printable(self._raw_block_content))
+        log.info("result - Block content updated")
 
     def compose(self) -> ComposeResult:
         yield Horizontal(self._inode_label, id="inode-label-container")
@@ -68,15 +71,19 @@ class ResultScreen(Screen[None]):
             id="block-buttons-container",
         )
         yield Horizontal(self._save_button, id="save-button-container")
+        log.debug("result - Result screen composed")
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         button_id = event.button.id
         if button_id == "go-back-button":
+            log.info("result - Go back button pressed")
             self.app.pop_screen()
         elif button_id == "previous-button" and self._inode > 0:
+            log.info("result - Previous button pressed")
             self._inode -= 1
             self._update()
         elif button_id == "add-block-button" and self._raw_block_content:
+            log.info("result - Add block button pressed")
             self._saver.add(self._inode, self._raw_block_content)
             count = self._saver.get_selected_blocks_count()
             self._block_count_label.update(
@@ -84,8 +91,10 @@ class ResultScreen(Screen[None]):
             )
             self._save_button.disabled = False
         elif button_id == "next-button":
+            log.info("result - Next button pressed")
             self._inode += 1
             self._update()
         elif button_id == "save-button":
+            log.info("result - Save button pressed")
             cast(SaveScreen, self.app.get_screen("save")).set_saver(self._saver)
             await self.app.push_screen("save")

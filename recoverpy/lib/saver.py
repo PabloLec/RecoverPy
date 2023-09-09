@@ -13,9 +13,11 @@ class Saver:
 
     def add(self, inode: int, result: str) -> None:
         self._results[inode] = result
+        log.info(f"saver - Added result for inode {inode}, {len(self._results)} total")
 
     def reset(self) -> None:
         self._results = {}
+        log.info("saver - Results reset")
 
     def save(self) -> None:
         ordered_blocks: List[str] = [
@@ -28,6 +30,7 @@ class Saver:
 
     def update_save_path(self, path: str) -> None:
         self.save_path = Path(path)
+        log.info(f"saver - Save path set to {self.save_path}")
 
     def get_selected_blocks_count(self) -> int:
         return len(self._results)
@@ -39,6 +42,7 @@ class Saver:
         file_name: Path = self.save_path / time_format
 
         self._write_to_file(file_name=file_name, content=result)
+        log.info(f"saver - Saved result to {file_name}")
 
     def _write_to_file(self, file_name: Path, content: str) -> None:
         with open(file_name, "w") as save_file:

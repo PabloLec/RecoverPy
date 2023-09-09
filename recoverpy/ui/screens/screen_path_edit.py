@@ -7,6 +7,7 @@ from textual.message import Message
 from textual.screen import Screen
 from textual.widgets import Button
 
+from recoverpy.log.logger import log
 from recoverpy.ui.widgets.directory_tree import DirectoryTree
 
 
@@ -25,8 +26,10 @@ class PathEditScreen(Screen[None]):
         yield Horizontal(
             Button("Confirm", id="confirm-button"), id="path-edit-button-container"
         )
+        log.info("path_edit - Path edit screen composed")
 
     async def on_button_pressed(self, event: Event) -> None:
+        log.info("path_edit - Confirm button pressed")
         event.stop()
         self.app.get_screen("save").post_message(
             self.Confirm(self._directory_tree.selected_dir)

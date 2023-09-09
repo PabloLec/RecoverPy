@@ -10,6 +10,7 @@ from textual.screen import Screen
 from textual.widgets import Button, Label
 
 from recoverpy.lib.search.search_engine import SearchEngine
+from recoverpy.log.logger import log
 from recoverpy.models.grep_result import GrepResult
 from recoverpy.ui.widgets.grep_result_list import GrepResultList
 
@@ -60,6 +61,7 @@ class SearchScreen(Screen[None]):
         )
         yield self._open_button
         yield Button("Exit", id="exit-button")
+        log.debug("search - Search screen composed")
 
     async def on_search_screen_start(self, message: Start) -> None:
         self.search_engine = SearchEngine(
@@ -72,6 +74,7 @@ class SearchScreen(Screen[None]):
             self._grep_result_list.start_consumer(self.search_engine.list_items_queue)
         )
         ensure_future(self.get_progress())
+        log.debug("search - Search engine started")
 
     async def get_progress(self) -> None:
         while True:
@@ -89,10 +92,13 @@ class SearchScreen(Screen[None]):
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         button_id = event.button.id
         if button_id == "exit-button":
+            log.info("search - User clicked exit button")
             self.search_engine.stop_search()
             self.app.exit()
             exit()
         elif button_id == "open-button":
+            log.info("search - User clicked open button")
+            log.info(f"search - Opening inode {self._get_selected_grep_result().inode}")
             self.app.post_message(
                 self.Open(
                     self._get_selected_grep_result().inode,
