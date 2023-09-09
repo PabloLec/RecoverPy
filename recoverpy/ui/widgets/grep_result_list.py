@@ -28,6 +28,7 @@ class GrepResultList(ListView):
             if not self._should_add_more():
                 await sleep(0.1)
                 continue
+            log.debug("grep_result_list - Adding more results")
             grep_result = await queue.get()
             await self._append(grep_result)
         log.debug("grep_result_list - Consumer stopped")
@@ -38,6 +39,7 @@ class GrepResultList(ListView):
 
     async def _append(self, grep_result: GrepResult) -> None:
         log.debug(f"grep_result_list - Appending inode {grep_result.inode}")
+        grep_result.create_list_item()
         if grep_result.list_item is None:
             log.error(
                 f"grep_result_list - Grep result {grep_result.inode} has no list item"

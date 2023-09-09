@@ -30,6 +30,7 @@ def start_result_enqueue_thread(
         target=enqueue_grep_output,
         args=(grep_process.stdout, queue),
         daemon=True,
+        name="enqueue-grep-output-thread",
     ).start()
 
 
@@ -38,6 +39,7 @@ def start_result_dequeue_thread(dequeue_results: Callable[[], None]) -> None:
     Thread(
         target=dequeue_results,
         daemon=True,
+        name="dequeue-results-thread",
     ).start()
 
 
@@ -53,4 +55,5 @@ def start_progress_monitoring_thread(
         target=monitor_search_progress,
         args=(grep_process.pid, progress),
         daemon=True,
+        name="progress-monitoring-thread",
     ).start()
