@@ -9,6 +9,7 @@ from tests.fixtures.mock_dd_output import mock_dd_string_output
 
 TEST_PARTITION = "sdb1"
 TEST_FULL_PARTITION = "/dev/sdb1"
+EXPECTED_SAVE_RESULT = {}
 
 
 def get_block_content_text(block_content: RichLog):
@@ -48,3 +49,15 @@ async def assert_current_result_is_selected_for_save(p: Pilot):
     assert p.app.screen._saver._results[p.app.screen._inode].replace(" ", "").replace(
         "\n", ""
     ) == get_expected_block_content_text(p.app.screen._inode)
+
+
+def add_expected_save_result(p: Pilot):
+    global EXPECTED_SAVE_RESULT
+    EXPECTED_SAVE_RESULT[p.app.screen._inode] = p.app.screen._raw_block_content
+
+
+def get_expected_save_result():
+    global EXPECTED_SAVE_RESULT
+    return "\n".join(
+        [EXPECTED_SAVE_RESULT[num] for num in sorted(EXPECTED_SAVE_RESULT.keys())]
+    )

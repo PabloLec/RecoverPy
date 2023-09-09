@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from textual.pilot import Pilot
 
@@ -12,12 +14,14 @@ from tests.integration.helper import (
     assert_with_timeout,
     get_block_content_text,
     get_expected_block_content_text,
+    add_expected_save_result,
+    get_expected_save_result,
 )
 
 
 @pytest.mark.asyncio
 async def test_init_app(
-    mock_root, mock_linux, mock_valid_version, mock_dependencies_installed
+    mock_root, mock_linux, mock_valid_version, mock_dependencies_installed, tmp_path
 ):
     async with RecoverpyApp().run_test() as p:
         await init_app(p)
@@ -31,7 +35,9 @@ async def test_init_app(
         await select_next_result(p)
         await select_previous_result(p)
         await start_save_process(p)
-        await edit_save_path(p)
+        await edit_save_path(p, tmp_path)
+        await save_results(p)
+        check_saved_result(tmp_path)
 
 
 async def init_app(p: Pilot):
@@ -130,6 +136,7 @@ async def select_first_result(p: Pilot):
 
     await p.click(f"#add-block-button")
     assert len(p.app.screen._saver._results) == 1
+    add_expected_save_result(p)
 
 
 async def select_next_result(p: Pilot):
@@ -153,6 +160,7 @@ async def select_next_result(p: Pilot):
 
     await p.click(f"#add-block-button")
     assert len(p.app.screen._saver._results) == 2
+    add_expected_save_result(p)
 
 
 async def select_previous_result(p: Pilot):
@@ -180,17 +188,18 @@ async def select_previous_result(p: Pilot):
 
     await p.click(f"#add-block-button")
     assert len(p.app.screen._saver._results) == 3
+    add_expected_save_result(p)
 
 
 async def start_save_process(p: Pilot):
     await p.click(f"#save-button")
     assert p.app.screen.name == "save"
 
+
+async def edit_save_path(p: Pilot, tmp_path: Path):
     await p.click(f"#edit-save-path-button")
     assert p.app.screen.name == "path_edit"
 
-
-async def edit_save_path(p: Pilot):
     tmp_tree_node = None
     for n in p.app.screen._directory_tree._tree_nodes.values():
         if "tmp" in n._label:
@@ -198,3 +207,26 @@ async def edit_save_path(p: Pilot):
             break
 
     assert tmp_tree_node is not None
+    p.app.screen._directory_tree.selected_dir = tmp_path
+
+    await p.click(f"#confirm-button")
+    assert p.app.screen.name == "save"
+    assert p.app.screen._saver.save_path == tmp_path
+
+
+async def save_results(p: Pilot):
+    await p.click(f"#save-button")
+    assert p.app.screen.name == "save-modal"
+
+    await p.click("#ok-button")
+    assert p.app.screen.name == "result"
+
+
+def check_saved_result(tmp_path: Path):
+    dir_files = list(tmp_path.iterdir())
+    assert len(dir_files) == 1
+    assert dir_files[0].name.startswith("recoverpy-save-")
+
+    with open(dir_files[0], "r") as f:
+        result = f.read()
+        assert result == get_expected_save_result()
