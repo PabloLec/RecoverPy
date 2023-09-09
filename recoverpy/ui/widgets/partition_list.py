@@ -16,7 +16,7 @@ def _get_label(partition: Partition) -> Label:
 
 
 def _get_partition_id(partition: Partition) -> str:
-    return "".join([c for c in partition.name if c.isalnum()])
+    return "".join(filter(str.isalnum, partition.name))
 
 
 class PartitionList(ListView):
@@ -28,8 +28,12 @@ class PartitionList(ListView):
     def _append_partitions(self) -> None:
         for partition in get_partitions():
             log.debug(f"partition_list - Appending partition {partition.name}")
-            list_item = ListItem(_get_label(partition), id=_get_partition_id(partition))
-            if partition.is_mounted:
-                list_item.add_class("mounted")
+            list_item = self._create_list_item(partition)
             self.list_items[list_item.id] = partition
             self.append(list_item)
+
+    def _create_list_item(self, partition: Partition) -> ListItem:
+        list_item = ListItem(_get_label(partition), id=_get_partition_id(partition))
+        if partition.is_mounted:
+            list_item.add_class("mounted")
+        return list_item

@@ -1,4 +1,4 @@
-"""Screen used to select ressult save path."""
+"""Screen used to select result save path."""
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal
