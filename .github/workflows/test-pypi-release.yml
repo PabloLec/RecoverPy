@@ -29,4 +29,4 @@ jobs:
         run: |
           poetry config repositories.testpypi https://test.pypi.org/legacy/
           poetry config pypi-token.testpypi ${{ secrets.TEST_PYPI_TOKEN }}
-          poetry publish --repository testpypi --dry-run
+          poetry publish --build --repository testpypi --dry-run
