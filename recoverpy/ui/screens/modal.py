@@ -10,9 +10,6 @@ from recoverpy.log.logger import log
 
 
 class Modal(ModalScreen[None]):
-    _message_label: Label
-    _callback: Callable  # type: ignore
-
     def __init__(self, name: str, message: str, callback: Optional[Callable] = None):  # type: ignore
         super().__init__(name=name)
         self._message_label = Label(message, id="modal-message")

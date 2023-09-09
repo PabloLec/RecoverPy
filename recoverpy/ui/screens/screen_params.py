@@ -12,10 +12,6 @@ from recoverpy.ui.widgets.partition_list import PartitionList
 
 
 class ParamsScreen(Screen[None]):
-    _partition_list: PartitionList
-    _search_input: Input
-    _start_search_button: Button
-
     class Continue(Message):
         def __init__(self, searched_string: str, selected_partition: str) -> None:
             super().__init__()
