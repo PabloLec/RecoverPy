@@ -5,6 +5,10 @@ on:
     types: [released]
   workflow_dispatch:
     branches: [main]
+    inputs:
+      version:
+        description: 'Version'
+        required: true
 
 jobs:
   pypi_release:
@@ -12,19 +16,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
+
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+
       - name: Add Poetry to path
         run: echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
-      - run: poetry install
+
       - name: Install dependencies
         run: |
           poetry install
           sudo apt-get install progress
+
       - name: Run tests
         run: poetry run pytest
-      - run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
+
+      - name: Set version based on tag or input
+        run: |
+          if [[ $GITHUB_EVENT_NAME == 'release' ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION=${{ github.event.inputs.version }}
+          fi
+          poetry version $VERSION
+
+      - name: Configure Poetry
+        run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
+
       - name: Publish package
         run: poetry publish --build

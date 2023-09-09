@@ -10,20 +10,23 @@ jobs:
   test_pypi_release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+
       - name: Install dependencies
         run: |
           poetry install
-          sudo apt-get install progress
-      - name: Run tests
-        run: poetry run pytest
-      - name: Publish
+
+      - name: Setup and Publish to Test PyPi
         run: |
           poetry config repositories.testpypi https://test.pypi.org/legacy/
           poetry config pypi-token.testpypi ${{ secrets.TEST_PYPI_TOKEN }}
-          poetry publish --build -r testpypi --dry-run
+          poetry publish --repository testpypi --dry-run
