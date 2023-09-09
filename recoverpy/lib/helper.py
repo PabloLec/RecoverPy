@@ -1,10 +1,5 @@
-from os import geteuid
 from re import findall
 from subprocess import DEVNULL, call, check_output
-
-
-def is_user_root() -> bool:
-    return geteuid() == 0
 
 
 def is_dependency_installed(command: str) -> bool:

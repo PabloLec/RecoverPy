@@ -15,7 +15,9 @@ from tests.integration.helper import (
 
 
 @pytest.mark.asyncio
-async def test_init_app(pilot):
+async def test_init_app(
+    pilot, mock_root, mock_linux, mock_valid_version, mock_dependencies_installed
+):
     async with pilot as p:
         await init_app(p)
         await input_search_params(p)

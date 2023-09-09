@@ -4,9 +4,10 @@ from typing import Dict, cast
 from textual.app import App
 from textual.screen import Screen
 
+from recoverpy.lib.env_check import verify_app_environment
 from recoverpy.log.logger import log
 from recoverpy.ui.css import get_css
-from recoverpy.ui.screens.screen_modal import ModalScreen
+from recoverpy.ui.screens.modal import install_and_push_modal
 from recoverpy.ui.screens.screen_params import ParamsScreen
 from recoverpy.ui.screens.screen_path_edit import PathEditScreen
 from recoverpy.ui.screens.screen_result import ResultScreen
@@ -20,7 +21,7 @@ class RecoverpyApp(App[None]):
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
-        self._is_user_root = True
+        self._is_user_root = False
         self.load_screens()
         log.debug("app - Recoverpy app initialized")
 
@@ -31,21 +32,14 @@ class RecoverpyApp(App[None]):
             "result": ResultScreen(name="result"),
             "save": SaveScreen(name="save"),
             "path_edit": PathEditScreen(name="path_edit"),
-            "modal": ModalScreen(name="modal"),
         }
         for screen in self.screens:
             self.install_screen(self.screens[screen], screen)
             log.debug(f"app - Installed screen {screen}")
 
-    def on_mount(self) -> None:
-        if self._is_user_root:
-            self.push_screen("params")
-        else:
-            log.warn("app - User is not root")
-            cast(ModalScreen, self.get_screen("modal")).set(
-                message="You must be root to run this app", callback=self.exit
-            )
-            self.push_screen("modal")
+    async def on_mount(self) -> None:
+        await self.push_screen("params")
+        await verify_app_environment(self)
 
     async def on_params_screen_continue(self, message: ParamsScreen.Continue) -> None:
         log.info("app - User clicked continue on parameters screen")
@@ -64,7 +58,8 @@ class RecoverpyApp(App[None]):
 
     async def on_save_screen_saved(self, message: SaveScreen.Saved) -> None:
         log.info("app - User clicked save on save screen")
-        cast(ModalScreen, self.get_screen("modal")).set(
-            f"Saved results to {message.save_path}"
+        await install_and_push_modal(
+            self,
+            "save-modal",
+            f"Saved results to {message.save_path}",
         )
-        await self.push_screen("modal")

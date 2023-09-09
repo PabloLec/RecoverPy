@@ -1,19 +1,33 @@
+Modal {
+    align: center middle;
+}
+
 #modal-container {
-   grid-size: 2;
+   grid-size: 2 3;
    grid-gutter: 1 2;
    margin: 1 2;
-   height: 80%;
+   height: auto;
 }
+
+#modal-error-label {
+    color: red;
+    column-span: 2;
+    content-align: center bottom;
+    width: 100%;
+    height: auto;
+}
+
 
 #modal-message {
     column-span: 2;
     content-align: center bottom;
     width: 100%;
-    height: 100%;
+    height: auto;
 }
 
 #modal-button-container {
     column-span: 2;
     align: center bottom;
     height: auto;
+    margin-bottom: 5;
 }

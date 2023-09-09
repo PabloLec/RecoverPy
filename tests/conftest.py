@@ -58,3 +58,67 @@ async def pilot():
 @pytest.fixture(scope="module")
 def search_engine():
     return SearchEngine(partition="/dev/sda1", searched_string="Lorem ipsum")
+
+
+@pytest.fixture(scope="function")
+def mock_root(session_mocker):
+    session_mocker.patch(
+        "recoverpy.lib.env_check._is_user_root",
+        MagicMock(return_value=True),
+    )
+
+
+@pytest.fixture(scope="function")
+def mock_not_root(session_mocker):
+    session_mocker.patch(
+        "recoverpy.lib.env_check._is_user_root",
+        MagicMock(return_value=False),
+    )
+
+
+@pytest.fixture(scope="function")
+def mock_valid_version(session_mocker):
+    session_mocker.patch(
+        "recoverpy.lib.env_check._is_version_supported",
+        MagicMock(return_value=True),
+    )
+
+
+@pytest.fixture(scope="function")
+def mock_invalid_version(session_mocker):
+    session_mocker.patch(
+        "recoverpy.lib.env_check._is_version_supported",
+        MagicMock(return_value=False),
+    )
+
+
+@pytest.fixture(scope="function")
+def mock_linux(session_mocker):
+    session_mocker.patch(
+        "recoverpy.lib.env_check._is_linux",
+        MagicMock(return_value=True),
+    )
+
+
+@pytest.fixture(scope="function")
+def mock_not_linux(session_mocker):
+    session_mocker.patch(
+        "recoverpy.lib.env_check._is_linux",
+        MagicMock(return_value=False),
+    )
+
+
+@pytest.fixture(scope="function")
+def mock_dependencies_installed(session_mocker):
+    session_mocker.patch(
+        "recoverpy.lib.env_check._are_system_dependencies_installed",
+        MagicMock(return_value=True),
+    )
+
+
+@pytest.fixture(scope="function")
+def mock_dependencies_not_installed(session_mocker):
+    session_mocker.patch(
+        "recoverpy.lib.env_check._are_system_dependencies_installed",
+        MagicMock(return_value=False),
+    )

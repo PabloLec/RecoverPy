@@ -4,8 +4,8 @@ from datetime import datetime
 from os import path
 from tempfile import gettempdir
 
-from recoverpy.ui.app import RecoverpyApp
 from recoverpy.log.logger import log
+from recoverpy.ui.app import RecoverpyApp
 
 
 def _set_logger() -> None:
