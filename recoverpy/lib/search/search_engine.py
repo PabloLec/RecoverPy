@@ -59,11 +59,11 @@ class SearchEngine:
         loop = new_event_loop()
         while True:
             results = self.result_processor.get_new_results(self.results_queue)
-            self._process_results(results, loop)
+            self._add_new_results(results, loop)
             log.debug(f"search_engine - Dequeued {len(results)} results")
             sleep(0.1)
 
-    def _process_results(self, results: List[str], loop: AbstractEventLoop) -> None:
+    def _add_new_results(self, results: List[str], loop: AbstractEventLoop) -> None:
         for result in results:
             grep_result = self._create_grep_result(
                 result, self.search_progress.result_count
