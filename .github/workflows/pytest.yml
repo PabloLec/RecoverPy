@@ -34,3 +34,15 @@ jobs:
 
       - name: Run Mypy
         run: mypy recoverpy --strict
+
+  automerge-dependabot:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.actor == 'dependabot[bot]' && github.event.pull_request.user.login == 'dependabot[bot]'
+    steps:
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
