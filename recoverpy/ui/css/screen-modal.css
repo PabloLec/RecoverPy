@@ -29,5 +29,5 @@ Modal {
     column-span: 2;
     align: center bottom;
     height: auto;
-    margin-bottom: 5;
+    min-height: 25vh;
 }
