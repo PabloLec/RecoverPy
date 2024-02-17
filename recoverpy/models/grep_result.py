@@ -11,12 +11,14 @@ class GrepResult:
         self.inode = get_inode(line)
         self.line = get_printable(line)
         self.list_item: Optional[ListItem] = None
+        self.label: Optional[Label] = None
         self.css_class = "grep-result"
 
     def create_list_item(self) -> None:
         try:
+            self.label = Label(str(self.line), markup=False)
             self.list_item = ListItem(
-                Label(str(self.line), markup=False),
+                self.label,
                 classes=self.css_class,
                 id=f"grep-result-{self.inode}",
             )
