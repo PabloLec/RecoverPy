@@ -8,12 +8,12 @@ from recoverpy.log.logger import log
 from recoverpy.models.search_params import SearchParams
 
 
-class ResultProcessor:
+class ResultFilter:
     def __init__(self, search_params: SearchParams):
         self.search_params = search_params
 
-    def get_new_results(self, queue_object: Queue[bytes]) -> List[str]:
-        """Consume grep output queue and format results."""
+    def filter_results(self, queue_object: Queue[bytes]) -> List[str]:
+        """Consume raw grep results, filter out false positives and return valid results."""
 
         queue_list: List[bytes] = list(queue_object.queue)
         queue_size = len(queue_list)
@@ -27,12 +27,13 @@ class ResultProcessor:
             return decoded_results
 
         final_results = [
-            result for result in decoded_results if self.is_result_format_valid(result)
+            result for result in decoded_results if self._is_result_valid(result)
         ]
         log.debug(f"result_processor - Found {len(final_results)} new results")
         return final_results
 
-    def is_result_format_valid(self, result: str) -> bool:
+    def _is_result_valid(self, result: str) -> bool:
+        """Check if result contains all searched lines."""
         inode = int(get_inode(result))
         block_factor = self.search_params.block_size * 8
 
@@ -42,6 +43,7 @@ class ResultProcessor:
         )
 
     def _get_combined_block_output(self, inode: int, block_factor: int) -> str:
+        """Get combined output of current and next block."""
         block_index = inode // block_factor
         block_output = get_dd_output(
             self.search_params.partition, block_factor, block_index
@@ -51,22 +53,3 @@ class ResultProcessor:
         )
 
         return decode_result(block_output) + decode_result(next_block_output)
-
-    def fix_line_start(self, line: str) -> str:
-        result_index: int = line.find(self.search_params.searched_lines[0])
-        return line[min(result_index, 15) :]
-
-    def fix_inode(self, inode: int) -> int:
-        inode //= self.search_params.block_size
-
-        for _ in range(10):
-            dd_output = self._get_dd_output(inode)
-            if self.search_params.searched_lines[0] in decode_result(dd_output):
-                return inode
-            inode += 1
-        return inode
-
-    def _get_dd_output(self, inode: int) -> bytes:
-        return get_dd_output(
-            self.search_params.partition, self.search_params.block_size, inode
-        )

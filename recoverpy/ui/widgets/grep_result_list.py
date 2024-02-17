@@ -64,4 +64,6 @@ class GrepResultList(ListView):
     def _resize_item(self, index: int) -> None:
         max_item_width = self.size.width - self.size.width // 20
         grep_result_line = self.grep_results[index].line
-        cast(Label, self.grep_results[index].label).update(grep_result_line[:max_item_width])
+        cast(Label, self.grep_results[index].label).update(
+            grep_result_line[:max_item_width]
+        )

@@ -3,7 +3,6 @@ from unittest.mock import MagicMock
 import pytest
 
 from recoverpy.lib.search.search_engine import SearchEngine
-
 from .fixtures import (
     mock_dd_output,
     mock_grep_process,
@@ -21,7 +20,11 @@ def system_calls_mock(session_mocker):
         new=mock_grep_process.mock_start_grep_process,
     )
     session_mocker.patch(
-        "recoverpy.lib.search.result_processor.get_dd_output",
+        "recoverpy.lib.search.result_filter.get_dd_output",
+        side_effect=mock_dd_output.mock_dd_string_output,
+    )
+    session_mocker.patch(
+        "recoverpy.lib.search.search_engine.get_dd_output",
         side_effect=mock_dd_output.mock_dd_string_output,
     )
     session_mocker.patch(

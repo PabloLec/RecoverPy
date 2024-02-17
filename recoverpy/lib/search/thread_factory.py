@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from io import BufferedReader
 from queue import Queue
 from subprocess import PIPE, Popen
 from threading import Thread
 from typing import Callable
 
 from recoverpy.lib.helper import is_dependency_installed
-from recoverpy.lib.search.grep_consumer import enqueue_grep_output
 from recoverpy.lib.search.progress_monitoring import monitor_search_progress
 from recoverpy.log.logger import log
 from recoverpy.models.search_progress import SearchProgress
@@ -22,22 +22,24 @@ def start_grep_process(searched_string: str, partition: str) -> Popen[bytes]:
     )
 
 
-def start_result_enqueue_thread(
-    grep_process: Popen[bytes], queue: Queue[bytes]
+def start_grep_stdout_consumer_thread(
+    consume_function: Callable[[BufferedReader, Queue[bytes]], None],
+    grep_process: Popen[bytes],
+    queue: Queue[bytes],
 ) -> None:
-    log.debug("thread_factory - Starting result enqueue thread")
+    log.debug("thread_factory - Starting grep stdout consumer thread")
     Thread(
-        target=enqueue_grep_output,
+        target=consume_function,
         args=(grep_process.stdout, queue),
         daemon=True,
         name="enqueue-grep-output-thread",
     ).start()
 
 
-def start_result_dequeue_thread(dequeue_results: Callable[[], None]) -> None:
-    log.debug("thread_factory - Starting result dequeue thread")
+def start_result_formatter_thread(format_function: Callable[[], None]) -> None:
+    log.debug("thread_factory - Starting result formatter thread")
     Thread(
-        target=dequeue_results,
+        target=format_function,
         daemon=True,
         name="dequeue-results-thread",
     ).start()
