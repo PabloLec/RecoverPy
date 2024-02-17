@@ -29,7 +29,7 @@ def test_search_progress_after_search(search_engine):
 
 
 def test_list_items_queue_size(search_engine):
-    assert search_engine.list_items_queue.qsize() == GREP_RESULT_COUNT
+    assert search_engine.formatted_results_queue.qsize() == GREP_RESULT_COUNT
 
 
 def test_list_items_queue_content(search_engine):
@@ -40,8 +40,8 @@ def test_list_items_queue_content(search_engine):
     ]
 
     results = []
-    while not search_engine.list_items_queue.empty():
-        results.append(search_engine.list_items_queue.get_nowait())
+    while not search_engine.formatted_results_queue.empty():
+        results.append(search_engine.formatted_results_queue.get_nowait())
 
     for i, result in enumerate(results):
         assert expected_list_items[i][0] == result.inode

@@ -8,7 +8,7 @@ from recoverpy.models.search_progress import SearchProgress
 
 def monitor_search_progress(grep_pid: int, progress: SearchProgress) -> None:
     while True:
-        output: str = get_progress_output(grep_pid)
+        output: str = _get_progress_output(grep_pid)
 
         if not output:
             progress.progress_percent = 100.0
@@ -22,7 +22,7 @@ def monitor_search_progress(grep_pid: int, progress: SearchProgress) -> None:
         sleep(0.5)
 
 
-def get_progress_output(grep_pid: int) -> str:
+def _get_progress_output(grep_pid: int) -> str:
     return check_output(["progress", "-p", str(grep_pid)], stderr=DEVNULL).decode(
         "utf8"
     )

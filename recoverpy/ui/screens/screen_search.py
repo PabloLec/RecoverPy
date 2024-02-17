@@ -70,7 +70,9 @@ class SearchScreen(Screen[None]):
     async def _start_search_engine(self) -> None:
         await self.search_engine.start_search()
         ensure_future(
-            self._grep_result_list.start_consumer(self.search_engine.list_items_queue)
+            self._grep_result_list.start_consumer(
+                self.search_engine.formatted_results_queue
+            )
         )
         ensure_future(self._update_progress_labels())
 
