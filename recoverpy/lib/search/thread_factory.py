@@ -36,8 +36,8 @@ def start_grep_stdout_consumer_thread(
     ).start()
 
 
-def start_result_formatter_thread(format_function: Callable[[], None]) -> None:
-    log.debug("thread_factory - Starting result formatter thread")
+def start_result_converter_thread(format_function: Callable[[], None]) -> None:
+    log.debug("thread_factory - Starting result converter thread")
     Thread(
         target=format_function,
         daemon=True,
