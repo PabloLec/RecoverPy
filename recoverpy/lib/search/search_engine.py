@@ -16,6 +16,8 @@ from queue import Queue
 from subprocess import Popen
 from typing import List
 
+from magika import Magika
+
 from recoverpy.lib.helper import get_dd_output, decode_result, get_inode
 from recoverpy.lib.search.thread_factory import (
     start_grep_process,
@@ -25,8 +27,11 @@ from recoverpy.lib.search.thread_factory import (
 )
 from recoverpy.log.logger import log
 from recoverpy.models.grep_result import GrepResult
+from recoverpy.models.raw_result import RawResult
 from recoverpy.models.search_params import SearchParams
 from recoverpy.models.search_progress import SearchProgress
+
+magika = Magika()
 
 
 def _consume_grep_stdout(out: BufferedReader, queue: Queue[bytes]) -> None:
@@ -75,7 +80,7 @@ class SearchEngine:
             self._process_new_results(results, loop)
             log.debug(f"search_engine - Dequeued {len(results)} results")
 
-    def _decode_new_results(self, queue_object: Queue[bytes]) -> List[str]:
+    def _decode_new_results(self, queue_object: Queue[bytes]) -> List[RawResult]:
         """Consume raw grep results, filter out false positives if multiline and return decoded results."""
         queue_list: List[bytes] = list(queue_object.queue)
         queue_size = len(queue_list)
@@ -83,11 +88,9 @@ class SearchEngine:
         if queue_size == 0:
             return []
 
-        decoded_results: List[str] = [decode_result(r) for r in queue_list]
-
-        if self.search_params.is_multi_line:
-            return self._filter_multiline_results(decoded_results)
-        return decoded_results
+        return [
+            RawResult(decode_result(r), magika.identify_bytes(r)) for r in queue_list
+        ]
 
     def _filter_multiline_results(self, results: List[str]) -> List[str]:
         """Filter out false positives from multiline results."""
@@ -115,7 +118,9 @@ class SearchEngine:
 
         return decode_result(block_output) + decode_result(next_block_output)
 
-    def _process_new_results(self, results: List[str], loop: AbstractEventLoop) -> None:
+    def _process_new_results(
+        self, results: List[RawResult], loop: AbstractEventLoop
+    ) -> None:
         """Consumes grep result strings, convert them into GrepResult objects
         and enqueues them into the formatted results queue for UI."""
         for result in results:
@@ -130,7 +135,7 @@ class SearchEngine:
             loop.run_until_complete(self.formatted_results_queue.put(grep_result))
             self.search_progress.result_count += 1
 
-    def _create_grep_result(self, result: str, result_index: int) -> GrepResult:
+    def _create_grep_result(self, result: RawResult, result_index: int) -> GrepResult:
         """Create a GrepResult object from a raw grep result string."""
         grep_result = GrepResult(result)
         self._configure_grep_result(grep_result, result_index)
