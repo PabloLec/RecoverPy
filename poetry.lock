@@ -1196,13 +1196,13 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
 name = "textual"
-version = "0.54.0"
+version = "0.55.0"
 description = "Modern Text User Interface framework"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "textual-0.54.0-py3-none-any.whl", hash = "sha256:94aacf28dece20a44f0b94b087e17ff4ac961acd92e12e648f060fe2555b3adc"},
-    {file = "textual-0.54.0.tar.gz", hash = "sha256:0cfd134dde5ae49d64dd73bb32a2fb5a86d878d9caeacecaa1d640082f31124e"},
+    {file = "textual-0.55.0-py3-none-any.whl", hash = "sha256:6c1537aea0897f68b547de2999589ac337210ad8bfa7f3634c0221b57a336e08"},
+    {file = "textual-0.55.0.tar.gz", hash = "sha256:2036aef7595bbbcfd0d827f0eea6efbe92b51bdb102dc493f7da8d80fa54a999"},
 ]
 
 [package.dependencies]
@@ -1211,7 +1211,7 @@ rich = ">=13.3.3"
 typing-extensions = ">=4.4.0,<5.0.0"
 
 [package.extras]
-syntax = ["tree-sitter (>=0.20.1,<0.21.0)", "tree_sitter_languages (>=1.7.0)"]
+syntax = ["tree-sitter (>=0.20.1,<0.21.0)", "tree-sitter-languages (==1.10.2)"]
 
 [[package]]
 name = "tomli"
@@ -1294,4 +1294,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "6e2af684ca015cd4496319b9a7b5cfe65ae695b14c6af9bd9fdecf4b0ef0bdd2"
+content-hash = "a31d351e989c015c3f38b9885d82f48b0a394ef7abe0bce549ae722781df31fa"
