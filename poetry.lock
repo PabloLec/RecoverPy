@@ -1196,13 +1196,13 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
 name = "textual"
-version = "0.55.0"
+version = "0.56.2"
 description = "Modern Text User Interface framework"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "textual-0.55.0-py3-none-any.whl", hash = "sha256:6c1537aea0897f68b547de2999589ac337210ad8bfa7f3634c0221b57a336e08"},
-    {file = "textual-0.55.0.tar.gz", hash = "sha256:2036aef7595bbbcfd0d827f0eea6efbe92b51bdb102dc493f7da8d80fa54a999"},
+    {file = "textual-0.56.2-py3-none-any.whl", hash = "sha256:cff8ee993796fc02430aacd7f148894478ff7f3a6b77865da525a8965ecc0ccf"},
+    {file = "textual-0.56.2.tar.gz", hash = "sha256:5d3efe7266aafc7b5a52ad622a155963fd22ec6043c769ecd7142490a3d9e17e"},
 ]
 
 [package.dependencies]
@@ -1294,4 +1294,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "bb0df4391ff6e0cea409d1e95625dcb45d7d2130c1fc521b3c6bbda41c538f22"
+content-hash = "8f641626c33a26c3dcc4b36000768cc9f468557567e31ea202994d1a2cadc053"
