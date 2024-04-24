@@ -76,7 +76,7 @@ python = "^3.8.1"
 textual = "0.57.1"
 
 [tool.poetry.dev-dependencies]
-coverage = "^7.4.4"
+coverage = "^7.5.0"
 pytest = "^8.1.1"
 pylint = "^3.1.0"
 isort = "^5.13.2"
