@@ -236,13 +236,13 @@ toml = ["tomli"]
 
 [[package]]
 name = "coverage-badge"
-version = "1.1.0"
+version = "1.1.1"
 description = "Generate coverage badges for Coverage.py."
 optional = false
 python-versions = "*"
 files = [
-    {file = "coverage-badge-1.1.0.tar.gz", hash = "sha256:c824a106503e981c02821e7d32f008fb3984b2338aa8c3800ec9357e33345b78"},
-    {file = "coverage_badge-1.1.0-py2.py3-none-any.whl", hash = "sha256:e365d56e5202e923d1b237f82defd628a02d1d645a147f867ac85c58c81d7997"},
+    {file = "coverage-badge-1.1.1.tar.gz", hash = "sha256:42252df917404af6147380861228a4ace3d9a29804df8fc2d34a22b2bc4f45b6"},
+    {file = "coverage_badge-1.1.1-py2.py3-none-any.whl", hash = "sha256:1d8e566ad47c37910fa2bbc74ea19972b171b5b4e40624b31b3e2f2d93680266"},
 ]
 
 [package.dependencies]
@@ -1294,4 +1294,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "a06d81800ee587a3919fefc8de5d800d912457128200ed3cbef9825920ccffa9"
+content-hash = "b2ee699f24e807257f03e4244c96d6788f70576f6a71ab6f07451792a044f180"
