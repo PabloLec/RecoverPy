@@ -8,8 +8,8 @@ from recoverpy import RecoverpyApp
 from tests.conftest import TEST_BLOCK_SIZE
 from tests.fixtures.mock_grep_process import GREP_RESULT_COUNT
 from tests.fixtures.mock_lsblk_output import (
-    VISIBLE_PARTITION_COUNT,
     UNFILTERED_PARTITION_COUNT,
+    VISIBLE_PARTITION_COUNT,
 )
 from tests.integration.helper import (
     TEST_FULL_PARTITION,
@@ -68,10 +68,10 @@ class TestFullWorkflow:
     async def test_partition_list_unfiltered(self, pilot):
         filter_checkbox = pilot.app.query("Checkbox").only_one()
         filter_checkbox.toggle()
-        pilot.pause()
+        await pilot.pause()
 
         assert filter_checkbox.value is False
-        assert_with_timeout(
+        await assert_with_timeout(
             lambda: len(list(pilot.app.query("ListItem").results()))
             == UNFILTERED_PARTITION_COUNT,
             UNFILTERED_PARTITION_COUNT,
@@ -81,10 +81,10 @@ class TestFullWorkflow:
     async def test_partition_list_filtered(self, pilot):
         filter_checkbox = pilot.app.query("Checkbox").only_one()
         filter_checkbox.toggle()
-        pilot.pause()
+        await pilot.pause()
 
         assert filter_checkbox.value is True
-        assert_with_timeout(
+        await assert_with_timeout(
             lambda: len(list(pilot.app.query("ListItem").results()))
             == VISIBLE_PARTITION_COUNT,
             VISIBLE_PARTITION_COUNT,
@@ -125,6 +125,12 @@ class TestFullWorkflow:
             == 100.0,
             100.0,
             pilot.app.screen.search_engine.search_progress.progress_percent,
+        )
+        await assert_with_timeout(
+            lambda: pilot.app.screen.search_engine.search_progress.result_count
+            == GREP_RESULT_COUNT,
+            GREP_RESULT_COUNT,
+            pilot.app.screen.search_engine.search_progress.result_count,
         )
         await assert_with_timeout(
             lambda: len(pilot.app.screen._grep_result_list.grep_results)

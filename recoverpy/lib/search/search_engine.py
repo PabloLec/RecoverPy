@@ -14,6 +14,7 @@ from asyncio import new_event_loop
 from io import BufferedReader
 from queue import Queue
 from subprocess import Popen
+from time import sleep
 from typing import List
 
 from recoverpy.lib.helper import decode_result, get_dd_output, get_inode
@@ -74,6 +75,7 @@ class SearchEngine:
             results = self._decode_new_results(self.raw_grep_results_queue)
             self._process_new_results(results, loop)
             log.debug(f"search_engine - Dequeued {len(results)} results")
+            sleep(0.1)
 
     def _decode_new_results(self, queue_object: Queue[bytes]) -> List[str]:
         """Consume raw grep results, filter out false positives if multiline and return decoded results."""
