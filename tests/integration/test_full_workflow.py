@@ -121,8 +121,8 @@ class TestFullWorkflow:
 
     async def test_search_results(self, pilot):
         await assert_with_timeout(
-            lambda: pilot.app.screen.search_engine.search_progress.progress_percent
-            == 100.0,
+            lambda: int(pilot.app.screen.search_engine.search_progress.progress_percent)
+            == 100,
             100.0,
             pilot.app.screen.search_engine.search_progress.progress_percent,
         )
@@ -299,7 +299,7 @@ class TestFullWorkflow:
 
         assert pilot.app.screen.name == "result"
 
-    def check_saved_result(tmp_path: Path):
+    def check_saved_result(self, tmp_path: Path):
         dir_files = list(tmp_path.iterdir())
         assert len(dir_files) == 1
         assert dir_files[0].name.startswith("recoverpy-save-")

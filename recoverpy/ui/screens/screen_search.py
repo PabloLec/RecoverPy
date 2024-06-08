@@ -86,7 +86,7 @@ class SearchScreen(Screen[None]):
             await sleep(0.1)
 
     def _update_progress_percent_title(self) -> None:
-        if self.search_engine.search_progress.progress_percent == 0.0:
+        if int(self.search_engine.search_progress.progress_percent) == 0:
             return
 
         if self._progress_title_label.renderable == "":

@@ -11,7 +11,7 @@ def test_search_params(search_engine):
 
 def test_search_progress_before_search(search_engine):
     assert search_engine.search_progress.result_count == 0
-    assert search_engine.search_progress.progress_percent == 0.0
+    assert int(search_engine.search_progress.progress_percent) == 0
 
 
 @pytest.mark.asyncio
@@ -28,7 +28,7 @@ async def test_search_progress_after_search(search_engine):
         GREP_RESULT_COUNT,
         search_engine.search_progress.result_count,
     )
-    assert search_engine.search_progress.progress_percent == 100.0
+    assert int(search_engine.search_progress.progress_percent) == 100
 
 
 def test_list_items_queue_size(search_engine):
