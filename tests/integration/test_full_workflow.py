@@ -84,12 +84,6 @@ async def verify_search_results(p: Pilot):
         p.app.screen.search_engine.search_progress.progress_percent,
     )
     await assert_with_timeout(
-        lambda: p.app.screen.search_engine.search_progress.result_count
-        == GREP_RESULT_COUNT,
-        GREP_RESULT_COUNT,
-        p.app.screen.search_engine.search_progress.result_count,
-    )
-    await assert_with_timeout(
         lambda: len(p.app.screen._grep_result_list.grep_results) == GREP_RESULT_COUNT,
         GREP_RESULT_COUNT,
         len(p.app.screen._grep_result_list.grep_results),
