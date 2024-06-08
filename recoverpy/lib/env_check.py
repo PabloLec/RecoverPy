@@ -25,13 +25,13 @@ async def verify_app_environment(app: App[None]) -> None:
             app, "version-error-modal", _version_error_message, exit
         )
     if not _is_linux():
-        log.warn("app - System is not Linux-based")
+        log.warning("app - System is not Linux-based")
         await install_and_push_modal(app, "linux-error-modal", _linux_error_message)
     if not _is_user_root():
-        log.warn("app - User is not root")
+        log.warning("app - User is not root")
         await install_and_push_modal(app, "root-error-modal", _root_error_message)
     if not _are_system_dependencies_installed():
-        log.warn("app - Some dependencies are not installed")
+        log.warning("app - Some dependencies are not installed")
         await install_and_push_modal(
             app, "dependencies-error-modal", _dependencies_error_message
         )

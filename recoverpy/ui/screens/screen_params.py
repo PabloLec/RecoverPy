@@ -45,18 +45,18 @@ class ParamsScreen(Screen[None]):
 
     async def on_button_pressed(self) -> None:
         if not self._partition_list:
-            log.warn("Partition list not initialized")
+            log.warning("Partition list not initialized")
             return
 
         highlighted_child = self._partition_list.highlighted_child
         searched_string = self._search_input.value.strip()
 
         if highlighted_child is None:
-            log.warn("No partition selected for search")
+            log.warning("No partition selected for search")
             return
 
         if not searched_string:
-            log.warn("No search string entered")
+            log.warning("No search string entered")
             return
 
         selected_partition: Partition = self._partition_list.list_items[
