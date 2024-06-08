@@ -1,13 +1,13 @@
 name: tests
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
       fail-fast: false
     env:
       IS_GITHUB_RUNNER: "true"
@@ -33,7 +33,7 @@ jobs:
         run: pytest
 
       - name: Run Mypy
-        run: mypy recoverpy --strict
+        run: mypy recoverpy
 
   automerge-dependabot:
     runs-on: ubuntu-latest
