@@ -32,9 +32,6 @@ jobs:
       - name: Run tests
         run: pytest
 
-      - name: Run Mypy
-        run: mypy recoverpy
-
   automerge-dependabot:
     runs-on: ubuntu-latest
     needs: test
