@@ -29,7 +29,7 @@ def get_expected_block_content_text(inode: int):
     )
 
 
-async def assert_with_timeout(check_func, timeout=5.0, interval=0.1):
+async def assert_with_timeout(check_func, expected, actual, timeout=5.0, interval=0.1):
     end_time = asyncio.get_event_loop().time() + timeout
     while True:
         if check_func():
@@ -38,13 +38,15 @@ async def assert_with_timeout(check_func, timeout=5.0, interval=0.1):
             func_src = inspect.getsource(check_func).strip()
             assert (
                 False
-            ), f"Timeout reached before condition in `{func_src}` became true."
+            ), f"Timeout reached before condition in `{func_src}` became true. Expected: {expected}, Actual: {actual}"
         await asyncio.sleep(interval)
 
 
 async def assert_current_result_is_selected_for_save(p: Pilot):
     await assert_with_timeout(
-        lambda: p.app.screen._inode in p.app.screen._saver._results
+        lambda: p.app.screen._inode in p.app.screen._saver._results,
+        p.app.screen._inode,
+        p.app.screen._saver._results,
     )
     assert p.app.screen._saver._results[p.app.screen._inode].replace(" ", "").replace(
         "\n", ""

@@ -68,24 +68,36 @@ async def start_search(p: Pilot):
     await p.click("#start-search-button")
 
     assert p.app.screen.name == "search"
-    await assert_with_timeout(lambda: hasattr(p.app.screen, "search_engine"))
+    await assert_with_timeout(
+        lambda: hasattr(p.app.screen, "search_engine"),
+        "search_engine",
+        p.app.screen.__dict__,
+    )
     assert p.app.screen.search_engine.search_params.search_string == "TEST"
     assert p.app.screen.search_engine.search_params.partition == TEST_FULL_PARTITION
 
 
 async def verify_search_results(p: Pilot):
     await assert_with_timeout(
-        lambda: p.app.screen.search_engine.search_progress.progress_percent == 100.0
+        lambda: p.app.screen.search_engine.search_progress.progress_percent == 100.0,
+        100.0,
+        p.app.screen.search_engine.search_progress.progress_percent,
     )
     await assert_with_timeout(
         lambda: p.app.screen.search_engine.search_progress.result_count
-        == GREP_RESULT_COUNT
+        == GREP_RESULT_COUNT,
+        GREP_RESULT_COUNT,
+        p.app.screen.search_engine.search_progress.result_count,
     )
     await assert_with_timeout(
-        lambda: len(p.app.screen._grep_result_list.grep_results) == GREP_RESULT_COUNT
+        lambda: len(p.app.screen._grep_result_list.grep_results) == GREP_RESULT_COUNT,
+        GREP_RESULT_COUNT,
+        len(p.app.screen._grep_result_list.grep_results),
     )
     await assert_with_timeout(
-        lambda: len(list(p.app.query("ListItem").results())) == GREP_RESULT_COUNT
+        lambda: len(list(p.app.query("ListItem").results())) == GREP_RESULT_COUNT,
+        GREP_RESULT_COUNT,
+        len(list(p.app.query("ListItem").results())),
     )
 
 
@@ -96,7 +108,9 @@ async def select_search_results(p: Pilot):
         await p.click(f"#{item.id}")
         assert item.highlighted is True
         await assert_with_timeout(
-            lambda: p.app.screen._get_selected_grep_result().list_item == item
+            lambda: p.app.screen._get_selected_grep_result().list_item == item,
+            item,
+            p.app.screen._get_selected_grep_result().list_item,
         )
 
 
@@ -110,14 +124,28 @@ async def open_result(p: Pilot):
 
     assert p.app.screen.name == "result"
 
-    await assert_with_timeout(lambda: p.app.screen._partition == TEST_FULL_PARTITION)
-    await assert_with_timeout(lambda: p.app.screen._block_size == TEST_BLOCK_SIZE)
-    await assert_with_timeout(lambda: p.app.screen._inode == select_grep_result.inode)
+    await assert_with_timeout(
+        lambda: p.app.screen._partition == TEST_FULL_PARTITION,
+        TEST_FULL_PARTITION,
+        p.app.screen._partition,
+    )
+    await assert_with_timeout(
+        lambda: p.app.screen._block_size == TEST_BLOCK_SIZE,
+        TEST_BLOCK_SIZE,
+        p.app.screen._block_size,
+    )
+    await assert_with_timeout(
+        lambda: p.app.screen._inode == select_grep_result.inode,
+        select_grep_result.inode,
+        p.app.screen._inode,
+    )
 
 
 async def verify_result(p: Pilot):
     await assert_with_timeout(
-        lambda: str(p.app.screen._inode) in p.app.screen._inode_label.renderable.plain
+        lambda: str(p.app.screen._inode) in p.app.screen._inode_label.renderable.plain,
+        p.app.screen._inode,
+        p.app.screen._inode_label.renderable.plain,
     )
     assert p.app.screen._block_count_label.renderable.plain.startswith("0 ")
 
@@ -127,7 +155,7 @@ async def verify_result(p: Pilot):
 
 
 async def select_first_result(p: Pilot):
-    await p.click(f"#add-block-button")
+    await p.click("#add-block-button")
 
     assert p.app.screen._block_count_label.renderable.plain.startswith("1 ")
     assert p.app.screen._save_button.disabled is False
@@ -135,70 +163,74 @@ async def select_first_result(p: Pilot):
     assert len(p.app.screen._saver._results) == 1
     await assert_current_result_is_selected_for_save(p)
 
-    await p.click(f"#add-block-button")
+    await p.click("#add-block-button")
     assert len(p.app.screen._saver._results) == 1
     add_expected_save_result(p)
 
 
 async def select_next_result(p: Pilot):
     current_inode = p.app.screen._inode
-    await p.click(f"#next-button")
+    await p.click("#next-button")
     assert p.app.screen._inode != current_inode
 
     await assert_with_timeout(
-        lambda: str(p.app.screen._inode) in p.app.screen._inode_label.renderable.plain
+        lambda: str(p.app.screen._inode) in p.app.screen._inode_label.renderable.plain,
+        str(p.app.screen._inode),
+        p.app.screen._inode_label.renderable.plain,
     )
     assert get_expected_block_content_text(
         p.app.screen._inode
     ) == get_block_content_text(p.app.screen._block_content)
 
-    await p.click(f"#add-block-button")
+    await p.click("#add-block-button")
 
     assert p.app.screen._block_count_label.renderable.plain.startswith("2 ")
 
     assert len(p.app.screen._saver._results) == 2
     await assert_current_result_is_selected_for_save(p)
 
-    await p.click(f"#add-block-button")
+    await p.click("#add-block-button")
     assert len(p.app.screen._saver._results) == 2
     add_expected_save_result(p)
 
 
 async def select_previous_result(p: Pilot):
     current_inode = p.app.screen._inode
-    await p.click(f"#previous-button")
+    await p.click("#previous-button")
     assert p.app.screen._inode != current_inode
 
     current_inode = p.app.screen._inode
-    await p.click(f"#previous-button")
+    await p.click("#previous-button")
     assert p.app.screen._inode != current_inode
 
     await assert_with_timeout(
-        lambda: str(p.app.screen._inode) in p.app.screen._inode_label.renderable.plain
+        lambda: str(p.app.screen._inode) in p.app.screen._inode_label.renderable.plain,
+        str(p.app.screen._inode),
+        p.app.screen._inode_label.renderable.plain,
     )
     assert get_expected_block_content_text(
         p.app.screen._inode
     ) == get_block_content_text(p.app.screen._block_content)
 
-    await p.click(f"#add-block-button")
+    await p.click("#add-block-button")
 
     assert p.app.screen._block_count_label.renderable.plain.startswith("3 ")
 
     assert len(p.app.screen._saver._results) == 3
     await assert_current_result_is_selected_for_save(p)
 
-    await p.click(f"#add-block-button")
+    await p.click("#add-block-button")
     assert len(p.app.screen._saver._results) == 3
     add_expected_save_result(p)
 
 
 async def start_save_process(p: Pilot):
-    await p.click(f"#save-button")
+    await p.click("#save-button")
     assert p.app.screen.name == "save"
 
 
 async def edit_save_path(p: Pilot, tmp_path: Path):
-    await p.click(f"#edit-save-path-button")
+    await p.click("#edit-save-path-button")
     assert p.app.screen.name == "path_edit"
 
     tmp_tree_node = None
@@ -210,13 +242,13 @@ async def edit_save_path(p: Pilot, tmp_path: Path):
     assert tmp_tree_node is not None
     p.app.screen._directory_tree.selected_dir = tmp_path
 
-    await p.click(f"#confirm-button")
+    await p.click("#confirm-button")
     assert p.app.screen.name == "save"
     assert p.app.screen._saver.save_path == tmp_path
 
 
 async def save_results(p: Pilot):
-    await p.click(f"#save-button")
+    await p.click("#save-button")
     assert p.app.screen.name == "save-modal"
 
     await p.click("#ok-button")

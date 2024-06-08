@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from recoverpy.lib.search.search_engine import SearchEngine
+
 from .fixtures import (
     mock_dd_output,
     mock_grep_process,
