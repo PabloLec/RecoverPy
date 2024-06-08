@@ -1,6 +1,7 @@
 """
 Defines the RecoverpyApp class which serves as the main app orchestrator for the application.
 """
+
 from typing import Dict, cast
 
 from textual.app import App

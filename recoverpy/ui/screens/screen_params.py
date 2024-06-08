@@ -1,6 +1,8 @@
 """First screen displayed to the user.
 Allows user to enter search string and select partition."""
 
+from typing import Generator, Optional
+
 from textual.app import ComposeResult
 from textual.message import Message
 from textual.screen import Screen
@@ -12,6 +14,8 @@ from recoverpy.ui.widgets.partition_list import PartitionList
 
 
 class ParamsScreen(Screen[None]):
+    _partition_list: Optional[PartitionList] = None
+
     class Continue(Message):
         def __init__(self, searched_string: str, selected_partition: str) -> None:
             super().__init__()
@@ -19,7 +23,6 @@ class ParamsScreen(Screen[None]):
             self.selected_partition = selected_partition
 
     def compose(self) -> ComposeResult:
-        self._partition_list = PartitionList()
         self._search_input = Input(
             name="search", id="search-input", placeholder="Search"
         )
@@ -30,11 +33,20 @@ class ParamsScreen(Screen[None]):
         yield Label("Type a text to search for:")
         yield self._search_input
         yield Label("Available partitions:")
-        yield self._partition_list
+        yield from self._yield_partition_list()
         yield self._start_search_button
         log.debug("params - Parameters screen composed")
 
+    def _yield_partition_list(self) -> Generator[PartitionList, None, None]:
+        if not self._partition_list:
+            self._partition_list = PartitionList()
+        yield self._partition_list
+
     async def on_button_pressed(self) -> None:
+        if not self._partition_list:
+            log.warn("Partition list not initialized")
+            return
+
         highlighted_child = self._partition_list.highlighted_child
         searched_string = self._search_input.value.strip()
 

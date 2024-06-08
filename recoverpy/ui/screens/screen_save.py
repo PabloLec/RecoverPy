@@ -1,4 +1,5 @@
 """Screen used to confirm save."""
+
 from typing import Optional
 
 from textual.app import ComposeResult

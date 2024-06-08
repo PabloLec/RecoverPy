@@ -21,9 +21,11 @@ def _set_logger() -> None:
     logging.basicConfig(
         level=logging.DEBUG if args.debug else logging.CRITICAL,
         format="%(asctime)s - %(levelname)s - [%(threadName)s] - %(message)s",
-        handlers=[logging.FileHandler(log_file_path)]
-        if args.debug
-        else [logging.NullHandler()],
+        handlers=(
+            [logging.FileHandler(log_file_path)]
+            if args.debug
+            else [logging.NullHandler()]
+        ),
     )
     log = logging.getLogger()
 

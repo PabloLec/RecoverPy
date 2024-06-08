@@ -16,12 +16,12 @@ from queue import Queue
 from subprocess import Popen
 from typing import List
 
-from recoverpy.lib.helper import get_dd_output, decode_result, get_inode
+from recoverpy.lib.helper import decode_result, get_dd_output, get_inode
 from recoverpy.lib.search.thread_factory import (
     start_grep_process,
+    start_grep_stdout_consumer_thread,
     start_progress_monitoring_thread,
     start_result_converter_thread,
-    start_grep_stdout_consumer_thread,
 )
 from recoverpy.log.logger import log
 from recoverpy.models.grep_result import GrepResult

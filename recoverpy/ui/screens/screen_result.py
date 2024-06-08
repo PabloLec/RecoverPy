@@ -1,4 +1,5 @@
 """Screen displaying dd results."""
+
 from subprocess import CalledProcessError
 from typing import Optional, cast
 

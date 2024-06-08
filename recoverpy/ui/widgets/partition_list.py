@@ -1,6 +1,8 @@
 """A Textual ListView Widget for displaying partitions."""
+
 from typing import Dict, Optional
 
+from textual.events import Mount
 from textual.widgets import Label, ListItem, ListView
 
 from recoverpy.lib.lsblk import get_partitions
@@ -23,7 +25,10 @@ class PartitionList(ListView):
     def __init__(self, *children, **kwargs) -> None:  # type: ignore
         super().__init__(id="partition-list", *children, **kwargs)
         self.list_items: Dict[Optional[str], Partition] = {}
+
+    def _on_mount(self, _: Mount) -> None:
         self._append_partitions()
+        return super()._on_mount(_)
 
     def _append_partitions(self) -> None:
         for partition in get_partitions():
