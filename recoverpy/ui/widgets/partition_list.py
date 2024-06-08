@@ -33,7 +33,7 @@ class PartitionList(ListView):
     def set_partitions(self, filtered: bool = True) -> None:
         self.clear()
         self.list_items.clear()
-        
+
         for partition in get_partitions(filtered):
             log.debug(f"partition_list - Appending partition {partition.name}")
             list_item = self._create_list_item(partition)

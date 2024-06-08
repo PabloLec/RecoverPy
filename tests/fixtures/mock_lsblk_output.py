@@ -13,3 +13,4 @@ vdb disk LVM2_member
 vda2 part LVM2_member"""
 
 VISIBLE_PARTITION_COUNT = 7
+UNFILTERED_PARTITION_COUNT = 9

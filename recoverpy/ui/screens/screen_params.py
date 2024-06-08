@@ -7,7 +7,7 @@ from textual.app import ComposeResult
 from textual.containers import Container
 from textual.message import Message
 from textual.screen import Screen
-from textual.widgets import Button, Input, Label, Checkbox
+from textual.widgets import Button, Checkbox, Input, Label
 
 from recoverpy.log.logger import log
 from recoverpy.models.partition import Partition
@@ -35,10 +35,7 @@ class ParamsScreen(Screen[None]):
         yield self._search_input
         yield Label("Available partitions:")
         yield from self._yield_partition_list()
-        yield Container(
-            self._start_search_button,
-            Checkbox("Filter partitions", True)
-        )
+        yield Container(self._start_search_button, Checkbox("Filter partitions", True))
         log.debug("params - Parameters screen composed")
 
     def _yield_partition_list(self) -> Generator[PartitionList, None, None]:

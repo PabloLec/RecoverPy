@@ -22,7 +22,9 @@ def _parse_lsblk_output(lsblk_output: str, filtered: bool) -> List[Partition]:
     partitions = [
         _parse_partition(line)
         for line in lsblk_output.splitlines()
-        if not (filtered and any(ignored in line for ignored in _IGNORED_PARTITION_TYPES))
+        if not (
+            filtered and any(ignored in line for ignored in _IGNORED_PARTITION_TYPES)
+        )
     ]
     return [p for p in partitions if p]
 

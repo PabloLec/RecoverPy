@@ -43,11 +43,10 @@ async def assert_with_timeout(check_func, expected, actual, timeout=5.0, interva
 
 
 async def assert_current_result_is_selected_for_save(p: Pilot):
-    await assert_with_timeout(
-        lambda: p.app.screen._inode in p.app.screen._saver._results,
-        p.app.screen._inode,
-        p.app.screen._saver._results,
-    )
+    await p.pause()
+
+    assert p.app.screen._inode in p.app.screen._saver._results
+
     assert p.app.screen._saver._results[p.app.screen._inode].replace(" ", "").replace(
         "\n", ""
     ) == get_expected_block_content_text(p.app.screen._inode)
