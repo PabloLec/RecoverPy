@@ -27,11 +27,14 @@ class PartitionList(ListView):
         self.list_items: Dict[Optional[str], Partition] = {}
 
     def _on_mount(self, _: Mount) -> None:
-        self._append_partitions()
+        self.set_partitions()
         return super()._on_mount(_)
 
-    def _append_partitions(self) -> None:
-        for partition in get_partitions():
+    def set_partitions(self, filtered: bool = True) -> None:
+        self.clear()
+        self.list_items.clear()
+        
+        for partition in get_partitions(filtered):
             log.debug(f"partition_list - Appending partition {partition.name}")
             list_item = self._create_list_item(partition)
             self.list_items[list_item.id] = partition

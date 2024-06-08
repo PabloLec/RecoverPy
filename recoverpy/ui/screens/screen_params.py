@@ -4,9 +4,10 @@ Allows user to enter search string and select partition."""
 from typing import Generator, Optional
 
 from textual.app import ComposeResult
+from textual.containers import Container
 from textual.message import Message
 from textual.screen import Screen
-from textual.widgets import Button, Input, Label
+from textual.widgets import Button, Input, Label, Checkbox
 
 from recoverpy.log.logger import log
 from recoverpy.models.partition import Partition
@@ -34,7 +35,10 @@ class ParamsScreen(Screen[None]):
         yield self._search_input
         yield Label("Available partitions:")
         yield from self._yield_partition_list()
-        yield self._start_search_button
+        yield Container(
+            self._start_search_button,
+            Checkbox("Filter partitions", True)
+        )
         log.debug("params - Parameters screen composed")
 
     def _yield_partition_list(self) -> Generator[PartitionList, None, None]:
@@ -72,3 +76,7 @@ class ParamsScreen(Screen[None]):
 
     async def on_input_changed(self, event: Input.Changed) -> None:
         self._start_search_button.disabled = len(event.value.strip()) == 0
+
+    async def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
+        if self._partition_list:
+            self._partition_list.set_partitions(event.value)

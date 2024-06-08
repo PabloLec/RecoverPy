@@ -6,9 +6,9 @@ from recoverpy.models.partition import Partition
 _IGNORED_PARTITION_TYPES: Tuple[str, str] = (" loop ", "swap")
 
 
-def get_partitions() -> List[Partition]:
+def get_partitions(filtered: bool) -> List[Partition]:
     lsblk_output: str = _fetch_lsblk_output()
-    return _parse_lsblk_output(lsblk_output)
+    return _parse_lsblk_output(lsblk_output, filtered)
 
 
 def _fetch_lsblk_output() -> str:
@@ -18,11 +18,11 @@ def _fetch_lsblk_output() -> str:
     )
 
 
-def _parse_lsblk_output(lsblk_output: str) -> List[Partition]:
+def _parse_lsblk_output(lsblk_output: str, filtered: bool) -> List[Partition]:
     partitions = [
         _parse_partition(line)
         for line in lsblk_output.splitlines()
-        if not any(ignored in line for ignored in _IGNORED_PARTITION_TYPES)
+        if not (filtered and any(ignored in line for ignored in _IGNORED_PARTITION_TYPES))
     ]
     return [p for p in partitions if p]
 
