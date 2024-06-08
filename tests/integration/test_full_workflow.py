@@ -7,7 +7,10 @@ import pytest_asyncio
 from recoverpy import RecoverpyApp
 from tests.conftest import TEST_BLOCK_SIZE
 from tests.fixtures.mock_grep_process import GREP_RESULT_COUNT
-from tests.fixtures.mock_lsblk_output import VISIBLE_PARTITION_COUNT
+from tests.fixtures.mock_lsblk_output import (
+    VISIBLE_PARTITION_COUNT,
+    UNFILTERED_PARTITION_COUNT,
+)
 from tests.integration.helper import (
     TEST_FULL_PARTITION,
     TEST_PARTITION,
@@ -53,6 +56,40 @@ class TestFullWorkflow:
             len(pilot.app.screen._partition_list.list_items) == VISIBLE_PARTITION_COUNT
         )
         assert pilot.app.screen._start_search_button.disabled is True
+
+    async def test_partition_list_default_state(self, pilot):
+        filter_checkbox = pilot.app.query("Checkbox").only_one()
+        assert filter_checkbox is not None
+        assert filter_checkbox.value is True
+
+        items = list(pilot.app.query("ListItem").results())
+        assert len(items) == VISIBLE_PARTITION_COUNT
+
+    async def test_partition_list_unfiltered(self, pilot):
+        filter_checkbox = pilot.app.query("Checkbox").only_one()
+        filter_checkbox.toggle()
+        pilot.pause()
+
+        assert filter_checkbox.value is False
+        assert_with_timeout(
+            lambda: len(list(pilot.app.query("ListItem").results()))
+            == UNFILTERED_PARTITION_COUNT,
+            UNFILTERED_PARTITION_COUNT,
+            len(list(pilot.app.query("ListItem").results())),
+        )
+
+    async def test_partition_list_filtered(self, pilot):
+        filter_checkbox = pilot.app.query("Checkbox").only_one()
+        filter_checkbox.toggle()
+        pilot.pause()
+
+        assert filter_checkbox.value is True
+        assert_with_timeout(
+            lambda: len(list(pilot.app.query("ListItem").results()))
+            == VISIBLE_PARTITION_COUNT,
+            VISIBLE_PARTITION_COUNT,
+            len(list(pilot.app.query("ListItem").results())),
+        )
 
     async def test_input_search_params(self, pilot):
         await pilot.click("#search-input")
