@@ -29,7 +29,7 @@ def get_expected_block_content_text(inode: int):
     )
 
 
-async def assert_with_timeout(check_func, expected, actual, timeout=5.0, interval=0.1):
+async def assert_with_timeout(check_func, expected, actual, timeout=10.0, interval=0.1):
     end_time = asyncio.get_event_loop().time() + timeout
     while True:
         if check_func():

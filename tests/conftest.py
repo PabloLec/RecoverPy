@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock
 
 import pytest
+import pytest_asyncio
 
 from recoverpy.lib.search.search_engine import SearchEngine
 
@@ -14,7 +15,7 @@ from .fixtures import (
 TEST_BLOCK_SIZE = 4096
 
 
-@pytest.fixture(scope="module", autouse=True)
+@pytest_asyncio.fixture(scope="session", autouse=True)
 def system_calls_mock(session_mocker):
     session_mocker.patch(
         "recoverpy.lib.search.search_engine.start_grep_process",
@@ -46,7 +47,7 @@ def system_calls_mock(session_mocker):
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def search_engine():
     return SearchEngine(partition="/dev/sda1", searched_string="Lorem ipsum")
 
@@ -113,3 +114,16 @@ def mock_dependencies_not_installed(session_mocker):
         "recoverpy.lib.env_check._are_system_dependencies_installed",
         MagicMock(return_value=False),
     )
+
+
+def pytest_runtest_makereport(item, call):
+    if "incremental" in item.keywords:
+        if call.excinfo is not None:
+            parent = item.parent
+            parent._previousfailed = item
+
+
+def pytest_runtest_setup(item):
+    previousfailed = getattr(item.parent, "_previousfailed", None)
+    if previousfailed is not None:
+        pytest.skip("previous test failed (%s)" % previousfailed.name)

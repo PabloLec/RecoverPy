@@ -1,7 +1,8 @@
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
-from textual.pilot import Pilot
+import pytest_asyncio
 
 from recoverpy import RecoverpyApp
 from tests.conftest import TEST_BLOCK_SIZE
@@ -19,223 +20,247 @@ from tests.integration.helper import (
 )
 
 
-@pytest.mark.asyncio
-async def test_init_app(
-    mock_root, mock_linux, mock_valid_version, mock_dependencies_installed, tmp_path
-):
-    async with RecoverpyApp().run_test() as p:
-        await init_app(p)
-        await input_search_params(p)
-        await start_search(p)
-        await verify_search_results(p)
-        await select_search_results(p)
-        await open_result(p)
-        await verify_result(p)
-        await select_first_result(p)
-        await select_next_result(p)
-        await select_previous_result(p)
-        await start_save_process(p)
-        await edit_save_path(p, tmp_path)
-        await save_results(p)
-        check_saved_result(tmp_path)
+@pytest.mark.asyncio(scope="class")
+@pytest.mark.incremental
+class TestFullWorkflow:
+    @pytest_asyncio.fixture(scope="class")
+    def session_patch(self, session_mocker):
+        session_mocker.patch(
+            "recoverpy.lib.env_check._is_user_root",
+            MagicMock(return_value=True),
+        )
+        session_mocker.patch(
+            "recoverpy.lib.env_check._are_system_dependencies_installed",
+            MagicMock(return_value=True),
+        )
+        session_mocker.patch(
+            "recoverpy.lib.env_check._is_linux",
+            MagicMock(return_value=True),
+        )
 
+    @pytest_asyncio.fixture(scope="class")
+    async def pilot(self, session_patch):
+        async with RecoverpyApp().run_test() as p:
+            yield p
 
-async def init_app(p: Pilot):
-    assert p.app is not None
-    for screen in p.app.screens:
-        assert p.app.is_screen_installed(p.app.screens[screen])
-    assert p.app.screen.name == "params"
-    assert p.app.screen._partition_list is not None
-    assert len(p.app.screen._partition_list.list_items) == VISIBLE_PARTITION_COUNT
-    assert p.app.screen._start_search_button.disabled is True
+    async def test_init_app(self, pilot):
+        assert pilot.app is not None
+        for screen in pilot.app.screens:
+            assert pilot.app.is_screen_installed(pilot.app.screens[screen])
+        assert pilot.app.screen.name == "params"
+        assert pilot.app.screen._partition_list is not None
+        assert (
+            len(pilot.app.screen._partition_list.list_items) == VISIBLE_PARTITION_COUNT
+        )
+        assert pilot.app.screen._start_search_button.disabled is True
 
+    async def test_input_search_params(self, pilot):
+        await pilot.click("#search-input")
+        await pilot.pause()
 
-async def input_search_params(p: Pilot):
-    await p.click("#search-input")
-    for c in "TEST":
-        await p.press(c)
+        for c in "TEST":
+            await pilot.press(c)
 
-    assert p.app.screen._search_input.value == "TEST"
+        assert pilot.app.screen._search_input.value == "TEST"
 
-    await p.click(f"#{TEST_PARTITION}")
+        await pilot.click(f"#{TEST_PARTITION}")
+        await pilot.pause()
 
-    assert p.app.screen._partition_list.highlighted_child is not None
-    assert p.app.screen._partition_list.highlighted_child.id == TEST_PARTITION
-    assert p.app.screen._start_search_button.disabled is False
+        assert pilot.app.screen._partition_list.highlighted_child is not None
+        assert pilot.app.screen._partition_list.highlighted_child.id == TEST_PARTITION
+        assert pilot.app.screen._start_search_button.disabled is False
 
+    async def test_start_search(self, pilot):
+        await pilot.click("#start-search-button")
+        await pilot.pause()
 
-async def start_search(p: Pilot):
-    await p.click("#start-search-button")
-    await p.pause()
+        assert pilot.app.screen.name == "search"
+        assert hasattr(pilot.app.screen, "search_engine")
+        assert pilot.app.screen.search_engine.search_params.search_string == "TEST"
+        assert (
+            pilot.app.screen.search_engine.search_params.partition
+            == TEST_FULL_PARTITION
+        )
 
-    assert p.app.screen.name == "search"
-    assert hasattr(p.app.screen, "search_engine")
-    assert p.app.screen.search_engine.search_params.search_string == "TEST"
-    assert p.app.screen.search_engine.search_params.partition == TEST_FULL_PARTITION
+    async def test_search_results(self, pilot):
+        await assert_with_timeout(
+            lambda: pilot.app.screen.search_engine.search_progress.progress_percent
+            == 100.0,
+            100.0,
+            pilot.app.screen.search_engine.search_progress.progress_percent,
+        )
+        await assert_with_timeout(
+            lambda: len(pilot.app.screen._grep_result_list.grep_results)
+            == GREP_RESULT_COUNT,
+            GREP_RESULT_COUNT,
+            len(pilot.app.screen._grep_result_list.grep_results),
+        )
+        await assert_with_timeout(
+            lambda: len(list(pilot.app.query("ListItem").results()))
+            == GREP_RESULT_COUNT,
+            GREP_RESULT_COUNT,
+            len(list(pilot.app.query("ListItem").results())),
+        )
 
+    async def test_select_search_results(self, pilot):
+        list_items = list(pilot.app.query("ListItem").results())
 
-async def verify_search_results(p: Pilot):
-    await assert_with_timeout(
-        lambda: p.app.screen.search_engine.search_progress.progress_percent == 100.0,
-        100.0,
-        p.app.screen.search_engine.search_progress.progress_percent,
-    )
-    await assert_with_timeout(
-        lambda: len(p.app.screen._grep_result_list.grep_results) == GREP_RESULT_COUNT,
-        GREP_RESULT_COUNT,
-        len(p.app.screen._grep_result_list.grep_results),
-    )
-    await assert_with_timeout(
-        lambda: len(list(p.app.query("ListItem").results())) == GREP_RESULT_COUNT,
-        GREP_RESULT_COUNT,
-        len(list(p.app.query("ListItem").results())),
-    )
+        for item in list_items:
+            await pilot.click(f"#{item.id}")
+            await pilot.pause()
 
+            assert item.highlighted is True
+            assert pilot.app.screen._get_selected_grep_result().list_item == item
 
-async def select_search_results(p: Pilot):
-    list_items = list(p.app.query("ListItem").results())
+    async def test_open_result(self, pilot):
+        select_item = pilot.app.screen._grep_result_list.highlighted_child
+        assert select_item is not None
+        select_grep_result = pilot.app.screen._get_selected_grep_result()
+        assert select_grep_result.list_item == select_item
 
-    for item in list_items:
-        await p.click(f"#{item.id}")
-        await p.pause()
+        await pilot.click("#open-button")
+        await pilot.pause()
 
-        assert item.highlighted is True
-        assert p.app.screen._get_selected_grep_result().list_item == item
+        assert pilot.app.screen.name == "result"
 
+        assert pilot.app.screen._partition == TEST_FULL_PARTITION
+        assert pilot.app.screen._block_size == TEST_BLOCK_SIZE
+        assert pilot.app.screen._inode == select_grep_result.inode
 
-async def open_result(p: Pilot):
-    select_item = p.app.screen._grep_result_list.highlighted_child
-    assert select_item is not None
-    select_grep_result = p.app.screen._get_selected_grep_result()
-    assert select_grep_result.list_item == select_item
+    async def test_result_content(self, pilot):
+        await pilot.pause()
 
-    await p.click("#open-button")
-    await p.pause()
+        assert (
+            str(pilot.app.screen._inode)
+            in pilot.app.screen._inode_label.renderable.plain
+        )
+        assert pilot.app.screen._block_count_label.renderable.plain.startswith("0 ")
+        assert get_expected_block_content_text(
+            pilot.app.screen._inode
+        ) == get_block_content_text(pilot.app.screen._block_content)
 
-    assert p.app.screen.name == "result"
+    async def test_select_first_result(self, pilot):
+        await pilot.click("#add-block-button")
+        await pilot.pause()
 
-    assert p.app.screen._partition == TEST_FULL_PARTITION
-    assert p.app.screen._block_size == TEST_BLOCK_SIZE
-    assert p.app.screen._inode == select_grep_result.inode
+        assert pilot.app.screen._block_count_label.renderable.plain.startswith("1 ")
+        assert pilot.app.screen._save_button.disabled is False
 
+        assert len(pilot.app.screen._saver._results) == 1
+        await assert_current_result_is_selected_for_save(pilot)
 
-async def verify_result(p: Pilot):
-    await p.pause()
+        await pilot.click("#add-block-button")
+        await pilot.pause()
 
-    assert str(p.app.screen._inode) in p.app.screen._inode_label.renderable.plain
-    assert p.app.screen._block_count_label.renderable.plain.startswith("0 ")
-    assert get_expected_block_content_text(
-        p.app.screen._inode
-    ) == get_block_content_text(p.app.screen._block_content)
+        assert len(pilot.app.screen._saver._results) == 1
+        add_expected_save_result(pilot)
 
+    async def test_select_next_result(self, pilot):
+        current_inode = pilot.app.screen._inode
+        await pilot.click("#next-button")
+        await pilot.pause()
 
-async def select_first_result(p: Pilot):
-    await p.click("#add-block-button")
+        assert pilot.app.screen._inode != current_inode
 
-    assert p.app.screen._block_count_label.renderable.plain.startswith("1 ")
-    assert p.app.screen._save_button.disabled is False
+        assert (
+            str(pilot.app.screen._inode)
+            in pilot.app.screen._inode_label.renderable.plain
+        )
 
-    assert len(p.app.screen._saver._results) == 1
-    await assert_current_result_is_selected_for_save(p)
+        assert get_expected_block_content_text(
+            pilot.app.screen._inode
+        ) == get_block_content_text(pilot.app.screen._block_content)
 
-    await p.click("#add-block-button")
-    assert len(p.app.screen._saver._results) == 1
-    add_expected_save_result(p)
+        await pilot.click("#add-block-button")
+        await pilot.pause()
 
+        assert pilot.app.screen._block_count_label.renderable.plain.startswith("2 ")
 
-async def select_next_result(p: Pilot):
-    current_inode = p.app.screen._inode
-    await p.click("#next-button")
-    await p.pause()
+        assert len(pilot.app.screen._saver._results) == 2
+        await assert_current_result_is_selected_for_save(pilot)
 
-    assert p.app.screen._inode != current_inode
+        await pilot.click("#add-block-button")
+        assert len(pilot.app.screen._saver._results) == 2
+        add_expected_save_result(pilot)
 
-    assert str(p.app.screen._inode) in p.app.screen._inode_label.renderable.plain
+    async def test_select_previous_result(self, pilot):
+        current_inode = pilot.app.screen._inode
+        await pilot.click("#previous-button")
+        await pilot.pause()
 
-    assert get_expected_block_content_text(
-        p.app.screen._inode
-    ) == get_block_content_text(p.app.screen._block_content)
+        assert pilot.app.screen._inode != current_inode
 
-    await p.click("#add-block-button")
-    await p.pause()
+        current_inode = pilot.app.screen._inode
+        await pilot.click("#previous-button")
+        await pilot.pause()
 
-    assert p.app.screen._block_count_label.renderable.plain.startswith("2 ")
+        assert pilot.app.screen._inode != current_inode
 
-    assert len(p.app.screen._saver._results) == 2
-    await assert_current_result_is_selected_for_save(p)
+        assert (
+            str(pilot.app.screen._inode)
+            in pilot.app.screen._inode_label.renderable.plain
+        )
+        assert get_expected_block_content_text(
+            pilot.app.screen._inode
+        ) == get_block_content_text(pilot.app.screen._block_content)
 
-    await p.click("#add-block-button")
-    assert len(p.app.screen._saver._results) == 2
-    add_expected_save_result(p)
+        await pilot.click("#add-block-button")
+        await pilot.pause()
 
+        assert pilot.app.screen._block_count_label.renderable.plain.startswith("3 ")
 
-async def select_previous_result(p: Pilot):
-    current_inode = p.app.screen._inode
-    await p.click("#previous-button")
-    assert p.app.screen._inode != current_inode
+        assert len(pilot.app.screen._saver._results) == 3
+        await assert_current_result_is_selected_for_save(pilot)
 
-    current_inode = p.app.screen._inode
-    await p.click("#previous-button")
-    await p.pause()
+        await pilot.click("#add-block-button")
+        await pilot.pause()
 
-    assert p.app.screen._inode != current_inode
+        assert len(pilot.app.screen._saver._results) == 3
+        add_expected_save_result(pilot)
 
-    assert str(p.app.screen._inode) in p.app.screen._inode_label.renderable.plain
-    assert get_expected_block_content_text(
-        p.app.screen._inode
-    ) == get_block_content_text(p.app.screen._block_content)
+    async def test_start_save_process(self, pilot):
+        await pilot.click("#save-button")
+        await pilot.pause()
 
-    await p.click("#add-block-button")
-    await p.pause()
+        assert pilot.app.screen.name == "save"
 
-    assert p.app.screen._block_count_label.renderable.plain.startswith("3 ")
+    async def test_edit_save_path(self, pilot, tmp_path: Path):
+        await pilot.click("#edit-save-path-button")
+        await pilot.pause()
 
-    assert len(p.app.screen._saver._results) == 3
-    await assert_current_result_is_selected_for_save(p)
+        assert pilot.app.screen.name == "path_edit"
 
-    await p.click("#add-block-button")
-    await p.pause()
+        tmp_tree_node = None
+        for n in pilot.app.screen._directory_tree._tree_nodes.values():
+            if "tmp" in n._label:
+                tmp_tree_node = n
+                break
 
-    assert len(p.app.screen._saver._results) == 3
-    add_expected_save_result(p)
+        assert tmp_tree_node is not None
+        pilot.app.screen._directory_tree.selected_dir = tmp_path
 
+        await pilot.click("#confirm-button")
+        await pilot.pause()
 
-async def start_save_process(p: Pilot):
-    await p.click("#save-button")
-    assert p.app.screen.name == "save"
+        assert pilot.app.screen.name == "save"
+        assert pilot.app.screen._saver.save_path == tmp_path
 
+    async def test_save_results(self, pilot):
+        await pilot.click("#save-button")
+        await pilot.pause()
 
-async def edit_save_path(p: Pilot, tmp_path: Path):
-    await p.click("#edit-save-path-button")
-    assert p.app.screen.name == "path_edit"
+        assert pilot.app.screen.name == "save-modal"
 
-    tmp_tree_node = None
-    for n in p.app.screen._directory_tree._tree_nodes.values():
-        if "tmp" in n._label:
-            tmp_tree_node = n
-            break
+        await pilot.click("#ok-button")
+        await pilot.pause()
 
-    assert tmp_tree_node is not None
-    p.app.screen._directory_tree.selected_dir = tmp_path
+        assert pilot.app.screen.name == "result"
 
-    await p.click("#confirm-button")
-    assert p.app.screen.name == "save"
-    assert p.app.screen._saver.save_path == tmp_path
+    def check_saved_result(tmp_path: Path):
+        dir_files = list(tmp_path.iterdir())
+        assert len(dir_files) == 1
+        assert dir_files[0].name.startswith("recoverpy-save-")
 
-
-async def save_results(p: Pilot):
-    await p.click("#save-button")
-    assert p.app.screen.name == "save-modal"
-
-    await p.click("#ok-button")
-    assert p.app.screen.name == "result"
-
-
-def check_saved_result(tmp_path: Path):
-    dir_files = list(tmp_path.iterdir())
-    assert len(dir_files) == 1
-    assert dir_files[0].name.startswith("recoverpy-save-")
-
-    with open(dir_files[0], "r") as f:
-        result = f.read()
-        assert result == get_expected_save_result()
+        with open(dir_files[0], "r") as f:
+            result = f.read()
+            assert result == get_expected_save_result()

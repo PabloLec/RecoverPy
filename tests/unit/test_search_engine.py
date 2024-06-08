@@ -1,8 +1,7 @@
-from time import sleep
-
 import pytest
 
 from tests.fixtures.mock_grep_process import GREP_RESULT_COUNT
+from tests.integration.helper import assert_with_timeout
 
 
 def test_search_params(search_engine):
@@ -22,9 +21,13 @@ async def test_start_search(search_engine):
     assert search_engine._grep_process.returncode is None
 
 
-def test_search_progress_after_search(search_engine):
-    sleep(0.5)
-    assert search_engine.search_progress.result_count == GREP_RESULT_COUNT
+@pytest.mark.asyncio
+async def test_search_progress_after_search(search_engine):
+    await assert_with_timeout(
+        lambda: search_engine.search_progress.result_count == GREP_RESULT_COUNT,
+        GREP_RESULT_COUNT,
+        search_engine.search_progress.result_count,
+    )
     assert search_engine.search_progress.progress_percent == 100.0
 
 
