@@ -73,7 +73,7 @@ recoverpy = "recoverpy.__init__:main"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-textual = "0.65.2"
+textual = "0.66.0"
 
 [tool.poetry.dev-dependencies]
 coverage = "^7.5.3"
