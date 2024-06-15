@@ -227,6 +227,7 @@ class TestFullWorkflow:
         add_expected_save_result(pilot)
 
     async def test_select_previous_result(self, pilot):
+        previous_button = pilot.app.query("#previous-button").only_one()
         current_inode = pilot.app.screen._inode
         await pilot.click("#previous-button")
         await pilot.pause()
@@ -234,6 +235,13 @@ class TestFullWorkflow:
         assert pilot.app.screen._inode != current_inode
 
         current_inode = pilot.app.screen._inode
+
+        await assert_with_timeout(
+            lambda: not previous_button.has_class("-active"),
+            False,
+            not previous_button.has_class("-active"),
+        )
+
         await pilot.click("#previous-button")
         await pilot.pause()
 
