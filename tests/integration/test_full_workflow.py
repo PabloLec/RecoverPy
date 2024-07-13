@@ -51,6 +51,8 @@ class TestFullWorkflow:
         for screen in pilot.app.screens:
             assert pilot.app.is_screen_installed(pilot.app.screens[screen])
         assert pilot.app.screen.name == "params"
+
+        await pilot.pause()
         assert pilot.app.screen._partition_list is not None
         assert (
             len(pilot.app.screen._partition_list.list_items) == VISIBLE_PARTITION_COUNT

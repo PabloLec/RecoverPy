@@ -2,6 +2,7 @@
 
 from typing import Dict, Optional
 
+from textual import work
 from textual.events import Mount
 from textual.widgets import Label, ListItem, ListView
 
@@ -30,15 +31,16 @@ class PartitionList(ListView):
         self.set_partitions()
         return super()._on_mount(_)
 
-    def set_partitions(self, filtered: bool = True) -> None:
-        self.clear()
+    @work(exclusive=True)
+    async def set_partitions(self, filtered: bool = True) -> None:
+        await self.clear()
         self.list_items.clear()
 
         for partition in get_partitions(filtered):
             log.debug(f"partition_list - Appending partition {partition.name}")
             list_item = self._create_list_item(partition)
             self.list_items[list_item.id] = partition
-            self.append(list_item)
+            await self.append(list_item)
 
     def _create_list_item(self, partition: Partition) -> ListItem:
         list_item = ListItem(_get_label(partition), id=_get_partition_id(partition))
