@@ -78,7 +78,7 @@ textual = "0.73.0"
 [tool.poetry.dev-dependencies]
 coverage = "^7.6.0"
 pytest = "^8.2.2"
-pylint = "^3.2.5"
+pylint = "^3.2.6"
 isort = "^5.13.2"
 black = "^24.4"
 flake8 = "^7.1.0"
