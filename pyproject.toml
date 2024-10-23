@@ -98,7 +98,7 @@ flake8-aaa = "^0.17.0"
 pytest-mock = "3.14.0"
 pytest-cov = "^5.0.0"
 coverage-badge = "^1.1.2"
-mypy = "^1.12"
+mypy = "^1.13"
 types-PyYAML = "^6.0.12"
 
 [tool.poetry.group.dev.dependencies]
