@@ -1222,18 +1222,18 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
 name = "textual"
-version = "0.79.1"
+version = "0.88.0"
 description = "Modern Text User Interface framework"
 optional = false
 python-versions = "<4.0.0,>=3.8.1"
 files = [
-    {file = "textual-0.79.1-py3-none-any.whl", hash = "sha256:75f26c0a8829560a1a8cc739f758c2c1c684246e27166acb3f4ad40110200692"},
-    {file = "textual-0.79.1.tar.gz", hash = "sha256:2aaa9778beac5e56957794ee492bd8d281d39516ccb0e507e726484a1327d8b2"},
+    {file = "textual-0.88.0-py3-none-any.whl", hash = "sha256:87a1085a403e3a95aa4b954c530d46947d830e9ad4b8c15490104c0b4a452b6a"},
+    {file = "textual-0.88.0.tar.gz", hash = "sha256:bf9cc3ec9d34957c361eabf739e59272295323478cc822633fb0a7b7cc2a0ac3"},
 ]
 
 [package.dependencies]
 markdown-it-py = {version = ">=2.1.0", extras = ["linkify", "plugins"]}
-platformdirs = ">=4.2.2,<5.0.0"
+platformdirs = ">=3.6.0,<5"
 rich = ">=13.3.3"
 typing-extensions = ">=4.4.0,<5.0.0"
 
@@ -1321,4 +1321,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "5896dd7c29c10e8116a826f96e71fd140e5aa09e54dbfb4952c791a1bbc323d5"
+content-hash = "d97b17eaa3206f04a9808e864fa65d2965735f117e40bd2d19523503cebb1301"
