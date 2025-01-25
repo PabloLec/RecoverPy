@@ -88,6 +88,8 @@ dev = [
     "pytest-asyncio>=0.24.0",
     "pytest>=8.3.4",
     "ruff>=0.9.3",
+    "pytest-mock>=3.14.0",
+    "pytest-cov>=5.0.0",
 ]
 
 [build-system]
