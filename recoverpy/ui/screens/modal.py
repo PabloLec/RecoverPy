@@ -43,6 +43,11 @@ async def install_and_push_modal(
     message: str,
     callback: Optional[Callable[[], None]] = None,
 ) -> None:
+    try:
+        app.uninstall_screen(app.get_screen(name))
+    except KeyError:
+        pass
+    
     modal = Modal(name, message=message, callback=callback)
     app.install_screen(modal, name)
     await app.push_screen(name)

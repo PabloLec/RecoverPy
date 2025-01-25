@@ -41,6 +41,7 @@ class RecoverpyApp(App[None]):
             log.debug(f"Installed screen {screen_name}")
 
     async def on_mount(self) -> None:
+        self.theme = "textual-dark"
         await self.push_screen("params")
         await verify_app_environment(self)
 
