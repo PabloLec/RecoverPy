@@ -36,9 +36,9 @@ async def assert_with_timeout(check_func, expected, actual, timeout=10.0, interv
             return
         if asyncio.get_event_loop().time() > end_time:
             func_src = inspect.getsource(check_func).strip()
-            assert (
-                False
-            ), f"Timeout reached before condition in `{func_src}` became true. Expected: {expected}, Actual: {actual}"
+            assert False, (
+                f"Timeout reached before condition in `{func_src}` became true. Expected: {expected}, Actual: {actual}"
+            )
         await asyncio.sleep(interval)
 
 

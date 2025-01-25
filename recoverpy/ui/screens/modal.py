@@ -38,7 +38,10 @@ class Modal(ModalScreen[None]):
 
 
 async def install_and_push_modal(
-    app: App[None], name: str, message: str, callback: Optional[Callable] = None  # type: ignore
+    app: App[None],
+    name: str,
+    message: str,
+    callback: Optional[Callable[[], None]] = None,
 ) -> None:
     modal = Modal(name, message=message, callback=callback)
     app.install_screen(modal, name)
