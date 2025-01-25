@@ -2,9 +2,6 @@ name: Test release on PyPI
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
   test_pypi_release:
