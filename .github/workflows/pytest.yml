@@ -22,11 +22,12 @@ jobs:
           architecture: x64
 
       - name: Install dependencies
+        shell: bash
         run: |
-          pip install --upgrade pip
-          pip install poetry
+          python -m pip install --upgrade pip
+          python -m pip install poetry
           poetry export --dev --without-hashes --output requirements.txt
-          pip install -r requirements.txt
+          python -m pip install -r requirements.txt
           sudo apt install progress -y
 
       - name: Run tests
