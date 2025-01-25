@@ -1,4 +1,4 @@
-name: Test release upload
+name: Test release on PyPI
 
 on:
   workflow_dispatch:
