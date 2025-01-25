@@ -24,8 +24,8 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
+          python -m pip install poetry && python -m pip install poetry-plugin-export
           python -m pip install --upgrade pip
-          python -m pip install poetry
           poetry export --dev --without-hashes --output requirements.txt
           python -m pip install -r requirements.txt
           sudo apt install progress -y
