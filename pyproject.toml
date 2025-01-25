@@ -83,32 +83,11 @@ recoverpy = "recoverpy.__init__:main"
 
 [dependency-groups]
 dev = [
-    "pytest-asyncio<0.25.0,>=0.20.3",
-    "ruff<0.8.6,>=0.5.1",
-    "coverage<8.0.0,>=7.6.1",
-    "pytest<9.0.0,>=8.3.4",
-    "pylint<4.0.0,>=3.2.7",
-    "isort<6.0.0,>=5.13.2",
-    "black<25.0,>=24.8",
-    "flake8<8.0.0,>=7.1.1",
-    "pre-commit<4.0.0,>=3.5.0",
-    "flake8-bandit<5.0.0,>=4.1.1",
-    "flake8-bugbear<25.0.0,>=24.12.12",
-    "flake8-builtins<3.0.0,>=2.5.0",
-    "flake8-comprehensions<4.0.0,>=3.15.0",
-    "darglint<2.0.0,>=1.8.1",
-    "flake8-docstrings<2.0.0,>=1.7.0",
-    "flake8-isort<7.0.0,>=6.1.1",
-    "flake8-pytest-style<3.0.0,>=2.0.0",
-    "flake8-mutable<2.0.0,>=1.2.0",
-    "flake8-html<1.0.0,>=0.4.1",
-    "flake8-simplify<1.0.0,>=0.21.0",
-    "flake8-aaa<1.0.0,>=0.17.0",
-    "pytest-mock==3.14.0",
-    "pytest-cov<6.0.0,>=5.0.0",
-    "coverage-badge<2.0.0,>=1.1.2",
-    "mypy<2.0,>=1.14",
-    "types-PyYAML<7.0.0,>=6.0.12",
+    "isort>=5.13.2",
+    "pyright>=1.1.392.post0",
+    "pytest-asyncio>=0.24.0",
+    "pytest>=8.3.4",
+    "ruff>=0.9.3",
 ]
 
 [build-system]
@@ -121,10 +100,12 @@ url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
 explicit = true
 
-[tool.mypy]
-python_version = 3.8
-ignore_missing_imports = "true"
-disallow_untyped_calls = "false"
+[tool.pyright]
+include = ["recoverpy"]
+exclude = ["recoverpy/ui/widgets/directory_tree.py"]
+typeCheckingMode = "strict"
+reportUnknownArgumentType = "none"
+reportUnknownMemberType = "none"
 
 [tool.pytest.ini_options]
 markers = [
