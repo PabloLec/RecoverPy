@@ -25,15 +25,17 @@
 ---
 
 <!--ts-->
-   * [Demo](#Demo)
-   * [Installation](#Installation)
-      * [Dependencies](#dependencies)
-      * [Run with pipx](#run-with-pipx)
-      * [Installation from pip](#installation-from-pip)
-      * [Installation from AUR](#installation-from-aur)
-   * [Usage](#Usage)
-   * [Tips](#Tips)
-   * [Contributing](#Contributing)
+
+* [Demo](#Demo)
+* [Installation](#Installation)
+    * [Dependencies](#dependencies)
+    * [Run with pipx](#run-with-pipx)
+    * [Installation from pip](#installation-from-pip)
+    * [Installation from AUR](#installation-from-aur)
+* [Usage](#Usage)
+* [Tips](#Tips)
+* [Contributing](#Contributing)
+
 <!--te-->
 
 ---
@@ -45,54 +47,51 @@ RecoverPy is a powerful tool that leverages your system capabilities to recover 
 Unlike others, you can not only recover deleted files but also **overwritten** data.
 
 Every block of your partition will be scanned. You can even find a string in binary files.
+
 ## Demo
 
 <p align="center">
     <img src="docs/assets/demo.gif">
 </p>
 
-## Installation
+## Setup
 
 :penguin: RecoverPy is currently only available on Linux systems.  
 :red_circle: **You must be root or use sudo**.
 
 ### Dependencies
 
-**Mandatory:** To list and search through your partitions, recoverpy uses `grep`, `dd`, and `lsblk` commands. Although, if you're running a major Linux distrucition these tools should already be installed.
+**Mandatory:** To list and search through your partitions, recoverpy uses `grep`, `dd`, and `lsblk` commands. Although,
+if you're running a major Linux distrucition these tools should already be installed.
 
 **Optional:** To display real time grep progress, you can install `progress`.
 
 To install all dependencies:
+
 - Debian-like: `apt install grep coreutils util-linux progress`
 - Arch: `pacman -S grep coreutils util-linux progress`
 - Fedora: `dnf install grep coreutils util-linux progress`
 
+## Usage
+
+### Run with uvx
+
+`sudo uvx recoverpy`
 
 ### Run with pipx
 
-You can **directly run recoverpy with pipx in an isolated environment** without installing it.  
-To install pipx, follow the [official documentation](https://pipxproject.github.io/pipx/installation/).  
-To run recoverpy with pipx, simply run:  
-
 `sudo pipx run recoverpy`
 
-#### Installation from pip
+### Installation from pip
 
 `python3 -m pip install recoverpy`
 
-#### Installation from AUR
-
-`yay -S python-recoverpy`
-
-## Usage
-
-```bash
-python3 -m recoverpy
-```
+then run `sudo python3 -m recoverpy`
 
 ---
 
-- **Select the system partition** in which your file was. If you are out of luck, you can alternatively search in your home partition, maybe your IDE, text editor, etc. made a backup at some point.
+- **Select the system partition** in which your file was. If you are out of luck, you can alternatively search in your
+  home partition, maybe your IDE, text editor, etc. made a backup at some point.
 
 - **Type a text string to search**. See tips below for better results.
 
@@ -102,12 +101,14 @@ python3 -m recoverpy
 
 - Once you have found your precious, **select `Open`**.
 
-- You can now either save this block individually or explore neighboring blocks for the remaining parts of the file. You could then save it all in one file.
+- You can now either save this block individually or explore neighboring blocks for the remaining parts of the file. You
+  could then save it all in one file.
 
 ## Tips
 
 - Always do backups! Yes, maybe too late...
-- **Unmount your partition before you do anything!** Although you can search with your partition still mounted, it is highly recommended to unmount your partition to avoid any alteration to your file.
+- **Unmount your partition before you do anything!** Although you can search with your partition still mounted, it is
+  highly recommended to unmount your partition to avoid any alteration to your file.
 
 Regarding the searched string:
 
@@ -117,7 +118,8 @@ Regarding the searched string:
 
 When you have found your file:
 
-- You might see multiple results. Your system often use different partion blocks to save successive versions of a file. Make sure you've found the last version.
+- You might see multiple results. Your system often use different partion blocks to save successive versions of a file.
+  Make sure you've found the last version.
 - Try exploring neighboring blocks to be sure to save your whole file.
 
 ## Contributing

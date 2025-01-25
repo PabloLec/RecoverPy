@@ -2,48 +2,26 @@ name: Release on PyPI
 
 on:
   release:
-    types: [released]
+    types: [ released ]
   workflow_dispatch:
-    branches: [main]
-    inputs:
-      version:
-        description: 'Version'
-        required: true
+    branches: [ main ]
 
 jobs:
   pypi_release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Install Poetry
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+
+      - name: Publish to PyPi
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
-
-      - name: Add Poetry to path
-        run: echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
-
-      - name: Install dependencies
-        run: |
-          poetry install
-          sudo apt-get install progress
-
-      - name: Run tests
-        run: poetry run pytest
-
-      - name: Set version based on tag or input
-        run: |
-          if [[ $GITHUB_EVENT_NAME == 'release' ]]; then
-            VERSION=${GITHUB_REF#refs/tags/}
-          else
-            VERSION=${{ github.event.inputs.version }}
-          fi
-          poetry version $VERSION
-
-      - name: Configure Poetry
-        run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
-
-      - name: Publish package
-        run: poetry publish --build
+          uv build
+          uv publish
