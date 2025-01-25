@@ -8,7 +8,7 @@ dependencies = [
     "textual==1.0.0",
 ]
 name = "recoverpy"
-version = "2.1.9"
+version = "2.2.0"
 description = "A TUI to recover overwritten or deleted data."
 readme = "README.md"
 keywords = [
