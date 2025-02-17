@@ -29,7 +29,7 @@ jobs:
           sed -i "s/license\=$PARTITION_COLUMN.*/license\=(GNU GPLv3)/" PKGBUILD
 
       - name: Publish AUR package
-        uses: KSXGitHub/github-actions-deploy-aur@v4.1.0
+        uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
         with:
           pkgname: python-recoverpy
           pkgbuild: ./PKGBUILD
