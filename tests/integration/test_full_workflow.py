@@ -54,11 +54,11 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         assert pilot.app.screen._start_search_button.disabled is True
 
         # Test partition list default state
-        filter_checkbox = pilot.app.query("Checkbox").only_one()
+        filter_checkbox = pilot.app.screen.query("Checkbox").only_one()
         assert filter_checkbox is not None
         assert filter_checkbox.value is True
 
-        items = list(pilot.app.query("ListItem").results())
+        items = list(pilot.app.screen.query("ListItem").results())
         assert len(items) == VISIBLE_PARTITION_COUNT
 
         # Test partition list unfiltered
@@ -67,10 +67,10 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
 
         assert filter_checkbox.value is False
         await assert_with_timeout(
-            lambda: len(list(pilot.app.query("ListItem").results()))
+            lambda: len(list(pilot.app.screen.query("ListItem").results()))
             == UNFILTERED_PARTITION_COUNT,
             UNFILTERED_PARTITION_COUNT,
-            len(list(pilot.app.query("ListItem").results())),
+            len(list(pilot.app.screen.query("ListItem").results())),
         )
 
         # Test partition list filtered
@@ -79,10 +79,10 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
 
         assert filter_checkbox.value is True
         await assert_with_timeout(
-            lambda: len(list(pilot.app.query("ListItem").results()))
+            lambda: len(list(pilot.app.screen.query("ListItem").results()))
             == VISIBLE_PARTITION_COUNT,
             VISIBLE_PARTITION_COUNT,
-            len(list(pilot.app.query("ListItem").results())),
+            len(list(pilot.app.screen.query("ListItem").results())),
         )
 
         # Test input search parameters
@@ -133,14 +133,14 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
             len(pilot.app.screen._grep_result_list.grep_results),
         )
         await assert_with_timeout(
-            lambda: len(list(pilot.app.query("ListItem").results()))
+            lambda: len(list(pilot.app.screen.query("ListItem").results()))
             == GREP_RESULT_COUNT,
             GREP_RESULT_COUNT,
-            len(list(pilot.app.query("ListItem").results())),
+            len(list(pilot.app.screen.query("ListItem").results())),
         )
 
         # Test select search results
-        list_items = list(pilot.app.query("ListItem").results())
+        list_items = list(pilot.app.screen.query("ListItem").results())
 
         for item in list_items:
             await pilot.click(f"#{item.id}")
@@ -223,7 +223,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         add_expected_save_result(pilot)
 
         # Test select previous result
-        previous_button = pilot.app.query("#previous-button").only_one()
+        previous_button = pilot.app.screen.query("#previous-button").only_one()
         current_inode = pilot.app.screen._inode
         await pilot.click("#previous-button")
         await pilot.pause()
