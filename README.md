@@ -1,128 +1,112 @@
 <div align="center">
-    <img src="docs/assets/logo.png" alt="RecoverPy">
+  <img src="docs/assets/logo.png" alt="RecoverPy" width="auto">
+  <h2>RecoverPy</h2>
+  <em>Find and recover deleted or even overwritten files from your Linux partitions, quickly and easily.</em>
+  
+  <br><br>
+
+  ![GitHub release](https://img.shields.io/github/v/release/pablolec/recoverpy?style=flat-square)
+  ![License](https://img.shields.io/github/license/pablolec/recoverpy?style=flat-square)
+  ![Downloads](https://static.pepy.tech/personalized-badge/recoverpy?period=total&units=abbreviation&left_color=grey&right_color=red&left_text=downloads)
+  ![Tests](https://github.com/PabloLec/recoverpy/actions/workflows/pytest.yml/badge.svg?branch=main)
+  
 </div>
 
-<p align="center">
-    <em>Recover overwritten or deleted data.</em>
-</p>
+---
+
+RecoverPy doesn't just recover deleted files, but also helps you **recover overwritten data** by scanning each disk block. Whether it's a lost snippet of code, accidentally deleted configs, or overwritten text files, RecoverPy gives you a powerful, interactive way to get it back.
+
+## ✨ Features
+
+- ✅ Recover **overwritten and deleted files**
+- 🔍 Search file contents by string, even in binary files
+- 📟 Modern, easy-to-use terminal UI
+- 🐧 Linux compatible (all file systems supported)
+- ⚡️ Fast, leveraging core Linux utilities (`grep`, `dd`, `lsblk`)
+
+---
+
+## 🎬 Demo
 
 <p align="center">
-<a href="https://img.shields.io/github/v/release/pablolec/recoverpy" target="_blank">
-    <img src="https://img.shields.io/github/v/release/pablolec/recoverpy" alt="Release">
-</a>
-<a href="https://github.com/PabloLec/recoverpy/blob/main/LICENSE" target="_blank">
-    <img src="https://img.shields.io/github/license/pablolec/recoverpy" alt="License">
-</a>
-<a href="https://pepy.tech/project/recoverpy" target="_blank">
-    <img src="https://static.pepy.tech/personalized-badge/recoverpy?period=total&units=abbreviation&left_color=grey&right_color=red&left_text=downloads" alt="Downloads">
-</a>
-
-<a href="#" target="_blank">
-    <img src="https://github.com/PabloLec/recoverpy/actions/workflows/pytest.yml/badge.svg?branch=main" alt="Tests">
-</a>
+  <img src="docs/assets/demo.gif" alt="RecoverPy Demo">
 </p>
 
 ---
 
-<!--ts-->
+## 📦 Installation
 
-* [Demo](#Demo)
-* [Installation](#Installation)
-    * [Dependencies](#dependencies)
-    * [Run with pipx](#run-with-pipx)
-    * [Installation from pip](#installation-from-pip)
-    * [Installation from AUR](#installation-from-aur)
-* [Usage](#Usage)
-* [Tips](#Tips)
-* [Contributing](#Contributing)
+> **Warning:** You **must** run RecoverPy as root (`sudo`).
 
-<!--te-->
+RecoverPy is Linux-only. Make sure you have these common tools installed (`grep`, `dd`, `lsblk`). Optionally, install `progress` to monitor scan progress:
 
----
+```bash
+# Debian / Ubuntu
+sudo apt install grep coreutils util-linux progress
 
-# RecoverPy
+# Arch
+sudo pacman -S grep coreutils util-linux progress
 
-RecoverPy is a powerful tool that leverages your system capabilities to recover lost files.
+# Fedora
+sudo dnf install grep coreutils util-linux progress
+```
 
-Unlike others, you can not only recover deleted files but also **overwritten** data.
+### Quick Run (no installation)
 
-Every block of your partition will be scanned. You can even find a string in binary files.
+Using `pipx`:
 
-## Demo
+```bash
+sudo pipx run recoverpy
+```
 
-<p align="center">
-    <img src="docs/assets/demo.gif">
-</p>
+Or using `uvx`:
 
-## Setup
+```bash
+sudo uvx recoverpy
+```
 
-:penguin: RecoverPy is currently only available on Linux systems.  
-:red_circle: **You must be root or use sudo**.
+### Install from PyPI
 
-### Dependencies
-
-**Mandatory:** To list and search through your partitions, recoverpy uses `grep`, `dd`, and `lsblk` commands. Although,
-if you're running a major Linux distrucition these tools should already be installed.
-
-**Optional:** To display real time grep progress, you can install `progress`.
-
-To install all dependencies:
-
-- Debian-like: `apt install grep coreutils util-linux progress`
-- Arch: `pacman -S grep coreutils util-linux progress`
-- Fedora: `dnf install grep coreutils util-linux progress`
-
-## Usage
-
-### Run with uvx
-
-`sudo uvx recoverpy`
-
-### Run with pipx
-
-`sudo pipx run recoverpy`
-
-### Installation from pip
-
-`python3 -m pip install recoverpy`
-
-then run `sudo python3 -m recoverpy`
+```bash
+python3 -m pip install recoverpy
+sudo recoverpy
+```
 
 ---
 
-- **Select the system partition** in which your file was. If you are out of luck, you can alternatively search in your
-  home partition, maybe your IDE, text editor, etc. made a backup at some point.
+## 💻 Usage
 
-- **Type a text string to search**. See tips below for better results.
+1. **Launch RecoverPy:**
 
-- **Start search**, Results will appear in the left-hand box.
+```bash
+sudo recoverpy
+```
 
-- **Select a result**.
+2. **Select Partition:**  
+   Choose the partition where your lost data resides. If unsure, try scanning your `/home` partition, it might contain editor or IDE backups.
 
-- Once you have found your precious, **select `Open`**.
+3. **Search Content:**  
+   Enter a unique string from the lost file content. RecoverPy will scan disk blocks to locate matches.
 
-- You can now either save this block individually or explore neighboring blocks for the remaining parts of the file. You
-  could then save it all in one file.
+4. **Find & Recover:**  
+   Results appear interactively. Select a result, preview the block, and save it. Explore neighboring blocks if the file spans multiple disk blocks.
 
-## Tips
+---
 
-- Always do backups! Yes, maybe too late...
-- **Unmount your partition before you do anything!** Although you can search with your partition still mounted, it is
-  highly recommended to unmount your partition to avoid any alteration to your file.
+## 💡 Recovery Tips
 
-Regarding the searched string:
+- 🛑 **Unmount partition first:** Reduce risk of data overwriting.
+- 🎯 **Be specific:** Use unique, simple search strings.
+- ⏳ **Act quickly:** The sooner you scan, the higher your recovery chances.
+- 📑 **Check adjacent blocks:** Your file might span several blocks—check them all.
 
-- Be concise, find something that could be unique to your file.
-- Stay simple, your string is escaped but exotic characters may affect your results.
-- Try to remember the last edit you have made to your file.
+---
 
-When you have found your file:
+## 🤝 Contributing
 
-- You might see multiple results. Your system often use different partion blocks to save successive versions of a file.
-  Make sure you've found the last version.
-- Try exploring neighboring blocks to be sure to save your whole file.
+Found a bug or have an idea? PRs, issues, and suggestions are warmly welcome. Check out our [contributing guide](CONTRIBUTING.md) for how to get involved!
 
-## Contributing
+---
 
-Thank you for considering contributing to RecoverPy.
-Any request, bug report or PR are welcome. Please read the [contributing guide](CONTRIBUTING.md).
+If RecoverPy saved your day, consider ⭐️ starring the repo, thanks for your support!
+
