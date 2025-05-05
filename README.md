@@ -98,7 +98,7 @@ sudo recoverpy
 - 🛑 **Unmount partition first:** Reduce risk of data overwriting.
 - 🎯 **Be specific:** Use unique, simple search strings.
 - ⏳ **Act quickly:** The sooner you scan, the higher your recovery chances.
-- 📑 **Check adjacent blocks:** Your file might span several blocks—check them all.
+- 📑 **Check adjacent blocks:** Your file might span several blocks, check them all.
 
 ---
 
