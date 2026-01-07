@@ -17,7 +17,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
 
       - name: Publish to PyPi
         env:
