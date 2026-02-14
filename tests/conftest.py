@@ -3,14 +3,10 @@ from unittest.mock import MagicMock
 import pytest
 import pytest_asyncio
 
-from recoverpy.lib.storage.block_device_metadata import DeviceInfo
 from recoverpy.lib.search.search_engine import SearchEngine
+from recoverpy.lib.storage.block_device_metadata import DeviceInfo
 
-from .fixtures import (
-    mock_device_discovery,
-    mock_block_reader,
-    mock_scan_hits,
-)
+from .fixtures import mock_block_reader, mock_device_discovery, mock_scan_hits
 
 TEST_BLOCK_SIZE = 4096
 

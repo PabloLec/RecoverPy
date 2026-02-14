@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from recoverpy.ui.widgets.folder_only_directory_tree import FolderOnlyDirectoryTree
+from recoverpy.ui.widgets.folder_only_directory_tree import \
+    FolderOnlyDirectoryTree
 
 
 def test_filter_paths_keeps_only_directories(tmp_path: Path) -> None:

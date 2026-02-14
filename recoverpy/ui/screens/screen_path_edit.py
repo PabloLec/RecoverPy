@@ -8,7 +8,8 @@ from textual.screen import Screen
 from textual.widgets import Button, DirectoryTree, Label
 
 from recoverpy.log.logger import log
-from recoverpy.ui.widgets.folder_only_directory_tree import FolderOnlyDirectoryTree
+from recoverpy.ui.widgets.folder_only_directory_tree import \
+    FolderOnlyDirectoryTree
 
 
 class PathEditScreen(Screen[None]):

@@ -10,8 +10,8 @@ from textual.screen import Screen
 from textual.timer import Timer
 from textual.widgets import Button, Label
 
-from recoverpy.lib.storage.block_device_metadata import DeviceIOError
 from recoverpy.lib.search.search_engine import SearchEngine
+from recoverpy.lib.storage.block_device_metadata import DeviceIOError
 from recoverpy.log.logger import log
 from recoverpy.models.search_result import SearchResult
 from recoverpy.ui.widgets.search_result_list import SearchResultList

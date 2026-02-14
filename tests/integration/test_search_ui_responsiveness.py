@@ -5,8 +5,8 @@ from unittest.mock import MagicMock
 import pytest
 
 from recoverpy import RecoverpyApp
-from recoverpy.lib.storage.block_device_metadata import DeviceInfo
 from recoverpy.lib.search.binary_scanner import ScanHit
+from recoverpy.lib.storage.block_device_metadata import DeviceInfo
 from recoverpy.ui.screens.screen_params import ParamsScreen
 from tests.conftest import TEST_BLOCK_SIZE
 

@@ -2,7 +2,8 @@ import errno
 
 import pytest
 
-from recoverpy.lib.storage.byte_range_reader import BlockExtractionError, extract_range, read_block
+from recoverpy.lib.storage.byte_range_reader import (BlockExtractionError,
+                                                     extract_range, read_block)
 
 
 def test_extract_range_success(tmp_path):

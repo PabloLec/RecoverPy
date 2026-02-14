@@ -7,21 +7,14 @@ from textual.widgets import DirectoryTree
 from recoverpy import RecoverpyApp
 from recoverpy.lib.storage.block_device_metadata import DeviceInfo
 from tests.conftest import TEST_BLOCK_SIZE
+from tests.fixtures.mock_device_discovery import (UNFILTERED_PARTITION_COUNT,
+                                                  VISIBLE_PARTITION_COUNT)
 from tests.fixtures.mock_scan_hits import SCAN_HIT_COUNT
-from tests.fixtures.mock_device_discovery import (
-    UNFILTERED_PARTITION_COUNT,
-    VISIBLE_PARTITION_COUNT,
-)
 from tests.integration.helper import (
-    TEST_FULL_PARTITION,
-    TEST_PARTITION,
-    add_expected_save_result,
-    assert_current_result_is_selected_for_save,
-    assert_with_timeout,
-    get_block_content_text,
-    get_expected_block_content_text,
-    get_expected_save_result,
-)
+    TEST_FULL_PARTITION, TEST_PARTITION, add_expected_save_result,
+    assert_current_result_is_selected_for_save, assert_with_timeout,
+    get_block_content_text, get_expected_block_content_text,
+    get_expected_save_result)
 
 
 @pytest.mark.asyncio

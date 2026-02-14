@@ -1,14 +1,9 @@
 import pytest
 
 from recoverpy.lib.storage.block_device_inventory import (
-    DeviceDiscoveryError,
-    _IGNORED_PARTITION_TYPES,
-    get_partitions,
-)
-from tests.fixtures.mock_device_discovery import (
-    UNFILTERED_PARTITION_COUNT,
-    VISIBLE_PARTITION_COUNT,
-)
+    _IGNORED_PARTITION_TYPES, DeviceDiscoveryError, get_partitions)
+from tests.fixtures.mock_device_discovery import (UNFILTERED_PARTITION_COUNT,
+                                                  VISIBLE_PARTITION_COUNT)
 
 
 def test_get_partitions_filtered():

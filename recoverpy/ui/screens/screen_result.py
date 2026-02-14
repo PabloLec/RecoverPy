@@ -8,9 +8,10 @@ from textual.containers import Horizontal
 from textual.screen import Screen
 from textual.widgets import Button, Label, RichLog
 
-from recoverpy.lib.storage.byte_range_reader import BlockExtractionError, read_block
-from recoverpy.lib.text.text_processing import decode_result, get_printable
 from recoverpy.lib.saver import Saver
+from recoverpy.lib.storage.byte_range_reader import (BlockExtractionError,
+                                                     read_block)
+from recoverpy.lib.text.text_processing import decode_result, get_printable
 from recoverpy.log.logger import log
 from recoverpy.ui.screens.screen_save import SaveScreen
 

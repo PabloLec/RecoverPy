@@ -5,14 +5,8 @@ from types import SimpleNamespace
 import pytest
 
 from recoverpy.lib.storage.block_device_metadata import (
-    BLKGETSIZE64,
-    BLKPBSZGET,
-    BLKROGET,
-    BLKSSZGET,
-    DeviceIOError,
-    get_device_info,
-    get_logical_block_size,
-)
+    BLKGETSIZE64, BLKPBSZGET, BLKROGET, BLKSSZGET, DeviceIOError,
+    get_device_info, get_logical_block_size)
 
 
 def test_get_device_info_fallback_for_regular_file(tmp_path):
