@@ -1,6 +1,7 @@
 from re import findall
-from subprocess import DEVNULL, call, check_output
+from subprocess import DEVNULL, call
 
+from recoverpy.lib.device_io import get_logical_block_size
 
 def is_dependency_installed(command: str) -> bool:
     return call(["which", command], stdout=DEVNULL) == 0
@@ -15,12 +16,7 @@ def get_printable(result: str) -> str:
 
 
 def get_block_size(partition: str) -> int:
-    return int(
-        check_output(
-            ["blockdev", "--getbsz", partition],
-            encoding="utf-8",
-        )
-    )
+    return get_logical_block_size(partition)
 
 
 def get_inode(string: str) -> int:

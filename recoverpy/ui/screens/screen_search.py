@@ -11,6 +11,7 @@ from textual.screen import Screen
 from textual.timer import Timer
 from textual.widgets import Button, Label
 
+from recoverpy.lib.device_io import DeviceIOError
 from recoverpy.lib.search.search_engine import SearchEngine
 from recoverpy.log.logger import log
 from recoverpy.models.grep_result import GrepResult
@@ -71,9 +72,15 @@ class SearchScreen(Screen[None]):
         log.debug("search - Search screen composed")
 
     async def on_search_screen_start(self, message: Start) -> None:
-        self.search_engine = SearchEngine(
-            message.selected_partition, message.searched_string
-        )
+        try:
+            self.search_engine = SearchEngine(
+                message.selected_partition, message.searched_string
+            )
+        except DeviceIOError as error:
+            log.error(f"search - {error}")
+            self.notify(error.user_message, severity="error")
+            self.app.pop_screen()
+            return
         self._search_status_label.update("Searching...")
         self.set_focus(self._grep_result_list)
         await self._start_search_engine()

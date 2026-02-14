@@ -91,7 +91,6 @@ class RecoverpyApp(App[None]):
 
     async def on_params_screen_continue(self, message: ParamsScreen.Continue) -> None:
         log.info("User clicked continue on parameters screen")
-        self.pop_screen()
         await self.push_screen("search")
         self.get_screen("search").post_message(
             SearchScreen.Start(message.searched_string, message.selected_partition)
