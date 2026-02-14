@@ -194,7 +194,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
 
         # Test select next result
         current_inode = pilot.app.screen._inode
-        await pilot.click("#next-button")
+        await pilot.press("right")
         await pilot.pause()
 
         assert pilot.app.screen._inode != current_inode
@@ -224,7 +224,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         # Test select previous result
         previous_button = pilot.app.screen.query("#previous-button").only_one()
         current_inode = pilot.app.screen._inode
-        await pilot.click("#previous-button")
+        await pilot.press("left")
         await pilot.pause()
 
         assert pilot.app.screen._inode != current_inode
@@ -237,7 +237,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
             not previous_button.has_class("-active"),
         )
 
-        await pilot.click("#previous-button")
+        await pilot.press("left")
         await pilot.pause()
 
         assert pilot.app.screen._inode != current_inode

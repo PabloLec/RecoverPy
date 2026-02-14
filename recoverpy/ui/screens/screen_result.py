@@ -4,6 +4,7 @@ from subprocess import CalledProcessError
 from typing import Optional, cast
 
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal
 from textual.screen import Screen
 from textual.widgets import Button, Label, RichLog
@@ -15,6 +16,14 @@ from recoverpy.ui.screens.screen_save import SaveScreen
 
 
 class ResultScreen(Screen[None]):
+    BINDINGS = [
+        Binding("left", "previous", "Previous"),
+        Binding("right", "next", "Next"),
+        Binding("a", "add_block", "Add block"),
+        Binding("s", "save", "Save"),
+        Binding("b", "go_back", "Go back"),
+    ]
+
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
         self._saver = Saver()
@@ -25,7 +34,9 @@ class ResultScreen(Screen[None]):
         self._block_count_label = Label("0 block selected", id="block-count")
         self._block_content = RichLog(markup=False, wrap=True)
         self._raw_block_content: Optional[str] = None
-        self._save_button = Button(label="Save", id="save-button", disabled=True)
+        self._save_button = Button(
+            label="Save", id="save-button", disabled=True, variant="success"
+        )
 
     def compose(self) -> ComposeResult:
         yield Horizontal(self._inode_label, id="inode-label-container")
@@ -35,12 +46,13 @@ class ResultScreen(Screen[None]):
             id="block-count-container",
         )
         yield Horizontal(
-            Button("Go back", id="go-back-button"), id="go-back-button-container"
+            Button("Go back", id="go-back-button", variant="warning"),
+            id="go-back-button-container",
         )
         yield Horizontal(
-            Button("Previous", id="previous-button"),
-            Button("Add block", id="add-block-button"),
-            Button("Next", id="next-button"),
+            Button("Previous", id="previous-button", variant="primary"),
+            Button("Add block", id="add-block-button", variant="primary"),
+            Button("Next", id="next-button", variant="primary"),
             id="block-buttons-container",
         )
         yield Horizontal(self._save_button, id="save-button-container")
@@ -116,3 +128,27 @@ class ResultScreen(Screen[None]):
         log.info("Save button pressed")
         cast(SaveScreen, self.app.get_screen("save")).set_saver(self._saver)
         await self.app.push_screen("save")
+
+    async def action_go_back(self) -> None:
+        await self._handle_go_back()
+
+    async def action_previous(self) -> None:
+        await self._handle_previous()
+
+    async def action_add_block(self) -> None:
+        await self._handle_add_block()
+
+    async def action_next(self) -> None:
+        await self._handle_next()
+
+    async def action_save(self) -> None:
+        await self._handle_save()
+
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        if action == "previous" and self._inode <= 0:
+            return None
+        if action == "save" and self._save_button.disabled:
+            return None
+        if action == "add_block" and not self._raw_block_content:
+            return None
+        return True

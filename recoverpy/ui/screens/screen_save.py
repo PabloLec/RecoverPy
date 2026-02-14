@@ -31,9 +31,9 @@ class SaveScreen(Screen[None]):
             id="save-path-container",
         )
         yield Horizontal(
-            Button("Go back", id="go-back-button"),
-            Button("Edit save path", id="edit-save-path-button"),
-            Button("Save", id="save-button"),
+            Button("Go back", id="go-back-button", variant="warning"),
+            Button("Edit save path", id="edit-save-path-button", variant="primary"),
+            Button("Save", id="save-button", variant="success"),
             id="action-buttons-container",
         )
         log.debug("save - Save screen composed")

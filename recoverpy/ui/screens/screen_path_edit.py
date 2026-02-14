@@ -29,7 +29,8 @@ class PathEditScreen(Screen[None]):
         yield self._directory_tree
         yield self._selected_dir_label
         yield Horizontal(
-            Button("Confirm", id="confirm-button"), id="path-edit-button-container"
+            Button("Confirm", id="confirm-button", variant="success"),
+            id="path-edit-button-container",
         )
         log.info("path_edit - Path edit screen composed")
 

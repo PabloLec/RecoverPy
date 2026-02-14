@@ -20,7 +20,7 @@ class Modal(ModalScreen[None]):
         grid_components: List[Widget] = [
             self._message_label,
             Horizontal(
-                Button("OK", id="ok-button"),
+                Button("OK", id="ok-button", variant="primary"),
                 id="modal-button-container",
             ),
         ]

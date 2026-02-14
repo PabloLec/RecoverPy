@@ -24,13 +24,12 @@ class RecoverpyApp(App[None]):
     screens: Dict[str, Screen[None]]
     CSS_PATH = get_css()  # type: ignore[assignment]
     BINDINGS = [
-        Binding("ctrl+n", "focus_next", "Focus next"),
-        Binding("ctrl+p", "focus_previous", "Focus previous"),
         Binding(
             "question_mark",
             "show_keyboard_help",
-            "Keyboard help",
+            "Help",
             key_display="?",
+            priority=True,
         ),
         Binding("ctrl+q", "quit", "Quit"),
     ]
@@ -60,11 +59,34 @@ class RecoverpyApp(App[None]):
         self.theme = "textual-dark"
         await self.push_screen("params")
         await verify_app_environment(self)
+        self.notify("Press ? for keyboard help", title="Tip", timeout=5)
 
-    def action_show_keyboard_help(self) -> None:
-        self.notify(
-            "Shortcuts: Ctrl+N next focus, Ctrl+P previous focus, Ctrl+Q quit.",
-            title="Keyboard Help",
+    def _get_keyboard_help_message(self) -> str:
+        hidden_keys = {"left", "right", "up", "down"}
+        lines: list[str] = []
+        for active_binding in self.active_bindings.values():
+            binding = active_binding.binding
+            if not binding.show or not binding.description:
+                continue
+            if binding.key in hidden_keys:
+                continue
+            key = binding.key_display or binding.key
+            lines.append(f"{key}: {binding.description}")
+
+        if not lines:
+            return "No keyboard shortcuts available."
+
+        ordered = sorted(set(lines), key=str.lower)
+        return "Available shortcuts:\n" + "\n".join(ordered)
+
+    async def action_show_keyboard_help(self) -> None:
+        if self.screen.name == "keyboard-help-modal":
+            return
+        await install_and_push_modal(
+            self,
+            name="keyboard-help-modal",
+            message=self._get_keyboard_help_message()
+            + "\n\nTip: Use Tab / Shift+Tab to move focus.",
         )
 
     async def on_params_screen_continue(self, message: ParamsScreen.Continue) -> None:

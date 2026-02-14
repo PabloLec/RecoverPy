@@ -28,7 +28,7 @@ class ParamsScreen(Screen[None]):
             name="search", id="search-input", placeholder="Search"
         )
         self._start_search_button = Button(
-            label="Start search", id="start-search-button", disabled=True
+            label="Start search", id="start-search-button", disabled=True, variant="primary"
         )
 
         yield Label("Type a text to search for:")

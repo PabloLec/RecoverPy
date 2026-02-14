@@ -45,7 +45,9 @@ class SearchScreen(Screen[None]):
         self._result_count_label = Label("0", id="result-count")
         self._progress_title_label = Label("", id="progress-title")
         self._progress_label = Label("", id="progress")
-        self._open_button = Button(label="Open", id="open-button", disabled=True)
+        self._open_button = Button(
+            label="Open", id="open-button", disabled=True, variant="success"
+        )
 
         yield self._grep_result_list
         yield Vertical(
@@ -56,7 +58,7 @@ class SearchScreen(Screen[None]):
             id="info-bar",
         )
         yield self._open_button
-        yield Button("Exit", id="exit-button")
+        yield Button("Exit", id="exit-button", variant="error")
         log.debug("search - Search screen composed")
 
     async def on_search_screen_start(self, message: Start) -> None:
