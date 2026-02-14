@@ -46,6 +46,7 @@ class ParamsScreen(Screen[None]):
     async def on_button_pressed(self) -> None:
         if not self._partition_list:
             log.warning("Partition list not initialized")
+            self.notify("Partition list is not available yet.", severity="warning")
             return
 
         highlighted_child = self._partition_list.highlighted_child
@@ -53,10 +54,12 @@ class ParamsScreen(Screen[None]):
 
         if highlighted_child is None:
             log.warning("No partition selected for search")
+            self.notify("Select a partition before starting search.", severity="warning")
             return
 
         if not searched_string:
             log.warning("No search string entered")
+            self.notify("Enter a search string before starting search.", severity="warning")
             return
 
         selected_partition: Partition = self._partition_list.list_items[

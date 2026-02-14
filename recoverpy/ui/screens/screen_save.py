@@ -79,6 +79,7 @@ class SaveScreen(Screen[None]):
                 )
         else:
             log.error("save - Saver not set for saving")
+            self.notify("Nothing to save yet.", severity="warning")
 
     async def on_path_edit_screen_confirm(self, event: PathEditScreen.Confirm) -> None:
         if self._saver:
@@ -86,3 +87,4 @@ class SaveScreen(Screen[None]):
             self._update_save_path_label()
         else:
             log.error("save - Saver not set for path editing")
+            self.notify("Saver is not initialized.", severity="error")

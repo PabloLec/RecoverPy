@@ -103,7 +103,7 @@ explicit = true
 
 [tool.pyright]
 include = ["recoverpy"]
-exclude = ["recoverpy/ui/widgets/directory_tree.py"]
+exclude = []
 typeCheckingMode = "strict"
 reportUnknownArgumentType = "none"
 reportUnknownMemberType = "none"

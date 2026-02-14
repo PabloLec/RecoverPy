@@ -1,16 +1,22 @@
 PathEditScreen {
     layout: grid;
-    grid-size: 1 2;
+    grid-size: 1 3;
     grid-gutter: 1;
-    grid-rows: 10fr 1fr;
+    grid-rows: 10fr 1fr 1fr;
+}
+
+#path-directory-tree {
+    height: 100%;
+}
+
+#selected-dir-label {
+    width: 100%;
+    height: auto;
+    content-align: center middle;
 }
 
 #path-edit-button-container {
     width: 100%;
     height: 100%;
     align: center middle;
-}
-
-TreeNode.selected {
-    background: $primary-darken-2;
 }

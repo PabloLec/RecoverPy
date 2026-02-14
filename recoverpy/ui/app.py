@@ -4,8 +4,10 @@ Defines the RecoverpyApp class which serves as the main app orchestrator for the
 
 from typing import Dict, cast
 
-from textual.app import App
+from textual.app import App, ComposeResult
+from textual.binding import Binding
 from textual.screen import Screen
+from textual.widgets import Footer
 
 from recoverpy.lib.env_check import verify_app_environment
 from recoverpy.log.logger import log
@@ -21,6 +23,17 @@ from recoverpy.ui.screens.screen_search import SearchScreen
 class RecoverpyApp(App[None]):
     screens: Dict[str, Screen[None]]
     CSS_PATH = get_css()  # type: ignore[assignment]
+    BINDINGS = [
+        Binding("ctrl+n", "focus_next", "Focus next"),
+        Binding("ctrl+p", "focus_previous", "Focus previous"),
+        Binding(
+            "question_mark",
+            "show_keyboard_help",
+            "Keyboard help",
+            key_display="?",
+        ),
+        Binding("ctrl+q", "quit", "Quit"),
+    ]
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
@@ -40,10 +53,19 @@ class RecoverpyApp(App[None]):
             self.install_screen(screen_instance, screen_name)
             log.debug(f"Installed screen {screen_name}")
 
+    def compose(self) -> ComposeResult:
+        yield Footer()
+
     async def on_mount(self) -> None:
         self.theme = "textual-dark"
         await self.push_screen("params")
         await verify_app_environment(self)
+
+    def action_show_keyboard_help(self) -> None:
+        self.notify(
+            "Shortcuts: Ctrl+N next focus, Ctrl+P previous focus, Ctrl+Q quit.",
+            title="Keyboard Help",
+        )
 
     async def on_params_screen_continue(self, message: ParamsScreen.Continue) -> None:
         log.info("User clicked continue on parameters screen")

@@ -1,12 +1,13 @@
 """Screen displaying grep results."""
 
-from asyncio import ensure_future, sleep
+from asyncio import Task, create_task
 from typing import List
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.message import Message
 from textual.screen import Screen
+from textual.timer import Timer
 from textual.widgets import Button, Label
 
 from recoverpy.lib.search.search_engine import SearchEngine
@@ -35,6 +36,8 @@ class SearchScreen(Screen[None]):
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         self.results: List[str] = []
+        self._progress_timer: Timer | None = None
+        self._consumer_task: Task[None] | None = None
         super().__init__(*args, **kwargs)
 
     def compose(self) -> ComposeResult:
@@ -60,30 +63,23 @@ class SearchScreen(Screen[None]):
         self.search_engine = SearchEngine(
             message.selected_partition, message.searched_string
         )
-        await self._wait_for_grep_list_focus()
+        self.set_focus(self._grep_result_list)
         await self._start_search_engine()
-
-    async def _wait_for_grep_list_focus(self) -> None:
-        while self._grep_result_list not in self.focus_chain:
-            continue
 
     async def _start_search_engine(self) -> None:
         await self.search_engine.start_search()
-        ensure_future(
+        self._consumer_task = create_task(
             self._grep_result_list.start_consumer(
                 self.search_engine.formatted_results_queue
             )
         )
-        ensure_future(self._update_progress_labels())
+        self._progress_timer = self.set_interval(0.1, self._update_progress_labels)
 
-    async def _update_progress_labels(self) -> None:
-        while True:
-            self._result_count_label.update(
-                str(self.search_engine.search_progress.result_count)
-            )
-            self._update_progress_percent_title()
-
-            await sleep(0.1)
+    def _update_progress_labels(self) -> None:
+        self._result_count_label.update(
+            str(self.search_engine.search_progress.result_count)
+        )
+        self._update_progress_percent_title()
 
     def _update_progress_percent_title(self) -> None:
         if int(self.search_engine.search_progress.progress_percent) == 0:
@@ -129,3 +125,13 @@ class SearchScreen(Screen[None]):
 
     async def on_list_view_highlighted(self) -> None:
         self._open_button.disabled = False
+
+    def on_unmount(self) -> None:
+        if self._progress_timer:
+            self._progress_timer.stop()
+            self._progress_timer = None
+        if self._consumer_task:
+            self._consumer_task.cancel()
+            self._consumer_task = None
+        if hasattr(self, "search_engine"):
+            self.search_engine.stop_search()

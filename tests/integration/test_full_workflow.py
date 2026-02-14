@@ -2,6 +2,7 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
+from textual.widgets import DirectoryTree
 
 from recoverpy import RecoverpyApp
 from tests.conftest import TEST_BLOCK_SIZE
@@ -274,14 +275,8 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
 
         assert pilot.app.screen.name == "path_edit"
 
-        tmp_tree_node = None
-        for n in pilot.app.screen._directory_tree._tree_nodes.values():
-            if "tmp" in n._label:
-                tmp_tree_node = n
-                break
-
-        assert tmp_tree_node is not None
-        pilot.app.screen._directory_tree.selected_dir = tmp_path
+        assert isinstance(pilot.app.screen._directory_tree, DirectoryTree)
+        pilot.app.screen._selected_dir = str(tmp_path)
 
         await pilot.click("#confirm-button")
         await pilot.pause()
