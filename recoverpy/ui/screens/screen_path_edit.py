@@ -3,6 +3,7 @@
 from pathlib import Path
 
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal
 from textual.message import Message
 from textual.screen import Screen
@@ -13,6 +14,11 @@ from recoverpy.ui.widgets.folder_only_directory_tree import FolderOnlyDirectoryT
 
 
 class PathEditScreen(Screen[None]):
+    BINDINGS = [
+        Binding("enter", "confirm", "Confirm path", priority=True),
+        Binding("escape", "cancel", "Cancel", priority=True),
+    ]
+
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
         self._selected_dir = "/"
@@ -55,7 +61,13 @@ class PathEditScreen(Screen[None]):
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id != "confirm-button":
             return
-        log.info("path_edit - Confirm button pressed")
         event.stop()
+        await self.action_confirm()
+
+    async def action_confirm(self) -> None:
+        log.info("path_edit - Confirm button pressed")
         self.app.get_screen("save").post_message(self.Confirm(self._selected_dir))
+        self.app.pop_screen()
+
+    def action_cancel(self) -> None:
         self.app.pop_screen()

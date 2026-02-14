@@ -272,9 +272,11 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         await pilot.pause()
 
         assert pilot.app.screen.name == "save"
+        assert pilot.app.focused is not None
+        assert pilot.app.focused.id == "edit-save-path-button"
 
         # Test edit save path
-        await pilot.click("#edit-save-path-button")
+        await pilot.press("e")
         await pilot.pause()
 
         assert pilot.app.screen.name == "path_edit"
@@ -282,14 +284,14 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         assert isinstance(pilot.app.screen._directory_tree, DirectoryTree)
         pilot.app.screen._selected_dir = str(tmp_path)
 
-        await pilot.click("#confirm-button")
+        await pilot.press("enter")
         await pilot.pause()
 
         assert pilot.app.screen.name == "save"
         assert pilot.app.screen._saver.save_path == tmp_path
 
         # Test save results
-        await pilot.click("#save-button")
+        await pilot.press("s")
         await pilot.pause()
 
         assert pilot.app.screen.name == "save-modal"

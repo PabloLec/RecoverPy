@@ -3,6 +3,7 @@
 from typing import Optional
 
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.message import Message
 from textual.screen import Screen
@@ -14,6 +15,12 @@ from recoverpy.ui.screens.screen_path_edit import PathEditScreen
 
 
 class SaveScreen(Screen[None]):
+    BINDINGS = [
+        Binding("e", "edit_save_path", "Edit path"),
+        Binding("s", "save", "Save"),
+        Binding("b", "go_back", "Go back"),
+    ]
+
     class Saved(Message):
         def __init__(self, save_path: str) -> None:
             super().__init__()
@@ -94,3 +101,17 @@ class SaveScreen(Screen[None]):
         else:
             log.error("save - Saver not set for path editing")
             self.notify("Saver is not initialized.", severity="error")
+
+    async def action_go_back(self) -> None:
+        await self._handle_go_back()
+
+    async def action_edit_save_path(self) -> None:
+        await self._handle_edit_save_path()
+
+    async def action_save(self) -> None:
+        await self._handle_save()
+
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        if action == "save" and self._saver is None:
+            return None
+        return True
