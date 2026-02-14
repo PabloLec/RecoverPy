@@ -1,6 +1,8 @@
 """First screen displayed to the user.
 Allows user to enter search string and select partition."""
 
+from __future__ import annotations
+
 from typing import Generator, Optional
 
 from textual.app import ComposeResult

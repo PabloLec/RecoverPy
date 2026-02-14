@@ -1,5 +1,7 @@
 """Screen displaying recovered block content."""
 
+from __future__ import annotations
+
 from typing import Optional, cast
 
 from textual.app import ComposeResult

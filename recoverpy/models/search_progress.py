@@ -1,5 +1,7 @@
 """Shared mutable search progress state consumed by the UI."""
 
+from __future__ import annotations
+
 class SearchProgress:
     def __init__(self) -> None:
         self.result_count = 0

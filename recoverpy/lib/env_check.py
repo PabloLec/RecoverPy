@@ -11,7 +11,7 @@ from recoverpy.ui.screens.modal import install_and_push_modal
 
 _root_error_message = "The current user is not root, the search is likely to not work. Run this app as root or use sudo."
 _version_error_message = (
-    "The current Python version is not supported. Please use Python 3.8 or higher."
+    "The current Python version is not supported. Please use Python 3.9 or higher."
 )
 _linux_error_message = (
     "Your system may not be Linux-based, the application might not work correctly."

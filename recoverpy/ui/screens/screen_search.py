@@ -1,5 +1,7 @@
 """Screen displaying search results."""
 
+from __future__ import annotations
+
 from asyncio import Task, create_task
 
 from textual.app import ComposeResult

@@ -1,5 +1,7 @@
 """Screen used to confirm save."""
 
+from __future__ import annotations
+
 from typing import Optional, cast
 
 from textual.app import ComposeResult
