@@ -15,7 +15,7 @@ _version_error_message = (
 _linux_error_message = (
     "Your system may not be Linux-based, the application might not work correctly."
 )
-_dependencies_error_message = "Some dependencies are not installed. Please install grep, dd and blockdev and restart the application."
+_dependencies_error_message = "Some dependencies are not installed. Please install grep and blockdev and restart the application."
 
 
 async def verify_app_environment(app: App[None]) -> None:
@@ -50,7 +50,7 @@ def _is_linux() -> bool:
 
 
 def _are_system_dependencies_installed() -> bool:
-    for dependency in ("grep", "dd", "blockdev"):
+    for dependency in ("grep", "blockdev"):
         if not is_dependency_installed(dependency):
             return False
     return True

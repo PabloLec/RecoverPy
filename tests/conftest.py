@@ -7,7 +7,7 @@ from recoverpy.lib.search.search_engine import SearchEngine
 
 from .fixtures import (
     mock_device_discovery,
-    mock_dd_output,
+    mock_block_reader,
     mock_grep_process,
     mock_progress,
 )
@@ -22,12 +22,12 @@ def system_calls_mock(session_mocker):
         new=mock_grep_process.mock_start_grep_process,
     )
     session_mocker.patch(
-        "recoverpy.lib.search.search_engine.get_dd_output",
-        side_effect=mock_dd_output.mock_dd_string_output,
+        "recoverpy.lib.search.search_engine.read_block",
+        side_effect=mock_block_reader.mock_read_block_output,
     )
     session_mocker.patch(
-        "recoverpy.ui.screens.screen_result.get_dd_output",
-        side_effect=mock_dd_output.mock_dd_string_output,
+        "recoverpy.ui.screens.screen_result.read_block",
+        side_effect=mock_block_reader.mock_read_block_output,
     )
     session_mocker.patch(
         "recoverpy.lib.device_discovery._read_proc_mounts",

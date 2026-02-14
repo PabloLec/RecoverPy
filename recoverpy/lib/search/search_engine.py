@@ -17,7 +17,8 @@ from subprocess import Popen
 from time import sleep
 from typing import List
 
-from recoverpy.lib.helper import decode_result, get_dd_output, get_inode
+from recoverpy.lib.block_extractor import BlockExtractionError, read_block
+from recoverpy.lib.helper import decode_result, get_inode
 from recoverpy.lib.search.thread_factory import (
     start_grep_process,
     start_grep_stdout_consumer_thread,
@@ -108,12 +109,16 @@ class SearchEngine:
     def _get_combined_block_output(self, inode: int, block_factor: int) -> str:
         """Get combined output of current and next block."""
         block_index = inode // block_factor
-        block_output = get_dd_output(
-            self.search_params.partition, block_factor, block_index
-        )
-        next_block_output = get_dd_output(
-            self.search_params.partition, block_factor, block_index + 1
-        )
+        try:
+            block_output = read_block(
+                self.search_params.partition, block_factor, block_index
+            )
+            next_block_output = read_block(
+                self.search_params.partition, block_factor, block_index + 1
+            )
+        except BlockExtractionError as error:
+            log.warning(f"search_engine - {error}")
+            return ""
 
         return decode_result(block_output) + decode_result(next_block_output)
 
@@ -154,10 +159,14 @@ class SearchEngine:
         inode //= self.search_params.block_size
 
         for _ in range(10):
-            dd_output = get_dd_output(
-                self.search_params.partition, self.search_params.block_size, inode
-            )
-            if self.search_params.searched_lines[0] in decode_result(dd_output):
+            try:
+                block_output = read_block(
+                    self.search_params.partition, self.search_params.block_size, inode
+                )
+            except BlockExtractionError as error:
+                log.warning(f"search_engine - {error}")
+                return inode
+            if self.search_params.searched_lines[0] in decode_result(block_output):
                 return inode
             inode += 1
         return inode

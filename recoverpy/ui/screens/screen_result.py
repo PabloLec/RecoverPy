@@ -1,6 +1,5 @@
-"""Screen displaying dd results."""
+"""Screen displaying recovered block content."""
 
-from subprocess import CalledProcessError
 from typing import Optional, cast
 
 from textual.app import ComposeResult
@@ -9,7 +8,8 @@ from textual.containers import Horizontal
 from textual.screen import Screen
 from textual.widgets import Button, Label, RichLog
 
-from recoverpy.lib.helper import decode_result, get_dd_output, get_printable
+from recoverpy.lib.block_extractor import BlockExtractionError, read_block
+from recoverpy.lib.helper import decode_result, get_printable
 from recoverpy.lib.saver import Saver
 from recoverpy.log.logger import log
 from recoverpy.ui.screens.screen_save import SaveScreen
@@ -82,13 +82,15 @@ class ResultScreen(Screen[None]):
         self._block_content.clear()
         try:
             self._raw_block_content = decode_result(
-                get_dd_output(self._partition, self._block_size, self._inode)
+                read_block(self._partition, self._block_size, self._inode)
             )
             self._block_content.write(get_printable(self._raw_block_content))
             log.info("Block content updated")
-        except CalledProcessError:
-            log.error(f"Cannot read block {self._inode}")
+        except BlockExtractionError as error:
+            self._raw_block_content = None
+            log.error(f"Cannot read block {self._inode}: {error}")
             self._block_content.write(f"Cannot read block {self._inode}")
+            self.notify(error.user_message, severity="error")
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         button_id = event.button.id

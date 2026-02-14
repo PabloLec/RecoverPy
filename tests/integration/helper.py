@@ -5,7 +5,7 @@ from textual.pilot import Pilot
 from textual.widgets import RichLog
 
 from tests.conftest import TEST_BLOCK_SIZE
-from tests.fixtures.mock_dd_output import mock_dd_string_output
+from tests.fixtures.mock_block_reader import mock_read_block_output
 
 TEST_PARTITION = "sdb1"
 TEST_FULL_PARTITION = "/dev/sdb1"
@@ -22,7 +22,7 @@ def get_block_content_text(block_content: RichLog):
 
 def get_expected_block_content_text(inode: int):
     return (
-        mock_dd_string_output(TEST_FULL_PARTITION, TEST_BLOCK_SIZE, inode)
+        mock_read_block_output(TEST_FULL_PARTITION, TEST_BLOCK_SIZE, inode)
         .decode()
         .replace(" ", "")
         .replace("\n", "")
