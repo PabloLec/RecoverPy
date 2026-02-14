@@ -167,11 +167,10 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         # Test result content
         await pilot.pause()
 
-        assert (
-            str(pilot.app.screen._inode)
-            in pilot.app.screen._inode_label.renderable
+        assert str(pilot.app.screen._inode) in str(
+            pilot.app.screen._inode_label.content
         )
-        assert pilot.app.screen._block_count_label.renderable.startswith("0 ")
+        assert str(pilot.app.screen._block_count_label.content).startswith("0 ")
         assert get_expected_block_content_text(
             pilot.app.screen._inode
         ) == get_block_content_text(pilot.app.screen._block_content)
@@ -180,7 +179,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         await pilot.click("#add-block-button")
         await pilot.pause()
 
-        assert pilot.app.screen._block_count_label.renderable.startswith("1 ")
+        assert str(pilot.app.screen._block_count_label.content).startswith("1 ")
         assert pilot.app.screen._save_button.disabled is False
 
         assert len(pilot.app.screen._saver._results) == 1
@@ -199,9 +198,8 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
 
         assert pilot.app.screen._inode != current_inode
 
-        assert (
-            str(pilot.app.screen._inode)
-            in pilot.app.screen._inode_label.renderable
+        assert str(pilot.app.screen._inode) in str(
+            pilot.app.screen._inode_label.content
         )
 
         assert get_expected_block_content_text(
@@ -211,7 +209,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         await pilot.click("#add-block-button")
         await pilot.pause()
 
-        assert pilot.app.screen._block_count_label.renderable.startswith("2 ")
+        assert str(pilot.app.screen._block_count_label.content).startswith("2 ")
 
         assert len(pilot.app.screen._saver._results) == 2
         await assert_current_result_is_selected_for_save(pilot)
@@ -243,9 +241,8 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
 
         assert pilot.app.screen._inode != current_inode
 
-        assert (
-            str(pilot.app.screen._inode)
-            in pilot.app.screen._inode_label.renderable
+        assert str(pilot.app.screen._inode) in str(
+            pilot.app.screen._inode_label.content
         )
         assert get_expected_block_content_text(
             pilot.app.screen._inode
@@ -254,7 +251,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         await pilot.click("#add-block-button")
         await pilot.pause()
 
-        assert pilot.app.screen._block_count_label.renderable.startswith("3 ")
+        assert str(pilot.app.screen._block_count_label.content).startswith("3 ")
 
         assert len(pilot.app.screen._saver._results) == 3
         await assert_current_result_is_selected_for_save(pilot)

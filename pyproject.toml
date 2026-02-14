@@ -3,9 +3,9 @@ authors = [
     { name = "PabloLec", email = "pablolec@pm.me" },
 ]
 license = { text = "GPL-3.0 License" }
-requires-python = "<4.0.0,>=3.8.1"
+requires-python = "<4.0.0,>=3.9"
 dependencies = [
-    "textual==3.5.0",
+    "textual==7.5.0",
 ]
 name = "recoverpy"
 version = "2.2.1"
@@ -55,7 +55,6 @@ classifiers = [
     "Intended Audience :: System Administrators",
     "Intended Audience :: Information Technology",
     "Intended Audience :: Education",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",

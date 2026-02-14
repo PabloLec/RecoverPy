@@ -89,7 +89,7 @@ class SearchScreen(Screen[None]):
         if int(self.search_engine.search_progress.progress_percent) == 0:
             return
 
-        if self._progress_title_label.renderable == "":
+        if str(self._progress_title_label.content) == "":
             self._progress_title_label.update("- progress -")
 
         self._progress_label.update(
