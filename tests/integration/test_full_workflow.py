@@ -102,7 +102,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         assert pilot.app.screen._start_search_button.disabled is False
 
         # Test start search
-        await pilot.click("#start-search-button")
+        await pilot.press("enter")
         await pilot.pause()
 
         assert pilot.app.screen.name == "search"
@@ -160,7 +160,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         select_grep_result = pilot.app.screen._get_selected_grep_result()
         assert select_grep_result.list_item == select_item
 
-        await pilot.click("#open-button")
+        await pilot.press("o")
         await pilot.pause()
 
         assert pilot.app.screen.name == "result"

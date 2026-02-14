@@ -4,6 +4,7 @@ from asyncio import Task, create_task
 from typing import List
 
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.message import Message
 from textual.screen import Screen
@@ -17,6 +18,11 @@ from recoverpy.ui.widgets.grep_result_list import GrepResultList
 
 
 class SearchScreen(Screen[None]):
+    BINDINGS = [
+        Binding("o", "open_result", "Open result"),
+        Binding("q", "exit_screen", "Exit"),
+    ]
+
     class Start(Message):
         def __init__(self, searched_string: str, selected_partition: str) -> None:
             super().__init__()
@@ -146,3 +152,14 @@ class SearchScreen(Screen[None]):
             self._consumer_task = None
         if hasattr(self, "search_engine"):
             self.search_engine.stop_search()
+
+    async def action_open_result(self) -> None:
+        await self._handle_open_button()
+
+    async def action_exit_screen(self) -> None:
+        await self._handle_exit_button()
+
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        if action == "open_result" and self._open_button.disabled:
+            return None
+        return True

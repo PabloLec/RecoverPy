@@ -4,6 +4,7 @@ Allows user to enter search string and select partition."""
 from typing import Generator, Optional
 
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Container
 from textual.message import Message
 from textual.screen import Screen
@@ -15,6 +16,11 @@ from recoverpy.ui.widgets.partition_list import PartitionList
 
 
 class ParamsScreen(Screen[None]):
+    BINDINGS = [
+        Binding("enter", "start_search", "Start search", priority=True),
+        Binding("f", "toggle_partition_filter", "Toggle filter"),
+    ]
+
     _partition_list: Optional[PartitionList] = None
 
     class Continue(Message):
@@ -27,6 +33,7 @@ class ParamsScreen(Screen[None]):
         self._search_input = Input(
             name="search", id="search-input", placeholder="Search"
         )
+        self._filter_checkbox = Checkbox("Filter partitions", True)
         self._start_search_button = Button(
             label="Start search", id="start-search-button", disabled=True, variant="primary"
         )
@@ -35,7 +42,7 @@ class ParamsScreen(Screen[None]):
         yield self._search_input
         yield Label("Available partitions:")
         yield from self._yield_partition_list()
-        yield Container(self._start_search_button, Checkbox("Filter partitions", True))
+        yield Container(self._start_search_button, self._filter_checkbox)
         log.debug("params - Parameters screen composed")
 
     def _yield_partition_list(self) -> Generator[PartitionList, None, None]:
@@ -83,3 +90,21 @@ class ParamsScreen(Screen[None]):
     async def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
         if self._partition_list:
             self._partition_list.set_partitions(event.value)
+
+    async def action_start_search(self) -> None:
+        await self.on_button_pressed()
+
+    def action_toggle_partition_filter(self) -> None:
+        self._filter_checkbox.toggle()
+
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        if action != "start_search":
+            return True
+
+        if not self._partition_list:
+            return None
+        if not self._search_input.value.strip():
+            return None
+        if self._partition_list.highlighted_child is None:
+            return None
+        return True
