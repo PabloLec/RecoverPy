@@ -89,7 +89,7 @@ class ParamsScreen(Screen[None]):
 
     async def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
         if self._partition_list:
-            self._partition_list.set_partitions(event.value)
+            await self._partition_list.set_partitions(event.value)
 
     async def action_start_search(self) -> None:
         await self.on_button_pressed()

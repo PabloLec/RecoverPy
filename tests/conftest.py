@@ -6,9 +6,9 @@ import pytest_asyncio
 from recoverpy.lib.search.search_engine import SearchEngine
 
 from .fixtures import (
+    mock_device_discovery,
     mock_dd_output,
     mock_grep_process,
-    mock_lsblk_output,
     mock_progress,
 )
 
@@ -30,8 +30,20 @@ def system_calls_mock(session_mocker):
         side_effect=mock_dd_output.mock_dd_string_output,
     )
     session_mocker.patch(
-        "recoverpy.lib.lsblk._fetch_lsblk_output",
-        return_value=mock_lsblk_output.MOCK_LSBLK_OUTPUT,
+        "recoverpy.lib.device_discovery._read_proc_mounts",
+        return_value=mock_device_discovery.MOCK_PROC_MOUNTS,
+    )
+    session_mocker.patch(
+        "recoverpy.lib.device_discovery._read_proc_partition_sizes",
+        return_value=mock_device_discovery.MOCK_PROC_PARTITION_SIZES,
+    )
+    session_mocker.patch(
+        "recoverpy.lib.device_discovery._list_block_devices",
+        return_value=mock_device_discovery.MOCK_BLOCK_DEVICES,
+    )
+    session_mocker.patch(
+        "recoverpy.lib.device_discovery._read_device_type",
+        side_effect=mock_device_discovery.mock_read_device_type,
     )
     session_mocker.patch(
         "recoverpy.models.search_params.get_block_size",

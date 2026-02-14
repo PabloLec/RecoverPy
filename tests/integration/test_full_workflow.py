@@ -7,7 +7,7 @@ from textual.widgets import DirectoryTree
 from recoverpy import RecoverpyApp
 from tests.conftest import TEST_BLOCK_SIZE
 from tests.fixtures.mock_grep_process import GREP_RESULT_COUNT
-from tests.fixtures.mock_lsblk_output import (
+from tests.fixtures.mock_device_discovery import (
     UNFILTERED_PARTITION_COUNT,
     VISIBLE_PARTITION_COUNT,
 )

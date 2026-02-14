@@ -2,17 +2,20 @@
 
 from typing import Dict, Optional
 
-from textual import work
-from textual.events import Mount
 from textual.widgets import Label, ListItem, ListView
 
-from recoverpy.lib.lsblk import get_partitions
+from recoverpy.lib.device_discovery import DeviceDiscoveryError, get_partitions
 from recoverpy.log.logger import log
 from recoverpy.models.partition import Partition
 
 
 def _get_label(partition: Partition) -> Label:
-    label_content = f"{partition.name} | {partition.fs_type}"
+    display_type = (
+        partition.fs_type
+        if partition.fs_type != "unknown"
+        else partition.device_type
+    )
+    label_content = f"{partition.name} | {display_type}"
     if partition.is_mounted:
         label_content += f" | Mounted on: {partition.mount_point}"
     return Label(label_content)
@@ -27,16 +30,21 @@ class PartitionList(ListView):
         super().__init__(id="partition-list", *children, **kwargs)
         self.list_items: Dict[Optional[str], Partition] = {}
 
-    def _on_mount(self, _: Mount) -> None:
-        self.set_partitions()
-        return super()._on_mount(_)
+    async def on_mount(self) -> None:
+        await self.set_partitions()
 
-    @work(exclusive=True)
     async def set_partitions(self, filtered: bool = True) -> None:
+        try:
+            partitions = get_partitions(filtered)
+        except DeviceDiscoveryError as error:
+            log.error(f"partition_list - {error}")
+            if self.app:
+                self.notify(str(error), severity="error")
+            return
+
         await self.clear()
         self.list_items.clear()
-
-        for partition in get_partitions(filtered):
+        for partition in partitions:
             log.debug(f"partition_list - Appending partition {partition.name}")
             list_item = self._create_list_item(partition)
             self.list_items[list_item.id] = partition
