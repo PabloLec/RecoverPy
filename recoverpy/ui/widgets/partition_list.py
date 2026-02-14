@@ -4,7 +4,7 @@ from typing import Dict, Optional
 
 from textual.widgets import Label, ListItem, ListView
 
-from recoverpy.lib.device_discovery import DeviceDiscoveryError, get_partitions
+from recoverpy.lib.storage.block_device_inventory import DeviceDiscoveryError, get_partitions
 from recoverpy.log.logger import log
 from recoverpy.models.partition import Partition
 

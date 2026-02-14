@@ -1,6 +1,6 @@
 from threading import Event
 
-from recoverpy.lib.search.scanner import iter_scan_hits
+from recoverpy.lib.search.binary_scanner import iter_scan_hits
 
 
 def test_scan_offsets_are_exact(tmp_path):

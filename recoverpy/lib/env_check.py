@@ -35,7 +35,7 @@ def _is_user_root() -> bool:
 
 
 def _is_version_supported() -> bool:
-    return version_info >= (3, 8)
+    return version_info >= (3, 9)
 
 
 def _is_linux() -> bool:

@@ -1,4 +1,4 @@
-from recoverpy.lib.search.scanner import ScanHit
+from recoverpy.lib.search.binary_scanner import ScanHit
 
 SCAN_HIT_COUNT = 3
 

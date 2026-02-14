@@ -1,4 +1,4 @@
-from recoverpy.lib.block_extractor import BlockExtractionError
+from recoverpy.lib.storage.byte_range_reader import BlockExtractionError
 from recoverpy.ui.screens.screen_result import ResultScreen
 
 

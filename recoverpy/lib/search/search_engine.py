@@ -13,10 +13,10 @@ from threading import Event, Thread
 from time import monotonic, sleep
 from typing import Iterable, Optional
 
-from recoverpy.lib.block_extractor import BlockExtractionError, read_block
-from recoverpy.lib.device_io import get_device_info
-from recoverpy.lib.helper import decode_result, get_printable
-from recoverpy.lib.search.scanner import ScanError, ScanHit, iter_scan_hits
+from recoverpy.lib.storage.byte_range_reader import BlockExtractionError, read_block
+from recoverpy.lib.storage.block_device_metadata import get_device_info
+from recoverpy.lib.text.text_processing import decode_result, get_printable
+from recoverpy.lib.search.binary_scanner import ScanError, ScanHit, iter_scan_hits
 from recoverpy.log.logger import log
 from recoverpy.models.search_result import SearchResult
 from recoverpy.models.search_params import SearchParams

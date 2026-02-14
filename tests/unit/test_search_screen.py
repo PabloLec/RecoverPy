@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from recoverpy import RecoverpyApp
-from recoverpy.lib.device_io import DeviceIOError
+from recoverpy.lib.storage.block_device_metadata import DeviceIOError
 from recoverpy.ui.screens.screen_search import SearchScreen
 
 

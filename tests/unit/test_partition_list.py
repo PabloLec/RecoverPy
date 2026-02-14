@@ -1,7 +1,7 @@
 import pytest
 from textual.app import App, ComposeResult
 
-from recoverpy.lib.device_discovery import DeviceDiscoveryError
+from recoverpy.lib.storage.block_device_inventory import DeviceDiscoveryError
 from recoverpy.ui.widgets.partition_list import PartitionList
 
 

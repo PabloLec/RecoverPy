@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 import pytest_asyncio
 
-from recoverpy.lib.device_io import DeviceInfo
+from recoverpy.lib.storage.block_device_metadata import DeviceInfo
 from recoverpy.lib.search.search_engine import SearchEngine
 
 from .fixtures import (
@@ -40,19 +40,19 @@ def system_calls_mock(session_mocker):
         side_effect=mock_block_reader.mock_read_block_output,
     )
     session_mocker.patch(
-        "recoverpy.lib.device_discovery._read_proc_mounts",
+        "recoverpy.lib.storage.block_device_inventory._read_proc_mounts",
         return_value=mock_device_discovery.MOCK_PROC_MOUNTS,
     )
     session_mocker.patch(
-        "recoverpy.lib.device_discovery._read_proc_partition_sizes",
+        "recoverpy.lib.storage.block_device_inventory._read_proc_partition_sizes",
         return_value=mock_device_discovery.MOCK_PROC_PARTITION_SIZES,
     )
     session_mocker.patch(
-        "recoverpy.lib.device_discovery._list_block_devices",
+        "recoverpy.lib.storage.block_device_inventory._list_block_devices",
         return_value=mock_device_discovery.MOCK_BLOCK_DEVICES,
     )
     session_mocker.patch(
-        "recoverpy.lib.device_discovery._read_device_type",
+        "recoverpy.lib.storage.block_device_inventory._read_device_type",
         side_effect=mock_device_discovery.mock_read_device_type,
     )
     session_mocker.patch(

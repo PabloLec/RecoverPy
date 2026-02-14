@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from recoverpy.lib.device_io import (
+from recoverpy.lib.storage.block_device_metadata import (
     BLKGETSIZE64,
     BLKPBSZGET,
     BLKROGET,

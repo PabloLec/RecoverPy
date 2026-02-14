@@ -1,6 +1,6 @@
 from re import findall
 
-from recoverpy.lib.device_io import get_logical_block_size
+from recoverpy.lib.storage.block_device_metadata import get_logical_block_size
 
 def decode_result(result: bytes) -> str:
     return result.decode("utf-8", errors="ignore")

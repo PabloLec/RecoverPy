@@ -1,4 +1,4 @@
-from recoverpy.lib.block_extractor import extract_range, read_range
+from recoverpy.lib.storage.byte_range_reader import extract_range, read_range
 
 
 def test_extract_range_from_fake_disk_image(tmp_path):

@@ -5,7 +5,7 @@ import pytest
 from textual.widgets import DirectoryTree
 
 from recoverpy import RecoverpyApp
-from recoverpy.lib.device_io import DeviceInfo
+from recoverpy.lib.storage.block_device_metadata import DeviceInfo
 from tests.conftest import TEST_BLOCK_SIZE
 from tests.fixtures.mock_scan_hits import SCAN_HIT_COUNT
 from tests.fixtures.mock_device_discovery import (

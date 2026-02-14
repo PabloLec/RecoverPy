@@ -1,6 +1,6 @@
 import pytest
 
-from recoverpy.lib.device_discovery import (
+from recoverpy.lib.storage.block_device_inventory import (
     DeviceDiscoveryError,
     _IGNORED_PARTITION_TYPES,
     get_partitions,
@@ -27,7 +27,7 @@ def test_get_partitions_unfiltered():
 
 def test_get_partitions_permission_error(mocker):
     mocker.patch(
-        "recoverpy.lib.device_discovery._read_proc_mounts",
+        "recoverpy.lib.storage.block_device_inventory._read_proc_mounts",
         side_effect=PermissionError("permission denied"),
     )
 

@@ -4,7 +4,7 @@ from time import sleep
 import pytest
 
 import recoverpy.lib.search.search_engine as search_engine_module
-from recoverpy.lib.search.scanner import ScanHit
+from recoverpy.lib.search.binary_scanner import ScanHit
 from tests.fixtures.mock_scan_hits import SCAN_HIT_COUNT
 from tests.integration.helper import assert_with_timeout
 

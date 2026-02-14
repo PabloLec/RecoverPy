@@ -2,7 +2,7 @@ from typing import Optional
 
 from textual.widgets import Label, ListItem
 
-from recoverpy.lib.helper import get_inode, get_printable
+from recoverpy.lib.text.text_processing import get_inode, get_printable
 from recoverpy.log.logger import log
 
 
