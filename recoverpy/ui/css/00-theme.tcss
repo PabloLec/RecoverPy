@@ -30,6 +30,16 @@ Button {
     min-width: 14;
 }
 
+Button:focus {
+    border: solid $rp-primary;
+}
+
+Button:disabled {
+    color: $rp-muted;
+    background: $rp-surface;
+    border: solid $rp-border;
+}
+
 Input,
 ListView,
 DirectoryTree,
@@ -47,6 +57,16 @@ TextLog:focus {
 
 ListView > ListItem.--highlight {
     color: $rp-text;
+}
+
+Footer {
+    background: $rp-surface;
+    border-top: solid $rp-border;
+}
+
+Modal > Grid {
+    background: $rp-surface;
+    border: solid $rp-border;
 }
 
 .rp-panel {
@@ -68,6 +88,10 @@ ParamsScreen > Container {
 
 ParamsScreen > Container > Checkbox {
     background: $rp-surface;
+}
+
+Checkbox:focus {
+    border: solid $rp-primary;
 }
 
 GrepResultList > ListItem.--highlight {
