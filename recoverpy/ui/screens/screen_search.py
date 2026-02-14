@@ -42,6 +42,7 @@ class SearchScreen(Screen[None]):
 
     def compose(self) -> ComposeResult:
         self._grep_result_list = GrepResultList()
+        self._search_status_label = Label("Waiting...", id="search-status")
         self._result_count_label = Label("0", id="result-count")
         self._progress_title_label = Label("", id="progress-title")
         self._progress_label = Label("", id="progress")
@@ -51,6 +52,8 @@ class SearchScreen(Screen[None]):
 
         yield self._grep_result_list
         yield Vertical(
+            self.InfoContainer(Label("- status -", id="status-title")),
+            self.InfoContainer(self._search_status_label),
             self.InfoContainer(Label("- result count -", id="result-count-title")),
             self.InfoContainer(self._result_count_label),
             self.InfoContainer(self._progress_title_label),
@@ -65,6 +68,7 @@ class SearchScreen(Screen[None]):
         self.search_engine = SearchEngine(
             message.selected_partition, message.searched_string
         )
+        self._search_status_label.update("Searching...")
         self.set_focus(self._grep_result_list)
         await self._start_search_engine()
 
@@ -93,6 +97,11 @@ class SearchScreen(Screen[None]):
         self._progress_label.update(
             f"{self.search_engine.search_progress.progress_percent}%"
         )
+        if int(self.search_engine.search_progress.progress_percent) >= 100:
+            self._search_status_label.update("Completed")
+            if self._progress_timer:
+                self._progress_timer.stop()
+                self._progress_timer = None
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         actions = {

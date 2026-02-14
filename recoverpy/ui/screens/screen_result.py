@@ -37,6 +37,9 @@ class ResultScreen(Screen[None]):
         self._save_button = Button(
             label="Save", id="save-button", disabled=True, variant="success"
         )
+        self._add_block_button = Button(
+            "Add block", id="add-block-button", variant="primary"
+        )
 
     def compose(self) -> ComposeResult:
         yield Horizontal(self._inode_label, id="inode-label-container")
@@ -51,7 +54,7 @@ class ResultScreen(Screen[None]):
         )
         yield Horizontal(
             Button("Previous", id="previous-button", variant="primary"),
-            Button("Add block", id="add-block-button", variant="primary"),
+            self._add_block_button,
             Button("Next", id="next-button", variant="primary"),
             id="block-buttons-container",
         )
@@ -66,6 +69,7 @@ class ResultScreen(Screen[None]):
         self._inode = inode
         self._update_ui()
         self._block_count_label.update("0 block selected")
+        self.set_focus(self._add_block_button)
 
     def _update_ui(self) -> None:
         self._update_inode_label()

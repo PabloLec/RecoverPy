@@ -43,6 +43,9 @@ class ParamsScreen(Screen[None]):
             self._partition_list = PartitionList()
         yield self._partition_list
 
+    def on_mount(self) -> None:
+        self.set_focus(self._search_input)
+
     async def on_button_pressed(self) -> None:
         if not self._partition_list:
             log.warning("Partition list not initialized")

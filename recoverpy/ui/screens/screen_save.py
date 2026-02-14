@@ -23,6 +23,9 @@ class SaveScreen(Screen[None]):
         super().__init__(*args, **kwargs)
         self._saver: Optional[Saver] = None
         self._save_path_label = Label("", id="save-path-label")
+        self._edit_save_path_button = Button(
+            "Edit save path", id="edit-save-path-button", variant="primary"
+        )
 
     def compose(self) -> ComposeResult:
         yield Vertical(
@@ -32,11 +35,14 @@ class SaveScreen(Screen[None]):
         )
         yield Horizontal(
             Button("Go back", id="go-back-button", variant="warning"),
-            Button("Edit save path", id="edit-save-path-button", variant="primary"),
+            self._edit_save_path_button,
             Button("Save", id="save-button", variant="success"),
             id="action-buttons-container",
         )
         log.debug("save - Save screen composed")
+
+    def on_mount(self) -> None:
+        self.set_focus(self._edit_save_path_button)
 
     def set_saver(self, saver: Saver) -> None:
         self._saver = saver

@@ -20,6 +20,10 @@ SearchScreen {
     margin: 1 0 0 0;
 }
 
+#status-title {
+    margin: 1 0 0 0;
+}
+
 #progress-title {
     margin: 1 0 0 0;
 }

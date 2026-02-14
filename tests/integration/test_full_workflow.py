@@ -46,6 +46,8 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         for screen in pilot.app.screens:
             assert pilot.app.is_screen_installed(pilot.app.screens[screen])
         assert pilot.app.screen.name == "params"
+        assert pilot.app.focused is not None
+        assert pilot.app.focused.id == "search-input"
 
         await pilot.pause()
         assert pilot.app.screen._partition_list is not None
@@ -87,9 +89,6 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         )
 
         # Test input search parameters
-        await pilot.click("#search-input")
-        await pilot.pause()
-
         for c in "TEST":
             await pilot.press(c)
 
@@ -138,6 +137,11 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
             == GREP_RESULT_COUNT,
             GREP_RESULT_COUNT,
             len(list(pilot.app.screen.query("ListItem").results())),
+        )
+        await assert_with_timeout(
+            lambda: str(pilot.app.screen._search_status_label.content) == "Completed",
+            "Completed",
+            str(pilot.app.screen._search_status_label.content),
         )
 
         # Test select search results
