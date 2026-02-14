@@ -1,7 +1,5 @@
 """Screen used to select result save path."""
 
-from pathlib import Path
-
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal
