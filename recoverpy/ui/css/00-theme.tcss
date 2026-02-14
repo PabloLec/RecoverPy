@@ -94,15 +94,15 @@ Checkbox:focus {
     border: solid $rp-primary;
 }
 
-GrepResultList > ListItem.--highlight {
+SearchResultList > ListItem.--highlight {
     background: $rp-primary 15%;
 }
 
-.grep-result-odd {
+.search-result-odd {
     background: $rp-surface;
 }
 
-.grep-result-even {
+.search-result-even {
     background: $rp-panel 45%;
 }
 

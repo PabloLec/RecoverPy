@@ -13,10 +13,6 @@ async def test_app_displays_footer_with_bindings(session_mocker) -> None:
         MagicMock(return_value=True),
     )
     session_mocker.patch(
-        "recoverpy.lib.env_check._are_system_dependencies_installed",
-        MagicMock(return_value=True),
-    )
-    session_mocker.patch(
         "recoverpy.lib.env_check._is_linux",
         MagicMock(return_value=True),
     )
@@ -31,10 +27,6 @@ async def test_app_displays_footer_with_bindings(session_mocker) -> None:
 async def test_question_mark_opens_keyboard_help_modal(session_mocker) -> None:
     session_mocker.patch(
         "recoverpy.lib.env_check._is_user_root",
-        MagicMock(return_value=True),
-    )
-    session_mocker.patch(
-        "recoverpy.lib.env_check._are_system_dependencies_installed",
         MagicMock(return_value=True),
     )
     session_mocker.patch(
@@ -57,10 +49,6 @@ async def test_question_mark_opens_keyboard_help_modal(session_mocker) -> None:
 async def test_question_mark_is_idempotent_when_help_modal_is_open(session_mocker) -> None:
     session_mocker.patch(
         "recoverpy.lib.env_check._is_user_root",
-        MagicMock(return_value=True),
-    )
-    session_mocker.patch(
-        "recoverpy.lib.env_check._are_system_dependencies_installed",
         MagicMock(return_value=True),
     )
     session_mocker.patch(

@@ -6,7 +6,7 @@ from textual.widgets import DirectoryTree
 
 from recoverpy import RecoverpyApp
 from tests.conftest import TEST_BLOCK_SIZE
-from tests.fixtures.mock_grep_process import GREP_RESULT_COUNT
+from tests.fixtures.mock_scan_hits import SCAN_HIT_COUNT
 from tests.fixtures.mock_device_discovery import (
     UNFILTERED_PARTITION_COUNT,
     VISIBLE_PARTITION_COUNT,
@@ -28,10 +28,6 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
     # Apply patches
     session_mocker.patch(
         "recoverpy.lib.env_check._is_user_root",
-        MagicMock(return_value=True),
-    )
-    session_mocker.patch(
-        "recoverpy.lib.env_check._are_system_dependencies_installed",
         MagicMock(return_value=True),
     )
     session_mocker.patch(
@@ -122,20 +118,20 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         )
         await assert_with_timeout(
             lambda: pilot.app.screen.search_engine.search_progress.result_count
-            == GREP_RESULT_COUNT,
-            GREP_RESULT_COUNT,
+            == SCAN_HIT_COUNT,
+            SCAN_HIT_COUNT,
             pilot.app.screen.search_engine.search_progress.result_count,
         )
         await assert_with_timeout(
-            lambda: len(pilot.app.screen._grep_result_list.grep_results)
-            == GREP_RESULT_COUNT,
-            GREP_RESULT_COUNT,
-            len(pilot.app.screen._grep_result_list.grep_results),
+            lambda: len(pilot.app.screen._search_result_list.search_results)
+            == SCAN_HIT_COUNT,
+            SCAN_HIT_COUNT,
+            len(pilot.app.screen._search_result_list.search_results),
         )
         await assert_with_timeout(
             lambda: len(list(pilot.app.screen.query("ListItem").results()))
-            == GREP_RESULT_COUNT,
-            GREP_RESULT_COUNT,
+            == SCAN_HIT_COUNT,
+            SCAN_HIT_COUNT,
             len(list(pilot.app.screen.query("ListItem").results())),
         )
         await assert_with_timeout(
@@ -152,13 +148,13 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
             await pilot.pause()
 
             assert item.highlighted is True
-            assert pilot.app.screen._get_selected_grep_result().list_item == item
+            assert pilot.app.screen._get_selected_search_result().list_item == item
 
         # Test open result
-        select_item = pilot.app.screen._grep_result_list.highlighted_child
+        select_item = pilot.app.screen._search_result_list.highlighted_child
         assert select_item is not None
-        select_grep_result = pilot.app.screen._get_selected_grep_result()
-        assert select_grep_result.list_item == select_item
+        select_search_result = pilot.app.screen._get_selected_search_result()
+        assert select_search_result.list_item == select_item
 
         await pilot.press("o")
         await pilot.pause()
@@ -167,7 +163,7 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
 
         assert pilot.app.screen._partition == TEST_FULL_PARTITION
         assert pilot.app.screen._block_size == TEST_BLOCK_SIZE
-        assert pilot.app.screen._inode == select_grep_result.inode
+        assert pilot.app.screen._inode == select_search_result.inode
 
         # Test result content
         await pilot.pause()

@@ -40,13 +40,13 @@ SearchScreen {
     margin: 0 1 0 1;
 }
 
-GrepResultList {
+SearchResultList {
     row-span: 5;
     column-span: 1;
     height: 100%;
 }
 
-GrepResultList > ListItem > Label {
+SearchResultList > ListItem > Label {
     padding: 0 0 0 1;
     max-width: 98%;
     overflow: hidden;

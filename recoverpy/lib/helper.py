@@ -1,11 +1,6 @@
 from re import findall
-from subprocess import DEVNULL, call
 
 from recoverpy.lib.device_io import get_logical_block_size
-
-def is_dependency_installed(command: str) -> bool:
-    return call(["which", command], stdout=DEVNULL) == 0
-
 
 def decode_result(result: bytes) -> str:
     return result.decode("utf-8", errors="ignore")

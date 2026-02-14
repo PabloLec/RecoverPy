@@ -1,4 +1,4 @@
-"""Screen displaying grep results."""
+"""Screen displaying search results."""
 
 from asyncio import Task, create_task
 from typing import List
@@ -14,8 +14,8 @@ from textual.widgets import Button, Label
 from recoverpy.lib.device_io import DeviceIOError
 from recoverpy.lib.search.search_engine import SearchEngine
 from recoverpy.log.logger import log
-from recoverpy.models.grep_result import GrepResult
-from recoverpy.ui.widgets.grep_result_list import GrepResultList
+from recoverpy.models.search_result import SearchResult
+from recoverpy.ui.widgets.search_result_list import SearchResultList
 
 
 class SearchScreen(Screen[None]):
@@ -45,26 +45,27 @@ class SearchScreen(Screen[None]):
         self.results: List[str] = []
         self._progress_timer: Timer | None = None
         self._consumer_task: Task[None] | None = None
+        self._search_error_notified = False
         super().__init__(*args, **kwargs)
 
     def compose(self) -> ComposeResult:
-        self._grep_result_list = GrepResultList()
+        self._search_result_list = SearchResultList()
         self._search_status_label = Label("Waiting...", id="search-status")
         self._result_count_label = Label("0", id="result-count")
-        self._progress_title_label = Label("", id="progress-title")
-        self._progress_label = Label("", id="progress")
+        self._progress_title_label = Label("- progress -", id="progress-title")
+        self._progress_label = Label("0.00%", id="progress")
         self._open_button = Button(
             label="Open", id="open-button", disabled=True, variant="primary"
         )
 
-        yield self._grep_result_list
+        yield self._search_result_list
         yield Vertical(
+            self.InfoContainer(self._progress_title_label),
+            self.InfoContainer(self._progress_label),
             self.InfoContainer(Label("- status -", id="status-title")),
             self.InfoContainer(self._search_status_label),
             self.InfoContainer(Label("- result count -", id="result-count-title")),
             self.InfoContainer(self._result_count_label),
-            self.InfoContainer(self._progress_title_label),
-            self.InfoContainer(self._progress_label),
             id="info-bar",
         )
         yield self._open_button
@@ -72,6 +73,7 @@ class SearchScreen(Screen[None]):
         log.debug("search - Search screen composed")
 
     async def on_search_screen_start(self, message: Start) -> None:
+        self._search_error_notified = False
         try:
             self.search_engine = SearchEngine(
                 message.selected_partition, message.searched_string
@@ -82,33 +84,36 @@ class SearchScreen(Screen[None]):
             self.app.pop_screen()
             return
         self._search_status_label.update("Searching...")
-        self.set_focus(self._grep_result_list)
+        self.set_focus(self._search_result_list)
         await self._start_search_engine()
 
     async def _start_search_engine(self) -> None:
         await self.search_engine.start_search()
         self._consumer_task = create_task(
-            self._grep_result_list.start_consumer(
+            self._search_result_list.start_consumer(
                 self.search_engine.formatted_results_queue
             )
         )
         self._progress_timer = self.set_interval(0.1, self._update_progress_labels)
 
     def _update_progress_labels(self) -> None:
+        if self.search_engine.search_progress.error_message:
+            self._search_status_label.update("Failed")
+            if not self._search_error_notified:
+                self._search_error_notified = True
+                self.notify(
+                    self.search_engine.search_progress.error_message,
+                    severity="error",
+                )
+            if self._progress_timer:
+                self._progress_timer.stop()
+                self._progress_timer = None
+
         self._result_count_label.update(
             str(self.search_engine.search_progress.result_count)
         )
-        self._update_progress_percent_title()
-
-    def _update_progress_percent_title(self) -> None:
-        if int(self.search_engine.search_progress.progress_percent) == 0:
-            return
-
-        if str(self._progress_title_label.content) == "":
-            self._progress_title_label.update("- progress -")
-
         self._progress_label.update(
-            f"{self.search_engine.search_progress.progress_percent}%"
+            f"{self.search_engine.search_progress.progress_percent:.2f}%"
         )
         if int(self.search_engine.search_progress.progress_percent) >= 100:
             self._search_status_label.update("Completed")
@@ -134,18 +139,20 @@ class SearchScreen(Screen[None]):
 
     async def _handle_open_button(self) -> None:
         log.info("search - User clicked open button")
-        selected_grep_result = self._get_selected_grep_result()
-        log.info(f"search - Opening inode {selected_grep_result.inode}")
+        selected_search_result = self._get_selected_search_result()
+        log.info(f"search - Opening inode {selected_search_result.inode}")
         self.app.post_message(
             self.Open(
-                selected_grep_result.inode,
+                selected_search_result.inode,
                 self.search_engine.search_params.block_size,
                 self.search_engine.search_params.partition,
             )
         )
 
-    def _get_selected_grep_result(self) -> GrepResult:
-        return self._grep_result_list.grep_results[self._grep_result_list.get_index()]
+    def _get_selected_search_result(self) -> SearchResult:
+        return self._search_result_list.search_results[
+            self._search_result_list.get_index()
+        ]
 
     async def on_list_view_highlighted(self) -> None:
         self._open_button.disabled = False

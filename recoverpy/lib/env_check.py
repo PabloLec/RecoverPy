@@ -4,7 +4,6 @@ from sys import exit, version_info
 
 from textual.app import App
 
-from recoverpy.lib.helper import is_dependency_installed
 from recoverpy.log.logger import log
 from recoverpy.ui.screens.modal import install_and_push_modal
 
@@ -15,7 +14,6 @@ _version_error_message = (
 _linux_error_message = (
     "Your system may not be Linux-based, the application might not work correctly."
 )
-_dependencies_error_message = "Some dependencies are not installed. Please install grep and restart the application."
 
 
 async def verify_app_environment(app: App[None]) -> None:
@@ -30,11 +28,6 @@ async def verify_app_environment(app: App[None]) -> None:
     if not _is_user_root():
         log.warning("app - User is not root")
         await install_and_push_modal(app, "root-error-modal", _root_error_message)
-    if not _are_system_dependencies_installed():
-        log.warning("app - Some dependencies are not installed")
-        await install_and_push_modal(
-            app, "dependencies-error-modal", _dependencies_error_message
-        )
 
 
 def _is_user_root() -> bool:
@@ -47,10 +40,3 @@ def _is_version_supported() -> bool:
 
 def _is_linux() -> bool:
     return "linux" in system().lower()
-
-
-def _are_system_dependencies_installed() -> bool:
-    for dependency in ("grep",):
-        if not is_dependency_installed(dependency):
-            return False
-    return True

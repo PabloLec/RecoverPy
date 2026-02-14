@@ -3,13 +3,13 @@ from unittest.mock import MagicMock
 import pytest
 import pytest_asyncio
 
+from recoverpy.lib.device_io import DeviceInfo
 from recoverpy.lib.search.search_engine import SearchEngine
 
 from .fixtures import (
     mock_device_discovery,
     mock_block_reader,
-    mock_grep_process,
-    mock_progress,
+    mock_scan_hits,
 )
 
 TEST_BLOCK_SIZE = 4096
@@ -18,12 +18,22 @@ TEST_BLOCK_SIZE = 4096
 @pytest_asyncio.fixture(scope="session", autouse=True)
 def system_calls_mock(session_mocker):
     session_mocker.patch(
-        "recoverpy.lib.search.search_engine.start_grep_process",
-        new=mock_grep_process.mock_start_grep_process,
+        "recoverpy.lib.search.search_engine.iter_scan_hits",
+        new=mock_scan_hits.mock_iter_scan_hits,
     )
     session_mocker.patch(
         "recoverpy.lib.search.search_engine.read_block",
         side_effect=mock_block_reader.mock_read_block_output,
+    )
+    session_mocker.patch(
+        "recoverpy.lib.search.search_engine.get_device_info",
+        return_value=DeviceInfo(
+            size_bytes=1024 * 1024,
+            logical_sector_size=TEST_BLOCK_SIZE,
+            physical_sector_size=TEST_BLOCK_SIZE,
+            read_only=False,
+            is_block_device=True,
+        ),
     )
     session_mocker.patch(
         "recoverpy.ui.screens.screen_result.read_block",
@@ -48,14 +58,6 @@ def system_calls_mock(session_mocker):
     session_mocker.patch(
         "recoverpy.models.search_params.get_block_size",
         MagicMock(return_value=TEST_BLOCK_SIZE),
-    )
-    session_mocker.patch(
-        "recoverpy.lib.search.thread_factory.is_dependency_installed",
-        MagicMock(return_value=True),
-    )
-    session_mocker.patch(
-        "recoverpy.lib.search.thread_factory.monitor_search_progress",
-        new=mock_progress.mock_monitor_search_progress,
     )
 
 
@@ -108,22 +110,6 @@ def mock_linux(session_mocker):
 def mock_not_linux(session_mocker):
     session_mocker.patch(
         "recoverpy.lib.env_check._is_linux",
-        MagicMock(return_value=False),
-    )
-
-
-@pytest.fixture(scope="function")
-def mock_dependencies_installed(session_mocker):
-    session_mocker.patch(
-        "recoverpy.lib.env_check._are_system_dependencies_installed",
-        MagicMock(return_value=True),
-    )
-
-
-@pytest.fixture(scope="function")
-def mock_dependencies_not_installed(session_mocker):
-    session_mocker.patch(
-        "recoverpy.lib.env_check._are_system_dependencies_installed",
         MagicMock(return_value=False),
     )
 

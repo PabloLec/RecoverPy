@@ -21,10 +21,6 @@ async def test_search_start_error_returns_to_params(session_mocker) -> None:
         MagicMock(return_value=True),
     )
     session_mocker.patch(
-        "recoverpy.lib.env_check._are_system_dependencies_installed",
-        MagicMock(return_value=True),
-    )
-    session_mocker.patch(
         "recoverpy.lib.env_check._is_linux",
         MagicMock(return_value=True),
     )
