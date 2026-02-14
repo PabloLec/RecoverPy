@@ -26,6 +26,29 @@ Container {
     background: $rp-bg;
 }
 
+Button {
+    min-width: 14;
+}
+
+Input,
+ListView,
+DirectoryTree,
+TextLog {
+    background: $rp-surface;
+    border: solid $rp-border;
+}
+
+Input:focus,
+ListView:focus,
+DirectoryTree:focus,
+TextLog:focus {
+    border: solid $rp-primary;
+}
+
+ListView > ListItem.--highlight {
+    color: $rp-text;
+}
+
 .rp-panel {
     background: $rp-panel;
     border: solid $rp-border;
