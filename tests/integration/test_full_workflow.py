@@ -280,6 +280,19 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
         await pilot.pause()
 
         assert pilot.app.screen.name == "path_edit"
+        assert "Selected directory:" in str(pilot.app.screen._selected_dir_label.content)
+
+        # Test cancel path edition (keyboard)
+        await pilot.press("escape")
+        await pilot.pause()
+
+        assert pilot.app.screen.name == "save"
+
+        # Re-open path edit and confirm
+        await pilot.press("e")
+        await pilot.pause()
+
+        assert pilot.app.screen.name == "path_edit"
 
         assert isinstance(pilot.app.screen._directory_tree, DirectoryTree)
         pilot.app.screen._selected_dir = str(tmp_path)

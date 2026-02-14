@@ -29,3 +29,12 @@ async def test_file_selected_keeps_directory_only_and_notifies(session_mocker) -
     notify_mock.assert_called_once_with(
         "Only directories can be selected.", severity="warning"
     )
+
+
+def test_set_selected_dir_updates_label() -> None:
+    screen = PathEditScreen()
+
+    screen.set_selected_dir("/tmp")
+
+    assert screen._selected_dir == "/tmp"
+    assert str(screen._selected_dir_label.content) == "Selected directory: /tmp"

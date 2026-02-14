@@ -17,6 +17,7 @@ class PathEditScreen(Screen[None]):
     BINDINGS = [
         Binding("enter", "confirm", "Confirm path", priority=True),
         Binding("escape", "cancel", "Cancel", priority=True),
+        Binding("c", "cancel", "Cancel"),
     ]
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
@@ -35,22 +36,30 @@ class PathEditScreen(Screen[None]):
         yield self._directory_tree
         yield self._selected_dir_label
         yield Horizontal(
+            Button("Cancel", id="cancel-button", variant="warning"),
             Button("Confirm", id="confirm-button", variant="success"),
             id="path-edit-button-container",
         )
         log.info("path_edit - Path edit screen composed")
 
     def on_mount(self) -> None:
-        self._selected_dir_label.update(f"Selected directory: {self._selected_dir}")
+        self._update_selected_dir_label()
         if self._directory_tree:
             self._directory_tree.focus()
+
+    def set_selected_dir(self, directory: str) -> None:
+        self._selected_dir = directory
+        self._update_selected_dir_label()
+
+    def _update_selected_dir_label(self) -> None:
+        self._selected_dir_label.update(f"Selected directory: {self._selected_dir}")
 
     async def on_directory_tree_directory_selected(
         self, event: DirectoryTree.DirectorySelected
     ) -> None:
         event.stop()
         self._selected_dir = str(event.path)
-        self._selected_dir_label.update(f"Selected directory: {self._selected_dir}")
+        self._update_selected_dir_label()
 
     async def on_directory_tree_file_selected(
         self, event: DirectoryTree.FileSelected
@@ -59,10 +68,13 @@ class PathEditScreen(Screen[None]):
         self.notify("Only directories can be selected.", severity="warning")
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id != "confirm-button":
+        if event.button.id not in {"confirm-button", "cancel-button"}:
             return
         event.stop()
-        await self.action_confirm()
+        if event.button.id == "confirm-button":
+            await self.action_confirm()
+        else:
+            self.action_cancel()
 
     async def action_confirm(self) -> None:
         log.info("path_edit - Confirm button pressed")

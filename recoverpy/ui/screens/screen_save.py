@@ -1,6 +1,6 @@
 """Screen used to confirm save."""
 
-from typing import Optional
+from typing import Optional, cast
 
 from textual.app import ComposeResult
 from textual.binding import Binding
@@ -79,6 +79,10 @@ class SaveScreen(Screen[None]):
 
     async def _handle_edit_save_path(self) -> None:
         log.info("save - Edit save path button pressed")
+        if self._saver:
+            cast(PathEditScreen, self.app.get_screen("path_edit")).set_selected_dir(
+                str(self._saver.save_path)
+            )
         await self.app.push_screen("path_edit")
 
     async def _handle_save(self) -> None:

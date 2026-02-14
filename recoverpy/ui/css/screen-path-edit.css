@@ -20,3 +20,8 @@ PathEditScreen {
     height: 100%;
     align: center middle;
 }
+
+#path-edit-button-container > Button {
+    margin: 0 1;
+    min-width: 16;
+}
