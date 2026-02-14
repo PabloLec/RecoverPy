@@ -1,3 +1,5 @@
+"""DirectoryTree specialization that only exposes folders as selectable nodes."""
+
 from pathlib import Path
 from typing import Iterable
 

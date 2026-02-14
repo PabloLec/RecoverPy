@@ -10,7 +10,7 @@ from asyncio import new_event_loop
 from collections import OrderedDict
 from queue import Empty, Full, Queue
 from threading import Event, Thread
-from time import monotonic, sleep
+from time import monotonic
 from typing import Iterable, Optional
 
 from recoverpy.lib.storage.byte_range_reader import BlockExtractionError, read_block
@@ -26,6 +26,10 @@ _RAW_HITS_QUEUE_MAXSIZE = 4000
 _RECENT_BLOCKS_MAXSIZE = 8192
 _BATCH_MAX_ITEMS = 100
 _BATCH_MAX_WAIT_SECONDS = 0.2
+_QUEUE_PUT_TIMEOUT_SECONDS = 0.1
+_QUEUE_GET_MIN_TIMEOUT_SECONDS = 0.01
+_WORKER_JOIN_TIMEOUT_SECONDS = 1.0
+_MULTILINE_VALIDATION_BLOCK_SPAN = 8
 
 
 class SearchEngine:
@@ -33,6 +37,8 @@ class SearchEngine:
         self.search_params = SearchParams(partition, searched_string)
         self.search_progress = SearchProgress()
         self.formatted_results_queue: AsyncQueue[SearchResult] = AsyncQueue()
+        # Bounded queue enforces backpressure from producer to converter so
+        # memory usage remains bounded on high-hit scans.
         self.raw_scan_hits_queue: Queue[Optional[ScanHit]] = Queue(
             maxsize=_RAW_HITS_QUEUE_MAXSIZE
         )
@@ -53,9 +59,9 @@ class SearchEngine:
         self._pause_event.clear()
         self._enqueue_sentinel()
         if self._scan_thread and self._scan_thread.is_alive():
-            self._scan_thread.join(timeout=1.0)
+            self._scan_thread.join(timeout=_WORKER_JOIN_TIMEOUT_SECONDS)
         if self._convert_thread and self._convert_thread.is_alive():
-            self._convert_thread.join(timeout=1.0)
+            self._convert_thread.join(timeout=_WORKER_JOIN_TIMEOUT_SECONDS)
 
     def pause_search(self) -> None:
         self._pause_event.set()
@@ -96,7 +102,9 @@ class SearchEngine:
 
                 while not self._stop_event.is_set():
                     try:
-                        self.raw_scan_hits_queue.put(hit, timeout=0.1)
+                        self.raw_scan_hits_queue.put(
+                            hit, timeout=_QUEUE_PUT_TIMEOUT_SECONDS
+                        )
                         break
                     except Full:
                         continue
@@ -128,6 +136,7 @@ class SearchEngine:
                 return
             except Full:
                 try:
+                    # Free one slot to guarantee sentinel delivery during shutdown.
                     self.raw_scan_hits_queue.get_nowait()
                 except Empty:
                     continue
@@ -148,7 +157,7 @@ class SearchEngine:
                 deadline = monotonic() + _BATCH_MAX_WAIT_SECONDS
 
                 while len(batch) < _BATCH_MAX_ITEMS and monotonic() < deadline:
-                    timeout = max(0.01, deadline - monotonic())
+                    timeout = max(_QUEUE_GET_MIN_TIMEOUT_SECONDS, deadline - monotonic())
                     try:
                         item = self.raw_scan_hits_queue.get(timeout=timeout)
                     except Empty:
@@ -173,6 +182,8 @@ class SearchEngine:
         for hit in hits:
             inode = hit.match_offset // self.search_params.block_size
 
+            # Recent-block dedup intentionally stays bounded to avoid unbounded
+            # memory growth while still reducing noisy near-duplicate hits.
             if self._is_recent_block(inode):
                 continue
 
@@ -192,18 +203,22 @@ class SearchEngine:
             self._mark_recent_block(inode)
 
     def _is_hit_valid_multiline(self, hit: ScanHit) -> bool:
-        block_factor = self.search_params.block_size * 8
-        block_index = hit.match_offset // block_factor
+        # Multi-line validation reads a wider window than a single logical block
+        # so patterns split across adjacent blocks are still validated.
+        multiline_validation_block_size = (
+            self.search_params.block_size * _MULTILINE_VALIDATION_BLOCK_SPAN
+        )
+        block_index = hit.match_offset // multiline_validation_block_size
 
         try:
             current_block = read_block(
                 self.search_params.partition,
-                block_factor,
+                multiline_validation_block_size,
                 block_index,
             )
             next_block = read_block(
                 self.search_params.partition,
-                block_factor,
+                multiline_validation_block_size,
                 block_index + 1,
             )
         except BlockExtractionError as error:

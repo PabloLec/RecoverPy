@@ -1,3 +1,5 @@
+"""String and byte helpers used by search and rendering layers."""
+
 from re import findall
 
 from recoverpy.lib.storage.block_device_metadata import get_logical_block_size

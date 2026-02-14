@@ -1,3 +1,5 @@
+"""Reusable modal screen helpers for user-facing messages and confirmations."""
+
 from typing import Callable, List, Optional
 
 from textual.app import App, ComposeResult

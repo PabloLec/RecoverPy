@@ -1,3 +1,5 @@
+"""Runtime environment checks executed at application startup."""
+
 from os import geteuid
 from platform import system
 from sys import exit, version_info

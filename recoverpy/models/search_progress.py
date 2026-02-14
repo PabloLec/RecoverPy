@@ -1,3 +1,5 @@
+"""Shared mutable search progress state consumed by the UI."""
+
 class SearchProgress:
     def __init__(self) -> None:
         self.result_count = 0

@@ -1,3 +1,5 @@
+"""CSS asset discovery utilities used by the Textual app."""
+
 from pathlib import Path
 from typing import List
 

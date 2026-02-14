@@ -14,7 +14,6 @@ from recoverpy.models.search_result import SearchResult
 class SearchResultList(ListView):
     def __init__(self, *children, **kwargs) -> None:  # type: ignore
         super().__init__(*children, **kwargs)
-        self.results: List[str] = []
         self.lock = Lock()
         self.search_results: List[SearchResult] = []
         self.id = "search-result-list"

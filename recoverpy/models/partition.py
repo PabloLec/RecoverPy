@@ -1,3 +1,5 @@
+"""Domain model describing partitions/devices presented in the UI."""
+
 from dataclasses import dataclass
 from typing import Optional
 

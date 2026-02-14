@@ -1,9 +1,13 @@
+"""Low-level block device metadata access via Linux ioctl with safe fallbacks."""
+
 import fcntl
 import os
 import stat
 import struct
 from dataclasses import dataclass
 
+# Linux block ioctl request numbers.
+# They are stable kernel ABI constants and intentionally kept explicit here.
 BLKGETSIZE64 = 0x80081272
 BLKSSZGET = 0x1268
 BLKPBSZGET = 0x127B
@@ -77,6 +81,8 @@ def _get_block_device_info(fd: int, path: str) -> DeviceInfo:
     try:
         physical_sector_size = _ioctl_get_u32(fd, BLKPBSZGET)
     except (PermissionError, OSError):
+        # Some devices/filesystems do not expose physical block size cleanly.
+        # Falling back to logical size keeps the rest of the pipeline usable.
         physical_sector_size = logical_sector_size
 
     return DeviceInfo(

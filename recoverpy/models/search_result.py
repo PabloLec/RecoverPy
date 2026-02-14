@@ -1,3 +1,5 @@
+"""Search result item model mapped to Textual list rows."""
+
 from typing import Optional
 
 from textual.widgets import Label, ListItem

@@ -1,3 +1,5 @@
+"""RecoverPy command-line bootstrap and application launcher."""
+
 import argparse
 import logging
 from datetime import datetime

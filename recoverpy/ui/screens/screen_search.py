@@ -1,7 +1,6 @@
 """Screen displaying search results."""
 
 from asyncio import Task, create_task
-from typing import List
 
 from textual.app import ComposeResult
 from textual.binding import Binding
@@ -43,7 +42,6 @@ class SearchScreen(Screen[None]):
             super().__init__(classes="info-container", *args, **kwargs)
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
-        self.results: List[str] = []
         self._progress_timer: Timer | None = None
         self._consumer_task: Task[None] | None = None
         self._search_error_notified = False
@@ -96,6 +94,8 @@ class SearchScreen(Screen[None]):
 
     async def _start_search_engine(self) -> None:
         await self.search_engine.start_search()
+        # UI consumes formatted results asynchronously while scan workers run
+        # in background threads managed by SearchEngine.
         self._consumer_task = create_task(
             self._search_result_list.start_consumer(
                 self.search_engine.formatted_results_queue

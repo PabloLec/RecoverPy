@@ -1,3 +1,11 @@
+"""
+Streaming binary scanner for devices and disk images.
+
+This module performs chunked byte-pattern scanning without loading the full source
+in memory. It emits lightweight `ScanHit` records containing the absolute match
+offset and a bounded preview window around each match.
+"""
+
 from __future__ import annotations
 
 import os
@@ -5,6 +13,12 @@ from dataclasses import dataclass
 from threading import Event
 from time import sleep
 from typing import Iterator
+
+DEFAULT_SCAN_CHUNK_SIZE = 8 * 1024 * 1024
+DEFAULT_PREVIEW_BEFORE_BYTES = 256
+DEFAULT_PREVIEW_AFTER_BYTES = 256
+DEFAULT_MAX_PREVIEW_BYTES = 512
+PAUSE_POLL_INTERVAL_SECONDS = 0.25
 
 
 @dataclass(frozen=True)
@@ -23,10 +37,10 @@ def iter_scan_hits(
     source_path: str,
     needle: bytes,
     *,
-    chunk_size: int = 8 * 1024 * 1024,
-    preview_before: int = 256,
-    preview_after: int = 256,
-    max_preview_len: int = 512,
+    chunk_size: int = DEFAULT_SCAN_CHUNK_SIZE,
+    preview_before: int = DEFAULT_PREVIEW_BEFORE_BYTES,
+    preview_after: int = DEFAULT_PREVIEW_AFTER_BYTES,
+    max_preview_len: int = DEFAULT_MAX_PREVIEW_BYTES,
     stop_event: Event | None = None,
     pause_event: Event | None = None,
 ) -> Iterator[ScanHit]:
@@ -39,6 +53,8 @@ def iter_scan_hits(
     if max_preview_len <= 0:
         raise ValueError("max_preview_len must be > 0")
 
+    # Keep enough trailing bytes from the previous chunk so matches crossing
+    # chunk boundaries are still detected in the next iteration.
     overlap = max(0, len(needle) - 1)
     tail_size = max(overlap, preview_before)
     preview_window = min(max_preview_len, preview_before + preview_after)
@@ -65,7 +81,7 @@ def iter_scan_hits(
             while pause_event and pause_event.is_set():
                 if stop_event and stop_event.is_set():
                     return
-                sleep(0.25)
+                sleep(PAUSE_POLL_INTERVAL_SECONDS)
             try:
                 chunk = os.read(fd, chunk_size)
             except PermissionError as error:
@@ -94,6 +110,8 @@ def iter_scan_hits(
 
                 absolute_match_offset = buffer_start_offset + match_index
                 search_index = match_index + 1
+                # Skip offsets that belong to the previous chunk overlap;
+                # this prevents duplicate hits while preserving boundary matches.
                 if absolute_match_offset < min_new_match_offset:
                     continue
 

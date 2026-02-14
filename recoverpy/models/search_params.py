@@ -1,3 +1,5 @@
+"""Immutable-ish search request parameters derived from user input."""
+
 from recoverpy.lib.text.text_processing import get_block_size
 
 

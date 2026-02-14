@@ -1,3 +1,5 @@
+"""Bounded byte-range extraction and block reads for devices and disk images."""
+
 import errno
 import os
 from pathlib import Path
@@ -47,6 +49,8 @@ def extract_range(
         os.close(source_fd)
 
     if remaining > 0:
+        # Partial reads at EOF/device end are treated as explicit failures so
+        # callers never mistake truncated output for a successful extraction.
         raise BlockExtractionError(
             "Requested range exceeds available data.",
             f"Cannot read requested range from {source_path}: reached end of file/device.",
@@ -115,6 +119,7 @@ def _open_source(source_path: str) -> int:
 
 def _safe_pread(source_fd: int, size: int, offset: int, source_path: str) -> bytes:
     try:
+        # pread keeps read position explicit and thread-safe for random access.
         return os.pread(source_fd, size, offset)
     except PermissionError as error:
         raise BlockExtractionError(
