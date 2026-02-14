@@ -5,6 +5,7 @@ import pytest
 from textual.widgets import DirectoryTree
 
 from recoverpy import RecoverpyApp
+from recoverpy.lib.device_io import DeviceInfo
 from tests.conftest import TEST_BLOCK_SIZE
 from tests.fixtures.mock_scan_hits import SCAN_HIT_COUNT
 from tests.fixtures.mock_device_discovery import (
@@ -33,6 +34,16 @@ async def test_full_workflow(session_mocker, tmp_path: Path):
     session_mocker.patch(
         "recoverpy.lib.env_check._is_linux",
         MagicMock(return_value=True),
+    )
+    session_mocker.patch(
+        "recoverpy.lib.search.search_engine.get_device_info",
+        return_value=DeviceInfo(
+            size_bytes=1024 * 1024,
+            logical_sector_size=TEST_BLOCK_SIZE,
+            physical_sector_size=TEST_BLOCK_SIZE,
+            read_only=False,
+            is_block_device=True,
+        ),
     )
 
     # Launch the application

@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from threading import Event
+from time import sleep
 from typing import Iterator
 
 
@@ -27,6 +28,7 @@ def iter_scan_hits(
     preview_after: int = 256,
     max_preview_len: int = 512,
     stop_event: Event | None = None,
+    pause_event: Event | None = None,
 ) -> Iterator[ScanHit]:
     if not needle:
         raise ValueError("needle must not be empty")
@@ -60,6 +62,10 @@ def iter_scan_hits(
         while True:
             if stop_event and stop_event.is_set():
                 return
+            while pause_event and pause_event.is_set():
+                if stop_event and stop_event.is_set():
+                    return
+                sleep(0.25)
             try:
                 chunk = os.read(fd, chunk_size)
             except PermissionError as error:

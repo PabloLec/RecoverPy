@@ -21,6 +21,7 @@ from recoverpy.ui.widgets.search_result_list import SearchResultList
 class SearchScreen(Screen[None]):
     BINDINGS = [
         Binding("o", "open_result", "Open result"),
+        Binding("p", "toggle_pause", "Pause/resume"),
         Binding("q", "exit_screen", "Exit"),
     ]
 
@@ -57,6 +58,9 @@ class SearchScreen(Screen[None]):
         self._open_button = Button(
             label="Open", id="open-button", disabled=True, variant="primary"
         )
+        self._pause_button = Button(
+            label="Pause", id="pause-button", disabled=True, variant="default"
+        )
 
         yield self._search_result_list
         yield Vertical(
@@ -69,6 +73,7 @@ class SearchScreen(Screen[None]):
             id="info-bar",
         )
         yield self._open_button
+        yield self._pause_button
         yield Button("Exit", id="exit-button", variant="error")
         log.debug("search - Search screen composed")
 
@@ -84,6 +89,8 @@ class SearchScreen(Screen[None]):
             self.app.pop_screen()
             return
         self._search_status_label.update("Searching...")
+        self._pause_button.disabled = False
+        self._pause_button.label = "Pause"
         self.set_focus(self._search_result_list)
         await self._start_search_engine()
 
@@ -115,8 +122,13 @@ class SearchScreen(Screen[None]):
         self._progress_label.update(
             f"{self.search_engine.search_progress.progress_percent:.2f}%"
         )
+        if self.search_engine.is_paused():
+            self._search_status_label.update("Paused")
+        elif int(self.search_engine.search_progress.progress_percent) < 100:
+            self._search_status_label.update("Searching...")
         if int(self.search_engine.search_progress.progress_percent) >= 100:
             self._search_status_label.update("Completed")
+            self._pause_button.disabled = True
             if self._progress_timer:
                 self._progress_timer.stop()
                 self._progress_timer = None
@@ -125,6 +137,7 @@ class SearchScreen(Screen[None]):
         actions = {
             "exit-button": self._handle_exit_button,
             "open-button": self._handle_open_button,
+            "pause-button": self._handle_pause_button,
         }
 
         button_id = event.button.id
@@ -148,6 +161,16 @@ class SearchScreen(Screen[None]):
                 self.search_engine.search_params.partition,
             )
         )
+
+    async def _handle_pause_button(self) -> None:
+        if self.search_engine.is_paused():
+            self.search_engine.resume_search()
+            self._pause_button.label = "Pause"
+            self._search_status_label.update("Searching...")
+        else:
+            self.search_engine.pause_search()
+            self._pause_button.label = "Resume"
+            self._search_status_label.update("Paused")
 
     def _get_selected_search_result(self) -> SearchResult:
         return self._search_result_list.search_results[
@@ -173,7 +196,15 @@ class SearchScreen(Screen[None]):
     async def action_exit_screen(self) -> None:
         await self._handle_exit_button()
 
+    async def action_toggle_pause(self) -> None:
+        if hasattr(self, "search_engine"):
+            await self._handle_pause_button()
+
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         if action == "open_result" and self._open_button.disabled:
+            return None
+        if action == "toggle_pause" and (
+            not hasattr(self, "search_engine") or self._pause_button.disabled
+        ):
             return None
         return True

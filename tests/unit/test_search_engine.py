@@ -63,6 +63,13 @@ async def test_stop_search_sets_cancel_flag(search_engine):
     assert search_engine._stop_event.is_set() is True
 
 
+def test_pause_resume_flags(search_engine):
+    search_engine.pause_search()
+    assert search_engine.is_paused() is True
+    search_engine.resume_search()
+    assert search_engine.is_paused() is False
+
+
 def test_raw_hits_queue_is_bounded_with_backpressure(mocker):
     engine = search_engine_module.SearchEngine(
         partition="/dev/sda1", searched_string="Lorem ipsum"

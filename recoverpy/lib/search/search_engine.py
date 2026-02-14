@@ -40,6 +40,7 @@ class SearchEngine:
         device_info = get_device_info(partition)
         self._source_size_bytes = max(1, device_info.size_bytes)
         self._stop_event = Event()
+        self._pause_event = Event()
         self._scan_thread: Thread | None = None
         self._convert_thread: Thread | None = None
         self._recent_blocks: OrderedDict[int, None] = OrderedDict()
@@ -49,11 +50,21 @@ class SearchEngine:
 
     def stop_search(self) -> None:
         self._stop_event.set()
+        self._pause_event.clear()
         self._enqueue_sentinel()
         if self._scan_thread and self._scan_thread.is_alive():
             self._scan_thread.join(timeout=1.0)
         if self._convert_thread and self._convert_thread.is_alive():
             self._convert_thread.join(timeout=1.0)
+
+    def pause_search(self) -> None:
+        self._pause_event.set()
+
+    def resume_search(self) -> None:
+        self._pause_event.clear()
+
+    def is_paused(self) -> bool:
+        return self._pause_event.is_set()
 
     def _start_workers(self) -> None:
         self._scan_thread = Thread(
@@ -78,6 +89,7 @@ class SearchEngine:
                 self.search_params.partition,
                 needle,
                 stop_event=self._stop_event,
+                pause_event=self._pause_event,
             ):
                 if self._stop_event.is_set():
                     break

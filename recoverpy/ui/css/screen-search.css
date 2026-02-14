@@ -1,8 +1,8 @@
 SearchScreen {
     layout: grid;
-    grid-size: 2 3;
+    grid-size: 2 4;
     grid-columns: 7fr 1fr;
-    grid-rows: 8fr 1fr 1fr;
+    grid-rows: 8fr 1fr 1fr 1fr;
 }
 
 #info-bar {
@@ -29,6 +29,12 @@ SearchScreen {
 }
 
 #open-button {
+    content-align: center bottom;
+    width: 100%;
+    margin: 0 1 0 1;
+}
+
+#pause-button {
     content-align: center bottom;
     width: 100%;
     margin: 0 1 0 1;
