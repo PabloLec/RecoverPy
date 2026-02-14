@@ -55,7 +55,7 @@ TextLog:focus {
     border: solid $rp-primary;
 }
 
-ListView > ListItem.--highlight {
+ListView > ListItem.-highlight {
     color: $rp-text;
 }
 
@@ -94,7 +94,7 @@ Checkbox:focus {
     border: solid $rp-primary;
 }
 
-SearchResultList > ListItem.--highlight {
+SearchResultList > ListItem.-highlight {
     background: $rp-primary 15%;
 }
 

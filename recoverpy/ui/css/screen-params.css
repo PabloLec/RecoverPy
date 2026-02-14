@@ -17,6 +17,15 @@ PartitionList > ListItem {
     padding: 0 0 0 1;
 }
 
+PartitionList > ListItem.-highlight {
+    background: $primary 20%;
+}
+
+PartitionList > ListItem.mounted.-highlight,
+PartitionList > ListItem.mounted.-highlight > Label {
+    color: $block-cursor-foreground;
+}
+
 #start-search-button {
     margin: 0 0 0 10;
 }
