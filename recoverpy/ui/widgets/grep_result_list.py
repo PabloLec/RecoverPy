@@ -12,8 +12,6 @@ from recoverpy.models.grep_result import GrepResult
 
 
 class GrepResultList(ListView):
-    list_items_background_color = {0: "red", 1: "green"}
-
     def __init__(self, *children, **kwargs) -> None:  # type: ignore
         super().__init__(*children, **kwargs)
         self.results: List[str] = []

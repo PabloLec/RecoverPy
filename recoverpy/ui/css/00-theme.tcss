@@ -1,0 +1,64 @@
+/* RecoverPy design tokens — DO NOT use raw hex elsewhere */
+$rp-bg: $background;
+$rp-surface: $surface;
+$rp-panel: $panel;
+
+$rp-text: $foreground;
+$rp-muted: $foreground-muted;
+
+$rp-border: $border;
+
+$rp-primary: $primary;
+$rp-success: $success;
+$rp-warning: $warning;
+$rp-error: $error;
+
+Screen {
+    background: $rp-bg;
+    color: $rp-text;
+}
+
+App {
+    background: $rp-bg;
+}
+
+Container {
+    background: $rp-bg;
+}
+
+.rp-panel {
+    background: $rp-panel;
+    border: solid $rp-border;
+}
+
+.rp-surface {
+    background: $rp-surface;
+}
+
+.mounted {
+    color: $rp-primary;
+}
+
+ParamsScreen > Container {
+    border-top: solid $rp-border;
+}
+
+ParamsScreen > Container > Checkbox {
+    background: $rp-surface;
+}
+
+GrepResultList > ListItem.--highlight {
+    background: $rp-primary 15%;
+}
+
+.grep-result-odd {
+    background: $rp-surface;
+}
+
+.grep-result-even {
+    background: $rp-panel 45%;
+}
+
+#modal-error-label {
+    color: $rp-error;
+}

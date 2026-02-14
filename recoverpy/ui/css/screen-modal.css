@@ -10,7 +10,6 @@ Modal {
 }
 
 #modal-error-label {
-    color: red;
     column-span: 2;
     content-align: center bottom;
     width: 100%;

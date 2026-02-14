@@ -41,7 +41,7 @@ class SaveScreen(Screen[None]):
             id="save-path-container",
         )
         yield Horizontal(
-            Button("Go back", id="go-back-button", variant="warning"),
+            Button("Go back", id="go-back-button", variant="default"),
             self._edit_save_path_button,
             Button("Save", id="save-button", variant="success"),
             id="action-buttons-container",

@@ -32,22 +32,12 @@ SearchScreen {
     content-align: center bottom;
     width: 100%;
     margin: 0 1 0 1;
-    background: $success-darken-2;
-}
-
-#open-button:hover {
-    background: $success-lighten-2;
 }
 
 #exit-button {
     content-align: center bottom;
     width: 100%;
     margin: 0 1 0 1;
-    background: $error-darken-2;
-}
-
-#exit-button:hover {
-    background: $error-lighten-2;
 }
 
 GrepResultList {
@@ -60,16 +50,4 @@ GrepResultList > ListItem > Label {
     padding: 0 0 0 1;
     max-width: 98%;
     overflow: hidden;
-}
-
-GrepResultList > ListItem.--highlight {
-    background: $accent
-}
-
-.grep-result-odd {
-    background: $surface;
-}
-
-.grep-result-even {
-    background: $surface-lighten-2;
 }

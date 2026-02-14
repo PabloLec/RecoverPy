@@ -53,7 +53,7 @@ class SearchScreen(Screen[None]):
         self._progress_title_label = Label("", id="progress-title")
         self._progress_label = Label("", id="progress")
         self._open_button = Button(
-            label="Open", id="open-button", disabled=True, variant="success"
+            label="Open", id="open-button", disabled=True, variant="primary"
         )
 
         yield self._grep_result_list

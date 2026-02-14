@@ -56,7 +56,7 @@ class RecoverpyApp(App[None]):
         yield Footer()
 
     async def on_mount(self) -> None:
-        self.theme = "textual-dark"
+        self.theme = "atom-one-dark"
         await self.push_screen("params")
         await verify_app_environment(self)
         self.notify("Press ? for keyboard help", title="Tip", timeout=5)

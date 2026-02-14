@@ -49,13 +49,13 @@ class ResultScreen(Screen[None]):
             id="block-count-container",
         )
         yield Horizontal(
-            Button("Go back", id="go-back-button", variant="warning"),
+            Button("Go back", id="go-back-button", variant="default"),
             id="go-back-button-container",
         )
         yield Horizontal(
-            Button("Previous", id="previous-button", variant="primary"),
+            Button("Previous", id="previous-button", variant="default"),
             self._add_block_button,
-            Button("Next", id="next-button", variant="primary"),
+            Button("Next", id="next-button", variant="default"),
             id="block-buttons-container",
         )
         yield Horizontal(self._save_button, id="save-button-container")

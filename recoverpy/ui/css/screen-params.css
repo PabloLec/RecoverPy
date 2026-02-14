@@ -7,7 +7,6 @@ ParamsScreen > Input {
     margin: 1;
 }
 
-
 PartitionList {
     margin: 1 1 0 1;
     max-height: 80%;
@@ -18,15 +17,9 @@ PartitionList > ListItem {
     padding: 0 0 0 1;
 }
 
-
-.mounted {
-    color: $text-accent;
-}
-
 #start-search-button {
     margin: 0 0 0 10;
 }
-
 
 ParamsScreen > Container {
     align: center middle;
@@ -39,5 +32,4 @@ ParamsScreen > Container {
 ParamsScreen > Container > Checkbox {
     margin: 1 0 0 1;
     dock: right;
-    background: black 0%;
 }
