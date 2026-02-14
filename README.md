@@ -1,28 +1,14 @@
 <div align="center">
   <img src="docs/assets/logo.png" alt="RecoverPy" width="auto">
   <h2>RecoverPy</h2>
-  <em>Find and recover deleted or even overwritten files from your Linux partitions, quickly and easily.</em>
-  
-  <br><br>
+  <em>Scan raw partitions and recover data by inspecting disk blocks directly.</em>
 
+  <br><br>
   ![GitHub release](https://img.shields.io/github/v/release/pablolec/recoverpy?style=flat-square)
   ![License](https://img.shields.io/github/license/pablolec/recoverpy?style=flat-square)
   ![Downloads](https://static.pepy.tech/personalized-badge/recoverpy?period=total&units=abbreviation&left_color=grey&right_color=red&left_text=downloads)
   ![Tests](https://github.com/PabloLec/recoverpy/actions/workflows/pytest.yml/badge.svg?branch=main)
-  
 </div>
-
----
-
-RecoverPy doesn't just recover deleted files, but also helps you **recover overwritten data** by scanning each disk block. Whether it's a lost snippet of code, accidentally deleted configs, or overwritten text files, RecoverPy gives you a powerful, interactive way to get it back.
-
-## ✨ Features
-
-- ✅ Recover **overwritten and deleted files**
-- 🔍 Search file contents by string, even in binary files
-- 📟 Modern, easy-to-use terminal UI
-- 🐧 Linux compatible (all file systems supported)
-- ⚡️ Fast, leveraging core Linux utilities (`grep`, `dd`, `lsblk`)
 
 ---
 
@@ -32,81 +18,133 @@ RecoverPy doesn't just recover deleted files, but also helps you **recover overw
   <img src="docs/assets/demo.gif" alt="RecoverPy Demo">
 </p>
 
+## 🔎 Overview
+
+When a file is deleted, its metadata disappears first. The underlying disk blocks often remain intact until they are reused.
+
+RecoverPy scans raw partition data directly and searches for byte patterns across the entire device. If the blocks have not been overwritten, fragments of deleted files can still be located by their content.
+
+It lets you inspect matching blocks, navigate adjacent ones, and extract what remains in a straightforward way.
+
+If the blocks are gone, recovery is impossible. If they are still there, RecoverPy helps you retrieve them.
+
+---
+
+## 🧭 What you can do
+
+* Search a partition or disk image for a specific string.
+* Inspect the disk blocks where matches are found.
+* Move across adjacent blocks to recover fragmented data.
+* Select and save useful content.
+
+RecoverPy does not attempt to interpret filesystem structures or restore filenames. It focuses on exposing what remains on disk and making it accessible.
+
 ---
 
 ## 📦 Installation
 
-> **Warning:** You **must** run RecoverPy as root (`sudo`).
+### Requirements
 
-RecoverPy is Linux-only. Make sure you have these common tools installed (`grep`, `dd`, `lsblk`). Optionally, install `progress` to monitor scan progress:
+- Linux
+- Python 3.9+
 
-```bash
-# Debian / Ubuntu
-sudo apt install grep coreutils util-linux progress
+Accessing raw block devices typically requires `sudo`.
 
-# Arch
-sudo pacman -S grep coreutils util-linux progress
-
-# Fedora
-sudo dnf install grep coreutils util-linux progress
-```
-
-### Quick Run (no installation)
-
-Using `pipx`:
-
-```bash
-sudo pipx run recoverpy
-```
-
-Or using `uvx`:
+### Using `uv`
 
 ```bash
 sudo uvx recoverpy
-```
+````
 
-### Install from PyPI
+Or install locally:
 
 ```bash
-python3 -m pip install recoverpy
+uv tool install recoverpy
+sudo recoverpy
+```
+
+### Using pip
+
+```bash
+python -m pip install recoverpy
 sudo recoverpy
 ```
 
 ---
 
-## 💻 Usage
+## ▶️ Usage
 
-1. **Launch RecoverPy:**
+Start RecoverPy:
 
 ```bash
 sudo recoverpy
 ```
 
-2. **Select Partition:**  
-   Choose the partition where your lost data resides. If unsure, try scanning your `/home` partition, it might contain editor or IDE backups.
+1. Select a partition.
+2. Enter a distinctive search string.
+3. Start the scan.
+4. Open a result.
+5. Inspect and navigate blocks.
+6. Save useful content.
 
-3. **Search Content:**  
-   Enter a unique string from the lost file content. RecoverPy will scan disk blocks to locate matches.
-
-4. **Find & Recover:**  
-   Results appear interactively. Select a result, preview the block, and save it. Explore neighboring blocks if the file spans multiple disk blocks.
+Using a unique identifier, configuration key, or sentence fragment generally produces better results than common words.
 
 ---
 
-## 💡 Recovery Tips
+## ⚙️ How it works
 
-- 🛑 **Unmount partition first:** Reduce risk of data overwriting.
-- 🎯 **Be specific:** Use unique, simple search strings.
-- ⏳ **Act quickly:** The sooner you scan, the higher your recovery chances.
-- 📑 **Check adjacent blocks:** Your file might span several blocks, check them all.
+RecoverPy operates directly on the raw byte stream of a block device.
+
+The selected partition is opened in read-only mode and scanned sequentially using fixed-size chunks. The scanner processes the stream incrementally, keeping a small overlap between chunks to ensure that matches spanning chunk boundaries are not missed.
+
+Pattern matching is performed at the byte level. For every match, RecoverPy records the exact absolute offset within the device. This offset becomes the reference point for block inspection and navigation.
+
+Block reads are performed using explicit offsets rather than relying on filesystem abstractions. This allows precise access to adjacent blocks without loading large portions of the device into memory.
+
+The entire scan is streaming-based and memory-bounded: RecoverPy never loads the full partition into memory.
+
+---
+
+## ⚠️ Limitations
+
+RecoverPy works on raw data. It does not reconstruct files automatically or infer file boundaries.
+
+Results may be partial or fragmented. If the underlying blocks have already been overwritten, recovery is not possible.
+
+Accessing block devices typically requires sudo. To reduce the risk of further overwriting, avoid writing to the target partition during recovery and unmount it when possible.
 
 ---
 
 ## 🤝 Contributing
 
-Found a bug or have an idea? PRs, issues, and suggestions are warmly welcome. Check out our [contributing guide](CONTRIBUTING.md) for how to get involved!
+If you run into a bug or think something could be improved, feel free to open an issue. And if you’d like to work on it yourself, pull requests are always appreciated.
 
 ---
 
-If RecoverPy saved your day, consider ⭐️ starring the repo, thanks for your support!
+## 🛠 Development
 
+Project structure:
+
+* `recoverpy/ui/` — Textual interface
+* `recoverpy/lib/search/` — streaming search engine
+* `recoverpy/lib/storage/` — block and device access
+* `recoverpy/lib/text/` — decoding utilities
+* `tests/` — unit and integration tests
+
+### Setup
+
+```bash
+uv sync --dev
+```
+
+### Run locally
+
+```bash
+sudo uv run recoverpy
+```
+
+### Run tests
+
+```bash
+uv run pytest -q
+```
