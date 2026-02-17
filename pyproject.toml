@@ -5,7 +5,7 @@ authors = [
 license = { text = "GPL-3.0 License" }
 requires-python = "<4.0.0,>=3.9"
 dependencies = [
-    "textual==7.5.0",
+    "textual==8.0.0",
 ]
 name = "recoverpy"
 version = "2.3.0"
