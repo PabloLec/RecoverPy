@@ -19,4 +19,6 @@ def get_block_size(partition: str) -> int:
 
 def get_inode(string: str) -> int:
     match = findall(r"^(\d+):", string)
+    if not match:
+        raise ValueError(f"Cannot parse inode from result line: {string!r}")
     return int(match[0])
